@@ -36,7 +36,7 @@ MAX_DISPLAYED_PAGE_LINKS = 10
 
 WORKFLOW_VERSION = 0.1
 
-MESSAGE_QUEUE_HOST = '10.128.26.155'
+MESSAGE_QUEUE_HOST = 'TODO_SET_MESSAGE_QUEUE_HOST'
 
 
 MILLISECONDS_BETWEEN_REFRESH = 10000
@@ -94,8 +94,8 @@ DATABASES = {
         'NAME': 'blue_sky',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'devdb2',
-        'PORT': '5942',
+        'HOST': 'TODO_SET_HOST',
+        'PORT': 'TODO_SET_PORT',
     }
 }
 

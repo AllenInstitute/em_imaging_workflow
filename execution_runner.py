@@ -2,7 +2,7 @@ from celery import Celery
 import os
 import pika
 
-MESSAGE_QUEUE_HOST = '10.128.26.155'
+MESSAGE_QUEUE_HOST = 'TODO_SET_MESSAGE_QUEUE_HOST'
 
 app = Celery('execution_runner', backend='rpc://', broker='pyamqp://guest@' + MESSAGE_QUEUE_HOST + '//')
 
