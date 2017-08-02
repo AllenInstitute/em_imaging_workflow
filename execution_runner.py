@@ -4,9 +4,12 @@ import pika
 import paramiko
 
 MESSAGE_QUEUE_HOST = 'TODO_SET_MESSAGE_QUEUE_HOST'
-MESSAGE_QUEUE_NAME = 'TODO_SET_MESSAGE_QUEUE_NAME'
+MESSAGE_QUEUE_NAME = 'TODO_MESSAGE_QUEUE_NAME'
+MESSAGE_QUEUE_USER = 'TODO_MESSAGE_QUEUE_USER'
+MESSAGE_QUEUE_PASSWORD = 'TODO_MESSAGE_QUEUE_PASSWORD'
+MESSAGE_QUEUE_PORT = 5672
 
-app = Celery('execution_runner', backend='rpc://', broker='pyamqp://guest@' + MESSAGE_QUEUE_HOST + '//')
+app = Celery('execution_runner', backend='rpc://', broker='pyamqp://' + str(MESSAGE_QUEUE_USER) + ':' + str(MESSAGE_QUEUE_PASSWORD) + '@' + MESSAGE_QUEUE_HOST + '//')
 
 app.conf.task_default_queue = 'celery'
 
@@ -24,18 +27,23 @@ def check_environment_variables():
 		raise Exception('Please set QMASTER_PASSWORD environment variable')
 
 @app.task
+def run_server_command(command):
+	check_environment_variables()
+
+	client = paramiko.SSHClient()
+	client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+	client.connect("qmaster", username=os.environ['QMASTER_USERNAME'], password=os.environ['QMASTER_PASSWORD'])
+	stdin, stdout, stderr = client.exec_command(command)
+	stdout_message = stdout.readlines()
+
+	return stdout_message
+
+@app.task
 def run_pbs(full_executable, task_id):
 	exit_code = SUCCESS_EXIT_CODE
 
 	try:
-		check_environment_variables()
-
-		client = paramiko.SSHClient()
-		client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-		client.connect("qmaster", username=os.environ['QMASTER_USERNAME'], password=os.environ['QMASTER_PASSWORD'])
-
-		stdin, stdout, stderr = client.exec_command(full_executable)
-		stdout_message = stdout.readlines()
+		stdout_message = run_server_command(full_executable)
 
 		pbs_id = stdout_message[FIRST].strip().replace(".corp.alleninstitute.org", "")
 
@@ -68,7 +76,9 @@ def run_normal(full_executable, task_id, logfile):
 
 @app.task
 def publish_message(body, task_id, optional_body=None):
-	connection = pika.BlockingConnection(pika.ConnectionParameters(host=MESSAGE_QUEUE_HOST))
+	credentials = pika.PlainCredentials(MESSAGE_QUEUE_USER, MESSAGE_QUEUE_PASSWORD)
+	connection = pika.BlockingConnection(pika.ConnectionParameters(MESSAGE_QUEUE_HOST,MESSAGE_QUEUE_PORT,'/', credentials))
+
 	channel = connection.channel()
 	channel.queue_declare(queue=MESSAGE_QUEUE_NAME)
 	if optional_body != None:
@@ -83,7 +93,7 @@ def cancel_task(use_pbs, p_id):
 		try:
 			pbs_id = p_id
 			executable = 'qdel ' + str(pbs_id)
-			exit_code = os.system(executable)
+			run_server_command(executable)
 		except Exception as e:
 			print('something went wrong')
 
