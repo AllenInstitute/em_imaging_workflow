@@ -3,11 +3,13 @@ import os
 import pika
 import paramiko
 
-MESSAGE_QUEUE_HOST = 'TODO_SET_MESSAGE_QUEUE_HOST'
-MESSAGE_QUEUE_NAME = 'TODO_MESSAGE_QUEUE_NAME'
-MESSAGE_QUEUE_USER = 'TODO_MESSAGE_QUEUE_USER'
-MESSAGE_QUEUE_PASSWORD = 'TODO_MESSAGE_QUEUE_PASSWORD'
+
+MESSAGE_QUEUE_HOST = 'ibs-roby-vm1'
+MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
+MESSAGE_QUEUE_USER = 'blue_sky_user'
+MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
 MESSAGE_QUEUE_PORT = 5672
+
 
 app = Celery('execution_runner', backend='rpc://', broker='pyamqp://' + str(MESSAGE_QUEUE_USER) + ':' + str(MESSAGE_QUEUE_PASSWORD) + '@' + MESSAGE_QUEUE_HOST + '//')
 

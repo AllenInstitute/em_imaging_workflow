@@ -1,5 +1,5 @@
 """
-WSGI config for blue_sky project.
+WSGI config for at_em_imaging_workflow project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "blue_sky.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "at_em_imaging_workflow.settings")
 
 application = get_wsgi_application()

@@ -2,7 +2,7 @@ from celery import Celery
 import os
 import pika
 
-MESSAGE_QUEUE_HOST = 'TODO_SET_MESSAGE_QUEUE_HOST'
+MESSAGE_QUEUE_HOST = 'ibs-roby-vm1'
 
 app = Celery('pbs_runner', backend='rpc://', broker='pyamqp://guest@' + MESSAGE_QUEUE_HOST + '//')
 
