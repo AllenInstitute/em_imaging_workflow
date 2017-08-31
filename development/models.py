@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.postgres.fields import JSONField
+from workflow_engine.blue_sky_state_machine import BlueSkyStateMachine
 
 class Study(models.Model):
 	name = models.CharField(max_length=255, null=True)
@@ -62,8 +63,8 @@ class Microscope(models.Model):
 class TileImageSet(models.Model):
 	storage_directory = models.CharField(max_length=255, null=True)
 	workflow_state = models.CharField(max_length=255, null=True)
-	camera = models.ForeignKey(Camera)
-	microscope = models.ForeignKey(Microscope)
+	camera = models.ForeignKey(Camera, null=True)
+	microscope = models.ForeignKey(Microscope, null=True)
 
 class MontageSet(TileImageSet):
 	uid = models.CharField(max_length=255, null=True)
@@ -74,6 +75,7 @@ class MontageSet(TileImageSet):
 
 class ReferenceSet(TileImageSet):
 	uid = models.CharField(max_length=255, null=True)
+	project_path = models.CharField(max_length=255)
 
 class EMMontageSet(MontageSet):
 	reference_set = models.ForeignKey(ReferenceSet)

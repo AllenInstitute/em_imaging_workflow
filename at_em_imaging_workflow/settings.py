@@ -23,6 +23,34 @@ MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
 MESSAGE_QUEUE_PORT = 5672
 
+FIJI_PATH = '/allen/programs/celltypes/workgroups/em-connectomics/samk/Fiji.app/ImageJ-linux64'
+GRID_SIZE = 3
+HEAP_SIZE = 20
+INITIAL_SIGMA = 1.6
+STEPS = 3
+MIN_OCTAVE_SIZE = 800
+MAX_OCTAVE_SIZE = 1200
+FD_SIZE = 4
+FD_BINS = 8
+
+ROD = 0.92
+MAX_EPSILON = 50
+MIN_INLIER_RATIO = 0.0
+MIN_NUMBER_INLIERS = 5
+EXPECTED_MODEL_INDEX = 1
+MULTIPLE_HYPOTHESES = True
+REJECT_IDENTITY = True
+IDENTITY_TOLERANCE = 5.0
+TILES_ARE_IN_PLACE = True
+DESIRED_MODEL_INDEX = 0
+REGULARIZE = False
+MAX_ITERATIONS_OPTIMIZE = 2000
+MAX_PLATEAU_WIDTH_OPTIMIZE = 200
+DIMENSION = 5
+LAMBDA_VAL = 0.01
+CLEAR_TRANSFORM = True
+VISUALIZE = False
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
