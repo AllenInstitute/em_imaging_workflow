@@ -24,9 +24,9 @@ MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
 MESSAGE_QUEUE_PORT = 5672
 
-FIJI_PATH = '/allen/programs/celltypes/workgroups/em-connectomics/samk/Fiji.app/ImageJ-linux64'
+FIJI_PATH = '/allen/aibs/shared/image_processing/volume_assembly/Fiji.app/ImageJ-linux64'
 GRID_SIZE = 3
-HEAP_SIZE = 20
+HEAP_SIZE = 10
 INITIAL_SIGMA = 1.6
 STEPS = 3
 MIN_OCTAVE_SIZE = 800

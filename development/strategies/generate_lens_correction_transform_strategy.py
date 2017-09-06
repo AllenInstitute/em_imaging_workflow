@@ -37,7 +37,7 @@ class GenerateLensCorrectionTransformStrategy(execution_strategy.ExecutionStrate
     input_data['fiji_path'] = settings.FIJI_PATH
     input_data['grid_size'] = settings.GRID_SIZE
     input_data['heap_size'] = settings.HEAP_SIZE
-    input_data['outfile'] = 'test_LC.json'
+    input_data['outfile'] = os.path.join(storage_directory, 'test_LC.json')
     input_data['processing_directory'] = storage_directory
 
     sift_params = {}
@@ -77,18 +77,10 @@ class GenerateLensCorrectionTransformStrategy(execution_strategy.ExecutionStrate
   #called after the execution finishes
   #process and save results to the database
   def on_finishing(self, enqueued_object, results, task):
-    self.check_key(results, 'required')
-    self.check_key(results, 'type')
-    self.check_key(results, 'properties')
-    properties = results['properties']
 
-    self.check_key(properties, 'output_json')
-    output_json = properties['output_json']
+    self.check_key(results, 'output_json')
 
-    self.check_key(output_json, 'type')
-    self.check_key(output_json, 'description')
-
-    self.set_well_known_file(output_json['description'], enqueued_object, 'description', task)
+    self.set_well_known_file(results['output_json'], enqueued_object, 'description', task)
 
   #override if needed
   #set the storage directory for an enqueued object
