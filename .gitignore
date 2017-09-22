@@ -1,4 +1,7 @@
 *.pyc
 *.csv
 *.png
+local_settings.py
+debug.log
+database.db
 __pycache__

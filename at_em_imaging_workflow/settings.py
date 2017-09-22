@@ -14,9 +14,13 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = BASE_DIR
 
-BASE_FILE_PATH = '/allen/programs/celltypes/workgroups/array_tomography/blue_sky/files/'
-PBS_FINISH_PATH = '/allen/programs/celltypes/workgroups/array_tomography/blue_sky/at_em_imaging_workflow/pbs_execution_finish.py'
+BASE_FILE_PATH = \
+    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky/files/'
+PBS_FINISH_PATH = \
+    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky' + \
+    '/at_em_imaging_workflow/pbs_execution_finish.py'
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
 CELERY_MESSAGE_QUEUE_NAME = 'celery_' + MESSAGE_QUEUE_NAME
@@ -24,7 +28,9 @@ MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
 MESSAGE_QUEUE_PORT = 5672
 
-FIJI_PATH = '/allen/aibs/shared/image_processing/volume_assembly/Fiji.app/ImageJ-linux64'
+FIJI_PATH = \
+    '/allen/aibs/shared/image_processing/volume_assembly' + \
+    '/Fiji.app/ImageJ-linux64'
 GRID_SIZE = 3
 HEAP_SIZE = 10
 INITIAL_SIGMA = 1.6
@@ -137,16 +143,20 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.' +
+        'UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.' +
+        'MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.' +
+        'CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.' +
+        'NumericPasswordValidator',
     },
 ]
 
@@ -155,13 +165,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'US/Pacific'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -178,7 +184,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/log/debug.log',
+            'filename': '/logs/debug.log',
         },
     },
     'loggers': {
@@ -189,3 +195,11 @@ LOGGING = {
         },
     },
 }
+
+try:
+    with open(os.path.join(
+        os.path.dirname(__file__), "local_settings.py"
+    )) as ls:
+        exec(ls.read())
+except IOError:
+    pass
