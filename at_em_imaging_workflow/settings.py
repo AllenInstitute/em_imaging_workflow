@@ -196,6 +196,8 @@ LOGGING = {
     },
 }
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 try:
     with open(os.path.join(
         os.path.dirname(__file__), "local_settings.py"

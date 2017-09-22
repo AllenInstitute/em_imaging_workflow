@@ -5,6 +5,9 @@ from workflow_engine.blue_sky_state_machine import BlueSkyStateMachine
 class Study(models.Model):
     name = models.CharField(max_length=255, null=True)
     storage_directory = models.CharField(max_length=255, null=True)
+    
+    def __str__(self):
+        return self.name
 
 class Specimen(models.Model):
     uid = models.CharField(max_length=255, null=True)
