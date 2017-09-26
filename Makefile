@@ -28,7 +28,7 @@ pypi_deploy:
 	python setup.py sdist upload --repository https://testpypi.python.org/pypi
 
 pytest_lax:
-	python setup.py test
+	python setup.py test 
 
 pytest: pytest_lax
 
