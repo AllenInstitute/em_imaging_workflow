@@ -28,7 +28,7 @@ pypi_deploy:
 	python setup.py sdist upload --repository https://testpypi.python.org/pypi
 
 pytest_lax:
-	python -m pytest -s --boxed --cov=at_em_imaging_workflow --cov-report html --junitxml=test-reports/test.xml
+	python setup.py test
 
 pytest: pytest_lax
 
