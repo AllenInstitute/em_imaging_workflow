@@ -21,7 +21,7 @@ class PyTest(TestCommand):
 
     def initialize_options(self):
         TestCommand.initialize_options(self)
-        self.pytest_args = []
+        self.pytest_args = ['-s']
 
     def finalize_options(self):
         TestCommand.finalize_options(self)
@@ -30,6 +30,8 @@ class PyTest(TestCommand):
 
     def run_tests(self):
         import pytest
+        os.environ['DJANGO_SETTINGS_MODULE'] = \
+            'at_em_imaging_workflow.settings' 
         errno = pytest.main(self.pytest_args)
         sys.exit(errno)
 

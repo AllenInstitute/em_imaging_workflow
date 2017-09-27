@@ -27,6 +27,10 @@ class GenerateLensCorrectionTransformStrategy(execution_strategy.ExecutionStrate
   #override if needed
   #set the data for the input file
   def get_input(self, enqueued_object, storage_directory, task):
+    '''
+    Args:
+        enqueued_object (ReferenceSet) assuming this based on project_path
+    '''
     input_data = {}
 
     project_path = enqueued_object.project_path
