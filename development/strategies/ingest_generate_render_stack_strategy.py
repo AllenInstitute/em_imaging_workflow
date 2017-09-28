@@ -6,7 +6,7 @@ from os import listdir
 
 import os
 
-class IngestGenerateReferenceSetStrategy(execution_strategy.ExecutionStrategy):
+class IngestGenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
 
   #override if needed
   #set the data for the input file

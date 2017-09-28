@@ -6,7 +6,7 @@ from os import listdir
 
 import os
 
-class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
+class RoughSolverStrategy(execution_strategy.ExecutionStrategy):
 
   #override if needed
   #set the data for the input file
