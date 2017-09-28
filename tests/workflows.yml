@@ -3,6 +3,7 @@ lens_correction:
         - key: "ingest"
           label: "Ingest Reference Set"
           class: "IngestReferenceSetStrategy"
+          enqueued_class: "ReferenceSet"
         - key: "generate"
           label: "generate_lens_correction_transform"
           class: "GenerateLensCorrectionTransformStrategy"

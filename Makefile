@@ -28,6 +28,9 @@ pypi_deploy:
 	python setup.py sdist upload --repository https://testpypi.python.org/pypi
 
 pytest_lax:
+	rm database.db || exit 0
+	python manage.py makemigrations
+	python manage.py migrate
 	python setup.py test 
 
 pytest: pytest_lax
