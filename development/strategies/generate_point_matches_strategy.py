@@ -3,14 +3,28 @@ from workflow_engine.models import *
 from development.models import *
 from django.conf import settings
 from os import listdir
-
+import jinja2
+import simplejson as json
 import os
 
 class GeneratePointMatchesStrategy(execution_strategy.ExecutionStrategy):
+  def get_template(self): 
+    env = jinja2.Environment(
+        loader=jinja2.PackageLoader('development.strategies',
+                                    'templates'))
+    return env.get_template('generate_point_matches_template.json')
+
   #override if needed
   #set the data for the input file
   def get_input(self, enqueued_object, storage_directory, task):
-    input_data = {}
+    input_data_template = self.get_template()
+
+    # port = enqueued_object.service.port
+    port = 8998
+
+    return json.loads(
+        input_data_template.render(
+            render_service_port=port))
 
     return input_data
 
