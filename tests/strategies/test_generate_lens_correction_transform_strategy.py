@@ -20,6 +20,6 @@ class TestGenerateLensCorrectionTransformStrategy(TestCase):
                                        task)
 
         assert input['manifest_path'] == 'manifest.json'
-        assert input['fiji_path'] == GenerateL
+        assert input['fiji_path'] == GenerateLensCorrectionTransformStrategy.default_input['fiji_path']
         print("input: " + str(input))
         assert input is not None
