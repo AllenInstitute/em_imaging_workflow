@@ -19,5 +19,7 @@ class TestGenerateLensCorrectionTransformStrategy(TestCase):
                                        storage_directory,
                                        task)
 
+        assert input['manifest_path'] == 'manifest.json'
+        assert input['fiji_path'] == GenerateL
         print("input: " + str(input))
         assert input is not None

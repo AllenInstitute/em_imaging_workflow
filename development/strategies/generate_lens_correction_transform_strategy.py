@@ -1,12 +1,50 @@
 from workflow_engine.strategies import execution_strategy
 from workflow_engine.models import *
 from development.models import *
+from rendermodules.lens_correction.schemas import \
+    LensCorrectionParameters, SIFTParameters, AlignmentParameters
+
 from django.conf import settings
 from os import listdir
-
 import os
 
+
 class GenerateLensCorrectionTransformStrategy(execution_strategy.ExecutionStrategy):
+  default_input = {
+      "manifest_path": "/allen/programs/celltypes/workgroups/em-connectomics/samk/lc_test_data/Wij_Set_594451332/594089217_594451332/_trackem_20170502174048_295434_5LC_0064_01_20170502174047_reference_0_.txt",
+      "project_path": "/allen/programs/celltypes/workgroups/em-connectomics/samk/lc_test_data/Wij_Set_594451332/594089217_594451332/",
+      "fiji_path": "/allen/programs/celltypes/workgroups/em-connectomics/samk/Fiji.app/ImageJ-linux64",
+      "grid_size": 3,
+      "heap_size": 20,
+      "outfile": "test_LC.json",
+      "processing_directory": None,
+      "SIFT_params": {
+          "initialSigma": 1.6,
+          "steps": 3,
+          "minOctaveSize": 800,
+          "maxOctaveSize": 1200,
+          "fdSize": 4,
+          "fdBins": 8
+      },
+      "align_params": {
+          "rod": 0.92,
+          "maxEpsilon": 5.0,
+          "minInlierRatio": 0.0,
+          "minNumInliers": 5,
+          "expectedModelIndex": 1,
+          "multipleHypotheses": True,
+          "rejectIdentity": True,
+          "identityTolerance": 5.0,
+          "tilesAreInPlace": True,
+          "desiredModelIndex": 0,
+          "regularize": False,
+          "maxIterationsOptimize": 2000,
+          "maxPlateauWidthOptimize": 200,
+          "dimension": 5,
+          "lambdaVal": 0.01,
+          "clearTransform": True,
+          "visualize": False
+      }}
 
   def find_manifest_path(self, project_path):
     manifest_path = None
@@ -31,51 +69,17 @@ class GenerateLensCorrectionTransformStrategy(execution_strategy.ExecutionStrate
     Args:
         enqueued_object (ReferenceSet) assuming this based on project_path
     '''
-    input_data = {}
-
     project_path = enqueued_object.project_path
-
-    input_data['manifest_path'] = self.find_manifest_path(project_path)
-    input_data['project_path'] = project_path
-
-    input_data['fiji_path'] = settings.FIJI_PATH
-    input_data['grid_size'] = settings.GRID_SIZE
-    input_data['heap_size'] = settings.HEAP_SIZE
-    input_data['outfile'] = os.path.join(storage_directory, 'test_LC.json')
-    input_data['processing_directory'] = storage_directory
-
-    sift_params = {}
-    sift_params['initialSigma'] = settings.INITIAL_SIGMA
-    sift_params['steps'] = settings.STEPS
-    sift_params['minOctaveSize'] = settings.MIN_OCTAVE_SIZE
-    sift_params['maxOctaveSize'] = settings.MAX_OCTAVE_SIZE
-    sift_params['fdSize'] = settings.FD_SIZE
-    sift_params['fdBins'] = settings.FD_BINS
-
-    input_data['SIFT_params'] = sift_params
-
-    align_params = {}
-    align_params['rod'] = settings.ROD
-    align_params['maxEpsilon'] = settings.MAX_EPSILON
-    align_params['minInlierRatio'] = settings.MIN_INLIER_RATIO
-    align_params['minNumInliers'] = settings.MIN_NUMBER_INLIERS
-    align_params['expectedModelIndex'] = settings.EXPECTED_MODEL_INDEX
-    align_params['multipleHypotheses'] = settings.MULTIPLE_HYPOTHESES
-    align_params['rejectIdentity'] = settings.REJECT_IDENTITY
-    align_params['identityTolerance'] = settings.IDENTITY_TOLERANCE
-    align_params['tilesAreInPlace'] = settings.TILES_ARE_IN_PLACE
-    align_params['desiredModelIndex'] = settings.DESIRED_MODEL_INDEX
-    align_params['regularize'] = settings.REGULARIZE
-    align_params['maxIterationsOptimize'] = settings.MAX_ITERATIONS_OPTIMIZE
-    align_params['maxPlateauWidthOptimize'] = settings.MAX_PLATEAU_WIDTH_OPTIMIZE
-    align_params['dimension'] = settings.DIMENSION
-    align_params['lambdaVal'] = settings.LAMBDA_VAL
-    align_params['clearTransform'] = settings.CLEAR_TRANSFORM
-    align_params['visualize'] = settings.VISUALIZE
-
-    input_data['align_params'] = align_params
-
-    return input_data
+    
+    input = GenerateLensCorrectionTransformStrategy.default_input
+    
+    input['manifest_path'] = self.find_manifest_path(project_path)
+    input['project_path'] = project_path
+    input['outfile'] = os.path.join(storage_directory, 'test_LC.json')
+    input['processing_directory'] = storage_directory
+    
+    return LensCorrectionParameters().dump(input).data
+    
 
   #override if needed
   #called after the execution finishes
