@@ -11,10 +11,9 @@ lens_correction:
           label: "move_reference_set_files_to_long_term_storage"
           class: "MoveReferenceSetStrategy"
     graph:
-        - [ "start", [ "ingest" ] ]
         - [ "ingest", [ "generate" ] ]
         - [ "generate", [ "move" ] ]
-        - [ "move", [ "end" ] ]
+        - [ "move", [] ]
 em_2d_montage:
     states:
         - key: "ingest_generate"
@@ -36,7 +35,7 @@ em_2d_montage:
         - key: "lens_correction"
           label: "Apply Lens Correction"
           class: "ApplyLensCorrectionStrategy"
-        - key: "point_match"
+        - key: "2d_montage_point_match"
           label: "2D Montage Point Match"
           class: "TwoDMontagePointMatchStrategy"
         - key: "solver"
@@ -50,13 +49,12 @@ em_2d_montage:
           label: "Alignment"
           workflow: true
     graph:
-        - [ "start", [ "ingest_generate" ] ]
         - [ "ingest_generate", [ "mic_task_builder" ] ]
         - [ "mic_task_builder", [ "mic_tasks" ] ]
         - [ "mic_tasks", [ "generate_mipmaps" ] ]
         - [ "generate_mipmaps", [ "long_term_storage", "lens_correction" ] ]
-        - [ "lens_correction", [ "point_match" ] ]
-        - [ "point_match", [ "solver" ] ]
+        - [ "lens_correction", [ "2d_montage_point_match" ] ]
+        - [ "2d_montage_point_match", [ "solver" ] ]
         - [ "solver", [ "manual_qc" ] ]
         - [ "manual_qc", [ "alignment" ] ]
 at_2d_montage:
@@ -92,7 +90,6 @@ at_2d_montage:
           label: "Alignment"
           workflow: true
     graph:
-        - [ "start", [ "ingest" ] ]
         - [ "ingest", [ "mic_task_builder" ] ]
         - [ "mic_task_builder", [ "mic_tasks" ] ]
         - [ "mic_tasks", [ "lens_correction" ] ]
@@ -101,8 +98,8 @@ at_2d_montage:
         - [ "long_term_storage", [ "cross_correlation" ] ]
         - [ "cross_correlation", [ "montage_qc" ] ]
         - [ "montage_qc", [ "drop_fails" ] ]
-        - [ "drop_fails", [ "point_match" ] ]
-        - [ "point_match", [ "registration" ] ]
+        - [ "drop_fails", [ "stitch" ] ]
+        - [ "stitch", [ "registration" ] ]
         - [ "registration", [ "assign_z" ] ]
         - [ "assign_z", [ "alignment" ] ]
 alignment:
@@ -114,7 +111,7 @@ alignment:
           label: "Downsample Section Image"
           class: "DownsampleSectionImageStrategy"
         - key: "rough_point_generation"
-          label: "Point Match Generation"
+          label: "Rough Point Match Generation"
           class: "PointMatchGenerationStrategy"
         - key: "rough_solver"
           label: "Rough Solver"
@@ -127,9 +124,9 @@ alignment:
           label: "Rough Alignment Application"
           class: "RoughAlignmentStrategy"
         - key: "fine_point_generation"
-          label: "Point Match Generation"
+          label: "Fine Point Match Generation"
           class: "FinePointMatchGenerationStrategy"
-        - key: "fine_qc"
+        - key: "fine_point_match_qc"
           label: "Point Match QC"
           class: "FineQCStrategy"
         - key: "consolidate"
@@ -138,7 +135,7 @@ alignment:
         - key: "fine_solver"
           label: "Fine Solver"
           class: "FineSolverStrategy"
-        - key: "fine_qc"
+        - key: "fine_align_qc"
           label: "Fine Alignment QC"
           class: "FineAlignmentQCStrategy"
         - key: "stack_splitter"
@@ -152,15 +149,17 @@ alignment:
           class: "FusionStrategy"
           workflow: true
     graph:
-        - [ "start", [ "define_chunks" ] ]
-        - [ "define_chunks", [ "downsample_section_image", "end" ] ]
+        - [ "define_chunks", [ "downsample_section_image" ] ]
         - [ "downsample_section_image", [ "rough_point_generation" ] ]
         - [ "rough_point_generation", [ "rough_solver" ] ]
         - [ "rough_solver", [ "rough_qc" ] ]
         - [ "rough_qc", [ "rough_align_application" ] ]
         - [ "rough_align_application", [ "fine_point_generation" ] ]
-        - [ "fine_point_generation", [ "fine_qc" ] ]
-        - [ "fine_qc", [ "stack_splitter" ] ]
+        - [ "fine_point_generation", [ "fine_point_match_qc" ] ]
+        - [ "fine_point_match_qc", [ "consolidate" ] ]
+        - [ "consolidate", [ "fine_solver" ] ]
+        - [ "fine_solver", [ "fine_align_qc" ] ]
+        - [ "fine_align_qc", [ "stack_splitter" ] ]
         - [ "stack_splitter", [ "reversion" ] ]
         - [ "reversion", [ "fusion" ] ]
 fusion:
@@ -179,8 +178,7 @@ fusion:
           label: "Render Volume"
           manual: true
     graph:
-        - [ "start", [ "ready" ] ]
-        - [ "ready", [ "register", "end" ] ]
+        - [ "ready", [ "register" ] ]
         - [ "register", [ "manual_qc" ] ]
         - [ "manual_qc", [ "manual_global_fusion" ] ]
         - [ "manual_global_fusion", [ "render_volume" ] ]

@@ -35,10 +35,14 @@
 #
 import pytest
 import os
-import importlib
+import logging
 from workflow_engine.workflow_config import WorkflowConfig
-from workflow_engine.models import *
 from django.db import transaction
+from workflow_engine.models import Executable, JobQueue, Workflow, WorkflowNode
+from development.models import ReferenceSet
+
+
+_log = logging.getLogger('test_output')
 
 
 @pytest.fixture
@@ -50,67 +54,37 @@ def test_workflow_config(workflow_config):
     assert workflow_config is not None
 
 
+@pytest.mark.django_db
 @transaction.atomic
 def test_create_workflow(workflow_config):
     app_package = 'development'
+    WorkflowConfig.create_workflow(
+        app_package,
+        os.path.join(os.path.dirname(__file__), 'workflows.yml'))
 
-    app_models = importlib.import_module(app_package + '.models')
-    app_strategies = importlib.import_module(app_package + '.strategies')
+    for e in Executable.objects.all():
+        _log.info(e.name)
+        jq = e.get_job_queues()
+        _log.info("Job queue: " + str(len(jq)))
 
-    pbs_queue = 'mindscope'
-    pbs_processor='vmem=16g',
-    pbs_walltime='walltime=5:00:00'
-    wc = workflow_config.from_yaml_file(os.path.join(os.path.dirname(__file__),
-                                        'workflows.yml'))
+    for q in JobQueue.objects.all():
+        _log.info("Q: %s" % (q.name))
 
-    for workflow_spec in wc:
-        workflow_name = workflow_spec.name
+    workflow_nodes = \
+        WorkflowNode.objects.filter(
+            workflow=Workflow.objects.get(name='lens_correction'),
+            parent=None)
 
-        workflow = Workflow(name=workflow_name,
-                            description='N/A',
-                            use_pbs=False)
-        workflow.save()
-
-        executable_number = 1
-        queue_number = 1
-
-        mock_executable = \
-            Executable(name='%s mock executable %d' % (workflow_name,
-                                                       executable_number),
-                       description='N/A',
-                       executable_path='/data/mock_executable.sh',
-                       pbs_queue=pbs_queue,
-                       pbs_processor=pbs_processor,
-                       pbs_walltime=pbs_walltime)
-        executable_number = executable_number + 1
-        mock_executable.save()
-
-        for k,node in workflow_spec.states.items():
-            node['enqueued_class'] = app_models.ReferenceSet
-    
-            if node['class'] is None:
-                node['class'] = app_strategies.IngestReferenceSetStrategy          
-            queue = JobQueue(name='%s queue %d' % (workflow_name,
-                                                   queue_number),
-                             job_strategy_class=node['class'],
-                             enqueued_object_class=node['enqueued_class'],
-                             executable=mock_executable)
-            queue_number = queue_number + 1
-
-            queue.save()
-
-            batch_size = 1
-            max_retries = 1
-
-            workflow_node = WorkflowNode(job_queue=queue,
-                                         is_head=False,
-                                         workflow=workflow,
-                                         batch_size=batch_size,
-                                         max_retries=max_retries) 
-            workflow_node.save()
+    for n in workflow_nodes:
+        _log.info("N: %s->%s" % (str(n), str(n.parent)))
+    assert len(workflow_nodes) == 1
+    # eq = JobQueue.objects.get(
+    #     name='lens_correction generate_lens_correction_transform')
+    # eq.
+    # Workflow.start_workflow('lens_correction', ReferenceSet())
 
 
-def xtest_from_yaml_file(workflow_config):
+def test_from_yaml_file(workflow_config):
     wc = workflow_config.from_yaml_file(os.path.join(os.path.dirname(__file__),
                                         'workflows.yml'))
 
