@@ -38,7 +38,7 @@ import os
 import logging
 from workflow_engine.workflow_config import WorkflowConfig
 from django.db import transaction
-from workflow_engine.models import Executable, JobQueue, Workflow, WorkflowNode
+from workflow_engine.models import Executable, JobQueue, Workflow, WorkflowNode, RunState
 from development.models import ReferenceSet
 
 
@@ -81,7 +81,14 @@ def test_create_workflow(workflow_config):
     # eq = JobQueue.objects.get(
     #     name='lens_correction generate_lens_correction_transform')
     # eq.
-    # Workflow.start_workflow('lens_correction', ReferenceSet())
+    
+    for rs in RunState.objects.all():
+        _log.info("Run States %s" % (rs.name))
+    
+    enqueued_object = ReferenceSet()
+    enqueued_object.save()
+
+    Workflow.start_workflow('lens_correction', enqueued_object)
 
 
 def test_from_yaml_file(workflow_config):
@@ -89,7 +96,7 @@ def test_from_yaml_file(workflow_config):
                                         'workflows.yml'))
 
     print("\n")
-    for w in wc:
+    for w in wc['flows']:
         print("\nworkflow: " + w.name)
         for k in w.states.keys():
             s = w.states[k]
