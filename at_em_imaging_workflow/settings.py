@@ -16,8 +16,9 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = BASE_DIR
 
-BASE_FILE_PATH = \
-    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky/files/'
+#BASE_FILE_PATH = \
+#    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky/files/'
+BASE_FILE_PATH = '/data'
 PBS_FINISH_PATH = \
     '/allen/programs/celltypes/workgroups/array_tomography/blue_sky' + \
     '/at_em_imaging_workflow/pbs_execution_finish.py'

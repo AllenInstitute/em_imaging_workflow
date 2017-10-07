@@ -53,9 +53,8 @@ def workflow_config():
 def test_workflow_config(workflow_config):
     assert workflow_config is not None
 
-
+# @transaction.atomic
 @pytest.mark.django_db
-@transaction.atomic
 def test_create_workflow(workflow_config):
     app_package = 'development'
     WorkflowConfig.create_workflow(
@@ -88,7 +87,8 @@ def test_create_workflow(workflow_config):
     enqueued_object = ReferenceSet()
     enqueued_object.save()
 
-    Workflow.start_workflow('lens_correction', enqueued_object)
+    Workflow.start_workflow('lens_correction',
+                            enqueued_object)
 
 
 def test_from_yaml_file(workflow_config):
