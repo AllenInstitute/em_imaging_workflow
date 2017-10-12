@@ -40,3 +40,7 @@ from .microscope_type import MicroscopeType
 class Microscope(models.Model):
     uid = models.CharField(max_length=255, null=True)
     microscope_type = models.ForeignKey(MicroscopeType)
+
+    def __str__(self):
+        return self.uid
+

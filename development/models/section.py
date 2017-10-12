@@ -46,3 +46,7 @@ class Section(models.Model):
     specimen = models.ForeignKey(Specimen)
     chucks = models.ManyToManyField(Chuck, related_name='sections')
     sample_holders = models.ManyToManyField(SampleHolder, related_name='sample_holders')
+
+    def __str__(self):
+        return self.section_id
+

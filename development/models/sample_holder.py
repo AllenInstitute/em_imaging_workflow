@@ -41,3 +41,7 @@ class SampleHolder(models.Model):
     uid = models.CharField(max_length=255, null=True)
     imaged_sections_count = models.IntegerField(null=True)
     load = models.ForeignKey(Load)
+
+    def __str__(self):
+        return self.uid
+

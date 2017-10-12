@@ -40,3 +40,6 @@ from .specimen import Specimen
 class RenderedVolumn(models.Model):
     mipmap_directory = models.CharField(max_length=255, null=True)
     specimen = models.ForeignKey(Specimen)
+
+    def __str__(self):
+        return "Rendered Volume for %s" % (str(self.specimen))

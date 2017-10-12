@@ -42,3 +42,7 @@ class Specimen(models.Model):
     render_project = models.CharField(max_length=255, null=True)
     render_owner = models.CharField(max_length=255, null=True)
     study = models.ForeignKey(Study)
+
+    def __str__(self):
+        return self.uid
+

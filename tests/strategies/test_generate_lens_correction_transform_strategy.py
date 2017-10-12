@@ -1,7 +1,8 @@
 from django.test import TestCase
 from mock import patch
 from development.models import ReferenceSet
-from development.strategies import GenerateLensCorrectionTransformStrategy
+from development.strategies.generate_lens_correction_transform_strategy \
+    import GenerateLensCorrectionTransformStrategy
 
 
 class TestGenerateLensCorrectionTransformStrategy(TestCase):

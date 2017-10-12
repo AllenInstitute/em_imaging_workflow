@@ -44,6 +44,9 @@ class Chuck(models.Model):
     preceding_chunk = models.ForeignKey('self', related_name='%(class)s_preceding_chunk')
     following_chunk = models.ForeignKey('self', related_name='%(class)s_following_chunk')
 
+    def __str__(self):
+        return "Chunk Lorem Ipsum"  # TODO: better string
+
     def set_chuck_size(self):
         #TODO
         self.size = 0

@@ -43,3 +43,7 @@ class TileImageSet(models.Model):
     workflow_state = models.CharField(max_length=255, null=True)
     camera = models.ForeignKey(Camera, null=True)
     microscope = models.ForeignKey(Microscope, null=True)
+
+    def __str__(self):
+        return "Tile Image Set Lorem Ipsum"  # TODO: better string
+

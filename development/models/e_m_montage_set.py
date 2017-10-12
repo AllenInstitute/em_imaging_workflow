@@ -41,3 +41,7 @@ from .reference_set import ReferenceSet
 class EMMontageSet(MontageSet):
     reference_set = models.ForeignKey(ReferenceSet)
     reference_set_uid = models.CharField(max_length=255, null=True)
+
+    def __str__(self):
+        return self.reference_set_uid
+

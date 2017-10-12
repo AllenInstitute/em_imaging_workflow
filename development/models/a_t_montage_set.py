@@ -42,5 +42,9 @@ class ATMontageSet(MontageSet):
     image_session_number = models.CharField(max_length=255, null=True)
     registration_series = models.ForeignKey(RegistrationSeries)
 
+    def __str__(self):
+        return self.image_session_number
+
     def has_z_index(self):
         return True
+
