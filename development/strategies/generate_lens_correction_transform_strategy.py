@@ -1,15 +1,17 @@
-from workflow_engine.strategies import execution_strategy
-from workflow_engine.models import *
-from development.models import *
+from workflow_engine.strategies.execution_strategy import ExecutionStrategy
+#from workflow_engine.models import *
+#from development.models import *
 from rendermodules.lens_correction.schemas import \
     LensCorrectionParameters, SIFTParameters, AlignmentParameters
 
 from django.conf import settings
 from os import listdir
+import logging
 import os
 
 
-class GenerateLensCorrectionTransformStrategy(execution_strategy.ExecutionStrategy):
+class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
+  _log = logging.getLogger('development.strategies.generate_lens_correction_transform_strategy')
   default_input = {
       "manifest_path": "/allen/programs/celltypes/workgroups/em-connectomics/samk/lc_test_data/Wij_Set_594451332/594089217_594451332/_trackem_20170502174048_295434_5LC_0064_01_20170502174047_reference_0_.txt",
       "project_path": "/allen/programs/celltypes/workgroups/em-connectomics/samk/lc_test_data/Wij_Set_594451332/594089217_594451332/",
@@ -70,6 +72,8 @@ class GenerateLensCorrectionTransformStrategy(execution_strategy.ExecutionStrate
         enqueued_object (ReferenceSet) assuming this based on project_path
     '''
     project_path = enqueued_object.project_path
+    GenerateLensCorrectionTransformStrategy._log.info(
+        'project path: %s' % (project_path))
     
     input = GenerateLensCorrectionTransformStrategy.default_input
     
