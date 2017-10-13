@@ -2,14 +2,14 @@ from workflow_engine.strategies import execution_strategy
 # from workflow_engine.models import *
 # from development.models import *
 from rendermodules.intensity_correction.schemas import \
-    MultIntensityCorrParams
+    MakeMedianParams 
 from django.conf import settings
 from os import listdir
 import logging
 import os
 
-class MICTasksStrategy(execution_strategy.ExecutionStrategy):
-  _log = logging.getLogger('development.strategies.m_i_c_tasks_strategy')
+class ATMICTaskBuilderStrategy(execution_strategy.ExecutionStrategy):
+  _log = logging.getLogger('development.strategies.at_m_i_c_task_builder_strategy')
 
   default_input = {
     "render": {
@@ -20,10 +20,11 @@ class MICTasksStrategy(execution_strategy.ExecutionStrategy):
         "client_scripts": "/var/www/render/render-ws-java-client/src/main/scripts"
     },
     "input_stack": "Acquisition_DAPI_1",
-    "correction_stack": "Median_TEST_DAPI_1",
-    "output_stack": "Flatfield_TEST_DAPI_1",
-    "output_directory": "/nas/data/M246930_Scnn1a_4/processed/FlatfieldTEST",
-    "z_index": 102,
+    "file_prefix": "Median",
+    "output_stack": "Median_TEST_DAPI_1",
+    "output_directory": "/nas/data/M246930_Scnn1a_4/processed/Medians",
+    "minZ": 100,
+    "maxZ": 103,
     "pool_size": 20
   }
 
@@ -34,10 +35,11 @@ class MICTasksStrategy(execution_strategy.ExecutionStrategy):
     Args:
         enqueued_object (EMMontageSet) 
     '''
-    MICTasksStrategy._log.info('MIC Tasks')
-    input = MICTasksStrategy.default_input
+    ATMICTaskBuilderStrategy._log.info('MIC Task Builder')
+    input = ATMICTaskBuilderStrategy.default_input
 
-    return MultIntensityCorrParams().dump(input).data
+    return MakeMedianParams().dump(input).data
+    
 
   #override if needed
   #called after the execution finishes

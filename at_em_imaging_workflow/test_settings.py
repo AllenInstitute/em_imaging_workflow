@@ -128,7 +128,7 @@ WSGI_APPLICATION = 'at_em_imaging_workflow.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'xdefault': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'at_em_imaging_workflow',
         'USER': 'postgres',
@@ -144,7 +144,7 @@ DATABASES = {
         'HOST': 'devdb2',
         'PORT': '5942',
     },
-    'test': {
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(PROJECT_ROOT, 'database.db'),
         'USER': '',
@@ -201,7 +201,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'debug.log',
+            'filename': 'dbg.log',
         },
     },
     'loggers': {
@@ -217,7 +217,7 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 try:
     with open(os.path.join(
-        os.path.dirname(__file__), "local_settings.py"
+        os.path.dirname(__file__), "test_local_settings.py"
     )) as ls:
         exec(ls.read())
 except IOError:

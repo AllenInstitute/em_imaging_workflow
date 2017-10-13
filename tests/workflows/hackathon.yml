@@ -1,0 +1,55 @@
+executables:
+    mock:
+        name: 'Mock Executable'
+        path: '/projects/mock_bin/mock_executable.sh'
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
+    python:
+        name: 'Mock Executable'
+        path: '/projects/mock_bin/python'
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
+run_states:
+    - "PENDING"
+    - "QUEUED"
+    - "RUNNING"
+    - "FINISHED_EXECUTION"
+    - "FAILED_EXECUTION"
+    - "FAILED"
+    - "SUCCESS"
+    - "PROCESS_KILLED"
+workflows:
+    em_2d_montage:
+        states:
+            - key: "create_tile_pairs"
+              label: "Create Tile Pairs"
+              class: "development.strategies.create_tile_pairs_strategy.CreateTilePairsStrategy"
+              enqueued_class: "development.models.EMMontageSet"
+              executable: "python"
+              executable_args: "-m render_module"
+            - key: "2d_montage_point_match"
+              label: "2D Montage Point Match"
+              class: "development.strategies.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy"
+              enqueued_class: "development.models.EMMontageSet"
+              executable: "mock"
+            - key: "solver"
+              label: "2D Montage Solver"
+              class: "development.strategies.two_d_montage_solver_strategy.TwoDMontageSolverStrategy"
+              enqueued_class: "development.models.EMMontageSet"
+              executable: "mock"
+            - key: "manual_qc"
+              label: "Manual QC / High Degree Polynomial or Point Match Regeneration"
+              manual: true
+              class: "development.strategies.manual_q_c_strategy.ManualQCStrategy"
+              enqueued_class: "development.models.EMMontageSet"
+              executable: "mock"
+            - key: "alignment"
+              label: "Alignment"
+              workflow: true
+        graph:
+            - [ "create_tile_pairs", [ "2d_montage_point_match" ] ]
+            - [ "2d_montage_point_match", [ "solver" ] ]
+            - [ "solver", [ "manual_qc" ] ]
+            - [ "manual_qc", [ "alignment" ] ]

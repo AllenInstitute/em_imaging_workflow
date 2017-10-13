@@ -12,6 +12,7 @@ import os
 
 class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
   _log = logging.getLogger('development.strategies.generate_lens_correction_transform_strategy')
+
   default_input = {
       "manifest_path": "/allen/programs/celltypes/workgroups/em-connectomics/samk/lc_test_data/Wij_Set_594451332/594089217_594451332/_trackem_20170502174048_295434_5LC_0064_01_20170502174047_reference_0_.txt",
       "project_path": "/allen/programs/celltypes/workgroups/em-connectomics/samk/lc_test_data/Wij_Set_594451332/594089217_594451332/",

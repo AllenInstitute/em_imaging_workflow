@@ -8,7 +8,7 @@ from os import listdir
 import logging
 import os
 
-class MICTasksStrategy(execution_strategy.ExecutionStrategy):
+class ATMICTasksStrategy(execution_strategy.ExecutionStrategy):
   _log = logging.getLogger('development.strategies.m_i_c_tasks_strategy')
 
   default_input = {
@@ -34,8 +34,8 @@ class MICTasksStrategy(execution_strategy.ExecutionStrategy):
     Args:
         enqueued_object (EMMontageSet) 
     '''
-    MICTasksStrategy._log.info('MIC Tasks')
-    input = MICTasksStrategy.default_input
+    ATMICTasksStrategy._log.info('MIC Tasks')
+    input = ATMICTasksStrategy.default_input
 
     return MultIntensityCorrParams().dump(input).data
 

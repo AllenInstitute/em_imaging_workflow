@@ -80,6 +80,7 @@ class Command(BaseCommand):
                         'project_path': '/example_data'
                     })
 
+
             # fix strategy and enqueued object classes for existing workflow
             apply_montage_set_queue, _ = \
                 JobQueue.objects.update_or_create(
@@ -101,4 +102,58 @@ class Command(BaseCommand):
         except Exception as e:
             _log.error('Something went wrong: ' + str(e))
 
+        try:
+            _log.info('creating study')
+            study, _ = Study.objects.update_or_create(
+                name='DEADBEEF',
+                defaults={
+                    'storage_directory': '/study/directory'
+                })
+
+            _log.info('creating specimen')
+            specimen, _ = Specimen.objects.update_or_create(
+                uid='DEADBEEF',
+                defaults={
+                    'render_project': 'PROJECT Lorem Impsum',
+                    'render_owner': 'Lorem Imsum',
+                    'study': study
+                })
+
+            _log.info('creating section')
+            section, _ = Section.objects.update_or_create(
+                id='12345',
+                defaults={
+                    'z_index': 98765,
+                    'metadata': None,
+                    'specimen': specimen 
+                    # TODO: many-to-many fields
+                    # 'chucks': None,    # TODO ???
+                    # 'sample_holders'
+                })
+
+            _log.info('creating load')
+            load, _ = Load.objects.update_or_create(
+                uid='DEADBEEF'
+            )
+
+
+            _log.info('creating sample holder')
+            sample_holder, _ = SampleHolder.objects.update_or_create(
+                uid='DEADBEEF',
+                defaults={
+                    'imaged_sections_count': 0,
+                    'load': load
+                })
+
+            _log.info('creating em montage set')
+            em_montage_set, _ = EMMontageSet.objects.update_or_create(
+                uid="DEADBEEF",
+                defaults={
+                    'acquisition_date': None,
+                    'mipmap_directory': '/mip/map/directory',
+                    'section': section,
+                    'sample_holder': sample_holder
+                })
+        except Exception as e:
+            _log.error('Something went wrong 2: ' + str(e))
        

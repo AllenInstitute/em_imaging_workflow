@@ -30,8 +30,6 @@ class PyTest(TestCommand):
 
     def run_tests(self):
         import pytest
-        os.environ['DJANGO_SETTINGS_MODULE'] = \
-            'at_em_imaging_workflow.settings' 
         errno = pytest.main(self.pytest_args)
         sys.exit(errno)
 

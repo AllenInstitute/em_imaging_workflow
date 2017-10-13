@@ -1,0 +1,58 @@
+executables:
+    mock:
+        name: 'Mock Executable'
+        path: '/projects/mock_bin/mock_executable.sh'
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
+run_states:
+    - "PENDING"
+    - "QUEUED"
+    - "RUNNING"
+    - "FINISHED_EXECUTION"
+    - "FAILED_EXECUTION"
+    - "FAILED"
+    - "SUCCESS"
+    - "PROCESS_KILLED"
+workflows:
+    em_2d_montage:
+        states:
+            - key: "ingest_generate"
+              label: "Ingest / Generate Render Stack"
+              class: "development.strategies.ingest_generate_render_stack_strategy.IngestGenerateRenderStackStrategy"
+              enqueued_class: "development.models.ReferenceSet"
+              executable: "mock"
+            - key: "mic_task_builder"
+              label: "Multiplicative Intensity Correction Task Builder"
+              class: "development.strategies.m_i_c_task_builder_strategy.MICTaskBuilderStrategy"
+              executable: "mock"
+            - key: "mic_tasks"
+              parallel: true
+              label: "Multiplicative Intensity Correction Tasks"
+              class: "development.strategies.m_i_c_tasks_strategy.MICTasksStrategy"
+              enqueued_class: "development.models.ReferenceSet"
+              executable: "mock"
+        graph:
+            - [ "ingest_generate", [ "mic_task_builder" ] ]
+            - [ "mic_task_builder", [ "mic_tasks" ] ]
+    at_2d_montage:
+        states:
+            - key: "ingest"
+              label: "Ingest"
+              class: "development.strategies.ingest_2d_montage_strategy.Ingest2DMontageStrategy"
+              enqueued_class: "development.models.ATMontageSet"
+              executable: "mock"
+            - key: "at_mic_task_builder"
+              label: "Multiplicative Intensity Task Builder"
+              class: "development.strategies.m_i_c_task_builder_strategy.MICTaskBuilderStrategy"
+              enqueued_class: "development.models.ATMontageSet"
+              executable: "mock"
+            - key: "at_mic_tasks"
+              parallel: true
+              label: "AT Multiplicative Intensity Correction Tasks"
+              class: "development.strategies.at_m_i_c_tasks_strategy.ATMICTasksStrategy"
+              enqueued_class: "development.models.ATMontageSet"
+              executable: "mock"
+        graph:
+            - [ "ingest", [ "at_mic_task_builder" ] ]
+            - [ "at_mic_task_builder", [ "at_mic_tasks" ] ]
