@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import MoveRawMontageSetStrategy
+from development.strategies.move_raw_montage_set_strategy \
+    import MoveRawMontageSetStrategy
 
 class TestMoveRawMontageSetStrategy(TestCase):
     def test_get_input_data(self):

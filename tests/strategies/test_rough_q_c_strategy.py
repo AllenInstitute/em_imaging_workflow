@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import RoughQCStrategy
+from development.strategies.rough_q_c_strategy \
+    import RoughQCStrategy
 
 class TestRoughQCStrategy(TestCase):
     def test_get_input_data(self):
@@ -13,3 +14,4 @@ class TestRoughQCStrategy(TestCase):
                                    storage_directory,
                                    task)
         assert input is not None
+

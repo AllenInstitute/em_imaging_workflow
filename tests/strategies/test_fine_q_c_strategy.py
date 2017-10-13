@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import FineQCStrategy
+from development.strategies.fine_q_c_strategy \
+    import FineQCStrategy
 
 class TestFineQCStrategy(TestCase):
     def test_get_input_data(self):

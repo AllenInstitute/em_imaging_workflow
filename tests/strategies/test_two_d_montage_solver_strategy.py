@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import TwoDMontageSolverStrategy
+from development.strategies.two_d_montage_solver_strategy \
+    import TwoDMontageSolverStrategy
 
 class TestTwoDMontageSolverStrategy(TestCase):
     def test_get_input_data(self):
@@ -13,3 +14,4 @@ class TestTwoDMontageSolverStrategy(TestCase):
                                    storage_directory,
                                    task)
         assert input is not None
+

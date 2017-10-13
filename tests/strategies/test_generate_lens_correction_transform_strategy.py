@@ -12,8 +12,9 @@ class TestGenerateLensCorrectionTransformStrategy(TestCase):
         task = None
         storage_directory = '/example/storage/directory'
 
-        with patch('development.strategies.generate_lens_correction_transform_strategy.'
-                   '.GenerateLensCorrectionTransformStrategy'
+        with patch('development.strategies' + \
+                   '.generate_lens_correction_transform_strategy' + \
+                   '.GenerateLensCorrectionTransformStrategy' + \
                    '.find_manifest_path',
                    return_value='manifest.json'):
             strategy = GenerateLensCorrectionTransformStrategy()

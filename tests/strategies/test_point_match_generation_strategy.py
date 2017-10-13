@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import PointMatchGenerationStrategy
+from development.strategies.point_match_generation_strategy \
+    import PointMatchGenerationStrategy
 
 class TestPointMatchGenerationStrategy(TestCase):
     def test_get_input_data(self):
@@ -13,3 +14,4 @@ class TestPointMatchGenerationStrategy(TestCase):
                                    storage_directory,
                                    task)
         assert input is not None
+

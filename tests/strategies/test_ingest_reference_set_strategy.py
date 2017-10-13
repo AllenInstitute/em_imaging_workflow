@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import IngestReferenceSetStrategy
+from development.strategies.ingest_reference_set_strategy \
+    import IngestReferenceSetStrategy
 
 class TestIngestReferenceSetStrategy(TestCase):
     def test_get_input_data(self):
@@ -13,3 +14,4 @@ class TestIngestReferenceSetStrategy(TestCase):
                                    storage_directory,
                                    task)
         assert input is not None
+

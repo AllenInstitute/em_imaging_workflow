@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import TwoDMontagePointMatchStrategy
+from development.strategies.two_d_montage_point_match_strategy \
+    import TwoDMontagePointMatchStrategy
 
 class TestTwoDMontagePointMatchStrategy(TestCase):
     def test_get_input_data(self):
@@ -13,3 +14,4 @@ class TestTwoDMontagePointMatchStrategy(TestCase):
                                    storage_directory,
                                    task)
         assert input is not None
+

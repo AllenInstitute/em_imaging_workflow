@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import GenerateMipMapsStrategy
+from development.strategies.generate_mip_maps_strategy \
+    import GenerateMipMapsStrategy
 
 class TestGenerateMipMapsStrategy(TestCase):
     def test_get_input_data(self):
@@ -13,3 +14,4 @@ class TestGenerateMipMapsStrategy(TestCase):
                                    storage_directory,
                                    task)
         assert input is not None
+

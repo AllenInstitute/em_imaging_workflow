@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import RoughSolverStrategy
+from development.strategies.rough_solver_strategy \
+    import RoughSolverStrategy
 
 class TestRoughSolverStrategy(TestCase):
     def test_get_input_data(self):

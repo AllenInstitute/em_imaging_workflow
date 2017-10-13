@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import StackSplitReversionStrategy
+from development.strategies.stack_split_reversion_strategy \
+    import StackSplitReversionStrategy
 
 class TestStackSplitReversionStrategy(TestCase):
     def test_get_input_data(self):
@@ -13,3 +14,4 @@ class TestStackSplitReversionStrategy(TestCase):
                                    storage_directory,
                                    task)
         assert input is not None
+

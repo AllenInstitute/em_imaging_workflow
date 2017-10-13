@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import StackSplitterStrategy
+from development.strategies.stack_splitter_strategy \
+    import StackSplitterStrategy
 
 class TestStackSplitterStrategy(TestCase):
     def test_get_input_data(self):
@@ -13,3 +14,4 @@ class TestStackSplitterStrategy(TestCase):
                                    storage_directory,
                                    task)
         assert input is not None
+

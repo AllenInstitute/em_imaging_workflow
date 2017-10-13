@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import ConsolidateStrategy
+from development.strategies.consolidate_strategy \
+    import ConsolidateStrategy
 
 class TestConsolidateStrategy(TestCase):
     def test_get_input_data(self):

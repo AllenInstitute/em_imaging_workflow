@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import MICTaskBuilderStrategy
+from development.strategies.m_i_c_task_builder_strategy \
+    import MICTaskBuilderStrategy
 
 class TestMICTaskBuilderStrategy(TestCase):
     def test_get_input_data(self):
@@ -13,3 +14,4 @@ class TestMICTaskBuilderStrategy(TestCase):
                                    storage_directory,
                                    task)
         assert input is not None
+

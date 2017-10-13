@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import DownsampleSectionImageStrategy
+from development.strategies.downsample_section_image_strategy \
+    import DownsampleSectionImageStrategy
 
 class TestDownsampleSectionImageStrategy(TestCase):
     def test_get_input_data(self):

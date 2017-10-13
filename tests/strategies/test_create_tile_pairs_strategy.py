@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import CreateTilePairsStrategy
+from development.strategies.create_tile_pairs_strategy \
+    import CreateTilePairsStrategy
 
 class TestCreateTilePairsStrategy(TestCase):
     def test_get_input_data(self):
@@ -13,3 +14,4 @@ class TestCreateTilePairsStrategy(TestCase):
                                    storage_directory,
                                    task)
         assert input is not None
+

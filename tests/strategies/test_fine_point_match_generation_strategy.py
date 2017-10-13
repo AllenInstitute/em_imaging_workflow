@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import FinePointMatchGenerationStrategy
+from development.strategies.fine_point_match_generation_strategy \
+    import FinePointMatchGenerationStrategy
 
 class TestFinePointMatchGenerationStrategy(TestCase):
     def test_get_input_data(self):

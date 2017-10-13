@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import ManualQCStrategy
+from development.strategies.manual_q_c_strategy \
+    import ManualQCStrategy
 
 class TestManualQCStrategy(TestCase):
     def test_get_input_data(self):
@@ -13,3 +14,4 @@ class TestManualQCStrategy(TestCase):
                                    storage_directory,
                                    task)
         assert input is not None
+

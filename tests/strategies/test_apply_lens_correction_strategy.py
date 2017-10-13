@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import ApplyLensCorrectionStrategy
+from development.strategies.apply_lens_correction_strategy \
+    import ApplyLensCorrectionStrategy
 
 class TestApplyLensCorrectionStrategy(TestCase):
     def test_get_input_data(self):
@@ -13,3 +14,4 @@ class TestApplyLensCorrectionStrategy(TestCase):
                                    storage_directory,
                                    task)
         assert input is not None
+

@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import RoughAlignmentStrategy
+from development.strategies.rough_alignment_strategy \
+    import RoughAlignmentStrategy
 
 class TestRoughAlignmentStrategy(TestCase):
     def test_get_input_data(self):
@@ -13,3 +14,4 @@ class TestRoughAlignmentStrategy(TestCase):
                                    storage_directory,
                                    task)
         assert input is not None
+

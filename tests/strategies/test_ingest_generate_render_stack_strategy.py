@@ -1,7 +1,8 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.strategies import IngestGenerateRenderStackStrategy
+from development.strategies.ingest_generate_render_stack_strategy \
+    import IngestGenerateRenderStackStrategy
 
 class TestIngestGenerateRenderStackStrategy(TestCase):
     def test_get_input_data(self):
@@ -13,3 +14,4 @@ class TestIngestGenerateRenderStackStrategy(TestCase):
                                    storage_directory,
                                    task)
         assert input is not None
+

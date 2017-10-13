@@ -3,7 +3,8 @@ django.setup()
 import pprint
 import simplejson as json
 from django.test import TestCase
-from development.strategies import GeneratePointMatchesStrategy
+from development.strategies.generate_point_matches_strategy import \
+    GeneratePointMatchesStrategy
 from render_parameters import *
 
 class TestGeneratePointMatchesStrategy(TestCase):
@@ -37,3 +38,4 @@ class TestGeneratePointMatchesStrategy(TestCase):
                                         task)
 
         assert input_json['render']['port'] == 8998
+
