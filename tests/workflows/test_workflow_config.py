@@ -58,7 +58,6 @@ def test_workflow_config(workflow_config):
 def test_create_workflow(workflow_config):
     app_package = 'development'
     WorkflowConfig.create_workflow(
-        app_package,
         os.path.join(os.path.dirname(__file__), 'workflows.yml'))
 
     for e in Executable.objects.all():
@@ -71,7 +70,7 @@ def test_create_workflow(workflow_config):
 
     workflow_nodes = \
         WorkflowNode.objects.filter(
-            workflow=Workflow.objects.get(name='lens_correction'),
+            workflow=Workflow.objects.get(name='lens_correction2'),
             parent=None)
 
     for n in workflow_nodes:
@@ -87,7 +86,7 @@ def test_create_workflow(workflow_config):
     enqueued_object = ReferenceSet()
     enqueued_object.save()
 
-    Workflow.start_workflow('lens_correction',
+    Workflow.start_workflow('lens_correction2',
                             enqueued_object)
 
 
