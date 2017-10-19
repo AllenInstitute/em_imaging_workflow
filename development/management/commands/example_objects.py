@@ -40,7 +40,7 @@ from workflow_engine.models import JobQueue
 import logging
 
 _log = logging.getLogger(
-    'development.mananagement.commands.example_objects')
+    'development.management.commands.example_objects')
 
 
 class Command(BaseCommand):
@@ -131,8 +131,8 @@ class Command(BaseCommand):
                 'sample_holder': sample_holder,
                 'reference_set': example_reference_set,
                 'reference_set_uid': example_reference_set.uid
-         
             })
+        _log.info(str(em_montage_set))
 
     @classmethod
     def fix_nathans_queue(cls):
@@ -167,6 +167,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # file_path = options['file']
+        logging.basicConfig(level=logging.INFO)
+        logging.getLogger('development').setLevel(logging.INFO)
         try:
             self.__class__.example_reference_set()
         except Exception as e:

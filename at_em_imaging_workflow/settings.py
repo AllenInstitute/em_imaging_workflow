@@ -18,7 +18,7 @@ PROJECT_ROOT = BASE_DIR
 
 #BASE_FILE_PATH = \
 #    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky/files/'
-BASE_FILE_PATH = '/data'
+BASE_FILE_PATH = '/example_data'
 PBS_FINISH_PATH = \
     '/allen/programs/celltypes/workgroups/array_tomography/blue_sky' + \
     '/at_em_imaging_workflow/pbs_execution_finish.py'
@@ -197,6 +197,12 @@ STATIC_URL = '/static/'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'detailed': {
+            'class': 'logging.Formatter',
+            'format': '%(asctime)s %(name)-15s %(levelname)-8s %(processName)-10s %(message)s'
+        }
+    },    
     'handlers': {
         'file': {
             'level': 'DEBUG',
@@ -207,11 +213,42 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['file'],
+            'level': 'WARN',
+            'propagate': True,
+        },
+        'at_em_imaging_workflow': {
+            'handlers': ['file'],
+            'level': 'WARN',
+            'propagate': True,
+        },
+        'development': {
+            'handlers': ['file'],
+            'level': 'WARN',
+            'propagate': True,
+        },
+        'test_output': {
+            'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True,
         },
-    },
-}
+        'workflow_engine': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'celery': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'celery.task': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        }        
+    }
+} 
+CELERYD_HIJACK_ROOT_LOGGER = False
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
