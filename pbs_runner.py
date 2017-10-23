@@ -2,11 +2,13 @@ from celery import Celery
 import os
 import pika
 
-MESSAGE_QUEUE_HOST = 'ibs-roby-vm1'
+MESSAGE_QUEUE_HOST = 'message_queue'
+MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
+MESSAGE_QUEUE_USER = 'blue_sky_user'
+MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
 
-app = Celery('pbs_runner', backend='rpc://', broker='pyamqp://guest@' + MESSAGE_QUEUE_HOST + '//')
-
-app.conf.task_default_queue = 'pbs'
+app = Celery('pbs_runner', backend='rpc://', broker='pyamqp://' + str(MESSAGE_QUEUE_USER) + ':' + str(MESSAGE_QUEUE_PASSWORD) + '@' + MESSAGE_QUEUE_HOST + '//')
+app.conf.task_default_queue = 'pbs' + MESSAGE_QUEUE_NAME
 
 SUCCESS_EXIT_CODE = 0
 ERROR_EXIT_CODE = 1

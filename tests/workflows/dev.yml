@@ -23,6 +23,11 @@ run_states:
 workflows:
     em_2d_montage_point_match:
         states:
+            - key: "ingest_generate"
+              label: "Ingest / Generate Render Stack"
+              class: "development.strategies.ingest_generate_render_stack_strategy.IngestGenerateRenderStackStrategy"
+              enqueued_class: "development.models.EMMontageSet"
+              executable: "mock"
             - key: "create_tile_pairs"
               label: "Create Tile Pairs"
               class: "development.strategies.create_tile_pairs_strategy.CreateTilePairsStrategy"
@@ -48,6 +53,7 @@ workflows:
               label: "Alignment"
               workflow: true
         graph:
+            - [ "ingest_generate", [ "create_tile_pairs" ] ]
             - [ "create_tile_pairs", [ "2d_montage_point_match" ] ]
             - [ "2d_montage_point_match", [ "solver" ] ]
             - [ "solver", [ "manual_qc" ] ]

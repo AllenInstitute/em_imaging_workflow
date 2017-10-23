@@ -1,5 +1,5 @@
 from workflow_engine.strategies import execution_strategy
-from workflow_engine.models import *
+#from workflow_engine.models import *
 #from development.models import *
 from rendermodules.pointmatch.schemas import \
     TilePairClientParameters
@@ -44,10 +44,9 @@ class CreateTilePairsStrategy(execution_strategy.ExecutionStrategy):
   #called after the execution finishes
   #process and save results to the database
   def on_finishing(self, enqueued_object, results, task):
-
-    self.check_key(results, 'output_json')
-
-    self.set_well_known_file(results['output_json'], enqueued_object, 'description', task)
+    CreateTilePairsStrategy._log.info("ON FINISHING")
+    # self.check_key(results, 'output_json')
+    # self.set_well_known_file(results['output_json'], enqueued_object, 'description', task)
 
   #override if needed
   #set the storage directory for an enqueued object
