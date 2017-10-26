@@ -40,6 +40,16 @@ class IngestGenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
         'ingest/generate render stack')
     input = IngestGenerateRenderStackStrategy.default_input
 
+    input['render']['host'] = settings.RENDER_SERVICE_URL
+    input['render']['port'] = settings.RENDER_SERVICE_PORT
+    input['render']['owner'] = settings.RENDER_SERVICE_USER
+    input['render']['project'] = settings.RENDER_SERVICE_PROJECT
+    input['metafile'] = \
+        os.path.join(
+            '/allen/aibs/pipeline/image_processing/volume_assembly',
+            'dataimport_test_data',
+            '_metadata_20170829130146_295434_5LC_0064_01_redo_001050_0_.json')
+
     return GenerateEMTileSpecsParameters().dump(input).data
 
   #override if needed

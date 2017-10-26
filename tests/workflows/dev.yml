@@ -11,6 +11,42 @@ executables:
         pbs_queue: 'mindscope'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
+    generate_em_tilespecs_from_metafile:
+        name: 'EM Create Tilespecs'
+        path: '/opt/conda/bin/python'
+        args:
+        - '-m'
+        - "rendermodules.dataimport.generate_EM_tilespecs_from_metafile"
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
+    generate_point_matches:
+        name: 'EM 2D Generate Point Matches'
+        path: '/opt/conda/bin/python'
+        args:
+        - '-m'
+        - "rendermodules.pointmatch.generate_point_matches"
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
+    em_2d_solver:
+        name: 'EM 2D Solver'
+        path: '/opt/conda/bin/python'
+        args:
+        - '-m'
+        - "rendermodules.montage.run_montage_job_for_section"
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
+    create_tilepairs:
+        name: 'Python'
+        path: '/opt/conda/bin/python'
+        args:
+        - '-m'
+        - "rendermodules.pointmatch.create_tilepairs"
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
 run_states:
     - "PENDING"
     - "QUEUED"
@@ -27,22 +63,22 @@ workflows:
               label: "Ingest / Generate Render Stack"
               class: "development.strategies.ingest_generate_render_stack_strategy.IngestGenerateRenderStackStrategy"
               enqueued_class: "development.models.EMMontageSet"
-              executable: "mock"
+              executable: "generate_em_tilespecs_from_metafile"
             - key: "create_tile_pairs"
               label: "Create Tile Pairs"
               class: "development.strategies.create_tile_pairs_strategy.CreateTilePairsStrategy"
               enqueued_class: "development.models.EMMontageSet"
-              executable: "mock"
+              executable: "create_tilepairs"
             - key: "2d_montage_point_match"
               label: "2D Montage Point Match"
               class: "development.strategies.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy"
               enqueued_class: "development.models.EMMontageSet"
-              executable: "mock"
+              executable: "generate_point_matches"
             - key: "solver"
               label: "2D Montage Solver"
               class: "development.strategies.two_d_montage_solver_strategy.TwoDMontageSolverStrategy"
               enqueued_class: "development.models.EMMontageSet"
-              executable: "mock"
+              executable: "em_2d_solver"
             - key: "manual_qc"
               label: "Manual QC / High Degree Polynomial or Point Match Regeneration"
               manual: true

@@ -1,6 +1,6 @@
 from workflow_engine.strategies import execution_strategy
-#from workflow_engine.models import *
-#from development.models import *
+# from workflow_engine.models import *
+# from development.models import *
 from rendermodules.pointmatch.schemas import \
     TilePairClientParameters
 from django.conf import settings
@@ -37,6 +37,14 @@ class CreateTilePairsStrategy(execution_strategy.ExecutionStrategy):
     CreateTilePairsStrategy._log.info("get input")
 
     input = CreateTilePairsStrategy.default_input
+
+    input['render']['host'] = settings.RENDER_SERVICE_URL
+    input['render']['port'] = settings.RENDER_SERVICE_PORT
+    input['render']['owner'] = settings.RENDER_SERVICE_USER
+    input['render']['project'] = settings.RENDER_SERVICE_PROJECT
+    input['render']['output_dir'] = '/example_data/scratch'
+
+    input['stack'] = 'TEST_IMPORT_FROMMD'
 
     return TilePairClientParameters().dump(input).data 
 
