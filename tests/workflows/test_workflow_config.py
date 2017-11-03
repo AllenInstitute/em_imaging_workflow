@@ -58,7 +58,7 @@ def test_workflow_config(workflow_config):
 def test_create_workflow(workflow_config):
     app_package = 'development'
     WorkflowConfig.create_workflow(
-        os.path.join(os.path.dirname(__file__), 'workflows.yml'))
+        os.path.join(os.path.dirname(__file__), 'dev.yml'))
 
     for e in Executable.objects.all():
         _log.info(e.name)
@@ -70,7 +70,7 @@ def test_create_workflow(workflow_config):
 
     workflow_nodes = \
         WorkflowNode.objects.filter(
-            workflow=Workflow.objects.get(name='lens_correction2'),
+            workflow=Workflow.objects.get(name='em_2d_montage_point_match'),
             parent=None)
 
     for n in workflow_nodes:
@@ -86,13 +86,13 @@ def test_create_workflow(workflow_config):
     enqueued_object = ReferenceSet()
     enqueued_object.save()
 
-    Workflow.start_workflow('lens_correction2',
-                            enqueued_object)
+    # Workflow.start_workflow('em_2d_montage',
+    #                         enqueued_object)
 
 
 def test_from_yaml_file(workflow_config):
     wc = workflow_config.from_yaml_file(os.path.join(os.path.dirname(__file__),
-                                        'workflows.yml'))
+                                        'dev.yml'))
 
     print("\n")
     for w in wc['flows']:
