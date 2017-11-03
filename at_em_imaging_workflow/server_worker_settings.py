@@ -25,8 +25,8 @@ PBS_FINISH_PATH = \
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
 INGEST_QUEUE_NAME = 'em_2d_montage_ingest'
-CELERY_MESSAGE_QUEUE_NAME = 'celery_' + MESSAGE_QUEUE_NAME
 SPARK_MESSAGE_QUEUE_NAME = 'spark_' + MESSAGE_QUEUE_NAME
+CELERY_MESSAGE_QUEUE_NAME = 'celery_' + MESSAGE_QUEUE_NAME
 # CELERY_DEFAULT_QUEUE = 'celery_' + MESSAGE_QUEUE_NAME
 MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
@@ -215,7 +215,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'debug.log',
+            'filename': 'server_worker_debug.log',
         },
     },
     'loggers': {

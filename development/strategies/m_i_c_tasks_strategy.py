@@ -37,16 +37,23 @@ class MICTasksStrategy(execution_strategy.ExecutionStrategy):
     MICTasksStrategy._log.info('MIC Tasks')
     input = MICTasksStrategy.default_input
 
+    input['render']['host'] = settings.RENDER_SERVICE_URL
+    input['render']['port'] = settings.RENDER_SERVICE_PORT
+    input['render']['owner'] = settings.RENDER_SERVICE_USER
+    input['render']['project'] = settings.RENDER_SERVICE_PROJECT
+    input['render']['output_dir'] = '/example_data/scratch'
+    
+    input['stack'] = 'test_LC'
+
     return MultIntensityCorrParams().dump(input).data
 
   #override if needed
   #called after the execution finishes
   #process and save results to the database
   def on_finishing(self, enqueued_object, results, task):
-
-    self.check_key(results, 'output_json')
-
-    self.set_well_known_file(results['output_json'], enqueued_object, 'description', task)
+    # self.check_key(results, 'output_json')
+    # self.set_well_known_file(results['output_json'], enqueued_object, 'description', task)
+    pass
 
   #override if needed
   #set the storage directory for an enqueued object

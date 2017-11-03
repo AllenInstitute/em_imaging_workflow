@@ -42,9 +42,12 @@ class CreateTilePairsStrategy(execution_strategy.ExecutionStrategy):
     input['render']['port'] = settings.RENDER_SERVICE_PORT
     input['render']['owner'] = settings.RENDER_SERVICE_USER
     input['render']['project'] = settings.RENDER_SERVICE_PROJECT
-    input['render']['output_dir'] = '/example_data/scratch'
 
-    input['stack'] = 'TEST_IMPORT_FROMMD'
+    input["minZ"] = 1
+    input["maxZ"] = 1
+    input['output_dir'] = self.get_or_create_task_storage_directory(task)
+    input['baseStack'] = 'test_LC'
+    input['stack'] = 'test_LC'
 
     return TilePairClientParameters().dump(input).data 
 

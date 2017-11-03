@@ -20,12 +20,22 @@ executables:
         pbs_queue: 'mindscope'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
-    generate_point_matches:
-        name: 'EM 2D Generate Point Matches'
+    apply_lens_correction:
+        name: 'Apply Lens Correction'
         path: '/opt/conda/bin/python'
         args:
         - '-m'
-        - "rendermodules.pointmatch.generate_point_matches"
+        - "rendermodules.lens_correction.apply_lens_correction"
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
+    generate_point_matches:
+        name: 'EM 2D Generate Point Matches'
+        path: '/usr/bin/python'
+        args:
+        - '-m'
+        - "rendermodules.pointmatch.generate_point_matches_spark"
+        remote_queue: 'spark'
         pbs_queue: 'mindscope'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
@@ -38,12 +48,48 @@ executables:
         pbs_queue: 'mindscope'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
+    generate_mipmaps:
+        name: 'Generate MIPmaps'
+        path: '/opt/conda/bin/python'
+        args:
+        - '-m'
+        - "rendermodules.dataimport.generate_mipmaps"
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
+    apply_mipmaps:
+        name: 'Apply MIPmaps'
+        path: '/opt/conda/bin/python'
+        args:
+        - '-m'
+        - "rendermodules.dataimport.apply_mipmaps_to_render"
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
     create_tilepairs:
-        name: 'Python'
+        name: 'Create Tile Pairs'
         path: '/opt/conda/bin/python'
         args:
         - '-m'
         - "rendermodules.pointmatch.create_tilepairs"
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
+    calculate_multiplicative_correction:
+        name: 'Calculate Multiplicative Correction'
+        path: '/opt/conda/bin/python'
+        args:
+        - '-m'
+        - "rendermodules.intensity_correction.calculate_multiplicative_correction"
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
+    apply_multiplicative_correction:
+        name: 'Apply Multiplicative Correction'
+        path: '/opt/conda/bin/python'
+        args:
+        - '-m'
+        - "rendermodules.intensity_correction.apply_multiplicative_correction"
         pbs_queue: 'mindscope'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
@@ -64,6 +110,11 @@ workflows:
               class: "development.strategies.ingest_generate_render_stack_strategy.IngestGenerateRenderStackStrategy"
               enqueued_class: "development.models.EMMontageSet"
               executable: "generate_em_tilespecs_from_metafile"
+            - key: "apply_lens_correction_new"
+              label: "Apply Lens Correction New"
+              class: "development.strategies.apply_lens_correction_strategy.ApplyLensCorrectionStrategy"
+              enqueued_class: "development.models.EMMontageSet"
+              executable: "apply_lens_correction"
             - key: "create_tile_pairs"
               label: "Create Tile Pairs"
               class: "development.strategies.create_tile_pairs_strategy.CreateTilePairsStrategy"
@@ -89,7 +140,8 @@ workflows:
               label: "Alignment"
               workflow: true
         graph:
-            - [ "ingest_generate", [ "create_tile_pairs" ] ]
+            - [ "ingest_generate", [ "apply_lens_correction_new" ] ]
+            - [ "apply_lens_correction_new", [ "create_tile_pairs" ] ]
             - [ "create_tile_pairs", [ "2d_montage_point_match" ] ]
             - [ "2d_montage_point_match", [ "solver" ] ]
             - [ "solver", [ "manual_qc" ] ]
@@ -99,14 +151,14 @@ workflows:
             - key: "mic_task_builder"
               label: "Multiplicative Intensity Correction Task Builder"
               class: "development.strategies.m_i_c_task_builder_strategy.MICTaskBuilderStrategy"
-              enqueued_class: "development.models.ReferenceSet"
-              executable: "mock"
+              enqueued_class: "development.models.EMMontageSet"
+              executable: "calculate_multiplicative_correction"
             - key: "mic_tasks"
               parallel: true
               label: "Multiplicative Intensity Correction Tasks"
               class: "development.strategies.m_i_c_tasks_strategy.MICTasksStrategy"
-              enqueued_class: "development.models.ReferenceSet"
-              executable: "mock"
+              enqueued_class: "development.models.EMMontageSet"
+              executable: "apply_multiplicative_correction"
         graph:
             - [ "mic_task_builder", [ "mic_tasks" ] ]
     at_2d_montage:

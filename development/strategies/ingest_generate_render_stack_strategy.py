@@ -49,7 +49,11 @@ class IngestGenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
             '/allen/aibs/pipeline/image_processing/volume_assembly',
             'dataimport_test_data',
             '_metadata_20170829130146_295434_5LC_0064_01_redo_001050_0_.json')
-
+    #     os.path.join(
+    #         '/allen/aibs/pipeline/image_processing/volume_assembly',
+    #         'dataimport_test_data',
+    #         '_metadata_20170829130146_295434_5LC_0064_01_redo_001050_0_.json')
+ 
     return GenerateEMTileSpecsParameters().dump(input).data
 
   #override if needed
