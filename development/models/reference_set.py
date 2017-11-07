@@ -40,3 +40,4 @@ from .tile_image_set import TileImageSet
 class ReferenceSet(TileImageSet):
     uid = models.CharField(max_length=255, null=True)
     project_path = models.CharField(max_length=255)
+
