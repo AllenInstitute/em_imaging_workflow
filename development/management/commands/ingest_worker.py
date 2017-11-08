@@ -34,6 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 import pika
+import simplejson as json
 from workflow_engine.models import RunState, Task, Workflow
 from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ObjectDoesNotExist
@@ -41,6 +42,8 @@ from development.models import *
 from django.conf import settings
 import logging
 import traceback
+from rendermodules.ingest.schemas import \
+    example, EMMontageSetIngestSchema
 
 _WORKFLOW_NAME='em_2d_montage_point_match'
 
@@ -61,8 +64,8 @@ class Command(BaseCommand):
 
         credentials = pika.PlainCredentials(
             settings.MESSAGE_QUEUE_USER,
-
             settings.MESSAGE_QUEUE_PASSWORD)
+
         connection = pika.BlockingConnection(
             pika.ConnectionParameters(
                 settings.MESSAGE_QUEUE_HOST,
@@ -89,21 +92,29 @@ class Command(BaseCommand):
         Command._log.info(" [x] Received " + str(body))
 
         try:
-            body_data = body
-            cls.create_em_render_set(body)
+            body_data = json.loads(body)
+            Command._log.info(body_data)
+            em_montage_set = cls.create_em_render_set(body_data)
+            Workflow.start_workflow(_WORKFLOW_NAME,
+                                    em_montage_set)
         except Exception as e:
             Command._log.error(
-                'Something went wrong: ' + (traceback.print_exc(e)))
+                'Something went wrong: ' + traceback.print_exc(e))
 
     @classmethod
-    def example_reference_set(cls):
+    def create_reference_set(cls, message):
+        message_camera = message['acquisition_data']['camera']
         camera, _ = \
             Camera.objects.update_or_create(
-                uid="DEADBEEF")
+                uid=message_camera['camera_id'],
+                defaults={
+                    'height': message_camera['height'],
+                    'width': message_camera['width'],
+                    'model': message_camera['model']})
 
         microscope_type, _ = \
             MicroscopeType.objects.update_or_create(
-                name="DEADBEEF")
+                name=message['acquisition_data']['microscope'])
 
         microscope, _ = \
             Microscope.objects.update_or_create(
@@ -112,9 +123,8 @@ class Command(BaseCommand):
                     'microscope_type': microscope_type
                 })
 
-        reference_set, _ = \
-            ReferenceSet.objects.update_or_create(
-                uid="DEADBEEF",
+        reference_set, _ = ReferenceSet.objects.update_or_create(
+                uid=message['reference_set_id'],
                 defaults={
                     'storage_directory': '/example_data',
                     'workflow_state': 'Lorem Ipsum',
@@ -127,18 +137,18 @@ class Command(BaseCommand):
 
     
     @classmethod
-    def create_em_render_set(cls, set_name):
+    def create_em_render_set(cls, message):
         Command._log.info('creating study')
 
         study, _ = Study.objects.update_or_create(
             name='DEADBEEF',
             defaults={
-                'storage_directory': '/study/directory'
+                'storage_directory': message['storage_directory'] 
             })
 
         Command._log.info('creating specimen')
         specimen, _ = Specimen.objects.update_or_create(
-            uid='DEADBEEF',
+            uid=message['section']['specimen'],
             defaults={
                 'render_project': 'PROJECT Lorem Impsum',
                 'render_owner': 'Lorem Imsum',
@@ -149,7 +159,7 @@ class Command(BaseCommand):
         section, _ = Section.objects.update_or_create(
             id='12345',
             defaults={
-                'z_index': 98765,
+                'z_index': message['section']['z_index'],
                 'metadata': None,
                 'specimen': specimen 
                 # TODO: many-to-many fields
@@ -162,30 +172,29 @@ class Command(BaseCommand):
             uid='DEADBEEF'
         )
 
-
         Command._log.info('creating sample holder')
         sample_holder, _ = SampleHolder.objects.update_or_create(
-            uid='DEADBEEF',
+            uid=message['section']['sample_holder'],
             defaults={
                 'imaged_sections_count': 0,
                 'load': load
             })
 
         Command._log.info('creating em montage set')
-        example_reference_set = cls.example_reference_set()
+        ingest_reference_set = cls.create_reference_set(message)
 
         em_montage_set, _ = EMMontageSet.objects.update_or_create(
-            uid=set_name,
+            uid=message['reference_set_id'],
             defaults={
-                'acquisition_date': None,
+                'acquisition_date':
+                    message['acquisition_data']['acquisition_time'],
+                'overlap': message['acquisition_data']['overlap'],
                 'mipmap_directory': '/mip/map/directory',
                 'section': section,
                 'sample_holder': sample_holder,
-                'reference_set': example_reference_set,
-                'reference_set_uid': example_reference_set.uid
+                'reference_set': ingest_reference_set,
+                'reference_set_uid': ingest_reference_set.uid
             })
         Command._log.info(str(em_montage_set))
 
-        Workflow.start_workflow(_WORKFLOW_NAME,
-                                em_montage_set)
-
+        return em_montage_set

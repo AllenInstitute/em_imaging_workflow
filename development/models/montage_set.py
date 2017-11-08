@@ -45,6 +45,7 @@ class MontageSet(TileImageSet):
     mipmap_directory = models.CharField(max_length=255, null=True)
     section = models.ForeignKey(Section)
     sample_holder = models.ForeignKey(SampleHolder)
+    overlap = models.FloatField(null=True)
 
     def __str__(self):
         return self.uid
