@@ -4,7 +4,7 @@ import pika
 import paramiko
 import logging
 
-MESSAGE_QUEUE_HOST = os.getenv('MESSAGE_QUEUE_HOST')
+MESSAGE_QUEUE_HOST = os.getenv('MESSAGE_QUEUE_HOST', 'message_queue')
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
 CELERY_MESSAGE_QUEUE_NAME = 'celery_' + MESSAGE_QUEUE_NAME
 MESSAGE_QUEUE_USER = 'blue_sky_user'
