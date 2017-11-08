@@ -9,7 +9,7 @@ credentials = pika.PlainCredentials(
 
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(
-        'ibs-timf-ux1',
+        'em-131db',
         5672,
         '/',
         credentials))
