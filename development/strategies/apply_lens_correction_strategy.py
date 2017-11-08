@@ -1,6 +1,4 @@
 from workflow_engine.strategies import execution_strategy
-# from workflow_engine.models import *
-# from development.models import *
 from rendermodules.lens_correction.schemas import \
   ApplyLensCorrectionParameters
 from django.conf import settings
@@ -12,9 +10,9 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
   _log = logging.getLogger(
       'development.strategies.apply_lens_correction_strategy')
 
-  default_input = {
+  _default_input = {
     "render": {
-        "host": "em-131fs",
+        "host": "renderservice",
         "port": 8080,
         "owner": "samk",
         "project": "RENDERAPI_TEST",
@@ -72,16 +70,18 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
   #set the data for the input file
   def get_input(self, enqueued_object, storage_directory, task):
     ApplyLensCorrectionStrategy._log.info('get_input')
-    input = ApplyLensCorrectionStrategy.default_input
+    input = ApplyLensCorrectionStrategy._default_input
 
     input['render']['host'] = settings.RENDER_SERVICE_URL
     input['render']['port'] = settings.RENDER_SERVICE_PORT
     input['render']['owner'] = settings.RENDER_SERVICE_USER
     input['render']['project'] = settings.RENDER_SERVICE_PROJECT
+    input['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
     input['zs'] = [ 1 ]
     input['inputStack'] = 'TEST_IMPORT_FROMMD'
 
     return ApplyLensCorrectionParameters().dump(input).data
+
 
   #override if needed
   #called after the execution finishes

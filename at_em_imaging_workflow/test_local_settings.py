@@ -15,7 +15,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(PROJECT_ROOT, 'test_debug.log'),
+            'filename': os.path.join(PROJECT_ROOT, 'debug_test.log'),
             'formatter': 'detailed'
         },
     },
@@ -23,6 +23,16 @@ LOGGING = {
         'django': {
             'handlers': ['file'],
             'level': 'DEBUG',
+            'propagate': True,
+        },
+        'at_em_imaging_workflow': {
+            'handlers': ['file'],
+            'level': 'WARN',
+            'propagate': True,
+        },
+        'development': {
+            'handlers': ['file'],
+            'level': 'WARN',
             'propagate': True,
         },
         'test_output': {

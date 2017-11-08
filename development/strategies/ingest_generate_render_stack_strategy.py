@@ -44,6 +44,7 @@ class IngestGenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
     input['render']['port'] = settings.RENDER_SERVICE_PORT
     input['render']['owner'] = settings.RENDER_SERVICE_USER
     input['render']['project'] = settings.RENDER_SERVICE_PROJECT
+    input['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
     input['metafile'] = \
         os.path.join(
             '/allen/aibs/pipeline/image_processing/volume_assembly',

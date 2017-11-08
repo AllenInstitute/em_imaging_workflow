@@ -2,6 +2,7 @@
 sleep 20
 export PYTHONPATH=/at_em_imaging_workflow:/blue_sky_workflow_engine:/render-modules:/schema_package
 export DJANGO_SETTINGS_MODULE=at_em_imaging_workflow.settings
+export MESSAGE_QUEUE_HOST=ibs-timf-ux1
 
 python manage.py makemigrations
 python manage.py migrate 

@@ -36,6 +36,9 @@ RENDER_SERVICE_URL = 'em_131db'
 RENDER_SERVICE_PORT = '8081'
 RENDER_SERVICE_USER = 'timf'
 RENDER_SERVICE_PROJECT = 'DEV'
+RENDER_CLIENT_SCRIPTS = os.environ.get(
+    'RENDER_CLIENT_SCRIPTS',
+    '/shared/render/render-ws-java-client/src/main/scripts')
 
 FIJI_PATH = \
     '/allen/aibs/pipeline/image_processing/volume_assembly' + \

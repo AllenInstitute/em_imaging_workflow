@@ -28,6 +28,8 @@ INGEST_QUEUE_NAME = 'em_2d_montage_ingest'
 CELERY_MESSAGE_QUEUE_NAME = 'celery_' + MESSAGE_QUEUE_NAME
 SPARK_MESSAGE_QUEUE_NAME = 'spark_' + MESSAGE_QUEUE_NAME
 # CELERY_DEFAULT_QUEUE = 'celery_' + MESSAGE_QUEUE_NAME
+
+MESSAGE_QUEUE_HOST = 'message_queue'
 MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
 MESSAGE_QUEUE_PORT = 5672
@@ -36,6 +38,9 @@ RENDER_SERVICE_URL = 'renderservice'
 RENDER_SERVICE_PORT = '8080'
 RENDER_SERVICE_USER = 'gayathri'
 RENDER_SERVICE_PROJECT = 'MM2'
+RENDER_CLIENT_SCRIPTS = os.environ.get(
+    'RENDER_CLIENT_SCRIPTS',
+    '/shared/render/render-ws-java-client/src/main/scripts')
 
 FIJI_PATH = \
     '/allen/aibs/pipeline/image_processing/volume_assembly' + \
@@ -83,8 +88,6 @@ RESULTS_PER_PAGE = 20
 MAX_DISPLAYED_PAGE_LINKS = 10
 
 WORKFLOW_VERSION = 0.1
-
-MESSAGE_QUEUE_HOST = 'message_queue'
 
 MILLISECONDS_BETWEEN_REFRESH = 10000
 # MILLISECONDS_BETWEEN_REFRESH = 1000
