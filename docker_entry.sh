@@ -1,7 +1,9 @@
 #!/bin/bash
 sleep 20
-export PYTHONPATH=/at_em_imaging_workflow:/blue_sky_workflow_engine:/render-modules
+export PYTHONPATH=/at_em_imaging_workflow:/blue_sky_workflow_engine:/render-modules:/schema_package
 export DJANGO_SETTINGS_MODULE=at_em_imaging_workflow.settings
+
+python manage.py makemigrations
 python manage.py migrate 
 
 echo "from django.contrib.auth.models import User; User.objects.filter(email='admin@example.com').delete(); User.objects.create_superuser('admin', 'admin@example.com', 'WhateverMan')" | python manage.py shell
