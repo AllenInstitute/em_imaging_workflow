@@ -1,7 +1,7 @@
 Django==1.11
 pika==0.10.0
 celery==4.0.2
-render-python==1.1.0
+render-python>=1.1.0
 amqp==2.1.4
 psycopg2>=2.7.3.1
 paramiko>=2.2.1
