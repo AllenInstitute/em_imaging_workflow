@@ -93,6 +93,12 @@ executables:
         pbs_queue: 'mindscope'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
+    move:
+        name: 'Move'
+        path: '/example_data/bin/mock_executable'
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
 run_states:
     - "PENDING"
     - "QUEUED"
@@ -120,6 +126,11 @@ workflows:
               class: "development.strategies.create_tile_pairs_strategy.CreateTilePairsStrategy"
               enqueued_class: "development.models.EMMontageSet"
               executable: "create_tilepairs"
+            - key: "move_raw_montage_set"
+              label: "Move Raw Montage Sets"
+              class: "development.strategies.move_raw_montage_set_strategy.MoveRawMontageSetStrategy"
+              enqueued_class: "development.models.EMMontageSet"
+              executable: "move"
             - key: "2d_montage_point_match"
               label: "2D Montage Point Match"
               class: "development.strategies.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy"
@@ -142,7 +153,8 @@ workflows:
         graph:
             - [ "ingest_generate", [ "apply_lens_correction_new" ] ]
             - [ "apply_lens_correction_new", [ "create_tile_pairs" ] ]
-            - [ "create_tile_pairs", [ "2d_montage_point_match" ] ]
+            - [ "create_tile_pairs", [ "move_raw_montage_set" ] ]
+            - [ "move_raw_montage_set", [ "2d_montage_point_match" ] ]
             - [ "2d_montage_point_match", [ "solver" ] ]
             - [ "solver", [ "manual_qc" ] ]
             - [ "manual_qc", [ "alignment" ] ]
