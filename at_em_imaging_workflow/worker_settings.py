@@ -29,10 +29,10 @@ MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
 MESSAGE_QUEUE_PORT = 5672
 
-RENDER_SERVICE_URL = 'renderservice'
-RENDER_SERVICE_PORT = '8080'
-RENDER_SERVICE_USER = 'gayathri'
-RENDER_SERVICE_PROJECT = 'MM2'
+RENDER_SERVICE_URL = 'ibs-timf-ux1'
+RENDER_SERVICE_PORT = '9006'
+RENDER_SERVICE_USER = 'timf'
+RENDER_SERVICE_PROJECT = 'DEV'
 RENDER_CLIENT_SCRIPTS = os.environ.get(
     'RENDER_CLIENT_SCRIPTS',
     '/shared/render/render-ws-java-client/src/main/scripts')
