@@ -3,13 +3,16 @@ from rendermodules.ingest.schemas import example as ex
 import pika
 import simplejson as json
 
+MESSAGE_HOST='ibs-timf-ux1'
+#MESSAGE_HOST='em-131db.corp.alleninstitute.org'
+
 credentials = pika.PlainCredentials(
     'blue_sky_user',
     'blue_sky_user')
 
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(
-        'em-131db',
+        MESSAGE_HOST,
         5672,
         '/',
         credentials))

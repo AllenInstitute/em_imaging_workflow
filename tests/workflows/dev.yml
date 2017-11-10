@@ -29,6 +29,19 @@ executables:
         pbs_queue: 'mindscope'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
+    spark_pi:
+        name: 'Spark Pi'
+        path: '/usr/spark-2.2.0/bin/spark-submit'
+        args:
+        - "--class"
+        - "org.apache.spark.examples.SparkPi"
+        - "--master" 
+        - "local[4]"
+        - "/usr/spark-2.2.0/examples/jars/spark-examples_2.11-2.2.0.jar"
+        remote_queue: 'spark'
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
     generate_point_matches:
         name: 'EM 2D Generate Point Matches'
         path: '/usr/bin/python'
@@ -109,6 +122,26 @@ run_states:
     - "SUCCESS"
     - "PROCESS_KILLED"
 workflows:
+    lens_correction_new:
+        states:
+            - key: "ingest_reference"
+              label: "Ingest Reference Set"
+              class: "development.strategies.ingest_generate_reference_set_strategy.IngestGenerateReferenceSetStrategy"
+              enqueued_class: "development.models.ReferenceSet"
+              executable: "generate_em_tilespecs_from_metafile"
+            - key: "apply_lens_correction_new"
+              label: "Apply Lens Correction New"
+              class: "development.strategies.apply_lens_correction_strategy.ApplyLensCorrectionStrategy"
+              enqueued_class: "development.models.ReferenceSet"
+              executable: "apply_lens_correction"
+            - key: "move_raw_montage_set"
+              label: "Move Raw Montage Sets"
+              class: "development.strategies.move_raw_montage_set_strategy.MoveRawMontageSetStrategy"
+              enqueued_class: "development.models.ReferenceSet"
+              executable: "move"
+        graph:
+            - [ "ingest_reference", [ "apply_lens_correction_new" ] ]
+            - [ "apply_lens_correction_new", [ "move_raw_montage_set" ] ]
     em_2d_montage_point_match:
         states:
             - key: "ingest_generate"
@@ -116,21 +149,11 @@ workflows:
               class: "development.strategies.ingest_generate_render_stack_strategy.IngestGenerateRenderStackStrategy"
               enqueued_class: "development.models.EMMontageSet"
               executable: "generate_em_tilespecs_from_metafile"
-            - key: "apply_lens_correction_new"
-              label: "Apply Lens Correction New"
-              class: "development.strategies.apply_lens_correction_strategy.ApplyLensCorrectionStrategy"
-              enqueued_class: "development.models.EMMontageSet"
-              executable: "apply_lens_correction"
             - key: "create_tile_pairs"
               label: "Create Tile Pairs"
               class: "development.strategies.create_tile_pairs_strategy.CreateTilePairsStrategy"
               enqueued_class: "development.models.EMMontageSet"
               executable: "create_tilepairs"
-            - key: "move_raw_montage_set"
-              label: "Move Raw Montage Sets"
-              class: "development.strategies.move_raw_montage_set_strategy.MoveRawMontageSetStrategy"
-              enqueued_class: "development.models.EMMontageSet"
-              executable: "move"
             - key: "2d_montage_point_match"
               label: "2D Montage Point Match"
               class: "development.strategies.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy"
@@ -151,10 +174,8 @@ workflows:
               label: "Alignment"
               workflow: true
         graph:
-            - [ "ingest_generate", [ "apply_lens_correction_new" ] ]
-            - [ "apply_lens_correction_new", [ "create_tile_pairs" ] ]
-            - [ "create_tile_pairs", [ "move_raw_montage_set" ] ]
-            - [ "move_raw_montage_set", [ "2d_montage_point_match" ] ]
+            - [ "ingest_generate", [ "create_tile_pairs" ] ]
+            - [ "create_tile_pairs", [ "2d_montage_point_match" ] ]
             - [ "2d_montage_point_match", [ "solver" ] ]
             - [ "solver", [ "manual_qc" ] ]
             - [ "manual_qc", [ "alignment" ] ]

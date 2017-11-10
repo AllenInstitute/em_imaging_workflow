@@ -176,7 +176,8 @@ class TwoDMontagePointMatchStrategy(execution_strategy.ExecutionStrategy):
     input['render']['owner'] = settings.RENDER_SERVICE_USER
     input['render']['project'] = settings.RENDER_SERVICE_PROJECT
     input['method'] = 'spark'
-    input['masterUrl'] = 'spark://spark-master:7077'
+    # input['masterUrl'] = 'spark://spark-master:7077'
+    input['masterUrl'] = 'local[4]'
     input['baseDataUrl'] = \
         'http://' + settings.RENDER_SERVICE_URL + \
         ':' + settings.RENDER_SERVICE_PORT

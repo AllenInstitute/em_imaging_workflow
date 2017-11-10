@@ -45,7 +45,7 @@ import traceback
 from rendermodules.ingest.schemas import \
     example, EMMontageSetIngestSchema
 
-_WORKFLOW_NAME='em_2d_montage_point_match'
+_WORKFLOW_NAME='lens_correction_new'
 
 def callback(ch, method, properties, body):
     Command.cb(ch, method, properties, body)
@@ -53,7 +53,7 @@ def callback(ch, method, properties, body):
 
 class Command(BaseCommand):
     _log = logging.getLogger(
-        'development.mananagement.commands.ingest_worker')
+        'development.mananagement.commands.ingest_reference_set')
     help = 'ingest handler for the message queue'
 
     def handle(self, *args, **options):
@@ -73,7 +73,7 @@ class Command(BaseCommand):
                 '/',
                 credentials))
 
-        MQ = settings.INGEST_QUEUE_NAME
+        MQ = _WORKFLOW_NAME + '_ingest'
         Command._log.info("listening to queue: %s" % (MQ))
         channel = connection.channel()
         channel.queue_declare(queue=MQ,
@@ -94,66 +94,43 @@ class Command(BaseCommand):
         try:
             body_data = json.loads(body)
             Command._log.info(body_data)
-            em_montage_set = cls.create_em_render_set(body_data)
+            enqueued_object = cls.create_reference_set(body_data)
             Workflow.start_workflow(_WORKFLOW_NAME,
-                                    em_montage_set)
+                                    enqueued_object)
         except Exception as e:
             Command._log.error(
                 'Something went wrong: ' + traceback.print_exc(e))
 
     @classmethod
-    def create_em_render_set(cls, message):
-        Command._log.info('creating study')
+    def create_reference_set(cls, message):
+        message_camera = message['acquisition_data']['camera']
+        camera, _ = \
+            Camera.objects.update_or_create(
+                uid=message_camera['camera_id'],
+                defaults={
+                    'height': message_camera['height'],
+                    'width': message_camera['width'],
+                    'model': message_camera['model']})
 
-        study, _ = Study.objects.update_or_create(
-            name='DEADBEEF'
-        )
+        microscope_type, _ = \
+            MicroscopeType.objects.update_or_create(
+                name=message['acquisition_data']['microscope'])
 
-        Command._log.info('creating specimen')
-        specimen, _ = Specimen.objects.update_or_create(
-            uid=message['section']['specimen'],
-            defaults={
-                'render_project': 'PROJECT Lorem Impsum',
-                'render_owner': 'Lorem Imsum',
-                'study': study
-            })
+        microscope, _ = \
+            Microscope.objects.update_or_create(
+                uid="DEADBEEF",
+                defaults={
+                    'microscope_type': microscope_type
+                })
 
-        Command._log.info('creating section')
-        section = Section.objects.create(
-            z_index=message['section']['z_index'],
-            metadata=None,
-            specimen=specimen 
-        )
+        reference_set, _ = ReferenceSet.objects.update_or_create(
+                uid=message['reference_set_id'],
+                defaults={
+                    # 'storage_directory': '/example_data', # in ref set ingest
+                    'workflow_state': 'Pending',
+                    'camera': camera,
+                    'microscope': microscope,
+                    # 'project_path': '/example_data' # deprecated
+                })
 
-        Command._log.info('creating load')
-        load, _ = Load.objects.update_or_create(
-            uid='DEADBEEF'
-        )
-
-        Command._log.info('creating sample holder')
-        sample_holder, _ = SampleHolder.objects.update_or_create(
-            uid=message['section']['sample_holder'],
-            defaults={
-                'imaged_sections_count': 0,
-                'load': load
-            })
-
-        Command._log.info('creating em montage set')
-
-        reference_set = ReferenceSet.objects.get(
-            uid=message['reference_set_id']
-        )
-
-        em_montage_set = EMMontageSet.objects.create(
-            acquisition_date=message['acquisition_data']['acquisition_time'],
-            overlap=message['acquisition_data']['overlap'],
-            mipmap_directory=None,
-            section=section,
-            sample_holder=sample_holder,
-            reference_set=reference_set,
-            reference_set_uid=message['reference_set_id'],
-            storage_directory=message['storage_directory']
-        )
-        Command._log.info(str(em_montage_set))
-
-        return em_montage_set
+        return reference_set
