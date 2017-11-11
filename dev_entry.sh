@@ -5,7 +5,7 @@ export DJANGO_SETTINGS_MODULE=at_em_imaging_workflow.settings
 export MESSAGE_QUEUE_HOST=ibs-timf-ux1
 
 python manage.py makemigrations
-python manage.py migrate 
+python manage.py migrate  --noinput
 
 echo "from django.contrib.auth.models import User; User.objects.filter(email='admin@example.com').delete(); User.objects.create_superuser('admin', 'admin@example.com', 'WhateverMan')" | python manage.py shell
 

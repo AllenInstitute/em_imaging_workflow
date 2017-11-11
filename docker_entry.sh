@@ -4,7 +4,7 @@ export PYTHONPATH=/at_em_imaging_workflow:/blue_sky_workflow_engine:/render-modu
 export DJANGO_SETTINGS_MODULE=at_em_imaging_workflow.settings
 
 python manage.py makemigrations
-python manage.py migrate 
+python manage.py migrate --noinput
 
 echo "from django.contrib.auth.models import User; User.objects.filter(email='admin@example.com').delete(); User.objects.create_superuser('admin', 'admin@example.com', 'WhateverMan')" | python manage.py shell
 

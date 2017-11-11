@@ -30,7 +30,7 @@ pypi_deploy:
 pytest_lax:
 	rm database.db || exit 0
 	python manage.py makemigrations
-	python manage.py migrate
+	python manage.py migrate --noinput
 	python setup.py test 
 
 pytest: pytest_lax
