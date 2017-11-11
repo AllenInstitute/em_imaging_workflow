@@ -34,19 +34,23 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from django.contrib.postgres.fields import JSONField
-from .chunk import Chunk
-from .specimen import Specimen
-from .sample_holder import SampleHolder
+from .rendered_volume import RenderedVolume
 
-class Section(models.Model):
-    section_id = models.CharField(max_length=255, null=True)
-    z_index = models.IntegerField(null=True)
-    metadata = JSONField(null=True)
-    specimen = models.ForeignKey(Specimen)
-    chunks = models.ManyToManyField(Chunk, related_name='sections')
-    sample_holders = models.ManyToManyField(SampleHolder, related_name='sample_holders')
+
+class Chunk(models.Model):
+    size = models.IntegerField(null=True)
+    chunk_state = models.CharField(max_length=255, null=True)
+    rendered_volume = models.ForeignKey(RenderedVolume)
+    preceding_chunk = models.ForeignKey('self', related_name='%(class)s_preceding_chunk')
+    following_chunk = models.ForeignKey('self', related_name='%(class)s_following_chunk')
 
     def __str__(self):
-        return self.section_id
+        return "Chunk Lorem Ipsum"  # TODO: better string
 
+    def set_chunk_size(self):
+        #TODO
+        self.size = 0
+
+    def is_complete(self):
+        #TODO
+        return True

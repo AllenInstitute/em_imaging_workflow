@@ -102,7 +102,7 @@ class Command(BaseCommand):
                 'metadata': None,
                 'specimen': specimen 
                 # TODO: many-to-many fields
-                # 'chucks': None,    # TODO ???
+                # 'chunks': None,    # TODO ???
                 # 'sample_holders'
             })
 

@@ -3,8 +3,8 @@ from rendermodules.ingest.schemas import example as ex
 import pika
 import simplejson as json
 
-MESSAGE_HOST='ibs-timf-ux1'
-#MESSAGE_HOST='em-131db.corp.alleninstitute.org'
+# MESSAGE_HOST='ibs-timf-ux1'
+MESSAGE_HOST='em-131db.corp.alleninstitute.org'
 
 def send():
     credentials = pika.PlainCredentials(

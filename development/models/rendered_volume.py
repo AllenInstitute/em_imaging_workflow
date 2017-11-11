@@ -34,19 +34,12 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from django.contrib.postgres.fields import JSONField
-from .chunk import Chunk
 from .specimen import Specimen
-from .sample_holder import SampleHolder
 
-class Section(models.Model):
-    section_id = models.CharField(max_length=255, null=True)
-    z_index = models.IntegerField(null=True)
-    metadata = JSONField(null=True)
+
+class RenderedVolume(models.Model):
+    mipmap_directory = models.CharField(max_length=255, null=True)
     specimen = models.ForeignKey(Specimen)
-    chunks = models.ManyToManyField(Chunk, related_name='sections')
-    sample_holders = models.ManyToManyField(SampleHolder, related_name='sample_holders')
 
     def __str__(self):
-        return self.section_id
-
+        return "Rendered Volume for %s" % (str(self.specimen))

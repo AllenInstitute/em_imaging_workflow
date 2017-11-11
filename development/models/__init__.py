@@ -35,8 +35,8 @@
 #
 from .study import Study
 from .specimen import Specimen
-from .rendered_volumn import RenderedVolumn
-from .chuck import Chuck
+from .rendered_volume import RenderedVolume
+from .chunk import Chunk
 from .load import Load
 from .sample_holder import SampleHolder
 from .section import Section
