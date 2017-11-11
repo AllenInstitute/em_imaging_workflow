@@ -59,7 +59,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         logging.basicConfig(level=logging.INFO)
         logging.getLogger(
-            'development.management.commands.ingest_worker').setLevel(
+            'development.management.commands.ingest_reference_set').setLevel(
                 logging.INFO)
 
         credentials = pika.PlainCredentials(
