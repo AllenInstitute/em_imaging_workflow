@@ -72,6 +72,12 @@ LAMBDA_VAL = 0.01
 CLEAR_TRANSFORM = True
 VISUALIZE = False
 
+CHUNK_DEFAULTS = {
+    'overlap': 2,
+    'start_z': 1,
+    'chunk_size': 10
+}
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 

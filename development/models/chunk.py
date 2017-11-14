@@ -34,15 +34,21 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
+from django.conf import settings
 from .rendered_volume import RenderedVolume
-
+import logging
 
 class Chunk(models.Model):
+    _log = logging.getLogger('at_em_imaging_workflow.models.chunk')
     size = models.IntegerField(null=True)
     chunk_state = models.CharField(max_length=255, null=True)
     rendered_volume = models.ForeignKey(RenderedVolume)
-    preceding_chunk = models.ForeignKey('self', related_name='%(class)s_preceding_chunk')
-    following_chunk = models.ForeignKey('self', related_name='%(class)s_following_chunk')
+    preceding_chunk = \
+        models.ForeignKey('self',
+        related_name='%(class)s_preceding_chunk')
+    following_chunk = \
+        models.ForeignKey('self',
+        related_name='%(class)s_following_chunk')
 
     def __str__(self):
         return "Chunk Lorem Ipsum"  # TODO: better string
@@ -52,5 +58,38 @@ class Chunk(models.Model):
         self.size = 0
 
     def is_complete(self):
-        #TODO
+        raise Exception('unimplimented')
         return True
+
+    @classmethod
+    def chunks_for_z_index(cls, z):
+        ''' returns one or more chunks that would contain a z-index
+        '''
+        # TODO: move to class config
+        chunk_defaults = settings.CHUNK_DEFAULTS
+        size = chunk_defaults['chunk_size']
+        overlap = chunk_defaults['overlap']
+        size_minus_overlap = size - overlap 
+        offset = chunk_defaults['start_z']
+        z_no_offset = z - offset
+        chunk_id = z_no_offset // size_minus_overlap
+        z_within_chunk = z_no_offset % size_minus_overlap
+
+        if z_within_chunk < overlap:
+            if chunk_id > 0:
+                return [ chunk_id - 1, chunk_id ]
+            else:
+                return [ chunk_id ]
+        else:
+            return [ chunk_id ]
+
+
+    @classmethod
+    def z_indices_for_chunk(cls, c):
+        chunk_defaults = settings.CHUNK_DEFAULTS
+        start = (
+            c * chunk_defaults['chunk_size']
+            + chunk_defaults['start_z'])
+        stop = start + chunk_defaults['chunk_size']
+
+        return list(range(start, stop))
