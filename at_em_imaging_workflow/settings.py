@@ -18,14 +18,19 @@ PROJECT_ROOT = BASE_DIR
 
 #BASE_FILE_PATH = \
 #    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky/files/'
-BASE_FILE_PATH = '/example_data'
-PBS_FINISH_PATH = \
-    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky' + \
-    '/at_em_imaging_workflow/pbs_execution_finish.py'
+BASE_FILE_PATH = '/data/aibstemp/timf/example_data'
+#PBS_FINISH_PATH = \
+#    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky' + \
+#    '/at_em_imaging_workflow/pbs_execution_finish.py'
+PBS_FINISH_PATH=os.environ.get(
+    'PBS_FINISH_PATH',
+    '/data/aibstemp/timf/example_data/bin/pbs_execution_finish.py')
+
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
 INGEST_QUEUE_NAME = 'em_2d_montage_ingest'
 CELERY_MESSAGE_QUEUE_NAME = 'celery_' + MESSAGE_QUEUE_NAME
+PBS_MESSAGE_QUEUE_NAME = 'pbs_' + MESSAGE_QUEUE_NAME
 SPARK_MESSAGE_QUEUE_NAME = 'spark_' + MESSAGE_QUEUE_NAME
 # CELERY_DEFAULT_QUEUE = 'celery_' + MESSAGE_QUEUE_NAME
 

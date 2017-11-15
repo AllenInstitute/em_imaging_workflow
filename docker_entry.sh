@@ -6,7 +6,7 @@ export DJANGO_SETTINGS_MODULE=at_em_imaging_workflow.settings
 python manage.py makemigrations
 python manage.py migrate --noinput
 
-echo "from django.contrib.auth.models import User; User.objects.filter(email='admin@example.com').delete(); User.objects.create_superuser('admin', 'admin@example.com', 'WhateverMan')" | python manage.py shell
+echo "from django.contrib.auth.models import User; User.objects.filter(email='admin@example.com').delete(); User.objects.create_superuser('blue_sky_user', 'admin@example.com', 'blue_sky_user')" | python manage.py shell
 
 printf "admin\nt@a.org\nWhateverMan\n" | python manage.py createsuperuser
 python manage.py import_workflows tests/workflows/dev.yml

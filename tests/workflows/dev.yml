@@ -1,14 +1,21 @@
 executables:
     mock:
         name: 'Mock Executable'
-        path: '/example_data/bin/mock_executable'
-        pbs_queue: 'mindscope'
+        path: '/data/aibstemp/timf/example_data/bin/mock_executable'
+        pbs_queue: 'lims2'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
+    sleeper:
+        name: 'PBS Sleeper Executable'
+        path: '/data/aibstemp/timf/example_data/bin/sleeper'
+        remote_queue: 'pbs'
+        pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     python:
         name: 'Python'
         path: '/opt/conda/bin/python'
-        pbs_queue: 'mindscope'
+        pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     generate_em_tilespecs_from_metafile:
@@ -17,7 +24,7 @@ executables:
         args:
         - '-m'
         - "rendermodules.dataimport.generate_EM_tilespecs_from_metafile"
-        pbs_queue: 'mindscope'
+        pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     apply_lens_correction:
@@ -26,7 +33,7 @@ executables:
         args:
         - '-m'
         - "rendermodules.lens_correction.apply_lens_correction"
-        pbs_queue: 'mindscope'
+        pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     spark_pi:
@@ -39,7 +46,7 @@ executables:
         - "local[4]"
         - "/usr/spark-2.2.0/examples/jars/spark-examples_2.11-2.2.0.jar"
         remote_queue: 'spark'
-        pbs_queue: 'mindscope'
+        pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     generate_point_matches:
@@ -49,7 +56,7 @@ executables:
         - '-m'
         - "rendermodules.pointmatch.generate_point_matches_spark"
         remote_queue: 'spark'
-        pbs_queue: 'mindscope'
+        pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     em_2d_solver:
@@ -58,7 +65,7 @@ executables:
         args:
         - '-m'
         - "rendermodules.montage.run_montage_job_for_section"
-        pbs_queue: 'mindscope'
+        pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     generate_mipmaps:
@@ -67,7 +74,7 @@ executables:
         args:
         - '-m'
         - "rendermodules.dataimport.generate_mipmaps"
-        pbs_queue: 'mindscope'
+        pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     apply_mipmaps:
@@ -76,7 +83,7 @@ executables:
         args:
         - '-m'
         - "rendermodules.dataimport.apply_mipmaps_to_render"
-        pbs_queue: 'mindscope'
+        pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     create_tilepairs:
@@ -85,7 +92,7 @@ executables:
         args:
         - '-m'
         - "rendermodules.pointmatch.create_tilepairs"
-        pbs_queue: 'mindscope'
+        pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     calculate_multiplicative_correction:
@@ -94,7 +101,7 @@ executables:
         args:
         - '-m'
         - "rendermodules.intensity_correction.calculate_multiplicative_correction"
-        pbs_queue: 'mindscope'
+        pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     apply_multiplicative_correction:
@@ -103,13 +110,13 @@ executables:
         args:
         - '-m'
         - "rendermodules.intensity_correction.apply_multiplicative_correction"
-        pbs_queue: 'mindscope'
+        pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     move:
         name: 'Move'
-        path: '/example_data/bin/mock_executable'
-        pbs_queue: 'mindscope'
+        path: '/data/aibstemp/timf/example_data/bin/mock_executable'
+        pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
 run_states:
@@ -127,17 +134,17 @@ workflows:
             - key: "ingest_reference"
               label: "Ingest Reference Set"
               class: "development.strategies.ingest_generate_reference_set_strategy.IngestGenerateReferenceSetStrategy"
-              enqueued_class: "development.models.ReferenceSet"
+              enqueued_class: "development.models.reference_set.ReferenceSet"
               executable: "generate_em_tilespecs_from_metafile"
             - key: "apply_lens_correction_new"
               label: "Apply Lens Correction New"
               class: "development.strategies.apply_lens_correction_strategy.ApplyLensCorrectionStrategy"
-              enqueued_class: "development.models.ReferenceSet"
+              enqueued_class: "development.models.reference_set.ReferenceSet"
               executable: "apply_lens_correction"
             - key: "move_raw_montage_set"
               label: "Move Raw Montage Sets"
               class: "development.strategies.move_raw_montage_set_strategy.MoveRawMontageSetStrategy"
-              enqueued_class: "development.models.ReferenceSet"
+              enqueued_class: "development.models.reference_set.ReferenceSet"
               executable: "move"
         graph:
             - [ "ingest_reference", [ "apply_lens_correction_new" ] ]
@@ -147,28 +154,28 @@ workflows:
             - key: "ingest_generate"
               label: "Ingest / Generate Render Stack"
               class: "development.strategies.ingest_generate_render_stack_strategy.IngestGenerateRenderStackStrategy"
-              enqueued_class: "development.models.EMMontageSet"
+              enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "generate_em_tilespecs_from_metafile"
             - key: "create_tile_pairs"
               label: "Create Tile Pairs"
               class: "development.strategies.create_tile_pairs_strategy.CreateTilePairsStrategy"
-              enqueued_class: "development.models.EMMontageSet"
+              enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "create_tilepairs"
             - key: "2d_montage_point_match"
               label: "2D Montage Point Match"
               class: "development.strategies.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy"
-              enqueued_class: "development.models.EMMontageSet"
+              enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "generate_point_matches"
             - key: "solver"
               label: "2D Montage Solver"
               class: "development.strategies.two_d_montage_solver_strategy.TwoDMontageSolverStrategy"
-              enqueued_class: "development.models.EMMontageSet"
+              enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "em_2d_solver"
             - key: "manual_qc"
               label: "Manual QC / High Degree Polynomial or Point Match Regeneration"
               manual: true
               class: "development.strategies.manual_q_c_strategy.ManualQCStrategy"
-              enqueued_class: "development.models.EMMontageSet"
+              enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "mock"
             - key: "alignment"
               label: "Alignment"
@@ -184,13 +191,13 @@ workflows:
             - key: "mic_task_builder"
               label: "Multiplicative Intensity Correction Task Builder"
               class: "development.strategies.m_i_c_task_builder_strategy.MICTaskBuilderStrategy"
-              enqueued_class: "development.models.EMMontageSet"
+              enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "calculate_multiplicative_correction"
             - key: "mic_tasks"
               parallel: true
               label: "Multiplicative Intensity Correction Tasks"
               class: "development.strategies.m_i_c_tasks_strategy.MICTasksStrategy"
-              enqueued_class: "development.models.EMMontageSet"
+              enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "apply_multiplicative_correction"
         graph:
             - [ "mic_task_builder", [ "mic_tasks" ] ]
@@ -199,13 +206,13 @@ workflows:
             - key: "at_mic_task_builder"
               label: "Multiplicative Intensity Task Builder"
               class: "development.strategies.m_i_c_task_builder_strategy.MICTaskBuilderStrategy"
-              enqueued_class: "development.models.ATMontageSet"
-              executable: "mock"
+              enqueued_class: "development.models.reference_set.ReferenceSet"
+              executable: "sleeper"
             - key: "at_mic_tasks"
               parallel: true
               label: "AT Multiplicative Intensity Correction Tasks"
               class: "development.strategies.at_m_i_c_tasks_strategy.ATMICTasksStrategy"
-              enqueued_class: "development.models.ATMontageSet"
+              enqueued_class: "development.models.a_t_montage_set.ATMontageSet"
               executable: "mock"
         graph:
             - [ "at_mic_task_builder", [ "at_mic_tasks" ] ]

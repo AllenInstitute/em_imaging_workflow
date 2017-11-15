@@ -49,13 +49,17 @@ class IngestGenerateReferenceSetStrategy(execution_strategy.ExecutionStrategy):
  
     return GenerateEMTileSpecsParameters().dump(input).data
 
-  #override if needed
-  #called after the execution finishes
-  #process and save results to the database
   def on_finishing(self, enqueued_object, results, task):
-    #self.check_key(results, 'output_json')
-    #self.set_well_known_file(results['output_json'], enqueued_object, 'description', task)
-    pass
+    ''' override if needed
+        called after the execution finishes
+        process and save results to the database
+    '''
+    self.check_key(results, 'stack')
+    IngestGenerateReferenceSetStrategy._log.info(
+        'output stack %s' % (results['stack']))
+    # self.set_well_known_file(
+    #     results['output_json'],
+    #     enqueued_object, 'description', task)
 
   #override if needed
   #set the storage directory for an enqueued object

@@ -86,14 +86,18 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
     return LensCorrectionParameters().dump(input).data
     
 
-  #override if needed
-  #called after the execution finishes
-  #process and save results to the database
   def on_finishing(self, enqueued_object, results, task):
-
-    self.check_key(results, 'output_json')
-
-    self.set_well_known_file(results['output_json'], enqueued_object, 'description', task)
+    ''' called after the execution finishes
+        process and save results to the database
+    '''
+    self.check_key(results, 'stack')
+    GenerateLensCorrectionTransformStrategy._log.info(
+        'output stack %s' % (results['stack']))
+    self.set_well_known_file(
+        results['output_json'],
+        enqueued_object,
+        'description',
+        task)
 
   #override if needed
   #set the storage directory for an enqueued object
