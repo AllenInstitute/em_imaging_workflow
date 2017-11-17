@@ -1,15 +1,19 @@
 #!/usr/bin/env python
-#from rendermodules.ingest.schemas import example as ex
-import pika
-import simplejson as json
+#from rendermodules.ingest.schemas import example as message_body_data
+from workflow_client.ingest_client import IngestClient
 
-MESSAGE_HOST='ibs-timf-ux1'
-#MESSAGE_HOST='em-131db.corp.alleninstitute.org'
+MESSAGE_QUEUE_HOST='ibs-timf-ux1.corp.alleninstitute.org'
+# MESSAGE_QUEUE_HOST='em-131db.corp.alleninstitute.org'
+MESSAGE_QUEUE_USER='blue_sky_user'
+MESSAGE_QUEUE_PASSWORD='blue_sky_user'
+MESSAGE_QUEUE_PORT = 5672
+MESSAGE_QUEUE_EXCHANGE = ''
+MESSAGE_QUEUE_ROUTE='lens_correction_new_ingest'
 
-ex = {
+message_body_data = {
     "reference_set_id": "DEADBEEF",
     "acquisition_data": {
-        "microscope": "temca2",
+    "microscope": "temca2",
         "camera": {
             "camera_id": "4450428",
             "height": 3840,
@@ -17,31 +21,17 @@ ex = {
             "model": "Ximea CB200MG"
         },
         "overlap": 0.07,
-        "acquisition_time": "2017-08-29T13:01:46"
+        "acquisition_time": "2017-08-29T13:01:46",
+        "metafile": "/allen/aibs/pipeline/image_processing/volume_assembly/dataimport_test_data/_metadata_20170829130146_295434_5LC_0064_01_redo_001050_0_.json"
     }
 }
 
-
-def send():
-    credentials = pika.PlainCredentials(
-        'blue_sky_user',
-        'blue_sky_user')
-
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(
-            MESSAGE_HOST,
-            5672,
-            '/',
-            credentials))
-
-    channel = connection.channel()
-
-    body_text = json.dumps(ex)
-
-    channel.basic_publish(exchange='',
-                          routing_key='lens_correction_new_ingest',
-                          body=body_text)
-    print(" [x] Sent '%s'" % (body_text))
-
-if __name__ == '__main__':
-    send()
+with IngestClient(MESSAGE_QUEUE_HOST,
+                  MESSAGE_QUEUE_PORT,
+                  MESSAGE_QUEUE_USER,
+                  MESSAGE_QUEUE_PASSWORD,
+                  MESSAGE_QUEUE_EXCHANGE,
+                  MESSAGE_QUEUE_ROUTE) as ic:
+    for i in range(0, 1):
+        message_body_data['reference_set_id'] = 'WHATEVER%d' % (i)
+        ic.send_as_json(message_body_data)

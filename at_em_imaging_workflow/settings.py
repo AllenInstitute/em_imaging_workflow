@@ -34,19 +34,19 @@ PBS_MESSAGE_QUEUE_NAME = 'pbs_' + MESSAGE_QUEUE_NAME
 SPARK_MESSAGE_QUEUE_NAME = 'spark_' + MESSAGE_QUEUE_NAME
 # CELERY_DEFAULT_QUEUE = 'celery_' + MESSAGE_QUEUE_NAME
 
-MESSAGE_QUEUE_HOST = 'message_queue'
+MESSAGE_QUEUE_HOST = 'ibs-timf-ux1.corp.alleninstitute.org'
 MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
 MESSAGE_QUEUE_PORT = 5672
 
-RENDER_SERVICE_URL = 'ibs-timf-ux1'
+RENDER_SERVICE_URL = 'ibs-timf-ux1.corp.alleninstitute.org'
 RENDER_SERVICE_PORT = '9006'
 RENDER_SERVICE_USER = 'timf'
 RENDER_SERVICE_PROJECT = 'DEV'
-RENDER_CLIENT_SCRIPTS = os.environ.get(
-    'RENDER_CLIENT_SCRIPTS',
-    '/shared/render/render-ws-java-client/src/main/scripts')
-
+#RENDER_CLIENT_SCRIPTS = os.environ.get(
+#    'RENDER_CLIENT_SCRIPTS',
+#    '/shared/render/render-ws-java-client/src/main/scripts')
+RENDER_CLIENT_SCRIPTS = '/allen/aibs/pipeline/image_processing/volume_assembly/render/render-ws-java-client/src/main/scripts'
 FIJI_PATH = \
     '/allen/aibs/pipeline/image_processing/volume_assembly' + \
     '/Fiji.app/ImageJ-linux64'
