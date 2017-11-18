@@ -28,11 +28,11 @@ PBS_FINISH_PATH=os.environ.get(
 
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
-INGEST_QUEUE_NAME = 'em_2d_montage_ingest'
+INGEST_MESSAGE_QUEUE_NAME = 'ingest_at_em_imaging_workflow'
+INGEST_STRATEGY='development.strategies.ingest_callbacks.IngestCallbacks'
 CELERY_MESSAGE_QUEUE_NAME = 'celery_' + MESSAGE_QUEUE_NAME
 PBS_MESSAGE_QUEUE_NAME = 'pbs_' + MESSAGE_QUEUE_NAME
 SPARK_MESSAGE_QUEUE_NAME = 'spark_' + MESSAGE_QUEUE_NAME
-# CELERY_DEFAULT_QUEUE = 'celery_' + MESSAGE_QUEUE_NAME
 
 MESSAGE_QUEUE_HOST = 'ibs-timf-ux1.corp.alleninstitute.org'
 MESSAGE_QUEUE_USER = 'blue_sky_user'

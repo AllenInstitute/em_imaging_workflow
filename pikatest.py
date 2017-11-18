@@ -9,7 +9,7 @@ MESSAGE_QUEUE_USER='blue_sky_user'
 MESSAGE_QUEUE_PASSWORD='blue_sky_user'
 MESSAGE_QUEUE_PORT = 5672
 MESSAGE_QUEUE_EXCHANGE = ''
-MESSAGE_QUEUE_ROUTE='em_2d_montage_ingest'
+MESSAGE_QUEUE_ROUTE='ingest_at_em_imaging_workflow'
 
 with IngestClient(MESSAGE_QUEUE_HOST,
                   MESSAGE_QUEUE_PORT,

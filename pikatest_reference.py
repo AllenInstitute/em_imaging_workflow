@@ -8,7 +8,7 @@ MESSAGE_QUEUE_USER='blue_sky_user'
 MESSAGE_QUEUE_PASSWORD='blue_sky_user'
 MESSAGE_QUEUE_PORT = 5672
 MESSAGE_QUEUE_EXCHANGE = ''
-MESSAGE_QUEUE_ROUTE='lens_correction_new_ingest'
+MESSAGE_QUEUE_ROUTE='ingest_at_em_imaging_workflow'
 
 message_body_data = {
     "reference_set_id": "DEADBEEF",

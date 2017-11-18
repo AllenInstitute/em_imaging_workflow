@@ -20,19 +20,25 @@ executables:
         pbs_walltime: 'walltime=5:00:00'
     generate_em_tilespecs_from_metafile:
         name: 'EM Create Tilespecs'
-        path: '/opt/conda/bin/python'
+        path: 'python'
+        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
+        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.dataimport.generate_EM_tilespecs_from_metafile"
+        remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=16g'
+        pbs_processor: 'vmem=128g'
         pbs_walltime: 'walltime=5:00:00'
     apply_lens_correction:
         name: 'Apply Lens Correction'
-        path: '/opt/conda/bin/python'
+        path: 'python'
+        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
+        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.lens_correction.apply_lens_correction"
+        remote_queue: 'pbs'
         pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
@@ -61,55 +67,73 @@ executables:
         pbs_walltime: 'walltime=5:00:00'
     em_2d_solver:
         name: 'EM 2D Solver'
-        path: '/opt/conda/bin/python'
+        path: 'python'
+        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
+        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.montage.run_montage_job_for_section"
+        remote_queue: 'pbs'
         pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     generate_mipmaps:
         name: 'Generate MIPmaps'
-        path: '/opt/conda/bin/python'
+        path: 'python'
+        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
+        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.dataimport.generate_mipmaps"
+        remote_queue: 'pbs'
         pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     apply_mipmaps:
         name: 'Apply MIPmaps'
-        path: '/opt/conda/bin/python'
+        path: 'python'
+        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
+        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.dataimport.apply_mipmaps_to_render"
+        remote_queue: 'pbs'
         pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     create_tilepairs:
         name: 'Create Tile Pairs'
-        path: '/opt/conda/bin/python'
+        path: 'python'
+        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
+        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.pointmatch.create_tilepairs"
+        remote_queue: 'pbs'
         pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     calculate_multiplicative_correction:
         name: 'Calculate Multiplicative Correction'
-        path: '/opt/conda/bin/python'
+        path: 'python'
+        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
+        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.intensity_correction.calculate_multiplicative_correction"
+        remote_queue: 'pbs'
         pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     apply_multiplicative_correction:
         name: 'Apply Multiplicative Correction'
-        path: '/opt/conda/bin/python'
+        path: 'python'
+        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
+        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.intensity_correction.apply_multiplicative_correction"
+        remote_queue: 'pbs'
         pbs_queue: 'lims2'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'

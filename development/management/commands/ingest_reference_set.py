@@ -35,6 +35,7 @@
 #
 import pika
 import simplejson as json
+import os
 from workflow_engine.models import RunState, Task, Workflow
 from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ObjectDoesNotExist
@@ -123,14 +124,17 @@ class Command(BaseCommand):
                     'microscope_type': microscope_type
                 })
 
+        storage_directory, metafile = \
+            os.path.split(message['acquisition_data']['metafile'])
+
         reference_set, _ = ReferenceSet.objects.update_or_create(
                 uid=message['reference_set_id'],
                 defaults={
-                    # 'storage_directory': '/example_data', # in ref set ingest
+                    'storage_directory': storage_directory,
                     'workflow_state': 'Pending',
                     'camera': camera,
                     'microscope': microscope,
                     # 'project_path': '/example_data' # deprecated
                 })
 
-        return reference_set
+        return reference_set # TODO: return reference_set id to ingest client

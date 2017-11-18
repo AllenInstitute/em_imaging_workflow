@@ -56,6 +56,7 @@ class Command(BaseCommand):
         'development.mananagement.commands.ingest_worker')
     help = 'ingest handler for the message queue'
 
+    # TODO: change this all over to use ingest_client
     def handle(self, *args, **options):
         logging.basicConfig(level=logging.INFO)
         logging.getLogger(
@@ -140,9 +141,15 @@ class Command(BaseCommand):
 
         Command._log.info('creating em montage set')
 
-        reference_set = ReferenceSet.objects.get(
-            uid=message['reference_set_id']
-        )
+        # if reference set id isn't specified,
+        # montage set should still be created
+        try:
+            reference_set = ReferenceSet.objects.get(
+                uid=message['reference_set_id'])
+            reference_set_uid = reference_set.uid
+        except ObjectDoesNotExist:
+            reference_set = None
+            reference_set_uid = None
 
         em_montage_set = EMMontageSet.objects.create(
             acquisition_date=message['acquisition_data']['acquisition_time'],
@@ -151,7 +158,7 @@ class Command(BaseCommand):
             section=section,
             sample_holder=sample_holder,
             reference_set=reference_set,
-            reference_set_uid=message['reference_set_id'],
+            reference_set_uid=reference_set_uid,
             storage_directory=message['storage_directory']
         )
         Command._log.info(str(em_montage_set))
