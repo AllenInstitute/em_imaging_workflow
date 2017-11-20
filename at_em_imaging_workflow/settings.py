@@ -234,7 +234,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'debug.log',
+            'filename': os.environ.get('DEBUG_LOG', 'debug.log'),
         },
     },
     'loggers': {
@@ -279,10 +279,10 @@ CELERYD_HIJACK_ROOT_LOGGER = False
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
-try:
-    with open(os.path.join(
-        os.path.dirname(__file__), "local_settings.py"
-    )) as ls:
-        exec(ls.read())
-except IOError:
-    pass
+#try:
+#    with open(os.path.join(
+#        os.path.dirname(__file__), "local_settings.py"
+#    )) as ls:
+#        exec(ls.read())
+#except IOError:
+#    pass

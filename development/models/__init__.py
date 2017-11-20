@@ -52,4 +52,4 @@ from .e_m_montage_set import EMMontageSet
 from .registration_series import RegistrationSeries
 from .a_t_montage_set import ATMontageSet
 
-# from workflow_engine.blue_sky_state_machine import BlueSkyStateMachine
+from workflow_engine.blue_sky_state_machine import BlueSkyStateMachine
