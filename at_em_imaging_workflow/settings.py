@@ -22,18 +22,23 @@ BASE_FILE_PATH = '/data/aibstemp/timf/example_data'
 #PBS_FINISH_PATH = \
 #    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky' + \
 #    '/at_em_imaging_workflow/pbs_execution_finish.py'
-PBS_FINISH_PATH=os.environ.get(
-    'PBS_FINISH_PATH',
-    '/data/aibstemp/timf/example_data/bin/pbs_execution_finish.py')
+#PBS_FINISH_PATH=os.environ.get(
+#    'PBS_FINISH_PATH',
+#    '/data/aibstemp/timf/example_data/bin/pbs_execution_finish.py')
 
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
 INGEST_MESSAGE_QUEUE_NAME = 'ingest_at_em_imaging_workflow'
 INGEST_STRATEGY='development.strategies.ingest_callbacks.IngestCallbacks'
 CELERY_MESSAGE_QUEUE_NAME = 'celery_' + MESSAGE_QUEUE_NAME
-PBS_MESSAGE_QUEUE_NAME = 'pbs_' + MESSAGE_QUEUE_NAME
-SPARK_MESSAGE_QUEUE_NAME = 'spark_' + MESSAGE_QUEUE_NAME
+SPARK_MESSAGE_QUEUE_NAME='spark_' + MESSAGE_QUEUE_NAME
+PBS_MESSAGE_QUEUE_NAME='pbs_' + MESSAGE_QUEUE_NAME
 
+PBS_CONDA_HOME='/shared/utils.x86_64/python-2.7'
+PBS_FINISH_MODULE='workflow_client.pbs_execution_finish'
+PBS_PYTHONPATH='/data/aibstemp/timf/example_data/blue_sky_workflow_engine'
+PBS_CONDA_ENV='/data/aibstemp/timf/example_data/blue_sky_27'
+BLUE_SKY_SETTINGS='/data/aibstemp/timf/example_data/blue_sky_settings.yml'
 MESSAGE_QUEUE_HOST = 'ibs-timf-ux1.corp.alleninstitute.org'
 MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'

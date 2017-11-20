@@ -3,20 +3,20 @@ executables:
         name: 'Mock Executable'
         path: '/data/aibstemp/timf/example_data/bin/mock_executable'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=16g'
+        pbs_processor: 'vmem=128g'
         pbs_walltime: 'walltime=5:00:00'
     sleeper:
         name: 'PBS Sleeper Executable'
         path: '/data/aibstemp/timf/example_data/bin/sleeper'
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=16g'
+        pbs_processor: 'vmem=128g'
         pbs_walltime: 'walltime=5:00:00'
     python:
         name: 'Python'
         path: '/opt/conda/bin/python'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=16g'
+        pbs_processor: 'vmem=128g'
         pbs_walltime: 'walltime=5:00:00'
     generate_em_tilespecs_from_metafile:
         name: 'EM Create Tilespecs'
@@ -40,7 +40,7 @@ executables:
         - "rendermodules.lens_correction.apply_lens_correction"
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=16g'
+        pbs_processor: 'vmem=128g'
         pbs_walltime: 'walltime=5:00:00'
     spark_pi:
         name: 'Spark Pi'
@@ -53,7 +53,7 @@ executables:
         - "/usr/spark-2.2.0/examples/jars/spark-examples_2.11-2.2.0.jar"
         remote_queue: 'spark'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=16g'
+        pbs_processor: 'vmem=128g'
         pbs_walltime: 'walltime=5:00:00'
     generate_point_matches:
         name: 'EM 2D Generate Point Matches'
@@ -63,7 +63,7 @@ executables:
         - "rendermodules.pointmatch.generate_point_matches_spark"
         remote_queue: 'spark'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=16g'
+        pbs_processor: 'vmem=128g'
         pbs_walltime: 'walltime=5:00:00'
     em_2d_solver:
         name: 'EM 2D Solver'
@@ -75,7 +75,7 @@ executables:
         - "rendermodules.montage.run_montage_job_for_section"
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=16g'
+        pbs_processor: 'vmem=128g'
         pbs_walltime: 'walltime=5:00:00'
     generate_mipmaps:
         name: 'Generate MIPmaps'
@@ -87,7 +87,7 @@ executables:
         - "rendermodules.dataimport.generate_mipmaps"
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=16g'
+        pbs_processor: 'vmem=128g'
         pbs_walltime: 'walltime=5:00:00'
     apply_mipmaps:
         name: 'Apply MIPmaps'
@@ -99,7 +99,7 @@ executables:
         - "rendermodules.dataimport.apply_mipmaps_to_render"
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=16g'
+        pbs_processor: 'vmem=128g'
         pbs_walltime: 'walltime=5:00:00'
     create_tilepairs:
         name: 'Create Tile Pairs'
@@ -111,7 +111,7 @@ executables:
         - "rendermodules.pointmatch.create_tilepairs"
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=16g'
+        pbs_processor: 'vmem=128g'
         pbs_walltime: 'walltime=5:00:00'
     calculate_multiplicative_correction:
         name: 'Calculate Multiplicative Correction'
@@ -123,7 +123,7 @@ executables:
         - "rendermodules.intensity_correction.calculate_multiplicative_correction"
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=16g'
+        pbs_processor: 'vmem=128g'
         pbs_walltime: 'walltime=5:00:00'
     apply_multiplicative_correction:
         name: 'Apply Multiplicative Correction'
@@ -135,13 +135,13 @@ executables:
         - "rendermodules.intensity_correction.apply_multiplicative_correction"
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=16g'
+        pbs_processor: 'vmem=128g'
         pbs_walltime: 'walltime=5:00:00'
     move:
         name: 'Move'
         path: '/data/aibstemp/timf/example_data/bin/mock_executable'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=16g'
+        pbs_processor: 'vmem=128g'
         pbs_walltime: 'walltime=5:00:00'
 run_states:
     - "PENDING"
