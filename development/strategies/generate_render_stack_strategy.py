@@ -6,7 +6,7 @@ from os import listdir
 import logging
 import os
 
-class IngestGenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
+class GenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
   _log = logging.getLogger(
       'development.strategies.ingest_generate_render_stack_strategy')
   default_input = {
@@ -34,9 +34,9 @@ class IngestGenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
     Args:
         enqueued_object (EMMontageSet) assuming this based on project_path
     '''
-    IngestGenerateRenderStackStrategy._log.info(
+    GenerateRenderStackStrategy._log.info(
         'ingest/generate render stack')
-    input = IngestGenerateRenderStackStrategy.default_input
+    input = GenerateRenderStackStrategy.default_input
 
     input['render']['host'] = settings.RENDER_SERVICE_URL
     input['render']['port'] = settings.RENDER_SERVICE_PORT

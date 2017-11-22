@@ -6,7 +6,7 @@ from os import listdir
 
 import os
 
-class IngestGenerateReferenceSetStrategy(execution_strategy.ExecutionStrategy):
+class GenerateReferenceSetStrategy(execution_strategy.ExecutionStrategy):
   default_input = {
     "render": {
         "host": "em-131fs",
@@ -32,9 +32,9 @@ class IngestGenerateReferenceSetStrategy(execution_strategy.ExecutionStrategy):
     Args:
         enqueued_object (EMMontageSet) assuming this based on project_path
     '''
-    IngestGenerateReferenceSetStrategy._log.info(
+    GenerateReferenceSetStrategy._log.info(
         'ingest/generate render stack')
-    input = IngestGenerateReferenceSetStrategy.default_input
+    input = GenerateReferenceSetStrategy.default_input
 
     input['render']['host'] = settings.RENDER_SERVICE_URL
     input['render']['port'] = settings.RENDER_SERVICE_PORT
@@ -55,7 +55,7 @@ class IngestGenerateReferenceSetStrategy(execution_strategy.ExecutionStrategy):
         process and save results to the database
     '''
     self.check_key(results, 'stack')
-    IngestGenerateReferenceSetStrategy._log.info(
+    GenerateReferenceSetStrategy._log.info(
         'output stack %s' % (results['stack']))
     # self.set_well_known_file(
     #     results['output_json'],

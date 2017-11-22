@@ -154,10 +154,11 @@ run_states:
     - "PROCESS_KILLED"
 workflows:
     lens_correction_new:
+        ingest: "development.strategies.lens_correction_ingest.LensCorrectionIngest"
         states:
             - key: "ingest_reference"
               label: "Ingest Reference Set"
-              class: "development.strategies.ingest_generate_reference_set_strategy.IngestGenerateReferenceSetStrategy"
+              class: "development.strategies.generate_reference_set_strategy.GenerateReferenceSetStrategy"
               enqueued_class: "development.models.reference_set.ReferenceSet"
               executable: "generate_em_tilespecs_from_metafile"
             - key: "apply_lens_correction_new"
@@ -174,10 +175,11 @@ workflows:
             - [ "ingest_reference", [ "apply_lens_correction_new" ] ]
             - [ "apply_lens_correction_new", [ "move_raw_montage_set" ] ]
     em_2d_montage_point_match:
+        ingest: "development.strategies.e_m_point_match_ingest.EMPointMatchIngest"
         states:
-            - key: "ingest_generate"
-              label: "Ingest / Generate Render Stack"
-              class: "development.strategies.ingest_generate_render_stack_strategy.IngestGenerateRenderStackStrategy"
+            - key: "generate_em_montage"
+              label: "Generate Render Stack"
+              class: "development.strategies.generate_render_stack_strategy.GenerateRenderStackStrategy"
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "generate_em_tilespecs_from_metafile"
             - key: "create_tile_pairs"
@@ -205,12 +207,13 @@ workflows:
               label: "Alignment"
               workflow: true
         graph:
-            - [ "ingest_generate", [ "create_tile_pairs" ] ]
+            - [ "generate_em_montage", [ "create_tile_pairs" ] ]
             - [ "create_tile_pairs", [ "2d_montage_point_match" ] ]
             - [ "2d_montage_point_match", [ "solver" ] ]
             - [ "solver", [ "manual_qc" ] ]
             - [ "manual_qc", [ "alignment" ] ]
     em_2d_montage:
+        ingest: "development.strategies.e_m_montage_ingest.EMMontageIngest"
         states:
             - key: "mic_task_builder"
               label: "Multiplicative Intensity Correction Task Builder"

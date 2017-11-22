@@ -35,65 +35,29 @@
 #
 import os
 from workflow_engine.strategies.ingest_strategy import IngestStrategy
-from development.models.camera import Camera
-from development.models.microscope_type import MicroscopeType 
-from development.models.microscope import Microscope
-from development.models.reference_set import ReferenceSet
+from development.models.e_m_montage_set import ATMontageSet
 import logging
 import traceback
-from rendermodules.ingest.schemas import \
-    example, EMMontageSetIngestSchema # TODO: wrong schema
 
-class LensCorrectionIngest(IngestStrategy):
-    _log = logging.getLogger('development.strategies.lens_correction_ingest')
+class ATMontageIngest(IngestStrategy):
+    _log = logging.getLogger('development.strategies.a_t_montage_ingest')
 
     def get_workflow_name(self):
-        LensCorrectionIngest._log.info('get_workflow_name')
+        ATMontageIngest._log.info('get_workflow_name')
 
-        return 'lens_correction_new'
+        return 'at_2d_montage'
 
     def create_enqueued_object(self, message):
-        LensCorrectionIngest._log.info('create_enqueued_object')
+        ATMontageIngest._log.info('create_enqueued_object')
+        ATMontageIngest._log.warn('unimplemented')
 
-        message_camera = message['acquisition_data']['camera']
-        camera, _ = \
-            Camera.objects.update_or_create(
-                uid=message_camera['camera_id'],
-                defaults={
-                    'height': message_camera['height'],
-                    'width': message_camera['width'],
-                    'model': message_camera['model']})
+        raise Exception('unimplemented')
 
-        microscope_type, _ = \
-            MicroscopeType.objects.update_or_create(
-                name=message['acquisition_data']['microscope'])
-
-        microscope, _ = \
-            Microscope.objects.update_or_create(
-                uid="DEADBEEF",
-                defaults={
-                    'microscope_type': microscope_type
-                })
-
-        storage_directory, metafile = \
-            os.path.split(message['acquisition_data']['metafile'])
-
-        reference_set, _ = ReferenceSet.objects.update_or_create(
-                uid=message['reference_set_id'],
-                defaults={
-                    'storage_directory': storage_directory,
-                    'workflow_state': 'Pending',
-                    'camera': camera,
-                    'microscope': microscope,
-                    # 'project_path': '/example_data' # deprecated
-                })
-
-        return reference_set # TODO: return reference_set id to ingest client
+        return "unimplemented"
 
 
     def generate_response(self, enqueued_object):
-        LensCorrectionIngest._log.info('generate_response')
+        ATMontageIngest._log.info('generate_response')
+        ATMontageIngest._log.warn('unimplemented')
 
-        return {
-            'reference_set_id': enqueued_object.uid
-        }
+        return { 'message': 'unimplemented' }
