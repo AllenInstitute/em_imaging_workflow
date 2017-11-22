@@ -1,4 +1,4 @@
-from workflow_engine.strategies import execution_strategy
+from workflow_engine.strategies.execution_strategy import ExecutionStrategy
 from workflow_engine.models import *
 from development.models import *
 from django.conf import settings
@@ -7,7 +7,7 @@ import jinja2
 import simplejson as json
 import os
 
-class GeneratePointMatchesStrategy(execution_strategy.ExecutionStrategy):
+class JsonTemplateStrategy(ExecutionStrategy):
   def get_template(self): 
     env = jinja2.Environment(
         loader=jinja2.PackageLoader('development.strategies',
@@ -19,14 +19,17 @@ class GeneratePointMatchesStrategy(execution_strategy.ExecutionStrategy):
   def get_input(self, enqueued_object, storage_directory, task):
     input_data_template = self.get_template()
 
+    # e.g. get variables from enqueued object
     # port = enqueued_object.service.port
-    port = 8998
 
-    return json.loads(
-        input_data_template.render(
-            render_service_port=port))
+    # e.g. 
+    # return json.loads(
+    #     input_data_template.render(
+    #         render_service_port=port)) # TODO: use **args,
 
-    return input_data
+    raise Exception('JsonTemplateStrategy.get_data unimplemented')
+
+    return {}
 
   #override if needed
   #called after the execution finishes
