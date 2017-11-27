@@ -42,7 +42,7 @@ from development.models.reference_set import ReferenceSet
 import logging
 import traceback
 from rendermodules.ingest.schemas import \
-    example, EMMontageSetIngestSchema # TODO: wrong schema
+    example, ReferenceSetIngestSchema
 
 class LensCorrectionIngest(IngestStrategy):
     _log = logging.getLogger('development.strategies.lens_correction_ingest')
@@ -75,17 +75,20 @@ class LensCorrectionIngest(IngestStrategy):
                     'microscope_type': microscope_type
                 })
 
-        storage_directory, metafile = \
-            os.path.split(message['acquisition_data']['metafile'])
+        storage_directory = message['storage_directory']
+        metafile = message['metafile']
+        manifest_path = message['manifest_path']
 
         reference_set, _ = ReferenceSet.objects.update_or_create(
                 uid=message['reference_set_id'],
                 defaults={
                     'storage_directory': storage_directory,
+                    'metafile': metafile,
                     'workflow_state': 'Pending',
                     'camera': camera,
                     'microscope': microscope,
-                    # 'project_path': '/example_data' # deprecated
+                    # 'project_path': '/example_data', # deprecated
+                    'manifest_path': manifest_path
                 })
 
         return reference_set # TODO: return reference_set id to ingest client

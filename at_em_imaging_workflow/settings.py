@@ -37,7 +37,9 @@ PBS_MESSAGE_QUEUE_NAME='pbs_' + MESSAGE_QUEUE_NAME
 PBS_CONDA_HOME='/shared/utils.x86_64/python-2.7'
 PBS_FINISH_MODULE='workflow_client.pbs_execution_finish'
 PBS_PYTHONPATH='/data/aibstemp/timf/example_data/blue_sky_workflow_engine'
+#PBS_CONDA_ENV='/allen/aibs/pipeline/image_processing/volume_assembly/conda_envs/volume_assembly/render-modules_linked'
 PBS_CONDA_ENV='/data/aibstemp/timf/example_data/blue_sky_27'
+PBS_RESPONSE_CONDA_ENV='/data/aibstemp/timf/example_data/blue_sky_27'
 BLUE_SKY_SETTINGS='/data/aibstemp/timf/example_data/blue_sky_settings.yml'
 MESSAGE_QUEUE_HOST = 'ibs-timf-ux1.corp.alleninstitute.org'
 MESSAGE_QUEUE_USER = 'blue_sky_user'
@@ -51,7 +53,9 @@ RENDER_SERVICE_PROJECT = 'DEV'
 #RENDER_CLIENT_SCRIPTS = os.environ.get(
 #    'RENDER_CLIENT_SCRIPTS',
 #    '/shared/render/render-ws-java-client/src/main/scripts')
-RENDER_CLIENT_SCRIPTS = '/allen/aibs/pipeline/image_processing/volume_assembly/render/render-ws-java-client/src/main/scripts'
+# JAR FILES are one up from this
+# env var (on executable) RENDER_CLIENT_JAR=.
+RENDER_CLIENT_SCRIPTS = '/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/scripts'
 FIJI_PATH = \
     '/allen/aibs/pipeline/image_processing/volume_assembly' + \
     '/Fiji.app/ImageJ-linux64'
