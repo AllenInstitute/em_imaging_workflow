@@ -114,7 +114,9 @@ class EMPointMatchIngest(IngestStrategy):
             sample_holder=sample_holder,
             reference_set=reference_set,
             reference_set_uid=reference_set_uid,
-            storage_directory=message['storage_directory']
+            # reference set will have similar change
+            storage_directory=message['storage_directory'],
+            metafile=message['metafile']
         )
         EMPointMatchIngest._log.info(str(em_montage_set))
 
@@ -123,4 +125,7 @@ class EMPointMatchIngest(IngestStrategy):
     def generate_response(self, enqueued_object):
         EMPointMatchIngest._log.info('generate_response')
 
+        return {
+            'e_m_montage_set_id': enqueued_object.uid
+        }
 

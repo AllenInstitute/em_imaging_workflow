@@ -52,10 +52,7 @@ class LensCorrectionIngest(IngestStrategy):
 
         return 'lens_correction_new'
 
-    def create_enqueued_object(self, message):
-        LensCorrectionIngest._log.info('create_enqueued_object')
-
-        message_camera = message['acquisition_data']['camera']
+    def create_camera(self, message_camera):
         camera, _ = \
             Camera.objects.update_or_create(
                 uid=message_camera['camera_id'],
@@ -64,16 +61,29 @@ class LensCorrectionIngest(IngestStrategy):
                     'width': message_camera['width'],
                     'model': message_camera['model']})
 
-        microscope_type, _ = \
+        return camera
+
+    def create_microscope(self, message_microscope):
+        scope_type, _ = \
             MicroscopeType.objects.update_or_create(
-                name=message['acquisition_data']['microscope'])
+                name=message_microscope)
 
         microscope, _ = \
             Microscope.objects.update_or_create(
                 uid="DEADBEEF",
                 defaults={
-                    'microscope_type': microscope_type
+                    'microscope_type': scope_type
                 })
+
+        return microscope
+
+    def create_enqueued_object(self, message):
+        LensCorrectionIngest._log.info('create_enqueued_object')
+
+        camera = self.create_camera(
+            message['acquisition_data']['camera'])
+        microscope = self.create_microscope(
+            message['acquisition_data']['microscope'])
 
         storage_directory = message['storage_directory']
         metafile = message['metafile']
@@ -94,9 +104,9 @@ class LensCorrectionIngest(IngestStrategy):
         return reference_set # TODO: return reference_set id to ingest client
 
 
-    def generate_response(self, enqueued_object):
+    def generate_response(self, ref_set):
         LensCorrectionIngest._log.info('generate_response')
 
         return {
-            'reference_set_id': enqueued_object.uid
+            'reference_set_id': ref_set.uid
         }
