@@ -70,7 +70,7 @@ def test_create_workflow(workflow_config):
 
     workflow_nodes = \
         WorkflowNode.objects.filter(
-            workflow=Workflow.objects.get(name='em_2d_montage_point_match'),
+            workflow=Workflow.objects.get(name='em_2d_montage'),
             parent=None)
 
     for n in workflow_nodes:
