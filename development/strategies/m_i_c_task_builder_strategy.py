@@ -1,54 +1,44 @@
 from workflow_engine.strategies import execution_strategy
-# from workflow_engine.models import *
-# from development.models import *
+from development.strategies.schemas.m_i_c_task_builder import input_dict
 from rendermodules.intensity_correction.schemas import \
     MakeMedianParams 
 from django.conf import settings
 from os import listdir
 import logging
+import copy
 import os
 
 class MICTaskBuilderStrategy(execution_strategy.ExecutionStrategy):
   _log = logging.getLogger('development.strategies.m_i_c_task_builder_strategy')
 
-  default_input = {
-    "render": {
-        "host": "ibs-forrestc-ux1",
-        "port": 8080,
-        "owner": "M246930_Scnn1a",
-        "project": "M246930_Scnn1a_4",
-        "client_scripts": "/var/www/render/render-ws-java-client/src/main/scripts"
-    },
-    "input_stack": "Acquisition_DAPI_1",
-    "file_prefix": "Median",
-    "output_stack": "Median_TEST_DAPI_1",
-    "output_directory": "/nas/data/M246930_Scnn1a_4/processed/Medians",
-    "minZ": 100,
-    "maxZ": 103,
-    "pool_size": 20
-  }
-
   #override if needed
   #set the data for the input file
-  def get_input(self, enqueued_object, storage_directory, task):
+  def get_input(self, em_mset, storage_directory, task):
     '''
     Args:
-        enqueued_object (EMMontageSet) 
+        em_mset (EMMontageSet) the enqueued object
     '''
     MICTaskBuilderStrategy._log.info('MIC Task Builder')
-    input = MICTaskBuilderStrategy.default_input
+    inp = copy.deepcopy(input_dict)
 
-    input['render']['host'] = settings.RENDER_SERVICE_URL
-    input['render']['port'] = settings.RENDER_SERVICE_PORT
-    input['render']['owner'] = settings.RENDER_SERVICE_USER
-    input['render']['project'] = settings.RENDER_SERVICE_PROJECT
-    input['render']['output_dir'] = '/example_data/scratch'
-    input['input_stack'] = 'test_LC'
-    input['minZ'] = 1
-    input['maxZ'] = 1
+    inp['render']['host'] = settings.RENDER_SERVICE_URL
+    inp['render']['port'] = settings.RENDER_SERVICE_PORT
+    inp['render']['owner'] = settings.RENDER_SERVICE_USER
+    inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
+    inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
+    inp['render']['output_dir'] = em_mset.storage_directory
+    inp['input_stack'] = self.get_input_stack_name()
+    inp['output_stack'] = self.get_output_stack_name()
+    inp['minZ'] = em_mset.section.z_index
+    inp['maxZ'] = em_mset.section.z_index
 
-    return MakeMedianParams().dump(input).data
+    return MakeMedianParams().dump(inp).data
     
+  def get_input_stack_name(self):
+    return settings.RENDER_STACK_NAME
+
+  def get_output_stack_name(self):
+    return settings.RENDER_STACK_NAME
 
   #override if needed
   #called after the execution finishes
