@@ -3,19 +3,34 @@ django.setup()
 from django.test import TestCase
 from django.utils import dateparse
 import pytz
-from development.management.commands.ingest_worker import Command 
-from development.management.commands.ingest_reference_set import Command as Ref
+from unittest import skip
+from development.strategies.lens_correction_ingest import LensCorrectionIngest
+from development.strategies.e_m_montage_ingest import EMMontageIngest
 from development.models.e_m_montage_set import EMMontageSet
 from rendermodules.ingest.schemas import example as body_data
-from pikatest_reference import message_body_data as ref_body_data
 
-class TestIngestWorker(TestCase):
+
+class TestEMMontageIngest(TestCase):
+    @skip
     def test_example_input(self):
-       ref_set = Ref.create_reference_set(ref_body_data)
-
+       ref_body_data = None
        example = body_data
-       example['reference_set_id'] = ref_body_data['reference_set_id']
-       reference_set = Command.create_em_render_set(example)
+
+       example['manifest_path'] = \
+           "/allen/aibs/pipeline/image_processing/volume_assembly/" + \
+           "lc_test_data/Wij_Set_594451332/594089217_594451332/" + \
+           "_trackem_20170502174048_295434_5LC_0064_" + \
+           "01_20170502174047_reference_0_.txt"
+       example['storage_directory'] = \
+           "/allen/aibs/pipeline/image_processing/volume_assembly/" + \
+           "lc_test_data/Wij_Set_594451332/594089217_594451332"
+       example['metafile'] = \
+           "/allen/aibs/pipeline/image_processing/volume_assembly/" + \
+           "dataimport_test_data/" + \
+           "_metadata_20170829130146_295434_5LC_0064_01_redo_001050_0_.json"
+       ref_set = LensCorrectionIngest().create_enqueued_object(example)
+
+       reference_set = EMMontageIngest().create_enqueued_object(example)
 
        em_mset = EMMontageSet.objects.get(
            storage_directory=example['storage_directory'])
