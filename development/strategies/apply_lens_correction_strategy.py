@@ -17,26 +17,26 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
   #set the data for the input file
   def get_input(self, em_mset, storage_directory, task):
     ApplyLensCorrectionStrategy._log.info('get_input')
-    input = input_dict
+    inp = input_dict
 
-    input['render']['host'] = settings.RENDER_SERVICE_URL
-    input['render']['port'] = settings.RENDER_SERVICE_PORT
-    input['render']['owner'] = settings.RENDER_SERVICE_USER
-    input['render']['project'] = settings.RENDER_SERVICE_PROJECT
-    input['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
-    input['zs'] = [ em_mset.section.z_index ]
-    input['inputStack'] = self.get_input_stack_name()
-    input['outputStack'] = self.get_input_stack_name()
-    input['close_stack'] = self.get_input_stack_name()
+    inp['render']['host'] = settings.RENDER_SERVICE_URL
+    inp['render']['port'] = settings.RENDER_SERVICE_PORT
+    inp['render']['owner'] = settings.RENDER_SERVICE_USER
+    inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
+    inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
+    inp['zs'] = [ em_mset.section.z_index ]
+    inp['inputStack'] = self.get_input_stack_name()
+    inp['outputStack'] = self.get_input_stack_name()
+    inp['close_stack'] = False
 
     wkf = WellKnownFile.get(em_mset.reference_set, 'description')
     ApplyLensCorrectionStrategy._log.info('WKF: %s' % (wkf))
 
     with open(wkf) as j:
         json_data = json.loads(j.read())
-        input['transform'] = json_data['transform']
+        inp['transform'] = json_data['transform']
 
-    return ApplyLensCorrectionParameters().dump(input).data
+    return ApplyLensCorrectionParameters().dump(inp).data
 
   def get_input_stack_name(self):
     return settings.RENDER_STACK_NAME

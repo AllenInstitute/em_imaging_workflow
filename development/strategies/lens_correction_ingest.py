@@ -85,20 +85,20 @@ class LensCorrectionIngest(IngestStrategy):
         microscope = self.create_microscope(
             message['acquisition_data']['microscope'])
 
-        storage_directory = message['storage_directory']
         metafile = message['metafile']
         manifest_path = message['manifest_path']
 
         reference_set, _ = ReferenceSet.objects.update_or_create(
                 uid=message['reference_set_id'],
                 defaults={
-                    'storage_directory': storage_directory,
+                    'storage_directory': message['storage_directory'],
                     'metafile': metafile,
                     'workflow_state': 'Pending',
                     'camera': camera,
                     'microscope': microscope,
                     # 'project_path': '/example_data', # deprecated
-                    'manifest_path': manifest_path
+                    'manifest_path': manifest_path,
+                    'metafile': metafile
                 })
 
         return reference_set # TODO: return reference_set id to ingest client

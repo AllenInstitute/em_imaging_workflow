@@ -26,6 +26,9 @@ executables:
         args:
         - '-m'
         - "rendermodules.dataimport.generate_EM_tilespecs_from_metafile"
+        environment:
+        - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
+        - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
         pbs_processor: 'vmem=128g'
@@ -39,8 +42,8 @@ executables:
         - '-m'
         - "rendermodules.lens_correction.lens_correction"
         environment:
-        - RENDER_CLIENT_SCRIPTS=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/scripts
-        - RENDER_CLIENT_JARS=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging
+        - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
+        - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
         pbs_processor: 'vmem=128g'
@@ -55,6 +58,7 @@ executables:
         - "rendermodules.lens_correction.apply_lens_correction"
         environment:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
+        - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
         pbs_processor: 'vmem=128g'
@@ -78,7 +82,8 @@ executables:
         args:
         - '-m'
         - "rendermodules.pointmatch.generate_point_matches_spark"
-        - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-spark-client-standalone.jar
+        - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
+        - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'spark'
         pbs_queue: 'lims2'
         pbs_processor: 'vmem=128g'
@@ -186,8 +191,8 @@ workflows:
               executable: "move"
         graph:
             - [ "ingest_reference", [ "move_raw_montage_set" ] ]
-    em_2d_montage_point_match:
-        ingest: "development.strategies.e_m_point_match_ingest.EMPointMatchIngest"
+    em_2d_montage:
+        ingest: "development.strategies.e_m_montage_ingest.EMMontageIngest"
         states:
             - key: "generate_em_montage"
               label: "Generate Render Stack"
@@ -230,8 +235,7 @@ workflows:
             - [ "2d_montage_point_match", [ "solver" ] ]
             - [ "solver", [ "manual_qc" ] ]
             - [ "manual_qc", [ "alignment" ] ]
-    em_2d_montage:
-        ingest: "development.strategies.e_m_montage_ingest.EMMontageIngest"
+    em_2d_montage_mic:
         states:
             - key: "mic_task_builder"
               label: "Multiplicative Intensity Correction Task Builder"

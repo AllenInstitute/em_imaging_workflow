@@ -21,19 +21,19 @@ class GenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
     '''
     GenerateRenderStackStrategy._log.info(
         'ingest/generate render stack')
-    input = copy.deepcopy(input_dict)
+    inp = copy.deepcopy(input_dict)
 
-    input['render']['host'] = settings.RENDER_SERVICE_URL
-    input['render']['port'] = settings.RENDER_SERVICE_PORT
-    input['render']['owner'] = settings.RENDER_SERVICE_USER
-    input['render']['project'] = settings.RENDER_SERVICE_PROJECT
-    input['stack'] = self.get_stack_name(em_set)
-    input['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
-    input['metafile'] = em_set.metafile
-    input['close_stack'] = False
-    input['z_index'] = self.get_z_index(em_set)
+    inp['render']['host'] = settings.RENDER_SERVICE_URL
+    inp['render']['port'] = settings.RENDER_SERVICE_PORT
+    inp['render']['owner'] = settings.RENDER_SERVICE_USER
+    inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
+    inp['stack'] = self.get_stack_name(em_set)
+    inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
+    inp['metafile'] = em_set.metafile
+    inp['close_stack'] = False
+    inp['z_index'] = self.get_z_index(em_set)
  
-    return GenerateEMTileSpecsParameters().dump(input).data
+    return GenerateEMTileSpecsParameters().dump(inp).data
 
   def get_z_index(self, em_set):
       return em_set.section.z_index

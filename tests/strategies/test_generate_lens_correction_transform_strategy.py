@@ -16,10 +16,10 @@ class TestGenerateLensCorrectionTransformStrategy(TestCase):
         storage_directory = '/example/storage/directory'
 
         strategy = GenerateLensCorrectionTransformStrategy()
-        input = strategy.get_input(enqueued_object,
-                                   storage_directory,
-                                   task)
+        inp = strategy.get_input(enqueued_object,
+                                 storage_directory,
+                                 task)
 
-        assert input['manifest_path'] == 'manifest.json'
-        assert input['fiji_path'] == input_dict['fiji_path']
-        assert input is not None
+        assert inp['manifest_path'] == 'manifest.json'
+        assert inp['fiji_path'] == input_dict['fiji_path']
+        assert inp is not None
