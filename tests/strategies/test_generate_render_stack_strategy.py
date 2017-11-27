@@ -20,7 +20,7 @@ class TestIngestGenerateRenderStackStrategy(TestCase):
         input_json = strategy.get_input(em_set,
                                         storage_directory,
                                         task)
-        print(str(input_json))
+        # print(str(input_json))
         assert input_json['render']['host'] == settings.RENDER_SERVICE_URL
         assert input_json['render']['port'] == int(settings.RENDER_SERVICE_PORT)
         assert input_json['render']['owner'] == settings.RENDER_SERVICE_USER
