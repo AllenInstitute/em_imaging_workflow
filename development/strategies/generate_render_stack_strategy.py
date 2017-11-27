@@ -1,55 +1,45 @@
 from workflow_engine.strategies import execution_strategy
+from development.strategies.schemas.generate_render_stack import input_dict
 from rendermodules.dataimport.schemas import \
     GenerateEMTileSpecsParameters
 from django.conf import settings
 from os import listdir
+import copy
 import logging
 import os
 
 class GenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
   _log = logging.getLogger(
       'development.strategies.ingest_generate_render_stack_strategy')
-  default_input = {
-    "render": {
-        "host": "em-131fs",
-        "port": 8080,
-        "owner": "russelt",
-        "project": "RENDERAPI_TEST",
-        "client_scripts": (
-            "/allen/programs/celltypes/workgroups/"
-            "em-connectomics/russelt/render_mc.old/render-ws-java-client/"
-            "src/main/scripts")},
-    "metafile": "/allen/programs/celltypes/workgroups/em-connectomics/data/workflow_test_sqmm/001050/0/_metadata_20170829130146_295434_5LC_0064_01_redo_001050_0_.json",
-    "stack": "TEST_IMPORT_FROMMD",
-    "overwrite_zlayer": True,
-    "pool_size": 10,
-    "close_stack": True,
-    "z_index": 1
-  }
 
   #override if needed
   #set the data for the input file
-  def get_input(self, enqueued_object, storage_directory, task):
+  def get_input(self, em_set, storage_directory, task):
     '''
     Args:
-        enqueued_object (EMMontageSet) assuming this based on project_path
+        em_set (EMMontageSet) the enqueued object
     '''
     GenerateRenderStackStrategy._log.info(
         'ingest/generate render stack')
-    input = GenerateRenderStackStrategy.default_input
+    input = copy.deepcopy(input_dict)
 
     input['render']['host'] = settings.RENDER_SERVICE_URL
     input['render']['port'] = settings.RENDER_SERVICE_PORT
     input['render']['owner'] = settings.RENDER_SERVICE_USER
     input['render']['project'] = settings.RENDER_SERVICE_PROJECT
+    input['stack'] = self.get_stack_name(em_set)
     input['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
-    input['metafile'] = \
-        os.path.join(
-            '/allen/aibs/pipeline/image_processing/volume_assembly',
-            'dataimport_test_data',
-            '_metadata_20170829130146_295434_5LC_0064_01_redo_001050_0_.json')
+    input['metafile'] = em_set.metafile
+    input['close_stack'] = False
+    input['z_index'] = self.get_z_index(em_set)
  
     return GenerateEMTileSpecsParameters().dump(input).data
+
+  def get_z_index(self, em_set):
+      return em_set.section.z_index
+
+  def get_stack_name(self, em_set):
+      return settings.RENDER_STACK_NAME
 
   #override if needed
   #called after the execution finishes

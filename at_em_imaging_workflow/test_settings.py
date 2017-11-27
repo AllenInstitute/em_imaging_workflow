@@ -35,11 +35,10 @@ MESSAGE_QUEUE_PORT = 5672
 
 RENDER_SERVICE_URL = 'renderservice'
 RENDER_SERVICE_PORT = '8080'
-RENDER_SERVICE_USER = 'gayathri'
+RENDER_SERVICE_USER = 'test_user'
 RENDER_SERVICE_PROJECT = 'MM2'
-RENDER_CLIENT_SCRIPTS = os.environ.get(
-    'RENDER_CLIENT_SCRIPTS',
-    '/shared/render/render-ws-java-client/src/main/scripts')
+RENDER_STACK_NAME = 'test_stack'
+RENDER_CLIENT_SCRIPTS = '/path/to/render/scripts'
 
 FIJI_PATH = \
     '/allen/aibs/pipeline/image_processing/volume_assembly' + \
@@ -222,7 +221,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'debug_test.log',
+            'filename': os.environ.get('DEBUG_LOG', 'debug_test.log')
         },
     },
     'loggers': {
@@ -267,10 +266,3 @@ CELERYD_HIJACK_ROOT_LOGGER = False
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
-try:
-    with open(os.path.join(
-        os.path.dirname(__file__), "test_local_settings.py"
-    )) as ls:
-        exec(ls.read())
-except IOError:
-    pass
