@@ -76,6 +76,7 @@ class EMMontageIngest(IngestStrategy):
                 'render_owner': settings.RENDER_SERVICE_USER,
                 'study': study
             })
+
         return specimen
 
     def create_section(self, section_message, metafile, specimen):
@@ -87,7 +88,7 @@ class EMMontageIngest(IngestStrategy):
         except:
             EMMontageIngest._log.error(
                 'Could not read metafile: %s' % (metafile))
-            meta = None
+            meta = { 'message': 'error' }
 
         section = Section.objects.create(
             z_index=section_message['z_index'],
@@ -154,15 +155,16 @@ class EMMontageIngest(IngestStrategy):
             sample_holder=sample_holder,
             reference_set=reference_set,
             reference_set_uid=reference_set_uid,
-            storage_directory=message['storage_directory']
+            storage_directory=message['storage_directory'],
+            metafile=message['metafile']
         )
         EMMontageIngest._log.info(str(em_montage_set))
 
         return em_montage_set
 
-
     def generate_response(self, enqueued_object):
         EMMontageIngest._log.info('generate_response')
-        EMMontageIngest._log.warn('unimplemented')
 
-        return { 'message': 'unimplemented' }
+        return {
+            'e_m_montage_set_id': enqueued_object.uid
+        }
