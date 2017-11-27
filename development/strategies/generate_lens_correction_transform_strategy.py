@@ -11,8 +11,8 @@ import os
 class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
   _log = logging.getLogger('development.strategies.generate_lens_correction_transform_strategy')
 
-  def skip_execution(self, enqueued_object):
-      return True
+  # def skip_execution(self, enqueued_object):
+  #    return True
 
   #override if needed
   #set the data for the input file
