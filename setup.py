@@ -15,6 +15,16 @@ with open('requirements.txt', 'r') as f:
 with open('test_requirements.txt', 'r') as f:
     test_required = f.read().splitlines()
 
+def prepend_find_packages(*roots):
+    ''' Recursively traverse nested packages under the root directories
+    '''
+    packages = []
+    
+    for root in roots:
+        packages += [root]
+        packages += [root + '.' + s for s in find_packages(root)]
+        
+    return packages
 
 class PyTest(TestCommand):
     user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
@@ -36,7 +46,7 @@ class PyTest(TestCommand):
 setup(
     name='at_em_imaging_workflow',
     version='0.120',
-    packages=find_packages(),
+    packages=prepend_find_packages('at_em_workflow_engine', 'development'),
     include_package_data=True,
     license='Allen Institute Software License',
     description='AT EM Imaging Workflow',
