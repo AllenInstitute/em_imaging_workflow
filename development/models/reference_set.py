@@ -34,7 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from .tile_image_set import TileImageSet
+from development.models.tile_image_set import TileImageSet
 
 
 class ReferenceSet(TileImageSet):

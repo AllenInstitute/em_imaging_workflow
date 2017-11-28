@@ -34,7 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from .microscope_type import MicroscopeType
+from development.models.microscope_type import MicroscopeType
 
 
 class Microscope(models.Model):

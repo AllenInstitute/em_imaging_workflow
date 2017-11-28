@@ -35,9 +35,9 @@
 #
 from django.db import models
 from django.contrib.postgres.fields import JSONField
-from .chunk import Chunk
-from .specimen import Specimen
-from .sample_holder import SampleHolder
+from development.models.chunk import Chunk
+from development.models.specimen import Specimen
+from development.models.sample_holder import SampleHolder
 
 class Section(models.Model):
     section_id = models.CharField(max_length=255, null=True)

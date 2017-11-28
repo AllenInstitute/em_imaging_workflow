@@ -34,7 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from .study import Study
+from development.models.study import Study
 
 
 class Specimen(models.Model):

@@ -33,23 +33,23 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from .study import Study
-from .specimen import Specimen
-from .rendered_volume import RenderedVolume
-from .chunk import Chunk
-from .load import Load
-from .sample_holder import SampleHolder
-from .section import Section
-from .stain import Stain
-from .camera import Camera
-from .microscope_type import MicroscopeType
-from .microscope import Microscope
+from development.models.study import Study
+from development.models.specimen import Specimen
+from development.models.rendered_volume import RenderedVolume
+from development.models.chunk import Chunk
+from development.models.load import Load
+from development.models.sample_holder import SampleHolder
+from development.models.section import Section
+from development.models.stain import Stain
+from development.models.camera import Camera
+from development.models.microscope_type import MicroscopeType
+from development.models.microscope import Microscope
 
-from .tile_image_set import TileImageSet
-from .montage_set import MontageSet
-from .reference_set import ReferenceSet
-from .e_m_montage_set import EMMontageSet
-from .registration_series import RegistrationSeries
-from .a_t_montage_set import ATMontageSet
+from development.models.tile_image_set import TileImageSet
+from development.models.montage_set import MontageSet
+from development.models.reference_set import ReferenceSet
+from development.models.e_m_montage_set import EMMontageSet
+from development.models.registration_series import RegistrationSeries
+from development.models.a_t_montage_set import ATMontageSet
 
 from workflow_engine.blue_sky_state_machine import BlueSkyStateMachine

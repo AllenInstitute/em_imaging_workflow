@@ -34,7 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from .load import Load
+from development.models.load import Load
 
 
 class SampleHolder(models.Model):

@@ -35,7 +35,7 @@
 #
 from django.db import models
 from django.conf import settings
-from .rendered_volume import RenderedVolume
+from development.models.rendered_volume import RenderedVolume
 import logging
 
 class Chunk(models.Model):

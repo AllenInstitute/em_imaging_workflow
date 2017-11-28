@@ -34,8 +34,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from .montage_set import MontageSet
-from .reference_set import ReferenceSet
+from development.models.montage_set import MontageSet
+from development.models.reference_set import ReferenceSet
 
 
 class EMMontageSet(MontageSet):

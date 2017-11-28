@@ -33,11 +33,10 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-import os
 from workflow_engine.strategies.ingest_strategy import IngestStrategy
-from development.models.e_m_montage_set import ATMontageSet
+from development.models.a_t_montage_set import ATMontageSet
 import logging
-import traceback
+
 
 class ATMontageIngest(IngestStrategy):
     _log = logging.getLogger('development.strategies.a_t_montage_ingest')

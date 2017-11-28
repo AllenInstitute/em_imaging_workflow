@@ -33,14 +33,12 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-import os
 from workflow_engine.strategies.ingest_strategy import IngestStrategy
 from development.models.camera import Camera
 from development.models.microscope_type import MicroscopeType 
 from development.models.microscope import Microscope
 from development.models.reference_set import ReferenceSet
 import logging
-import traceback
 from rendermodules.ingest.schemas import \
     example, ReferenceSetIngestSchema
 
@@ -53,6 +51,18 @@ class LensCorrectionIngest(IngestStrategy):
         return 'lens_correction_new'
 
     def create_camera(self, message_camera):
+        '''Add or retrieve and optionally modify a Camera in the database.
+        
+        Parameters
+        ----------
+        message_camera : dict
+            height, width, model keys
+        
+        Returns
+        -------
+        Camera
+            the database object
+        '''
         camera, _ = \
             Camera.objects.update_or_create(
                 uid=message_camera['camera_id'],
@@ -64,6 +74,19 @@ class LensCorrectionIngest(IngestStrategy):
         return camera
 
     def create_microscope(self, message_microscope):
+        '''Add or retrieve and optionally modify a Microscope
+        in the database.
+
+        Parameters
+        ----------
+        message_microscope : dict
+            the sub-message to be unpacked
+
+        Returns
+        -------
+        Microscope
+            the database object
+        '''
         scope_type, _ = \
             MicroscopeType.objects.update_or_create(
                 name=message_microscope)
@@ -78,6 +101,19 @@ class LensCorrectionIngest(IngestStrategy):
         return microscope
 
     def create_enqueued_object(self, message):
+        '''Add or retrieve and optionally modify a Microscope
+        in the database. Camera and Microscope are created if needed.
+
+        Parameters
+        ----------
+        message_microscope : dict
+            the sub-message to be unpacked
+
+        Returns
+        -------
+        ReferenceSet
+            the database object
+        '''
         LensCorrectionIngest._log.info('create_enqueued_object')
 
         camera = self.create_camera(

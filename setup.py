@@ -46,7 +46,7 @@ class PyTest(TestCommand):
 setup(
     name='at_em_imaging_workflow',
     version='0.120',
-    packages=prepend_find_packages('at_em_workflow_engine', 'development'),
+    packages=prepend_find_packages('at_em_imaging_workflow', 'development'),
     include_package_data=True,
     license='Allen Institute Software License',
     description='AT EM Imaging Workflow',

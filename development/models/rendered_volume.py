@@ -34,7 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from .specimen import Specimen
+from development.models.specimen import Specimen
 
 
 class RenderedVolume(models.Model):

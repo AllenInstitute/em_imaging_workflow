@@ -34,9 +34,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from .tile_image_set import TileImageSet
-from .section import Section
-from .sample_holder import SampleHolder
+from development.models.tile_image_set import TileImageSet
+from development.models.section import Section
+from development.models.sample_holder import SampleHolder
 
 
 class MontageSet(TileImageSet):

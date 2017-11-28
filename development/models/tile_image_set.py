@@ -34,8 +34,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from .camera import Camera
-from .microscope import Microscope
+from development.models.camera import Camera
+from development.models.microscope import Microscope
 
 
 class TileImageSet(models.Model):
