@@ -176,31 +176,36 @@ run_states:
     - "SUCCESS"
     - "PROCESS_KILLED"
 workflows:
-    lens_correction_new:
+    em_2d_montage:
         ingest: "development.strategies.lens_correction_ingest.LensCorrectionIngest"
         states:
-            - key: "ingest_reference"
+            - key: "ingest_tile_sets"
+              label: "Ingest Tile Sets"
+              class: "development.strategies.lens_correction_ingest.LensCorrectionIngest"
+              enqueued_class: "development.models.tile_image_set.TileImageSet"
+              executable: "mock"
+            - key: "generate_lens_correction"
               label: "Generate Lens Correction Transform"
               class: "development.strategies.generate_lens_correction_transform_strategy.GenerateLensCorrectionTransformStrategy"
               enqueued_class: "development.models.reference_set.ReferenceSet"
               executable: "generate_lens_correction"
+            - key: "wait_for_lens_correction"
+              label: "Wait for Lens Correction"
+              class: "development.strategies.wait_for_lens_correction.WaitForLensCorrection"
+              enqueued_class: "development.models.reference_set.ReferenceSet"
+              executable: "mock"
             - key: "move_raw_montage_set"
               label: "Move Raw Montage Sets"
               class: "development.strategies.move_raw_montage_set_strategy.MoveRawMontageSetStrategy"
               enqueued_class: "development.models.reference_set.ReferenceSet"
               executable: "move"
-        graph:
-            - [ "ingest_reference", [ "move_raw_montage_set" ] ]
-    em_2d_montage:
-        ingest: "development.strategies.e_m_montage_ingest.EMMontageIngest"
-        states:
             - key: "generate_em_montage"
               label: "Generate Render Stack"
               class: "development.strategies.generate_render_stack_strategy.GenerateRenderStackStrategy"
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "generate_em_tilespecs_from_metafile"
             - key: "apply_lens_correction_new"
-              label: "Apply Lens Correction New"
+              label: "Apply Lens Correction"
               class: "development.strategies.apply_lens_correction_strategy.ApplyLensCorrectionStrategy"
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "apply_lens_correction"
@@ -229,7 +234,11 @@ workflows:
               label: "Alignment"
               workflow: true
         graph:
-            - [ "generate_em_montage", [ "apply_lens_correction_new" ] ]
+            - [ "ingest_tile_sets", [ "generate_lens_correction", "generate_em_montage" ] ]
+            - [ "generate_lens_correction", [ "move_raw_montage_set" ] ]
+            - [ "generate_em_montage", [ "wait_for_lens_correction" ] ]
+            - [ "move_raw_montage_set", [ "wait_for_lens_correction" ] ]
+            - [ "wait_for_lens_correction", [ "apply_lens_correction_new" ] ]
             - [ "apply_lens_correction_new", [ "create_tile_pairs" ] ]
             - [ "create_tile_pairs", [ "2d_montage_point_match" ] ]
             - [ "2d_montage_point_match", [ "solver" ] ]

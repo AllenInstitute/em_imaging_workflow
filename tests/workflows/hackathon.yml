@@ -1,13 +1,13 @@
 executables:
     mock:
         name: 'Mock Executable'
-        path: '/projects/mock_bin/mock_executable.sh'
+        path: '/example_data/bin/mock_executable'
         pbs_queue: 'mindscope'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
     python:
-        name: 'Mock Executable'
-        path: '/projects/mock_bin/python'
+        name: 'Python'
+        path: '/opt/conda/bin/python'
         pbs_queue: 'mindscope'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'

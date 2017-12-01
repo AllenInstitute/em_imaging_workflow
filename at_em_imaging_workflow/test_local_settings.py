@@ -20,9 +20,14 @@ LOGGING = {
         },
     },
     'loggers': {
-        'django': {
+#        'django': {
+#            'handlers': ['file'],
+#            'level': 'WARN',
+#            'propagate': True,
+#        },
+        'at_em_imaging_workflow.models.chunk': {
             'handlers': ['file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
         'at_em_imaging_workflow': {

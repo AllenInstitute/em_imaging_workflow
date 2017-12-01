@@ -1,7 +1,13 @@
 executables:
     mock:
         name: 'Mock Executable'
-        path: '/projects/mock_bin/mock_executable.sh'
+        path: '/example_data/bin/mock_executable'
+        pbs_queue: 'mindscope'
+        pbs_processor: 'vmem=16g'
+        pbs_walltime: 'walltime=5:00:00'
+    python:
+        name: 'Python'
+        path: '/opt/conda/bin/python'
         pbs_queue: 'mindscope'
         pbs_processor: 'vmem=16g'
         pbs_walltime: 'walltime=5:00:00'
@@ -25,6 +31,7 @@ workflows:
             - key: "mic_task_builder"
               label: "Multiplicative Intensity Correction Task Builder"
               class: "development.strategies.m_i_c_task_builder_strategy.MICTaskBuilderStrategy"
+              enqueued_class: "development.models.ReferenceSet"
               executable: "mock"
             - key: "mic_tasks"
               parallel: true

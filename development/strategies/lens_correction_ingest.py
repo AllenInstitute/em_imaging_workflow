@@ -33,22 +33,33 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
+from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from workflow_engine.strategies.ingest_strategy import IngestStrategy
 from development.models.camera import Camera
 from development.models.microscope_type import MicroscopeType 
 from development.models.microscope import Microscope
 from development.models.reference_set import ReferenceSet
+from development.models.study import Study
+from development.models.specimen import Specimen
+from development.models.section import Section
+from development.models.sample_holder import SampleHolder
+from development.models.load import Load
+from development.models.e_m_montage_set import EMMontageSet
+import simplejson as json
 import logging
+import traceback
 from rendermodules.ingest.schemas import \
     example, ReferenceSetIngestSchema
 
 class LensCorrectionIngest(IngestStrategy):
     _log = logging.getLogger('development.strategies.lens_correction_ingest')
 
+    # TODO, query from datbase using class name
     def get_workflow_name(self):
         LensCorrectionIngest._log.info('get_workflow_name')
 
-        return 'lens_correction_new'
+        return 'em_2d_montage'
 
     def create_camera(self, message_camera):
         '''Add or retrieve and optionally modify a Camera in the database.
@@ -100,7 +111,7 @@ class LensCorrectionIngest(IngestStrategy):
 
         return microscope
 
-    def create_enqueued_object(self, message):
+    def create_reference_set(self, message):
         '''Add or retrieve and optionally modify a Microscope
         in the database. Camera and Microscope are created if needed.
 
@@ -139,10 +150,128 @@ class LensCorrectionIngest(IngestStrategy):
 
         return reference_set # TODO: return reference_set id to ingest client
 
+    def create_study(self, study_message):
+        LensCorrectionIngest._log.warn('creating study - UNIMPLEMENTED')
 
-    def generate_response(self, ref_set):
+        study, _ = Study.objects.update_or_create(
+            name='DEADBEEF'
+        )
+
+        return study
+
+    def create_specimen(self, specimen_message, study):
+        LensCorrectionIngest._log.info('creating specimen')
+        specimen, _ = Specimen.objects.update_or_create(
+            uid=specimen_message,
+            defaults={
+                'render_project': settings.RENDER_SERVICE_PROJECT,
+                'render_owner': settings.RENDER_SERVICE_USER,
+                'study': study
+            })
+
+        return specimen
+
+    def create_section(self, section_message, metafile, specimen):
+        LensCorrectionIngest._log.info('creating section')
+
+        # TODO: fix unused meta
+#         try:
+#             with open(metafile, 'r') as f:
+#                 meta = json.loads(f.read(f))
+#         except:
+#             LensCorrectionIngest._log.error(
+#                 'Could not read metafile: %s' % (metafile))
+#             meta = { 'message': 'error' }
+
+        section = Section.objects.create(
+            z_index=section_message['z_index'],
+            metadata=None,
+            specimen=specimen)
+
+        return section
+
+    def create_load(self, load_message):
+        LensCorrectionIngest._log.warn('creating load - UNIMPLEMENTED')
+
+        load, _ = Load.objects.update_or_create(
+            uid='DEADBEEF'
+        )
+
+        return load
+
+    def create_sample_holder(self, sample_holder_message, load):
+        LensCorrectionIngest._log.info('creating sample holder')
+
+        sample_holder, _ = SampleHolder.objects.update_or_create(
+            uid=sample_holder_message,
+            defaults={
+                'imaged_sections_count': 0,
+                'load': load
+            })
+
+        return sample_holder
+
+    def create_enqueued_object(self, message, tags=None):
+        if tags == None:
+            tags = ['EMMontageSet']
+
+        if 'ReferenceSet' in tags:
+            return self.create_reference_set(message)
+        elif 'EMMontageSet' in tags:
+            return self.create_em_montage_set(message)
+        else:
+            LensCorrectionIngest._log.warn("No enqueued object type tag")
+            return None
+
+
+    def create_em_montage_set(self, message):
+        LensCorrectionIngest._log.info('create_em_montage_set')
+
+        study = self.create_study(message)
+        specimen = self.create_specimen(
+            message['section']['specimen'],
+            study)
+        section = self.create_section(message['section'],
+                                      message['metafile'],
+                                      specimen)
+        load = self.create_load(None)
+        sample_holder = self.create_sample_holder(
+            message['section']['sample_holder'],
+            load)
+
+        LensCorrectionIngest._log.info('creating em montage set')
+
+        # if reference set id isn't specified,
+        # montage set should still be created
+        reference_set = None
+        reference_set_uid = None
+        if 'reference_set_id' in message:
+            reference_set_uid = message['reference_set_id']
+            try:
+                reference_set = ReferenceSet.objects.get(
+                    uid=reference_set_uid)
+            except ObjectDoesNotExist:
+                pass
+
+        em_montage_set = EMMontageSet.objects.create(
+            acquisition_date=message['acquisition_data']['acquisition_time'],
+            overlap=message['acquisition_data']['overlap'],
+            mipmap_directory=None,
+            section=section,
+            sample_holder=sample_holder,
+            reference_set=reference_set,
+            reference_set_uid=reference_set_uid,
+            storage_directory=message['storage_directory'],
+            metafile=message['metafile']
+        )
+        LensCorrectionIngest._log.info(str(em_montage_set))
+
+        return em_montage_set
+
+    def generate_response(self, tile_set):
         LensCorrectionIngest._log.info('generate_response')
 
         return {
-            'reference_set_id': ref_set.uid
+            'tile_set_id': tile_set.id
         }
+

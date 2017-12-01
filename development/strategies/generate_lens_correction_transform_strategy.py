@@ -34,8 +34,10 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
+import development
 from rendermodules.lens_correction.schemas \
     import LensCorrectionParameters
+from development.models.reference_set import ReferenceSet
 from development.strategies.schemas.generate_lens_correction_transform import input_dict
 from django.conf import settings
 import logging
@@ -84,6 +86,11 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
             enqueued_object,
             'description',
             task)
+
+    def can_transition(self, enqueued_object):
+        is_reference_set = isinstance(enqueued_object, ReferenceSet)
+
+        return is_reference_set
 
     #override if needed
     #set the storage directory for an enqueued object
