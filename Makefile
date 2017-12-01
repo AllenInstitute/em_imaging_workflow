@@ -21,11 +21,8 @@ distutils_build: clean
 sdist: distutils_build
 	python setup.py sdist
 
-pypi_register:
-	python setup.py register --repository https://testpypi.python.org/pypi
-
 pypi_deploy:
-	python setup.py sdist upload --repository https://testpypi.python.org/pypi
+	python setup.py sdist upload --repository local
 
 pytest_lax:
 	rm database.db || exit 0

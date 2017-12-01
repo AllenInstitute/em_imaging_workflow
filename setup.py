@@ -3,6 +3,8 @@ import sys
 from setuptools import find_packages, setup
 from setuptools.command.test import test as TestCommand
 
+VERSION = os.environ.get('VERSION', '0.dev')
+
 with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
     README = readme.read()
 
@@ -45,7 +47,7 @@ class PyTest(TestCommand):
 
 setup(
     name='at_em_imaging_workflow',
-    version='0.120',
+    version='0.121.%s' % (VERSION),
     packages=prepend_find_packages('at_em_imaging_workflow', 'development'),
     include_package_data=True,
     license='Allen Institute Software License',
