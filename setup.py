@@ -3,7 +3,6 @@ import sys
 from setuptools import find_packages, setup
 from setuptools.command.test import test as TestCommand
 
-VERSION = os.environ.get('VERSION', '0.dev')
 
 with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
     README = readme.read()
@@ -47,7 +46,7 @@ class PyTest(TestCommand):
 
 setup(
     name='at_em_imaging_workflow',
-    version='0.121.%s' % (VERSION),
+    use_scm_version=True,
     packages=prepend_find_packages('at_em_imaging_workflow', 'development'),
     include_package_data=True,
     license='Allen Institute Software License',
@@ -59,7 +58,8 @@ setup(
     install_requires = required,
     tests_require=test_required,
     setup_requires=[
-        'flake8'
+        'flake8',
+        'setuptools_scm'
     ],
     classifiers=[
         'Environment :: Web Environment',

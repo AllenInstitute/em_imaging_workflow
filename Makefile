@@ -1,8 +1,7 @@
 PROJECTNAME = at_em_imaging_workflow
 DISTDIR = dist
 BUILDDIR = build
-export RELEASE=dev$(BUILD_NUMBER)
-RELEASEDIR = $(PROJECTNAME)-$(VERSION).$(RELEASE)
+RELEASEDIR = $(PROJECTNAME)-$(VERSION)$(RELEASE)
 EGGINFODIR = $(PROJECTNAME).egg-info
 DOCDIR = doc
 COVDIR = htmlcov
@@ -51,8 +50,8 @@ flake8:
 EXAMPLES=doc/_static/examples
 
 doc: FORCE
-	sphinx-apidoc -d 4 -H "AT EM Imaging Workflow" -A "Allen Institute for Brain Science" -V $(VERSION) -R $(VERSION).$(RELEASE) --full -o doc development
-	sphinx-apidoc -d 4 -H "AT EM Imaging Workflow" -A "Allen Institute for Brain Science" -V $(VERSION) -R $(VERSION).$(RELEASE) --full -o doc $(PROJECTNAME)
+	sphinx-apidoc -d 4 -H "AT EM Imaging Workflow" -A "Allen Institute for Brain Science" -V $(VERSION) -R $(VERSION)$(RELEASE) --full -o doc development
+	sphinx-apidoc -d 4 -H "AT EM Imaging Workflow" -A "Allen Institute for Brain Science" -V $(VERSION) -R $(VERSION)$(RELEASE) --full -o doc $(PROJECTNAME)
 	cp doc_template/*.rst doc_template/conf.py doc
 	# cp -R doc_template/examples $(EXAMPLES)
 	sed -i --expression "s/|version|/${VERSION}/g" doc/conf.py
