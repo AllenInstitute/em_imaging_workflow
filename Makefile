@@ -1,7 +1,6 @@
 PROJECTNAME = at_em_imaging_workflow
 DISTDIR = dist
 BUILDDIR = build
-export RELEASE=.dev
 RELEASEDIR = $(PROJECTNAME)-$(VERSION)$(RELEASE)
 EGGINFODIR = $(PROJECTNAME).egg-info
 DOCDIR = doc
