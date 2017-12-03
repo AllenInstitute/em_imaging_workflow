@@ -1,0 +1,8 @@
+include LICENSE README.rst Makefile *requirements.txt
+recursive-include at_em_imaging_workflow/datafixes *
+recursive-include at_em_imaging_workflow/management *
+recursive-include at_em_imaging_workflow/migrations *
+recursive-include at_em_imaging_workflow/static *
+recursive-include at_em_imaging_workflow/strategies *
+recursive-include at_em_imaging_workflow/templates *
+recursive-include at_em_imaging_workflow/views *

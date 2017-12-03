@@ -50,6 +50,7 @@ setup(
     name='at_em_imaging_workflow',
     version='%s%s' % (VERSION, RELEASE),
     packages=prepend_find_packages('at_em_imaging_workflow', 'development'),
+    package_data={'': ['*.conf', '*.cfg', '*.json', '*.env', '*.sh', '*.txt', 'Makefile'] },
     include_package_data=True,
     license='Allen Institute Software License',
     description='AT EM Imaging Workflow',
