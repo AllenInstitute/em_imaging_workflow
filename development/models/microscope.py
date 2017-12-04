@@ -42,5 +42,5 @@ class Microscope(models.Model):
     microscope_type = models.ForeignKey(MicroscopeType)
 
     def __str__(self):
-        return self.uid
+        return str(self.uid)
 

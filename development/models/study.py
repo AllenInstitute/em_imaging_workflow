@@ -41,5 +41,5 @@ class Study(models.Model):
     storage_directory = models.CharField(max_length=255, null=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 

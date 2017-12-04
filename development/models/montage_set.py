@@ -48,5 +48,5 @@ class MontageSet(TileImageSet):
     overlap = models.FloatField(null=True)
 
     def __str__(self):
-        return self.uid
+        return str(self.uid)
 

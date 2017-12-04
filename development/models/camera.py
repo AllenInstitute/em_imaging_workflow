@@ -43,4 +43,4 @@ class Camera(models.Model):
     model = models.CharField(max_length=255, null=True)
 
     def __str__(self):
-        return self.uid
+        return str(self.uid)

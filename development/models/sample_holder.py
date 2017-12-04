@@ -43,5 +43,5 @@ class SampleHolder(models.Model):
     load = models.ForeignKey(Load)
 
     def __str__(self):
-        return self.uid
+        return str(self.uid)
 

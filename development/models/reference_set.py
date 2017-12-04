@@ -42,3 +42,5 @@ class ReferenceSet(TileImageSet):
     project_path = models.CharField(max_length=255) # deprecate for storage_dir
     manifest_path = models.CharField(max_length=255, null=True) # well_known_file?
 
+    def __str__(self):
+        return "unimplemented"

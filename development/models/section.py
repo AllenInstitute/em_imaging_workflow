@@ -48,5 +48,5 @@ class Section(models.Model):
     sample_holders = models.ManyToManyField(SampleHolder, related_name='sample_holders')
 
     def __str__(self):
-        return self.section_id
+        return str(self.section_id)
 

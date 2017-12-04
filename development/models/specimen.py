@@ -44,5 +44,5 @@ class Specimen(models.Model):
     study = models.ForeignKey(Study)
 
     def __str__(self):
-        return self.uid
+        return str(self.uid)
 
