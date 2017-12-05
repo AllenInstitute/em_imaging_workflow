@@ -1,17 +1,14 @@
-import django
-django.setup()
-from django.test import TestCase
+import pytest
 from development.strategies.rough_alignment_strategy \
     import RoughAlignmentStrategy
 
-class TestRoughAlignmentStrategy(TestCase):
-    def test_get_input_data(self):
-        enqueued_object = None
-        task = None
-        storage_directory = '/example/storage/directory'
-        strategy = RoughAlignmentStrategy()
-        input = strategy.get_input(enqueued_object,
-                                   storage_directory,
-                                   task)
-        assert input is not None
+def test_get_input_data():
+    enqueued_object = None
+    task = None
+    storage_directory = '/example/storage/directory'
+    strategy = RoughAlignmentStrategy()
+    input = strategy.get_input(enqueued_object,
+                               storage_directory,
+                               task)
+    assert input is not None
 

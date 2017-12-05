@@ -1,16 +1,13 @@
-import django
-django.setup()
-from django.test import TestCase
+import pytest
 from development.strategies.fine_q_c_strategy \
     import FineQCStrategy
 
-class TestFineQCStrategy(TestCase):
-    def test_get_input_data(self):
-        enqueued_object = None
-        task = None
-        storage_directory = '/example/storage/directory'
-        strategy = FineQCStrategy()
-        input = strategy.get_input(enqueued_object,
-                                   storage_directory,
-                                   task)
-        assert input is not None
+def test_get_input_data():
+    enqueued_object = None
+    task = None
+    storage_directory = '/example/storage/directory'
+    strategy = FineQCStrategy()
+    input = strategy.get_input(enqueued_object,
+                               storage_directory,
+                               task)
+    assert input is not None

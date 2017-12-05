@@ -46,11 +46,12 @@ from development.models.section import Section
 from development.models.sample_holder import SampleHolder
 from development.models.load import Load
 from development.models.e_m_montage_set import EMMontageSet
-import simplejson as json
+#import simplejson as json
 import logging
-import traceback
+#import traceback
 from rendermodules.ingest.schemas import \
     example, ReferenceSetIngestSchema
+import uuid
 
 class LensCorrectionIngest(IngestStrategy):
     _log = logging.getLogger('development.strategies.lens_correction_ingest')
@@ -135,9 +136,9 @@ class LensCorrectionIngest(IngestStrategy):
         metafile = message['metafile']
         manifest_path = message['manifest_path']
 
-        reference_set, _ = ReferenceSet.objects.update_or_create(
-                uid=message['reference_set_id'],
-                defaults={
+        reference_set = ReferenceSet.objects.update_or_create(
+                uid=uuid.uuid4(),
+                defaults= {
                     'storage_directory': message['storage_directory'],
                     'metafile': metafile,
                     'workflow_state': 'Pending',
@@ -148,7 +149,7 @@ class LensCorrectionIngest(IngestStrategy):
                     'metafile': metafile
                 })
 
-        return reference_set # TODO: return reference_set id to ingest client
+        return reference_set
 
     def create_study(self, study_message):
         LensCorrectionIngest._log.warn('creating study - UNIMPLEMENTED')
@@ -239,6 +240,11 @@ class LensCorrectionIngest(IngestStrategy):
             message['section']['sample_holder'],
             load)
 
+        camera = self.create_camera(
+            message['acquisition_data']['camera'])
+        microscope = self.create_microscope(
+            message['acquisition_data']['microscope'])
+
         LensCorrectionIngest._log.info('creating em montage set')
 
         # if reference set id isn't specified,
@@ -254,6 +260,7 @@ class LensCorrectionIngest(IngestStrategy):
                 pass
 
         em_montage_set = EMMontageSet.objects.create(
+            uid=uuid.uuid4(),
             acquisition_date=message['acquisition_data']['acquisition_time'],
             overlap=message['acquisition_data']['overlap'],
             mipmap_directory=None,
@@ -262,7 +269,9 @@ class LensCorrectionIngest(IngestStrategy):
             reference_set=reference_set,
             reference_set_uid=reference_set_uid,
             storage_directory=message['storage_directory'],
-            metafile=message['metafile']
+            metafile=message['metafile'],
+            camera=camera,
+            microscope=microscope
         )
         LensCorrectionIngest._log.info(str(em_montage_set))
 

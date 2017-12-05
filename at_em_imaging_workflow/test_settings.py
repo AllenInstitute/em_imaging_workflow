@@ -143,22 +143,6 @@ WSGI_APPLICATION = 'at_em_imaging_workflow.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    'xdefault': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'at_em_imaging_workflow',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'devdb2',
-        'PORT': '5432',
-    },
-    'devdb2': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'at_em_imaging_workflow',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'devdb2',
-        'PORT': '5942',
-    },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(PROJECT_ROOT, 'database.db'),

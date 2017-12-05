@@ -1,20 +1,12 @@
-from workflow_engine.strategies.manual_strategy \
-    import ManualStrategy
-import logging
+from workflow_engine.strategies.wait_strategy \
+    import WaitStrategy
 
 
-class WaitForLensCorrection(ManualStrategy):
-    _log = logging.getLogger(
-        'development.strategies.wait_for_lens_correction')
+class WaitForLensCorrection(WaitStrategy):
+    def must_wait(self, em_mset):
+        # Use this to check if the reference set is available
+        # return true if the state is correct
+        if 'STOP' == em_mset.uid:
+            return True
 
-    def task_finished(self, task):
-        # enqueued_object = task.get_enqueued_object()
         return False
-
-    def on_running(self, task):
-        pass
-
-    def on_finishing(self, enqueued_object, results, task):
-        # Use this to update the state
-        pass
-

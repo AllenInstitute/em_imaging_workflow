@@ -43,4 +43,4 @@ class ReferenceSet(TileImageSet):
     manifest_path = models.CharField(max_length=255, null=True) # well_known_file?
 
     def __str__(self):
-        return "unimplemented"
+        return str(self.uid)
