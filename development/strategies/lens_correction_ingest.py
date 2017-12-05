@@ -277,10 +277,10 @@ class LensCorrectionIngest(IngestStrategy):
 
         return em_montage_set
 
-    def generate_response(self, tile_set):
+    def generate_response(self, enqueued_object):
         LensCorrectionIngest._log.info('generate_response')
 
         return {
-            'tile_set_id': tile_set.id
+            'enqueued_object_uid': enqueued_object.uid
         }
 
