@@ -11,6 +11,7 @@ from rendermodules.ingest.schemas import example as message_body_data
 @pytest.fixture
 def ref_set_ingest_message():
     example = message_body_data
+    example['acquisition_data']['microscope_type'] = 'TEM'
     example['manifest_path'] = \
         "/allen/aibs/pipeline/image_processing/volume_assembly/" + \
         "lc_test_data/Wij_Set_594451332/594089217_594451332/" + \
@@ -30,6 +31,7 @@ def ref_set_ingest_message():
 @pytest.fixture
 def em_montage_set_ingest_message():
     example = message_body_data
+    example['acquisition_data']['microscope_type'] = 'TEM'
     example['manifest_path'] = \
         "/allen/aibs/pipeline/image_processing/volume_assembly/" + \
         "lc_test_data/Wij_Set_594451332/594089217_594451332/" + \
@@ -59,6 +61,9 @@ def test_reference_set_ingest(ref_set_ingest_message):
     assert mock_uuid == ref_set.uid
     assert \
         ref_set_ingest_message['acquisition_data']['microscope'] == \
+        ref_set.microscope.uid
+    assert \
+        ref_set_ingest_message['acquisition_data']['microscope_type'] == \
         ref_set.microscope.microscope_type.name
     assert \
         ref_set_ingest_message['acquisition_data']['camera']['camera_id'] == \
@@ -95,7 +100,12 @@ def test_em_montage_set_ingest(em_montage_set_ingest_message):
     assert em_mset is not None
     assert mock_uuid == em_mset.uid
     assert \
-        em_montage_set_ingest_message['acquisition_data']['microscope'] == \
+        em_montage_set_ingest_message[
+            'acquisition_data']['microscope'] == \
+        em_mset.microscope.uid
+    assert \
+        em_montage_set_ingest_message[
+            'acquisition_data']['microscope_type'] == \
         em_mset.microscope.microscope_type.name
     assert \
         em_montage_set_ingest_message[

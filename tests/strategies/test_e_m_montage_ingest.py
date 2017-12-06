@@ -10,7 +10,7 @@ import copy
 def test_with_reference_set():
     ref_body_data = None
     example = body_data
-
+    example['aquisition_data']['microscope_type'] = 'TEM'
     example['manifest_path'] = \
         "/allen/aibs/pipeline/image_processing/volume_assembly/" + \
         "lc_test_data/Wij_Set_594451332/594089217_594451332/" + \
@@ -55,7 +55,7 @@ def test_with_reference_set():
 @pytest.fixture
 def em_mset_no_ref_set():
     example = copy.deepcopy(body_data)
-
+    example['acquisition_data']['microscope_type'] = 'TEM'
     del example['reference_set_id']
     example['manifest_path'] = \
         "/allen/aibs/pipeline/image_processing/volume_assembly/" + \
@@ -92,6 +92,8 @@ def test_mset_microscope(em_mset_no_ref_set):
     em_mset = LensCorrectionIngest().create_em_montage_set(em_mset_no_ref_set)
 
     assert em_mset_no_ref_set['acquisition_data']['microscope'] == \
+        em_mset.microscope.uid
+    assert em_mset_no_ref_set['acquisition_data']['microscope_type'] == \
         em_mset.microscope.microscope_type.name
 
 
