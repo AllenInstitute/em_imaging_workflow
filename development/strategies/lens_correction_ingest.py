@@ -85,7 +85,9 @@ class LensCorrectionIngest(IngestStrategy):
 
         return camera
 
-    def create_microscope(self, message_microscope):
+    def create_microscope(self,
+                          message_microscope,
+                          message_microscope_type):
         '''Add or retrieve and optionally modify a Microscope
         in the database.
 
@@ -101,11 +103,11 @@ class LensCorrectionIngest(IngestStrategy):
         '''
         scope_type, _ = \
             MicroscopeType.objects.update_or_create(
-                name=message_microscope)
+                name=message_microscope_type)
 
         microscope, _ = \
             Microscope.objects.update_or_create(
-                uid="DEADBEEF",
+                uid=message_microscope,
                 defaults={
                     'microscope_type': scope_type
                 })
@@ -131,12 +133,13 @@ class LensCorrectionIngest(IngestStrategy):
         camera = self.create_camera(
             message['acquisition_data']['camera'])
         microscope = self.create_microscope(
-            message['acquisition_data']['microscope'])
+            message['acquisition_data']['microscope'],
+            message['acquisition_data']['microscope_type'])
 
         metafile = message['metafile']
         manifest_path = message['manifest_path']
 
-        reference_set = ReferenceSet.objects.update_or_create(
+        reference_set, _ = ReferenceSet.objects.update_or_create(
                 uid=uuid.uuid4(),
                 defaults= {
                     'storage_directory': message['storage_directory'],
@@ -191,6 +194,7 @@ class LensCorrectionIngest(IngestStrategy):
 
         return section
 
+    # TODO: ask RobY, Russel doesn't know what a load is.
     def create_load(self, load_message):
         LensCorrectionIngest._log.warn('creating load - UNIMPLEMENTED')
 
@@ -243,7 +247,8 @@ class LensCorrectionIngest(IngestStrategy):
         camera = self.create_camera(
             message['acquisition_data']['camera'])
         microscope = self.create_microscope(
-            message['acquisition_data']['microscope'])
+            message['acquisition_data']['microscope'],
+            message['acquisition_data']['microscope_type'])
 
         LensCorrectionIngest._log.info('creating em montage set')
 
