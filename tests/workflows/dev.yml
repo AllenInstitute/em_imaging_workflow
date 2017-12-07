@@ -192,12 +192,17 @@ workflows:
             - key: "wait_for_lens_correction"
               label: "Wait for Lens Correction"
               class: "development.strategies.wait_for_lens_correction.WaitForLensCorrection"
-              enqueued_class: "development.models.reference_set.ReferenceSet"
+              enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "mock"
+            - key: "move_reference_set"
+              label: "Move Reference Set"
+              class: "development.strategies.move_reference_set_strategy.MoveReferenceSetStrategy"
+              enqueued_class: "development.models.reference_set.ReferenceSet"
+              executable: "move"
             - key: "move_raw_montage_set"
               label: "Move Raw Montage Sets"
               class: "development.strategies.move_raw_montage_set_strategy.MoveRawMontageSetStrategy"
-              enqueued_class: "development.models.reference_set.ReferenceSet"
+              enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "move"
             - key: "generate_em_montage"
               label: "Generate Render Stack"
@@ -235,11 +240,12 @@ workflows:
               workflow: true
         graph:
             - [ "ingest_tile_sets", [ "generate_lens_correction", "generate_em_montage" ] ]
-            - [ "generate_lens_correction", [ "move_raw_montage_set" ] ]
+            - [ "generate_lens_correction", [ "move_reference_set" ] ]
             - [ "generate_em_montage", [ "wait_for_lens_correction" ] ]
-            - [ "move_raw_montage_set", [ "wait_for_lens_correction" ] ]
+            - [ "move_reference_set", [ "wait_for_lens_correction" ] ]
             - [ "wait_for_lens_correction", [ "apply_lens_correction_new" ] ]
             - [ "apply_lens_correction_new", [ "create_tile_pairs" ] ]
+            - [ "apply_lens_correction_new", [ "move_raw_montage_set" ] ]
             - [ "create_tile_pairs", [ "2d_montage_point_match" ] ]
             - [ "2d_montage_point_match", [ "solver" ] ]
             - [ "solver", [ "manual_qc" ] ]

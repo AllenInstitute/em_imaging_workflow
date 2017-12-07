@@ -34,7 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
-import development
+from workflow_engine.models.workflow_node import WorkflowNode
 from rendermodules.lens_correction.schemas \
     import LensCorrectionParameters
 from development.models.reference_set import ReferenceSet
@@ -73,7 +73,12 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
 
         return LensCorrectionParameters().dump(inp).data
 
-    def on_finishing(self, enqueued_object, results, task):
+    def on_running(self, task):
+        ref_set = task.get_enqueued_object()
+        ref_set.workflow_state = "PROCESSING"
+        ref_set.save()
+
+    def on_finishing(self, ref_set, results, task):
         ''' called after the execution finishes
             process and save results to the database
         '''
@@ -83,10 +88,17 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
             'lens_correction_transform output %s' % (str(results)))
         self.set_well_known_file(
             results['output_json'],
-            enqueued_object,
+            ref_set,
             'description',
             task)
+        ref_set.workflow_state = 'DONE'
+        ref_set.save()
 
+        # trigger waiting jobs
+        WorkflowNode.set_jobs_for_run(
+            'Wait for Lens Correction')
+
+    # TODO: this isn't used.  Ingest picks it directly
     def can_transition(self, enqueued_object):
         is_reference_set = isinstance(enqueued_object, ReferenceSet)
 

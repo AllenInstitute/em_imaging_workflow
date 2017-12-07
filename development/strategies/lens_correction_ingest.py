@@ -144,7 +144,7 @@ class LensCorrectionIngest(IngestStrategy):
                 defaults= {
                     'storage_directory': message['storage_directory'],
                     'metafile': metafile,
-                    'workflow_state': 'Pending',
+                    'workflow_state': 'PENDING',
                     'camera': camera,
                     'microscope': microscope,
                     # 'project_path': '/example_data', # deprecated
@@ -256,6 +256,7 @@ class LensCorrectionIngest(IngestStrategy):
         # montage set should still be created
         reference_set = None
         reference_set_uid = None
+
         if 'reference_set_id' in message:
             reference_set_uid = message['reference_set_id']
             try:
@@ -268,6 +269,7 @@ class LensCorrectionIngest(IngestStrategy):
             uid=uuid.uuid4(),
             acquisition_date=message['acquisition_data']['acquisition_time'],
             overlap=message['acquisition_data']['overlap'],
+            workflow_state='PENDING',
             mipmap_directory=None,
             section=section,
             sample_holder=sample_holder,

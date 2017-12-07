@@ -1,19 +1,13 @@
-from workflow_engine.strategies import execution_strategy
-from workflow_engine.models.job import Job
-from workflow_engine.models.workflow_node import WorkflowNode
+from workflow_engine.strategies.execution_strategy import ExecutionStrategy
 
-class MoveRawMontageSetStrategy(execution_strategy.ExecutionStrategy):
+class MoveRawMontageSetStrategy(ExecutionStrategy):
 
     #override if needed
     #set the data for the input file
-    def get_input(self, enqueued_object, storage_directory, task):
+    def get_input(self, em_mset, storage_directory, task):
         input_data = {}
 
         return input_data
-
-    def on_finishing(self, ref_set, results, task):
-        WorkflowNode.set_jobs_for_run(
-            'Wait for Lens Correction')
 
     #override if needed
     #set the storage directory for an enqueued object
