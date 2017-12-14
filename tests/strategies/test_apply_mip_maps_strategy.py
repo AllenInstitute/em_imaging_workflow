@@ -1,14 +1,14 @@
 import pytest
 from mock import Mock, patch
-from development.strategies.generate_mip_maps_strategy \
-    import GenerateMipMapsStrategy
+from development.strategies.apply_mip_maps_strategy \
+    import ApplyMipMapsStrategy
 
 def test_get_input_data():
     em_mset = Mock()
     task = Mock()
     task.job = Mock()
     storage_directory = '/example/storage/directory'
-    strategy = GenerateMipMapsStrategy()
+    strategy = ApplyMipMapsStrategy()
     
     with patch('os.makedirs'):
         with patch('os.path.exists', Mock(return_value=True)):
