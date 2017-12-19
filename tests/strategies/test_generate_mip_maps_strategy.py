@@ -12,8 +12,8 @@ def test_get_input_data():
     
     with patch('os.makedirs'):
         with patch('os.path.exists', Mock(return_value=True)):
-            input = strategy.get_input(em_mset,
+            inp = strategy.get_input(em_mset,
                                        storage_directory,
                                        task)
-            assert input is not None
+            assert inp is not None
 

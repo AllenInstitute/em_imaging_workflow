@@ -1,14 +1,19 @@
 import pytest
+from mock import Mock, patch
 from development.strategies.two_d_montage_solver_strategy \
     import TwoDMontageSolverStrategy
 
 def test_get_input_data():
-    enqueued_object = None
-    task = None
+    em_mset = Mock()
+    task = Mock()
     storage_directory = '/example/storage/directory'
-    strategy = TwoDMontageSolverStrategy()
-    input = strategy.get_input(enqueued_object,
-                               storage_directory,
-                               task)
-    assert input is not None
+
+    with patch('os.makedirs'):
+        with patch('os.path.exists', Mock(return_value=True)):
+            strategy = TwoDMontageSolverStrategy()
+            inp = strategy.get_input(em_mset,
+                                       storage_directory,
+                                       task)
+
+    assert inp is not None
 
