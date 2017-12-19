@@ -37,13 +37,14 @@ class CreateTilePairsStrategy(ExecutionStrategy):
     def get_output_stack_name(self):
         return settings.RENDER_STACK_NAME
 
-    #override if needed
-    #called after the execution finishes
-    #process and save results to the database
-    def on_finishing(self, enqueued_object, results, task):
+    def on_finishing(self, em_mset, results, task):
         CreateTilePairsStrategy._log.info("ON FINISHING")
-        # self.check_key(results, 'output_json')
-        # self.set_well_known_file(results['output_json'], enqueued_object, 'description', task)
+        self.check_key(results, 'tile_pairs_file')
+        self.set_well_known_file(
+            results['tile_pairs_file'],
+            em_mset,
+            em_mset.tile_pairs_file_description(),
+            task)
 
     #override if needed
     #set the storage directory for an enqueued object

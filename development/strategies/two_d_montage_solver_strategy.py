@@ -1,104 +1,84 @@
 from workflow_engine.strategies import execution_strategy
 from rendermodules.montage.schemas import SolveMontageSectionParameters
-# from workflow_engine.models import *
-# from development.models import *
+from development.strategies.schemas.two_d_montage_solver import input_dict
 from django.conf import settings
-from os import listdir
 import logging
 import os
 
+
 class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
-  _log = logging.getLogger(
-    'development.strategies.two_d_montage_solver_strategy')
+    _log = logging.getLogger(
+        'development.strategies.two_d_montage_solver_strategy')
 
-  default_input = {
-    "render": {
-        "host": "http://em-131fs",
-        "port": 8998,
-        "owner": "gayathri",
-        "project": "MM2",
-        "client_scripts": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_20170613/render-ws-java-client/src/main/scripts"
-    },
-    "solver_options": {
-		"min_tiles": 3,
-		"degree": 1,
-		"outlier_lambda": 1000,
-		"solver": "backslash",
-		"min_points": 4,
-		"max_points": 80,
-		"stvec_flag": 0,
-		"conn_comp": 1,
-		"distributed": 0,
-		"lambda_value": 1,
-		"edge_lambda": 0.1,
-		"small_region_lambda": 10,
-		"small_region": 5,
-		"calc_confidence": 1,
-		"translation_fac": 1,
-		"use_peg": 1,
-		"peg_weight": 0.0001,
-		"peg_npoints": 5
-	},
-    "source_collection": {
-		"stack": "mm2_acquire_8bit",
-		"owner": "gayathri",
-		"project": "MM2",
-		"service_host": "em-131fs:8998",
-		"baseURL": "http://em-131fs:8998/render-ws/v1",
-		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_20170613/render-ws-java-client/src/main/scripts",
-		"verbose": 0
-	},
-    "target_collection": {
-		"stack": "mm2_acquire_8bit_Montage",
-        "owner": "gayathri",
-		"project": "MM2",
-		"service_host": "em-131fs:8998",
-		"baseURL": "http://em-131fs:8998/render-ws/v1",
-		"renderbinPath": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/render_20170613/render-ws-java-client/src/main/scripts",
-		"verbose": 0,
-		"initialize": 0,
-		"complete": 1
-	},
-    "source_point_match_collection": {
-		"server": "http://em-131fs:8998/render-ws/v1",
-		"owner": "gayathri_MM2",
-		"match_collection": "mm2_acquire_8bit_montage"
-	},
-    "z_value": 1049,
-	"filter_point_matches": 1,
-    "solver_executable": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/EM_aligner/matlab_compiled/solve_montage_SL",
-	"temp_dir": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/scratch",
-	"scratch": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/scratch",
-	"renderer_client": "/data/nc-em2/gayathrim/renderBin/bin/render.sh",
-	"disableValidation": 1,
-	"verbose": 0
-  }
 
-  #override if needed
-  #set the data for the input file
-  def get_input(self, enqueued_object, storage_directory, task):
-    TwoDMontageSolverStrategy._log.info("get input")
+    #override if needed
+    #set the data for the input file
+    def get_input(self, em_mset, storage_directory, task):
+        TwoDMontageSolverStrategy._log.info("get input")
 
-    input = TwoDMontageSolverStrategy.default_input
-    input['render']['host'] = 'renderservice'
-    input['render']['port'] = '8080'
-    input['render']['owner'] = 'timf'
+        inp = input_dict
 
-    return  SolveMontageSectionParameters().dump(input).data
+        inp['render']['host'] = settings.RENDER_SERVICE_URL
+        inp['render']['port'] = settings.RENDER_SERVICE_PORT
+        inp['render']['owner'] = settings.RENDER_SERVICE_USER
+        inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
+        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
-  #override if needed
-  #called after the execution finishes
-  #process and save results to the database
-  def on_finishing(self, enqueued_object, results, task):
-    # self.check_key(results, 'output_json')
-    # self.set_well_known_file(results['output_json'],
-    #                          enqueued_object,
-    #                          'description',
-    #                          task)
-    pass
+        inp['source_collection']['service_host'] = \
+            settings.RENDER_SERVICE_URL + ":" + settings.RENDER_SERVICE_PORT
+        inp['source_collection']['baseURL'] = \
+            'http://' + settings.RENDER_SERVICE_URL + \
+            ":" + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
+        inp['source_collection']['owner'] = settings.RENDER_SERVICE_USER
+        inp['source_collection']['project'] = settings.RENDER_SERVICE_PROJECT
+        inp['source_collection']['renderbinPath'] = \
+            settings.RENDER_CLIENT_SCRIPTS
+        inp['source_collection']['stack'] = self.get_input_stack_name()
 
-  #override if needed
-  #set the storage directory for an enqueued object
-  #def get_storage_directory(self, base_storage_directory, job):
-  #  enqueued_object = job.get_enqueued_object()
-  #  return os.path.join(base_storage_directory, 'reference_set_' + str(enqueued_object.id))
+        inp['target_collection']['service_host'] = \
+            settings.RENDER_SERVICE_URL + ":" + settings.RENDER_SERVICE_PORT
+        inp['target_collection']['baseURL'] = \
+            'http://' + settings.RENDER_SERVICE_URL + \
+            ":" + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
+        inp['target_collection']['owner'] = settings.RENDER_SERVICE_USER
+        inp['target_collection']['project'] = settings.RENDER_SERVICE_PROJECT
+        inp['target_collection']['renderbinPath'] = \
+            settings.RENDER_CLIENT_SCRIPTS
+        inp['target_collection']['stack'] = self.get_output_stack_name()
+
+        inp['source_point_match_collection']['server'] = \
+            'http://' + settings.RENDER_SERVICE_URL + \
+            ":" + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
+        inp['source_point_match_collection']['owner'] = \
+            settings.RENDER_SERVICE_USER
+        inp['source_point_match_collection']['match_collection'] = \
+            self.get_collection_name()
+
+        inp['z_value'] = em_mset.section.z_index
+        inp['solver_executable'] = self.get_solver_executable_path()
+
+        task_dir = self.get_or_create_task_storage_directory(task)
+        inp['temp_dir'] = task_dir
+        inp['dir_scratch'] = task_dir
+        inp['renderer_client'] = os.path.join(settings.RENDER_CLIENT_SCRIPTS,
+                                              'render.sh')
+
+        return  SolveMontageSectionParameters().dump(inp).data
+
+    def get_input_stack_name(self):
+        return settings.RENDER_STACK_NAME
+
+    def get_output_stack_name(self):
+        return settings.RENDER_STACK_NAME
+
+    def get_collection_name(self):
+        return 'default_point_matches'
+
+    def get_solver_executable_path(self):
+        return settings.MONTAGE_SOLVER_BIN
+
+    #override if needed
+    #called after the execution finishes
+    #process and save results to the database
+    def on_finishing(self, enqueued_object, results, task):
+        pass

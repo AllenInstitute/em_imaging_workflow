@@ -45,3 +45,6 @@ class EMMontageSet(MontageSet):
     def __str__(self):
         return str(self.uid)
 
+    def tile_pairs_file_description(self):
+        return 'tile pairs file'
+

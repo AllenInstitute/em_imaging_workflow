@@ -55,15 +55,24 @@ RENDER_SERVICE_PORT = '9006'
 RENDER_SERVICE_USER = 'timf'
 RENDER_SERVICE_PROJECT = 'DEV'
 RENDER_STACK_NAME = 'default_stack'
+RENDER_POINT_MATCH_COLLECTION_NAME = 'default_point_matches'
+MATLAB_SOLVER_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/EMAligner/dev/allen_templates'
+MONTAGE_SOLVER_BIN=os.path.join(MATLAB_SOLVER_PATH, 'solve_montage_SL')
 #RENDER_CLIENT_SCRIPTS = os.environ.get(
 #    'RENDER_CLIENT_SCRIPTS',
 #    '/shared/render/render-ws-java-client/src/main/scripts')
 # JAR FILES are one up from this
 # env var (on executable) RENDER_CLIENT_JAR=.
-RENDER_CLIENT_SCRIPTS = '/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/scripts'
+RENDER_CLIENT_BASE_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/dev'
+RENDER_CLIENT_SCRIPTS = os.path.join(RENDER_CLIENT_BASE_PATH, 'scripts')
+RENDER_SPARK_JARFILE = os.path.join(RENDER_CLIENT_BASE_PATH, 'render-ws-spark-client-standalone.jar')
+RENDER_CLIENT_JAR = os.path.join(RENDER_CLIENT_BASE_PATH, 'render-ws-java-client-standalone.jar')
+
 FIJI_PATH = \
     '/allen/aibs/pipeline/image_processing/volume_assembly' + \
     '/Fiji.app/ImageJ-linux64'
+#SPARK_HOME='/allen/programs/celltypes/workgroups/em-connectomics/ImageProcessing/utils/spark/'
+SPARK_HOME='/allen/aibs/pipeline/image_processing/volume_assembly/utils/spark'
 GRID_SIZE = 3
 HEAP_SIZE = 10
 INITIAL_SIGMA = 1.6

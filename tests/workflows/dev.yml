@@ -85,16 +85,19 @@ executables:
 
     generate_point_matches:
         name: 'EM 2D Generate Point Matches'
-        path: '/usr/bin/python'
+        path: 'python'
+        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
+        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.pointmatch.generate_point_matches_spark"
         environment:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
-        remote_queue: 'spark'
+        - PYTHONPATH=/data/aibstemp/timf/example_data/render_modules
+        remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=128g'
+        pbs_processor: 'vmem=192g,nodes=1:ppn=24'
         pbs_walltime: 'walltime=5:00:00'
 
     em_2d_solver:
@@ -105,6 +108,10 @@ executables:
         args:
         - '-m'
         - "rendermodules.montage.run_montage_job_for_section"
+        environment:
+        - 'MCRROOT=/allen/aibs/pipeline/image_processing/volume_assembly/MATLAB_Runtime/v91'
+        - 'PYTHONPATH=/data/aibstemp/timf/example_data/render_modules'
+        - 'LD_LIBRARY_PATH=${MCRROOT}/runtime/glnxa64:${MCRROOT}/bin/glnxa64:${MCRROOT}/sys/os/glnxa64:${MCRROOT}/sys/opengl/lib/glnxa64'
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
         pbs_processor: 'vmem=128g'
@@ -144,6 +151,9 @@ executables:
         path: 'python'
         conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
         conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
+        environment:
+        - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
+        - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         args:
         - '-m'
         - "rendermodules.pointmatch.create_tilepairs"
