@@ -3,7 +3,7 @@
 export APP_NAME=at_em_imaging_workflow
 mkdir -p logs
 sleep 15
-DEBUG_LOG=logs/makemigrations.log python -m manage makemigrations
+DEBUG_LOG=logs/makemigrations.log python -m manage makemigrations --noinput
 sleep 15
 DEBUG_LOG=logs/migrate.log python -m manage migrate  --noinput
 sleep 15
