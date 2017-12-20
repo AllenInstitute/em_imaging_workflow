@@ -16,35 +16,47 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = BASE_DIR
 
-#BASE_FILE_PATH = \
-#    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky/files/'
 BASE_FILE_PATH = '/example_data'
-PBS_FINISH_PATH = \
-    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky' + \
-    '/at_em_imaging_workflow/pbs_execution_finish.py'
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
-INGEST_QUEUE_NAME = 'em_2d_montage_ingest'
+INGEST_MESSAGE_QUEUE_NAME = 'ingest_at_em_imaging_workflow'
+INGEST_STRATEGY='development.strategies.ingest_callbacks.IngestCallbacks'
 CELERY_MESSAGE_QUEUE_NAME = 'celery_' + MESSAGE_QUEUE_NAME
 SPARK_MESSAGE_QUEUE_NAME = 'spark_' + MESSAGE_QUEUE_NAME
-# CELERY_DEFAULT_QUEUE = 'celery_' + MESSAGE_QUEUE_NAME
+PBS_MESSAGE_QUEUE_NAME='pbs_' + MESSAGE_QUEUE_NAME
 
-MESSAGE_QUEUE_HOST = 'em-131db'
+PBS_CONDA_HOME='/shared/utils.x86_64/python-2.7'
+PBS_FINISH_MODULE='workflow_client.pbs_execution_finish'
+PBS_PYTHONPATH='/data/aibstemp/timf/example_data/blue_sky_workflow_engine'
+#PBS_CONDA_ENV='/allen/aibs/pipeline/image_processing/volume_assembly/conda_envs/volume_assembly/render-modules_linked'
+#PBS_CONDA_ENV='/data/aibstemp/timf/example_data/blue_sky_27'
+PBS_CONDA_ENV='/allen/aibs/pipeline/image_processing/volume_assembly/conda_envs/render-modules/dev'
+PBS_RESPONSE_CONDA_ENV='/allen/aibs/pipeline/image_processing/volume_assembly/conda_envs/render-modules/staging'
+BLUE_SKY_SETTINGS='/allen/aibs/pipeline/image_processing/volume_assembly/workflow_conf/staging/blue_sky_settings.yml'
+STATE_MACHINE_YML='/allen/aibs/pipeline/image_processing/volume_assembly/workflow_conf/staging/states.yml'
+WORKFLOW_CONFIG_YAML='/allen/aibs/pipeline/image_processing/volume_assembly/workflow_conf/staging/workflow_config.yml'
+MESSAGE_QUEUE_HOST = 'em-131db.corp.alleninstitute.org'
 MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
 MESSAGE_QUEUE_PORT = 5672
 
-RENDER_SERVICE_URL = 'em-131db'
+RENDER_SERVICE_URL = 'em-131db.corp.alleninstitute.org'
 RENDER_SERVICE_PORT = '8081'
 RENDER_SERVICE_USER = 'timf'
-RENDER_SERVICE_PROJECT = 'DEV'
-RENDER_CLIENT_SCRIPTS = os.environ.get(
-    'RENDER_CLIENT_SCRIPTS',
-    '/shared/render/render-ws-java-client/src/main/scripts')
+RENDER_SERVICE_PROJECT = 'STAGE'
+RENDER_STACK_NAME = 'default_stack'
+RENDER_POINT_MATCH_COLLECTION_NAME = 'default_point_matches'
+MATLAB_SOLVER_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/EMAligner/dev/allen_templates'
+MONTAGE_SOLVER_BIN=os.path.join(MATLAB_SOLVER_PATH, 'solve_montage_SL')
+RENDER_CLIENT_BASE_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging'
+RENDER_CLIENT_SCRIPTS = os.path.join(RENDER_CLIENT_BASE_PATH, 'scripts')
+RENDER_SPARK_JARFILE = os.path.join(RENDER_CLIENT_BASE_PATH, 'render-ws-spark-client-standalone.jar')
+RENDER_CLIENT_JAR = os.path.join(RENDER_CLIENT_BASE_PATH, 'render-ws-java-client-standalone.jar')
 
 FIJI_PATH = \
     '/allen/aibs/pipeline/image_processing/volume_assembly' + \
     '/Fiji.app/ImageJ-linux64'
+SPARK_HOME='/allen/aibs/pipeline/image_processing/volume_assembly/utils/spark'
 GRID_SIZE = 3
 HEAP_SIZE = 10
 INITIAL_SIGMA = 1.6
@@ -72,6 +84,12 @@ LAMBDA_VAL = 0.01
 CLEAR_TRANSFORM = True
 VISUALIZE = False
 
+CHUNK_DEFAULTS = {
+    'overlap': 2,
+    'start_z': 1,
+    'chunk_size': 10
+}
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -88,8 +106,6 @@ RESULTS_PER_PAGE = 20
 MAX_DISPLAYED_PAGE_LINKS = 10
 
 WORKFLOW_VERSION = 0.1
-
-MESSAGE_QUEUE_HOST = 'message_queue'
 
 MILLISECONDS_BETWEEN_REFRESH = 10000
 # MILLISECONDS_BETWEEN_REFRESH = 1000
@@ -220,7 +236,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'debug.log',
+            'filename': os.environ.get('DEBUG_LOG', 'debug.log'),
         },
     },
     'loggers': {
@@ -265,10 +281,3 @@ CELERYD_HIJACK_ROOT_LOGGER = False
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
-try:
-    with open(os.path.join(
-        os.path.dirname(__file__), "local_settings.py"
-    )) as ls:
-        exec(ls.read())
-except IOError:
-    pass

@@ -16,16 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = BASE_DIR
 
-#BASE_FILE_PATH = \
-#    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky/files/'
 BASE_FILE_PATH = '/data/aibstemp/timf/example_data'
-#PBS_FINISH_PATH = \
-#    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky' + \
-#    '/at_em_imaging_workflow/pbs_execution_finish.py'
-#PBS_FINISH_PATH=os.environ.get(
-#    'PBS_FINISH_PATH',
-#    '/data/aibstemp/timf/example_data/bin/pbs_execution_finish.py')
-
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
 INGEST_MESSAGE_QUEUE_NAME = 'ingest_at_em_imaging_workflow'
@@ -58,11 +49,6 @@ RENDER_STACK_NAME = 'default_stack'
 RENDER_POINT_MATCH_COLLECTION_NAME = 'default_point_matches'
 MATLAB_SOLVER_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/EMAligner/dev/allen_templates'
 MONTAGE_SOLVER_BIN=os.path.join(MATLAB_SOLVER_PATH, 'solve_montage_SL')
-#RENDER_CLIENT_SCRIPTS = os.environ.get(
-#    'RENDER_CLIENT_SCRIPTS',
-#    '/shared/render/render-ws-java-client/src/main/scripts')
-# JAR FILES are one up from this
-# env var (on executable) RENDER_CLIENT_JAR=.
 RENDER_CLIENT_BASE_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/dev'
 RENDER_CLIENT_SCRIPTS = os.path.join(RENDER_CLIENT_BASE_PATH, 'scripts')
 RENDER_SPARK_JARFILE = os.path.join(RENDER_CLIENT_BASE_PATH, 'render-ws-spark-client-standalone.jar')
@@ -297,10 +283,3 @@ CELERYD_HIJACK_ROOT_LOGGER = False
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
-#try:
-#    with open(os.path.join(
-#        os.path.dirname(__file__), "local_settings.py"
-#    )) as ls:
-#        exec(ls.read())
-#except IOError:
-#    pass

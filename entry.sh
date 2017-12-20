@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export APP_NAME=at_em_imaging_workflow
-
+mkdir -p logs
 sleep 15
 DEBUG_LOG=logs/makemigrations.log python -m manage makemigrations
 sleep 15
