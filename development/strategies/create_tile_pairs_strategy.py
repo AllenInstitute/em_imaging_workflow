@@ -1,6 +1,4 @@
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
-# from workflow_engine.models import *
-# from development.models import *
 from development.strategies.schemas.create_tile_pairs import input_dict
 from rendermodules.pointmatch.schemas import \
     TilePairClientParameters
@@ -39,9 +37,9 @@ class CreateTilePairsStrategy(ExecutionStrategy):
 
     def on_finishing(self, em_mset, results, task):
         CreateTilePairsStrategy._log.info("ON FINISHING")
-        self.check_key(results, 'tile_pairs_file')
+        self.check_key(results, 'tile_pair_file')
         self.set_well_known_file(
-            results['tile_pairs_file'],
+            results['tile_pair_file'],
             em_mset,
             em_mset.tile_pairs_file_description(),
             task)

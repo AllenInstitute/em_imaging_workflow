@@ -16,7 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = BASE_DIR
 
-BASE_FILE_PATH = '/example_data'
+BASE_FILE_PATH = '/allen/aibs/pipeline/image_processing/volume_assembly/example_data'
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
 INGEST_MESSAGE_QUEUE_NAME = 'ingest_at_em_imaging_workflow'
@@ -46,8 +46,8 @@ RENDER_SERVICE_USER = 'timf'
 RENDER_SERVICE_PROJECT = 'STAGE'
 RENDER_STACK_NAME = 'default_stack'
 RENDER_POINT_MATCH_COLLECTION_NAME = 'default_point_matches'
-MATLAB_SOLVER_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/EMAligner/dev/allen_templates'
-MONTAGE_SOLVER_BIN=os.path.join(MATLAB_SOLVER_PATH, 'solve_montage_SL')
+MATLAB_SOLVER_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/EMAligner/staging/allen_templates'
+MONTAGE_SOLVER_BIN=os.path.join(MATLAB_SOLVER_PATH, 'run_em_solver.sh')
 RENDER_CLIENT_BASE_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging'
 RENDER_CLIENT_SCRIPTS = os.path.join(RENDER_CLIENT_BASE_PATH, 'scripts')
 RENDER_SPARK_JARFILE = os.path.join(RENDER_CLIENT_BASE_PATH, 'render-ws-spark-client-standalone.jar')
@@ -159,15 +159,15 @@ WSGI_APPLICATION = 'at_em_imaging_workflow.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'at_em_imaging_workflow',
+        'NAME': 'at_em_imaging_staging',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'devdb2',
-        'PORT': '5432',
+        'PORT': '5942',
     },
     'devdb2': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'at_em_imaging_workflow',
+        'NAME': 'at_em_imaging_staging',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'devdb2',

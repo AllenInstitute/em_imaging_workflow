@@ -54,14 +54,13 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
         inp['source_point_match_collection']['match_collection'] = \
             self.get_collection_name()
 
-        inp['z_value'] = em_mset.section.z_index
+        inp['first_section'] = em_mset.section.z_index
+        inp['last_section'] = em_mset.section.z_index
         inp['solver_executable'] = self.get_solver_executable_path()
 
         task_dir = self.get_or_create_task_storage_directory(task)
         inp['temp_dir'] = task_dir
-        inp['dir_scratch'] = task_dir
-        inp['renderer_client'] = os.path.join(settings.RENDER_CLIENT_SCRIPTS,
-                                              'render.sh')
+        inp['solver_options']['dir_scratch'] = task_dir
 
         return  SolveMontageSectionParameters().dump(inp).data
 
