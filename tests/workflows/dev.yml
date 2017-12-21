@@ -110,7 +110,6 @@ executables:
         - "rendermodules.montage.run_montage_job_for_section"
         environment:
         - 'MCRROOT=/allen/aibs/pipeline/image_processing/volume_assembly/MATLAB_Runtime/v91'
-        - 'PYTHONPATH=/data/aibstemp/timf/example_data/render_modules'
         - 'LD_LIBRARY_PATH=${MCRROOT}/runtime/glnxa64:${MCRROOT}/bin/glnxa64:${MCRROOT}/sys/os/glnxa64:${MCRROOT}/sys/opengl/lib/glnxa64'
         remote_queue: 'pbs'
         pbs_queue: 'lims2'

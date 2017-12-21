@@ -29,4 +29,6 @@ DEBUG_LOG=logs/server.log python -m manage server_worker&
 DEBUG_LOG=logs/execution_worker.log python -m manage run_execution_worker&
 DEBUG_LOG=logs/debug.log python -m manage runserver 0.0.0.0:8000&
 
+/bin/bash worker_entry.sh&
+
 while true; do sleep 2; done
