@@ -37,10 +37,11 @@ class GenerateMipMapsStrategy(execution_strategy.ExecutionStrategy):
         return settings.RENDER_STACK_NAME
 
 
-    def on_finishing(self, enqueued_object, results, task):
-        # self.check_key(results, 'output_json')
-        # self.set_well_known_file(results['output_json'], enqueued_object, 'description', task)
-        pass
+    def on_finishing(self, em_mset, results, task):
+        self.check_key(results, 'output_dir')
+        em_mset.mipmap_directory =  results['output_dir']
+        em_mset.save()
+
 
     #override if needed
     #set the storage directory for an enqueued object
