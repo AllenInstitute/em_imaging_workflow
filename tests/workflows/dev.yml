@@ -94,6 +94,7 @@ executables:
         environment:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         - PYTHONPATH=/data/aibstemp/timf/example_data/render_modules
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
@@ -113,8 +114,8 @@ executables:
         - 'LD_LIBRARY_PATH=${MCRROOT}/runtime/glnxa64:${MCRROOT}/bin/glnxa64:${MCRROOT}/sys/os/glnxa64:${MCRROOT}/sys/opengl/lib/glnxa64'
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=128g'
-        pbs_walltime: 'walltime=5:00:00'
+        pbs_processor: 'vmem=192g,nodes=1:ppn=24'
+        pbs_walltime: 'walltime=15:00:00'
 
     generate_mipmaps:
         name: 'Generate MIPmaps'

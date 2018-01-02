@@ -3,7 +3,6 @@ from rendermodules.montage.schemas import SolveMontageSectionParameters
 from development.strategies.schemas.two_d_montage_solver import input_dict
 from django.conf import settings
 import logging
-import os
 
 
 class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
@@ -33,7 +32,7 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
         inp['source_collection']['project'] = settings.RENDER_SERVICE_PROJECT
         inp['source_collection']['renderbinPath'] = \
             settings.RENDER_CLIENT_SCRIPTS
-        inp['source_collection']['stack'] = self.get_input_stack_name()
+        inp['source_collection']['stack'] = em_mset.render_stack_name()
 
         inp['target_collection']['service_host'] = \
             settings.RENDER_SERVICE_URL + ":" + settings.RENDER_SERVICE_PORT
@@ -44,7 +43,7 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
         inp['target_collection']['project'] = settings.RENDER_SERVICE_PROJECT
         inp['target_collection']['renderbinPath'] = \
             settings.RENDER_CLIENT_SCRIPTS
-        inp['target_collection']['stack'] = self.get_output_stack_name()
+        inp['target_collection']['stack'] = em_mset.render_stack_solved_name()
 
         inp['source_point_match_collection']['server'] = \
             'http://' + settings.RENDER_SERVICE_URL + \
@@ -60,15 +59,9 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
 
         task_dir = self.get_or_create_task_storage_directory(task)
         inp['temp_dir'] = task_dir
-        inp['solver_options']['dir_scratch'] = task_dir
+        inp['solver_options']['dir_scratch'] = task_dir  # TODO: match this to mic scratch
 
         return  SolveMontageSectionParameters().dump(inp).data
-
-    def get_input_stack_name(self):
-        return settings.RENDER_STACK_NAME
-
-    def get_output_stack_name(self):
-        return settings.RENDER_STACK_NAME
 
     def get_collection_name(self):
         return 'default_point_matches'
@@ -76,8 +69,3 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
     def get_solver_executable_path(self):
         return settings.MONTAGE_SOLVER_BIN
 
-    #override if needed
-    #called after the execution finishes
-    #process and save results to the database
-    def on_finishing(self, enqueued_object, results, task):
-        pass

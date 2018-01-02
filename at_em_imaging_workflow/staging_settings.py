@@ -16,7 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = BASE_DIR
 
-BASE_FILE_PATH = '/allen/aibs/pipeline/image_processing/volume_assembly/example_data'
+BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/blue_sky_working/staging'
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
 INGEST_MESSAGE_QUEUE_NAME = 'ingest_at_em_imaging_workflow'
@@ -38,7 +38,7 @@ WORKFLOW_CONFIG_YAML='/allen/aibs/pipeline/image_processing/volume_assembly/work
 MESSAGE_QUEUE_HOST = 'em-131db.corp.alleninstitute.org'
 MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
-MESSAGE_QUEUE_PORT = 5672
+MESSAGE_QUEUE_PORT = 9008
 
 RENDER_SERVICE_URL = 'em-131db.corp.alleninstitute.org'
 RENDER_SERVICE_PORT = '8081'

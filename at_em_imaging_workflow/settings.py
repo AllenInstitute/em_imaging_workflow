@@ -16,7 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = BASE_DIR
 
-BASE_FILE_PATH = '/data/aibstemp/timf/example_data'
+BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/timf/example_data/dev'
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
 INGEST_MESSAGE_QUEUE_NAME = 'ingest_at_em_imaging_workflow'
@@ -33,13 +33,13 @@ PBS_PYTHONPATH='/data/aibstemp/timf/example_data/blue_sky_workflow_engine'
 PBS_CONDA_ENV='/allen/aibs/pipeline/image_processing/volume_assembly/conda_envs/render-modules/dev'
 #PBS_RESPONSE_CONDA_ENV='/data/aibstemp/timf/example_data/blue_sky_27'
 PBS_RESPONSE_CONDA_ENV='/allen/aibs/pipeline/image_processing/volume_assembly/conda_envs/render-modules/dev'
-BLUE_SKY_SETTINGS='/data/aibstemp/timf/example_data/blue_sky_settings.yml'
-STATE_MACHINE_YML='/home/timf/at_em_imaging_workflow/at_em_imaging_workflow/states.yml'
-WORKFLOW_CONFIG_YAML='/at_em_imaging_workflow/tests/workflows/dev.yml'
+BLUE_SKY_SETTINGS='/allen/aibs/pipeline/image_processing/volume_assembly/workflow_conf/dev/blue_sky_settings.yml'
+STATE_MACHINE_YML='/allen/aibs/pipeline/image_processing/volume_assembly/workflow_conf/dev/states.yml'
+WORKFLOW_CONFIG_YAML='/allen/aibs/pipeline/image_processing/volume_assembly/workflow_conf/dev/workflow_config.yml'
 MESSAGE_QUEUE_HOST = 'ibs-timf-ux1.corp.alleninstitute.org'
 MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
-MESSAGE_QUEUE_PORT = 5672
+MESSAGE_QUEUE_PORT = 9008
 
 RENDER_SERVICE_URL = 'ibs-timf-ux1.corp.alleninstitute.org'
 RENDER_SERVICE_PORT = '9006'
@@ -57,7 +57,6 @@ RENDER_CLIENT_JAR = os.path.join(RENDER_CLIENT_BASE_PATH, 'render-ws-java-client
 FIJI_PATH = \
     '/allen/aibs/pipeline/image_processing/volume_assembly' + \
     '/Fiji.app/ImageJ-linux64'
-#SPARK_HOME='/allen/programs/celltypes/workgroups/em-connectomics/ImageProcessing/utils/spark/'
 SPARK_HOME='/allen/aibs/pipeline/image_processing/volume_assembly/utils/spark'
 GRID_SIZE = 3
 HEAP_SIZE = 10

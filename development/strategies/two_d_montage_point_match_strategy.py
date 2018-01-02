@@ -55,5 +55,11 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
         return 'default_point_matches'
         # return settings.POINT_MATCH_COLLECTION_NAME
 
-    def on_finishing(self, enqueued_object, results, task):
-        pass
+    def on_finishing(self, em_mset, results, task):
+        self.check_key(results, 'pairCount')
+        self.set_well_known_file(
+            self.get_output_file(task),
+            em_mset,
+            'point_match_output',
+            task)
+

@@ -23,8 +23,8 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
         inp['zs'] = [ em_mset.section.z_index ]
-        inp['inputStack'] = self.get_input_stack_name()
-        inp['outputStack'] = self.get_input_stack_name()
+        inp['inputStack'] = em_mset.render_stack_name()
+        inp['outputStack'] = em_mset.render_stack_name()
         inp['close_stack'] = False
 
         wkf = WellKnownFile.get(em_mset.reference_set, 'description')
@@ -36,22 +36,3 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
 
         return ApplyLensCorrectionParameters().dump(inp).data
 
-    def get_input_stack_name(self):
-        return settings.RENDER_STACK_NAME
-
-    def get_output_stack_name(self):
-        return settings.RENDER_STACK_NAME
-
-    #override if needed
-    #called after the execution finishes
-    #process and save results to the database
-    def on_finishing(self, em_mset, results, task):
-        # self.check_key(results, 'output_json')
-        # self.set_well_known_file(results['output_json'], enqueued_object, 'description', task)
-        pass
-
-    #override if needed
-    #set the storage directory for an enqueued object
-    #def get_storage_directory(self, base_storage_directory, job):
-    #    enqueued_object = job.get_enqueued_object()
-    #    return os.path.join(base_storage_directory, 'reference_set_' + str(enqueued_object.id))

@@ -23,7 +23,7 @@ class GenerateMipMapsStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
-        inp['input_stack'] = self.get_input_stack_name()
+        inp['input_stack'] = em_mset.render_stack_name()
 
         inp['output_dir'] = em_mset.mipmap_directory
 
@@ -32,19 +32,7 @@ class GenerateMipMapsStrategy(execution_strategy.ExecutionStrategy):
 
         return GenerateMipMapsParameters().dump(inp).data
 
-
-    def get_input_stack_name(self):
-        return settings.RENDER_STACK_NAME
-
-
     def on_finishing(self, em_mset, results, task):
         self.check_key(results, 'output_dir')
         em_mset.mipmap_directory =  results['output_dir']
         em_mset.save()
-
-
-    #override if needed
-    #set the storage directory for an enqueued object
-    #def get_storage_directory(self, base_storage_directory, job):
-    #  enqueued_object = job.get_enqueued_object()
-    #  return os.path.join(base_storage_directory, 'reference_set_' + str(enqueued_object.id))

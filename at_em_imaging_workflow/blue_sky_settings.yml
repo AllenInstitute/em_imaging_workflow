@@ -1,5 +1,5 @@
 MESSAGE_QUEUE_HOST: ibs-timf-ux1.corp.alleninstitute.org
-MESSAGE_QUEUE_PORT: 5672
+MESSAGE_QUEUE_PORT: 9008
 MESSAGE_QUEUE_USER: blue_sky_user
 MESSAGE_QUEUE_PASSWORD: blue_sky_user
 CELERY_MESSAGE_QUEUE_NAME: celery_at_em_imaging_workflow

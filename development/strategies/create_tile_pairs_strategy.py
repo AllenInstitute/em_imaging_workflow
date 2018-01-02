@@ -21,19 +21,13 @@ class CreateTilePairsStrategy(ExecutionStrategy):
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
         inp['output_dir'] = self.get_or_create_task_storage_directory(task)
-        inp['baseStack'] = self.get_input_stack_name()
-        inp['stack'] = self.get_output_stack_name()
+        inp['baseStack'] = em_mset.render_stack_name()
+        inp['stack'] = em_mset.render_stack_name()
 
         inp["minZ"] = em_mset.section.z_index
         inp["maxZ"] = em_mset.section.z_index
 
         return TilePairClientParameters().dump(inp).data 
-
-    def get_input_stack_name(self):
-        return settings.RENDER_STACK_NAME
-
-    def get_output_stack_name(self):
-        return settings.RENDER_STACK_NAME
 
     def on_finishing(self, em_mset, results, task):
         CreateTilePairsStrategy._log.info("ON FINISHING")

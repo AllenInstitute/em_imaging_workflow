@@ -34,6 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
+from django.conf import settings
 from development.models.montage_set import MontageSet
 from development.models.reference_set import ReferenceSet
 
@@ -47,4 +48,12 @@ class EMMontageSet(MontageSet):
 
     def tile_pairs_file_description(self):
         return 'tile pairs file'
+
+    def render_stack_name(self):
+        return '_'.join([settings.RENDER_STACK_NAME, self.uid[0:6]])
+
+    def render_stack_solved_name(self):
+        return '_'.join([settings.RENDER_STACK_NAME,
+                         self.uid[0:6],
+                         'solved'])
 

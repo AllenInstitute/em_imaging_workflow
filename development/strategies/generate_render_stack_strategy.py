@@ -27,7 +27,7 @@ class GenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
         inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
-        inp['stack'] = self.get_stack_name(em_set)
+        inp['stack'] = em_set.render_stack_name()
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
         inp['metafile'] = em_set.metafile
         inp['close_stack'] = False
@@ -37,9 +37,6 @@ class GenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
 
     def get_z_index(self, em_set):
         return em_set.section.z_index
-
-    def get_stack_name(self, em_set):
-        return settings.RENDER_STACK_NAME
 
     def can_transition(self, enqueued_object):
         is_em_montage_set = isinstance(enqueued_object, EMMontageSet)
