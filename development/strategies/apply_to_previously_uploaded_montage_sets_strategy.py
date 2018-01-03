@@ -1,8 +1,5 @@
 from workflow_engine.strategies import execution_strategy
-from workflow_engine.models import *
-from development.models import *
 
-import os
 
 class ApplyToPreviouslyUploadedMontageSetsStrategy(execution_strategy.ExecutionStrategy):
 

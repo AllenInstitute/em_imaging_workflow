@@ -1,12 +1,8 @@
 from workflow_engine.strategies import execution_strategy
-# from workflow_engine.models import *
-# from development.models import *
 from rendermodules.intensity_correction.schemas import \
     MakeMedianParams 
-from django.conf import settings
-from os import listdir
 import logging
-import os
+
 
 class ATMICTaskBuilderStrategy(execution_strategy.ExecutionStrategy):
   _log = logging.getLogger('development.strategies.at_m_i_c_task_builder_strategy')
