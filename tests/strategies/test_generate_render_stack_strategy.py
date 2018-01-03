@@ -1,3 +1,4 @@
+from mock import Mock
 import django
 from django.conf import settings
 django.setup()
@@ -13,6 +14,7 @@ class TestIngestGenerateRenderStackStrategy(TestCase):
         test_z_index = 543
         em_set.section.z_index = test_z_index
         em_set.metafile = '/path/to/test/meta.file'
+        em_set.render_stack_name = Mock(return_value='test_stack')
         task = MagicMock()
 
         storage_directory = '/example/storage/directory'
@@ -26,7 +28,7 @@ class TestIngestGenerateRenderStackStrategy(TestCase):
         assert input_json['render']['owner'] == settings.RENDER_SERVICE_USER
         assert input_json['render']['project'] == \
             settings.RENDER_SERVICE_PROJECT
-        assert input_json['stack'] == settings.RENDER_STACK_NAME
+        assert input_json['stack'] == 'test_stack'
         assert input_json['render']['client_scripts'] == \
             settings.RENDER_CLIENT_SCRIPTS
         assert input_json['metafile'] == em_set.metafile
