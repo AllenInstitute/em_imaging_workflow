@@ -4,14 +4,18 @@ from rendermodules.pointmatch.schemas import \
     PointMatchClientParametersSpark
 import copy
 from workflow_engine.models.well_known_file import WellKnownFile
+import jinja2
+import os
 from development.strategies.schemas.two_d_montage_point_match \
     import input_dict
 from django.conf import settings
 import logging
 
 class TwoDMontagePointMatchStrategy(ExecutionStrategy):
-    _log = logging.getLogger(
-        'development.strategies.two_d_montage_point_match_strategy')
+    _package = 'development.strategies.two_d_montage_point_match_strategy'
+    _templates = 'templates'
+    _log_configuration_template = 'spark_log4j_template.properties'
+    _log = logging.getLogger(_package)
 
     def get_input(self, em_mset, storage_directory, task):
         TwoDMontagePointMatchStrategy._log.info("get input")
@@ -19,7 +23,8 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
         inp = copy.deepcopy(input_dict)
 
         inp['sparkhome'] = settings.SPARK_HOME
-        inp['logdir'] = self.get_or_create_task_storage_directory(task)
+        log_dir = self.get_or_create_task_storage_directory(task)
+        inp['logdir'] = log_dir
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
@@ -30,6 +35,18 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
         inp['owner'] = settings.RENDER_SERVICE_USER
 
         inp['jarfile'] = settings.RENDER_SPARK_JARFILE
+
+        log4j_properties_path = os.path.join(log_dir, 'log4j.properties')
+        log4j_log_path = os.path.join(log_dir, 'spark.log')
+
+        with open(log4j_properties_path, 'w') as file_handle:
+            file_handle.write(
+                self.create_log_configuration(log4j_log_path))
+
+        inp['spark_files'] = [ log4j_properties_path ]
+        inp['spark_conf'] = {
+            'spark.driver.extraJavaOptions':
+                '-Dlog4j.configuration=file:%s' % (log4j_properties_path) }
 
         inp['collection'] = self.get_collection_name()
         inp['pairJson'] = self.get_tile_pairs_file_name(em_mset)
@@ -62,4 +79,14 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
             em_mset,
             'point_match_output',
             task)
+
+    def create_log_configuration(self, log_file_path):
+        env = jinja2.Environment(
+           loader=jinja2.PackageLoader(
+               TwoDMontagePointMatchStrategy._package,
+               TwoDMontagePointMatchStrategy._templates))
+        log4j_template = env.get_template(
+            TwoDMontagePointMatchStrategy._log_configuration_template)
+
+        return log4j_template.render(log_file_path=log_file_path)
 
