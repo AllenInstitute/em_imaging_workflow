@@ -50,7 +50,7 @@ executables:
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=128g'
+        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
     apply_lens_correction:
@@ -66,21 +66,7 @@ executables:
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=128g'
-        pbs_walltime: 'walltime=5:00:00'
-
-    spark_pi:
-        name: 'Spark Pi'
-        path: '/usr/spark-2.2.0/bin/spark-submit'
-        args:
-        - "--class"
-        - "org.apache.spark.examples.SparkPi"
-        - "--master" 
-        - "local[4]"
-        - "/usr/spark-2.2.0/examples/jars/spark-examples_2.11-2.2.0.jar"
-        remote_queue: 'spark'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=128g'
+        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
     generate_point_matches:
@@ -98,7 +84,7 @@ executables:
         - PYTHONPATH=/data/aibstemp/timf/example_data/render_modules
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=192g,nodes=1:ppn=24'
+        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
     em_2d_solver:
@@ -112,9 +98,11 @@ executables:
         environment:
         - 'MCRROOT=/allen/aibs/pipeline/image_processing/volume_assembly/MATLAB_Runtime/v91'
         - 'LD_LIBRARY_PATH=${MCRROOT}/runtime/glnxa64:${MCRROOT}/bin/glnxa64:${MCRROOT}/sys/os/glnxa64:${MCRROOT}/sys/opengl/lib/glnxa64'
+        - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
+        - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=192g,nodes=1:ppn=24'
+        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=15:00:00'
 
     generate_mipmaps:
@@ -127,7 +115,7 @@ executables:
         - "rendermodules.dataimport.generate_mipmaps"
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'nodes=1:ppn=32'
+        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
     apply_mipmaps:
@@ -143,7 +131,7 @@ executables:
         - "rendermodules.dataimport.apply_mipmaps_to_render"
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'nodes=1:ppn=32'
+        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
     create_tilepairs:
@@ -159,7 +147,7 @@ executables:
         - "rendermodules.pointmatch.create_tilepairs"
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=128g'
+        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
     calculate_multiplicative_correction:
@@ -172,7 +160,7 @@ executables:
         - "rendermodules.intensity_correction.calculate_multiplicative_correction"
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=128g'
+        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
     apply_multiplicative_correction:
@@ -185,7 +173,7 @@ executables:
         - "rendermodules.intensity_correction.apply_multiplicative_correction"
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
-        pbs_processor: 'vmem=128g'
+        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
     move:
