@@ -21,7 +21,7 @@ class ApplyMipMapsStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
         inp['input_stack'] = RENDER_STACK_INGEST
-        inp['input_stack'] = RENDER_STACK_APPLY_MIPMAPS
+        inp['output_stack'] = RENDER_STACK_APPLY_MIPMAPS
         inp['mipmap_dir'] = em_mset.mipmap_directory
         inp['output_dir'] = em_mset.get_storage_directory()
 
