@@ -3,6 +3,7 @@ from development.strategies.schemas.generate_render_stack import input_dict
 from rendermodules.dataimport.schemas import \
     GenerateEMTileSpecsParameters
 from development.models.e_m_montage_set import EMMontageSet
+from development.strategies import RENDER_STACK_INGEST
 from django.conf import settings
 import copy
 import logging
@@ -27,7 +28,7 @@ class GenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
         inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
-        inp['stack'] = em_set.render_stack_name()
+        inp['stack'] = RENDER_STACK_INGEST
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
         inp['metafile'] = em_set.metafile
         inp['close_stack'] = False

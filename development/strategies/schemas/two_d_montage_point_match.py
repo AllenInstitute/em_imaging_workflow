@@ -26,6 +26,6 @@ input_dict = {
     "matchMinInlierRatio": 0.0,
     "matchMinNumInliers": 8,
     "matchMaxNumInliers": 200,
-    "clipWidth": 1000,
-    "clipHeight": 1000,
+    "clipWidth": 800,
+    "clipHeight": 800,
   }

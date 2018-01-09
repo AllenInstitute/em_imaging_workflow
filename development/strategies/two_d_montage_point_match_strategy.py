@@ -56,7 +56,14 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
         inp['memory'] = str(int((mem - ppn) / ppn)) + 'g'
         inp['driverMemory'] = str(int(mem)) +  'g'  # TODO roughly memory * ppn
 
-        inp['masterUrl'] = 'local[*]'
+        clipWidth = 800
+        clipHeight = 800
+        inp['clipWidth'] = clipWidth
+        inp['clipHeight'] = clipHeight
+        inp['maxFeatureCacheGb'] = 3
+
+        retries = 20
+        inp['masterUrl'] = 'local[*,%d]' % (retries)
         inp['baseDataUrl'] = \
             'http://' + settings.RENDER_SERVICE_URL + \
             ':' + settings.RENDER_SERVICE_PORT + '/render-ws/v1'

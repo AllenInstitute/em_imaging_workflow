@@ -24,8 +24,6 @@ executables:
     generate_em_tilespecs_from_metafile:
         name: 'EM Create Tilespecs'
         path: 'python'
-        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
-        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.dataimport.generate_EM_tilespecs_from_metafile"
@@ -40,8 +38,6 @@ executables:
     generate_lens_correction:
         name: 'Generate Lens Correction'
         path: 'python'
-        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
-        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.lens_correction.lens_correction"
@@ -56,8 +52,6 @@ executables:
     apply_lens_correction:
         name: 'Apply Lens Correction'
         path: 'python'
-        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
-        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.lens_correction.apply_lens_correction"
@@ -72,8 +66,6 @@ executables:
     generate_point_matches:
         name: 'EM 2D Generate Point Matches'
         path: 'python'
-        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
-        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.pointmatch.generate_point_matches_spark"
@@ -81,7 +73,6 @@ executables:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
-        - PYTHONPATH=/data/aibstemp/timf/example_data/render_modules
         remote_queue: 'pbs'
         pbs_queue: 'lims2'
         pbs_processor: 'vmem=192g,nodes=1:ppn=32'
@@ -90,8 +81,6 @@ executables:
     em_2d_solver:
         name: 'EM 2D Solver'
         path: 'python'
-        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
-        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.montage.run_montage_job_for_section"
@@ -108,8 +97,6 @@ executables:
     generate_mipmaps:
         name: 'Generate MIPmaps'
         path: 'python'
-        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
-        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.dataimport.generate_mipmaps"
@@ -121,8 +108,6 @@ executables:
     apply_mipmaps:
         name: 'Apply MIPmaps'
         path: 'python'
-        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
-        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         environment:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
@@ -137,8 +122,6 @@ executables:
     create_tilepairs:
         name: 'Create Tile Pairs'
         path: 'python'
-        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
-        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         environment:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
@@ -153,8 +136,6 @@ executables:
     calculate_multiplicative_correction:
         name: 'Calculate Multiplicative Correction'
         path: 'python'
-        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
-        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.intensity_correction.calculate_multiplicative_correction"
@@ -166,8 +147,6 @@ executables:
     apply_multiplicative_correction:
         name: 'Apply Multiplicative Correction'
         path: 'python'
-        conda_activate: '/shared/utils.x86_64/python-2.7/bin/activate'
-        conda_env: '/data/aibstemp/timf/example_data/blue_sky_27'
         args:
         - '-m'
         - "rendermodules.intensity_correction.apply_multiplicative_correction"

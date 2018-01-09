@@ -1,14 +1,5 @@
-#__all__ = []
-#
-#import pkgutil
-#import inspect
-#
-#for loader, name, is_pkg in pkgutil.walk_packages(__path__):
-#    module = loader.find_module(name).load_module(name)
-#
-#    for name, value in inspect.getmembers(module):
-#        if name.startswith('__'):
-#            continue
-#
-#        globals()[name] = value
-#        __all__.append(name)
+RENDER_STACK_INGEST = 'em_2d_montage_ingest'
+RENDER_STACK_LENS_CORRECTED = 'em_2d_montage_lc'
+RENDER_STACK_TILE_PAIRS = 'em_2d_montage_tile_pairs'
+RENDER_STACK_POINT_MATCH = 'em_2d_montage_point_match'
+RENDER_STACK_SOLVED = 'em_2d_montage_solved'

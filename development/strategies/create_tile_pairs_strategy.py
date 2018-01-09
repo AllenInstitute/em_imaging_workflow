@@ -5,6 +5,8 @@ from rendermodules.pointmatch.schemas import \
 from django.conf import settings
 import logging
 import copy
+from development.strategies \
+    import RENDER_STACK_LENS_CORRECTED, RENDER_STACK_TILE_PAIRS
 
 class CreateTilePairsStrategy(ExecutionStrategy):
     _log = logging.getLogger('development.strategies.create_tile_pairs_strategy')
@@ -20,9 +22,9 @@ class CreateTilePairsStrategy(ExecutionStrategy):
         inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
-        inp['output_dir'] = self.get_or_create_task_storage_directory(task)
-        inp['baseStack'] = em_mset.render_stack_name()
-        inp['stack'] = em_mset.render_stack_name()
+        inp['output_dir'] = em_mset.get_storage_directory()
+        inp['baseStack'] = RENDER_STACK_LENS_CORRECTED
+        inp['stack'] = RENDER_STACK_LENS_CORRECTED
 
         inp["minZ"] = em_mset.section.z_index
         inp["maxZ"] = em_mset.section.z_index
@@ -37,9 +39,3 @@ class CreateTilePairsStrategy(ExecutionStrategy):
             em_mset,
             em_mset.tile_pairs_file_description(),
             task)
-
-    #override if needed
-    #set the storage directory for an enqueued object
-    #def get_storage_directory(self, base_storage_directory, job):
-    #  enqueued_object = job.get_enqueued_object()
-    #  return os.path.join(base_storage_directory, 'reference_set_' + str(enqueued_object.id))

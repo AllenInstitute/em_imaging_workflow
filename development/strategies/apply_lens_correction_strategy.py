@@ -6,6 +6,8 @@ from workflow_engine.models.well_known_file import WellKnownFile
 from django.conf import settings
 import simplejson as json
 import logging
+from development.strategies import RENDER_STACK_INGEST,\
+    RENDER_STACK_LENS_CORRECTED
 
 class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
     _log = logging.getLogger(
@@ -23,8 +25,8 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
         inp['zs'] = [ em_mset.section.z_index ]
-        inp['inputStack'] = em_mset.render_stack_name()
-        inp['outputStack'] = em_mset.render_stack_name()
+        inp['inputStack'] = RENDER_STACK_INGEST
+        inp['outputStack'] = RENDER_STACK_LENS_CORRECTED
         inp['close_stack'] = False
 
         wkf = WellKnownFile.get(em_mset.reference_set, 'description')

@@ -3,6 +3,9 @@ from rendermodules.montage.schemas import SolveMontageSectionParameters
 from development.strategies.schemas.two_d_montage_solver import input_dict
 from django.conf import settings
 import logging
+from development.strategies \
+    import RENDER_STACK_TILE_PAIRS, RENDER_STACK_SOLVED,\
+    RENDER_STACK_LENS_CORRECTED
 
 
 class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
@@ -32,7 +35,7 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
         inp['source_collection']['project'] = settings.RENDER_SERVICE_PROJECT
         inp['source_collection']['renderbinPath'] = \
             settings.RENDER_CLIENT_SCRIPTS
-        inp['source_collection']['stack'] = em_mset.render_stack_name()
+        inp['source_collection']['stack'] = RENDER_STACK_LENS_CORRECTED
 
         inp['target_collection']['service_host'] = \
             settings.RENDER_SERVICE_URL + ":" + settings.RENDER_SERVICE_PORT
@@ -43,7 +46,7 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
         inp['target_collection']['project'] = settings.RENDER_SERVICE_PROJECT
         inp['target_collection']['renderbinPath'] = \
             settings.RENDER_CLIENT_SCRIPTS
-        inp['target_collection']['stack'] = em_mset.render_stack_solved_name()
+        inp['target_collection']['stack'] = RENDER_STACK_SOLVED
 
         inp['source_point_match_collection']['server'] = \
             'http://' + settings.RENDER_SERVICE_URL + \
@@ -59,7 +62,7 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
 
         task_dir = self.get_or_create_task_storage_directory(task)
         inp['temp_dir'] = task_dir
-        inp['solver_options']['dir_scratch'] = task_dir  # TODO: match this to mic scratch
+        inp['solver_options']['dir_scratch'] = em_mset.get_storage_directory()  # TODO: match this to mic scratch
 
         return  SolveMontageSectionParameters().dump(inp).data
 
@@ -68,4 +71,3 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
 
     def get_solver_executable_path(self):
         return settings.MONTAGE_SOLVER_BIN
-

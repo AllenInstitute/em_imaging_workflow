@@ -36,6 +36,7 @@ PBS_RESPONSE_CONDA_ENV='/allen/aibs/pipeline/image_processing/volume_assembly/co
 BLUE_SKY_SETTINGS='/allen/aibs/pipeline/image_processing/volume_assembly/workflow_conf/dev/blue_sky_settings.yml'
 STATE_MACHINE_YML='/allen/aibs/pipeline/image_processing/volume_assembly/workflow_conf/dev/states.yml'
 WORKFLOW_CONFIG_YAML='/allen/aibs/pipeline/image_processing/volume_assembly/workflow_conf/dev/workflow_config.yml'
+QMASTER_CRED='/local1/git/at_em_imaging_workflow/qmaster_cred.txt'
 MESSAGE_QUEUE_HOST = 'ibs-timf-ux1.corp.alleninstitute.org'
 MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'

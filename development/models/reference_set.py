@@ -34,7 +34,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
+from django.conf import settings
 from development.models.tile_image_set import TileImageSet
+import os
 
 
 class ReferenceSet(TileImageSet):
@@ -44,3 +46,7 @@ class ReferenceSet(TileImageSet):
 
     def __str__(self):
         return str(self.uid)
+
+    def get_storage_directory(self):
+        return os.path.join(settings.BASE_FILE_PATH,
+                            'reference_set_' + self.uid[0:8])

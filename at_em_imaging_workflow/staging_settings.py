@@ -35,6 +35,7 @@ PBS_RESPONSE_CONDA_ENV='/allen/aibs/pipeline/image_processing/volume_assembly/co
 BLUE_SKY_SETTINGS='/allen/aibs/pipeline/image_processing/volume_assembly/workflow_conf/staging/blue_sky_settings.yml'
 STATE_MACHINE_YML='/allen/aibs/pipeline/image_processing/volume_assembly/workflow_conf/staging/states.yml'
 WORKFLOW_CONFIG_YAML='/allen/aibs/pipeline/image_processing/volume_assembly/workflow_conf/staging/workflow_config.yml'
+QMASTER_CRED='/home/blue_sky_user/qmaster_cred.txt'
 MESSAGE_QUEUE_HOST = 'em-131db.corp.alleninstitute.org'
 MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'

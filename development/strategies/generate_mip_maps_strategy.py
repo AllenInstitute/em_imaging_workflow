@@ -3,6 +3,7 @@ from django.conf import settings
 from development.strategies.schemas.generate_mip_maps import input_dict
 from rendermodules.dataimport.schemas import GenerateMipMapsParameters
 import logging
+from development.strategies import RENDER_STACK_INGEST
 
 
 class GenerateMipMapsStrategy(execution_strategy.ExecutionStrategy):
@@ -12,8 +13,11 @@ class GenerateMipMapsStrategy(execution_strategy.ExecutionStrategy):
     def get_input(self, em_mset, storage_directory, task):
         GenerateMipMapsStrategy._log.info('get_input')
 
-        em_mset.mipmap_directory = \
-            self.get_or_create_task_storage_directory(task)
+        #em_mset.mipmap_directory = \
+        #    self.get_storage_directory(
+        #        em_mset.get_storage_directory(),
+        #        task.get_job())
+        em_mset.mipmap_directory = em_mset.get_storage_directory()
         em_mset.save()
 
         inp = input_dict
@@ -23,7 +27,7 @@ class GenerateMipMapsStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
-        inp['input_stack'] = em_mset.render_stack_name()
+        inp['input_stack'] = RENDER_STACK_INGEST
 
         inp['output_dir'] = em_mset.mipmap_directory
 
