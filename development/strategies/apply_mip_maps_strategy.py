@@ -2,7 +2,8 @@ from workflow_engine.strategies import execution_strategy
 from django.conf import settings
 from development.strategies.schemas.generate_mip_maps import input_dict
 from rendermodules.dataimport.schemas import AddMipMapsToStackParameters
-from development.strategies import RENDER_STACK_INGEST
+from development.strategies \
+    import RENDER_STACK_INGEST, RENDER_STACK_APPLY_MIPMAPS
 import logging
 
 
@@ -20,6 +21,7 @@ class ApplyMipMapsStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
         inp['input_stack'] = RENDER_STACK_INGEST
+        inp['input_stack'] = RENDER_STACK_APPLY_MIPMAPS
         inp['mipmap_dir'] = em_mset.mipmap_directory
         inp['output_dir'] = em_mset.get_storage_directory()
 
