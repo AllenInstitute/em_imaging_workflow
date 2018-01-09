@@ -22,13 +22,13 @@ class TestIngestGenerateRenderStackStrategy(TestCase):
         input_json = strategy.get_input(em_set,
                                         storage_directory,
                                         task)
-        # print(str(input_json))
+
         assert input_json['render']['host'] == settings.RENDER_SERVICE_URL
         assert input_json['render']['port'] == int(settings.RENDER_SERVICE_PORT)
         assert input_json['render']['owner'] == settings.RENDER_SERVICE_USER
         assert input_json['render']['project'] == \
             settings.RENDER_SERVICE_PROJECT
-        assert input_json['stack'] == 'test_stack'
+        assert input_json['stack'] == 'em_2d_montage_ingest'
         assert input_json['render']['client_scripts'] == \
             settings.RENDER_CLIENT_SCRIPTS
         assert input_json['metafile'] == em_set.metafile
