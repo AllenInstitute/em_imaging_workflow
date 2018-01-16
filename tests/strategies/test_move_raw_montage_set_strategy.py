@@ -1,4 +1,3 @@
-import pytest
 from mock import Mock
 from development.strategies.move_raw_montage_set_strategy \
     import MoveRawMontageSetStrategy
@@ -10,6 +9,6 @@ def test_get_input_data():
     storage_directory = '/example/storage/directory'
     strategy = MoveRawMontageSetStrategy()
     inp = strategy.get_input(enqueued_object,
-                               storage_directory,
-                               task)
+                             storage_directory,
+                             task)
     assert inp is not None

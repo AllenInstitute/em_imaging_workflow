@@ -48,11 +48,11 @@ example = {
 }
 
 class MoveTileSet(object):
-    def __init__(self):
-        pass
+    def __init__(self, cmd):
+        self.cmd = cmd
 
     def move(self, frm, to):
-        os.system('echo mv %s %s' % (frm, to))
+        os.system('%s %s %s' % (self.cmd, frm, to))
 
     def parse_json(self, json_string):
         return json.loads(json_string)
@@ -71,8 +71,10 @@ class MoveTileSet(object):
     
     @classmethod
     def main(cls, args):
-        mts = MoveTileSet()
+        cmd = '/bin/rsync -rRavL'
+        mts = MoveTileSet(cmd)
         parsed_args = mts.parse_args(args)
+        
         inp = mts.parse_json_file(parsed_args['input_json'])
 
         mts.move(inp['from'], inp['to'])
