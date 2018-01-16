@@ -57,4 +57,5 @@ def test_move():
             MoveTileSet.main(['--input_json', 'in.json',
                               '--output_json', 'out.json'])
     
-    os_sys.assert_called_once_with('echo mv /path/to/src /path/to/dest')
+    os_sys.assert_called_once_with(
+        '/bin/rsync -rRavL /path/to/src /path/to/dest')
