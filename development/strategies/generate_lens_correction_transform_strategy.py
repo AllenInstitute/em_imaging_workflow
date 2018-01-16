@@ -34,7 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
-from workflow_engine.models.workflow_node import WorkflowNode
+from workflow_engine.workflow_controller import WorkflowController
 from rendermodules.lens_correction.schemas \
     import LensCorrectionParameters
 from development.models.reference_set import ReferenceSet
@@ -74,7 +74,7 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
         return LensCorrectionParameters().dump(inp).data
 
     def on_running(self, task):
-        ref_set = task.get_enqueued_object()
+        ref_set = WorkflowController.get_enqueued_object(task)
         ref_set.workflow_state = "PROCESSING"
         ref_set.save()
 
@@ -95,7 +95,7 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
         ref_set.save()
 
         # trigger waiting jobs
-        WorkflowNode.set_jobs_for_run(
+        WorkflowController.set_jobs_for_run(
             'Wait for Lens Correction')
 
     # TODO: this isn't used.  Ingest picks it directly
@@ -107,6 +107,5 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
     #override if needed
     #set the storage directory for an enqueued object
     def get_storage_directory(self, base_storage_directory, job):
-        enqueued_object = job.get_enqueued_object()
-        return os.path.join(base_storage_directory,
-                            'reference_set_' + str(enqueued_object.id))
+        ref_set = job.get_enqueued_object()
+        return ref_set.get_storage_directory(base_storage_directory)

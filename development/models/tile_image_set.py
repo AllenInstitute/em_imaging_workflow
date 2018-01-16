@@ -36,6 +36,7 @@
 from django.db import models
 from development.models.camera import Camera
 from development.models.microscope import Microscope
+import re
 
 
 class TileImageSet(models.Model):
@@ -44,7 +45,15 @@ class TileImageSet(models.Model):
     camera = models.ForeignKey(Camera, null=True)
     microscope = models.ForeignKey(Microscope, null=True)
     metafile = models.CharField(max_length=255, null=True)
+    acquisition_date = models.DateTimeField(null=True)
+
+    _ODD_FILE_CHARS = re.compile(r'[ :\.\-\+]')
 
     def __str__(self):
-        return "Tile Image Set Lorem Ipsum"  # TODO: better string
+        return str(self.acquisition_date)
+    
+    def clean_acquisition_date(self):
+        return re.sub(TileImageSet._ODD_FILE_CHARS,
+                      '_',
+                      str(self.acquisition_date))
 

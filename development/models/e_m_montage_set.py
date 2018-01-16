@@ -45,11 +45,21 @@ class EMMontageSet(MontageSet):
     reference_set_uid = models.CharField(max_length=255, null=True)
 
     def __str__(self):
-        return str(self.uid)
+        return str(self.acquisition_date)
 
     def tile_pairs_file_description(self):
         return 'tile pairs file'
 
-    def get_storage_directory(self):
-        return os.path.join(settings.BASE_FILE_PATH,
-                            'em_montage_set_' + self.uid[0:8])
+    def get_storage_directory(self, base_storage_directory=None):
+        if base_storage_directory is None:
+            base_storage_directory = settings.BASE_FILE_PATH
+
+        section = self.section
+        specimen = section.specimen
+
+        return os.path.join(base_storage_directory,
+                            'em_montage_' + \
+                            specimen.uid + '_z' + \
+                            str(section.z_index) + '_' + \
+                            self.clean_acquisition_date())
+

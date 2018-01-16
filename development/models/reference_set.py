@@ -45,8 +45,12 @@ class ReferenceSet(TileImageSet):
     manifest_path = models.CharField(max_length=255, null=True) # well_known_file?
 
     def __str__(self):
-        return str(self.uid)
+        return str(self.acquisition_date)
 
-    def get_storage_directory(self):
-        return os.path.join(settings.BASE_FILE_PATH,
-                            'reference_set_' + self.uid[0:8])
+    def get_storage_directory(self, base_storage_directory=None):
+        if base_storage_directory is None:
+            base_storage_directory = settings.BASE_FILE_PATH
+            
+        return os.path.join(base_storage_directory,
+                            'reference_' + \
+                            self.clean_acquisition_date())

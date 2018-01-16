@@ -1,6 +1,3 @@
-#from django.utils import dateparse
-#import os
-#import pytz
 import pytest
 from mock import patch, Mock
 from development.strategies.lens_correction_ingest import LensCorrectionIngest

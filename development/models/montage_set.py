@@ -41,12 +41,11 @@ from development.models.sample_holder import SampleHolder
 
 class MontageSet(TileImageSet):
     uid = models.CharField(max_length=255, null=True)
-    acquisition_date = models.DateTimeField(null=True)
     mipmap_directory = models.CharField(max_length=255, null=True)
     section = models.ForeignKey(Section)
     sample_holder = models.ForeignKey(SampleHolder)
     overlap = models.FloatField(null=True)
 
     def __str__(self):
-        return str(self.uid)
+        return str(self.acquisition_date)
 

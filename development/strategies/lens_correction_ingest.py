@@ -46,9 +46,7 @@ from development.models.section import Section
 from development.models.sample_holder import SampleHolder
 from development.models.load import Load
 from development.models.e_m_montage_set import EMMontageSet
-#import simplejson as json
 import logging
-#import traceback
 from rendermodules.ingest.schemas import \
     example, ReferenceSetIngestSchema
 import uuid
@@ -147,6 +145,8 @@ class LensCorrectionIngest(IngestStrategy):
                     'workflow_state': 'PENDING',
                     'camera': camera,
                     'microscope': microscope,
+                    'acquisition_date':
+                        message['acquisition_data']['acquisition_time'],
                     # 'project_path': '/example_data', # deprecated
                     'manifest_path': manifest_path,
                     'metafile': metafile
@@ -158,7 +158,7 @@ class LensCorrectionIngest(IngestStrategy):
         LensCorrectionIngest._log.warn('creating study - UNIMPLEMENTED')
 
         study, _ = Study.objects.update_or_create(
-            name='DEADBEEF'
+            name='IARPA Phase 2' # TODO: from settings or ingest
         )
 
         return study
@@ -199,7 +199,7 @@ class LensCorrectionIngest(IngestStrategy):
         LensCorrectionIngest._log.warn('creating load - UNIMPLEMENTED')
 
         load, _ = Load.objects.update_or_create(
-            uid='DEADBEEF'
+            uid='Load'
         )
 
         return load
