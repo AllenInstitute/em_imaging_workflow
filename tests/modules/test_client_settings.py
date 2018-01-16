@@ -33,21 +33,28 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from django.conf import settings
-from workflow_engine.strategies.execution_strategy import ExecutionStrategy
-import logging
+from at_em_imaging_workflow.modules.move_tile_set import MoveTileSet
+import pytest
+import mock
+from mock import patch, mock_open, Mock
+import os
+try:
+    import __builtin__ as builtins  # @UnresolvedImport
+except:
+    import builtins  # @UnresolvedImport
 
+def test_move():
+    input_json_string = '''
+{
+    "from": "/path/to/src",
+    "to": "/path/to/dest"
+}
+'''
 
-class MoveRawMontageSetStrategy(ExecutionStrategy):
-    _log = logging.getLogger(
-        'development.strategies.move_raw_montage_set_strategy')
-
-    def get_input(self, em_mset, storage_directory, task):
-        input_data = {
-            'from': em_mset.get_storage_directory(
-                settings.BASE_FILE_PATH),
-            'to': em_mset.get_storage_directory(
-                settings.LONG_TERM_BASE_FILE_PATH)
-        }
-
-        return input_data
+    with patch('os.system') as os_sys:
+        with patch(builtins.__name__ + ".open",
+                   mock_open(read_data=input_json_string)):
+            MoveTileSet.main(['--input_json', 'in.json',
+                              '--output_json', 'out.json'])
+    
+    os_sys.assert_called_once_with('echo mv /path/to/src /path/to/dest')

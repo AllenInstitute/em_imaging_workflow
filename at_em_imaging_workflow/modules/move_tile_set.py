@@ -2,7 +2,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2018. Allen Institute. All rights reserved.
+# Copyright 2017. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -33,21 +33,53 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from django.conf import settings
-from workflow_engine.strategies.execution_strategy import ExecutionStrategy
-import logging
+import simplejson as json
+import argparse
+import sys
+import os
 
 
-class MoveRawMontageSetStrategy(ExecutionStrategy):
-    _log = logging.getLogger(
-        'development.strategies.move_raw_montage_set_strategy')
+if __name__ == "__main__" and __package__ is None:
+    __package__ = "at_em_image_processing.modules.move_tile_set"
 
-    def get_input(self, em_mset, storage_directory, task):
-        input_data = {
-            'from': em_mset.get_storage_directory(
-                settings.BASE_FILE_PATH),
-            'to': em_mset.get_storage_directory(
-                settings.LONG_TERM_BASE_FILE_PATH)
-        }
+example = {
+    'from': '/source/path',
+    'to': '/destination/path'
+}
 
-        return input_data
+class MoveTileSet(object):
+    def __init__(self):
+        pass
+
+    def move(self, frm, to):
+        os.system('echo mv %s %s' % (frm, to))
+
+    def parse_json(self, json_string):
+        return json.loads(json_string)
+
+    def parse_json_file(self, json_file):
+        with open(json_file, 'r') as f:
+            return self.parse_json(f.read())
+
+    def parse_args(self, args):
+        parser = argparse.ArgumentParser(
+            description='move tile set files to long term storage')
+        parser.add_argument('--input_json', help='input arguments')
+        parser.add_argument('--output_json', help='output results')
+
+        return vars(parser.parse_args(args))
+    
+    @classmethod
+    def main(cls, args):
+        mts = MoveTileSet()
+        parsed_args = mts.parse_args(args)
+        inp = mts.parse_json_file(parsed_args['input_json'])
+
+        mts.move(inp['from'], inp['to'])
+
+        with open(parsed_args['output_json'], 'w') as f:
+            f.write(json.dumps(inp))
+
+
+if '__main__' == __name__:
+    MoveTileSet.main(sys.argv)

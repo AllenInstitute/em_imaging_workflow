@@ -33,31 +33,20 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
+from django.conf import settings
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
-from workflow_engine.models.workflow_node import WorkflowNode
 import logging
 
 class MoveReferenceSetStrategy(ExecutionStrategy):
     _log = logging.getLogger(
-        'development.strategies'
-        '.move_reference_set_strategy')
-    #override if needed
-    #set the data for the input file
-    def get_input(self, enqueued_object, storage_directory, task):
-        input_data = {}
+        'development.strategies.move_reference_set_strategy')
+
+    def get_input(self, ref_set, storage_directory, task):
+        input_data = {
+            'from': ref_set.get_storage_directory(
+                settings.BASE_FILE_PATH),
+            'to': ref_set.get_storage_directory(
+                settings.LONG_TERM_BASE_FILE_PATH)
+        }
 
         return input_data
-
-    #override if needed
-    #called after the execution finishes
-    #process and save results to the database
-    def on_finishing(self, ref_set, results, task):
-        MoveReferenceSetStrategy._log.info('on finishing')
-        # storage_dir = ref_set.storage_directory
-        # TODO: verify files have been moved
-
-    #override if needed
-    #set the storage directory for an enqueued object
-    #def get_storage_directory(self, base_storage_directory, job):
-    #    enqueued_object = job.get_enqueued_object()
-    #    return os.path.join(base_storage_directory, 'reference_set_' + str(enqueued_object.id))
