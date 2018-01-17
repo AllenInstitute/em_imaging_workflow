@@ -42,11 +42,18 @@ class MoveReferenceSetStrategy(ExecutionStrategy):
         'development.strategies.move_reference_set_strategy')
 
     def get_input(self, ref_set, storage_directory, task):
+        extra_flags = ['--remove-source-files']
+
+        if settings.DRY_RUN == True:
+            extra_flags.append('--dry-run')
+        
+        extra_flags_string = ' '.join(extra_flags)
+
         input_data = {
-            'from': ref_set.get_storage_directory(
-                settings.BASE_FILE_PATH),
+            'from': ref_set.storage_directory,
             'to': ref_set.get_storage_directory(
-                settings.LONG_TERM_BASE_FILE_PATH)
+                settings.LONG_TERM_BASE_FILE_PATH),
+            'extra': extra_flags_string
         }
 
         return input_data

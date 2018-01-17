@@ -53,23 +53,23 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
 
     #override if needed
     #set the data for the input file
-    def get_input(self, enqueued_object, storage_directory, task):
+    def get_input(self, ref_set, storage_directory, task):
         '''
         Args:
             enqueued_object (ReferenceSet)
         '''
-        project_path = enqueued_object.storage_directory
+        project_path = ref_set.storage_directory
         GenerateLensCorrectionTransformStrategy._log.info(
             'project path: %s' % (project_path))
         
         inp = input_dict 
 
-        inp['manifest_path'] = enqueued_object.manifest_path
+        inp['manifest_path'] = ref_set.manifest_path
         inp['project_path'] = project_path
         inp['fiji_path'] = settings.FIJI_PATH
         inp['outfile'] = os.path.join(storage_directory,
                                         'lens_correction_out.json')
-        inp['processing_directory'] = storage_directory
+        inp['processing_directory'] = None
 
         return LensCorrectionParameters().dump(inp).data
 
@@ -99,8 +99,8 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
             'Wait for Lens Correction')
 
     # TODO: this isn't used.  Ingest picks it directly
-    def can_transition(self, enqueued_object):
-        is_reference_set = isinstance(enqueued_object, ReferenceSet)
+    def can_transition(self, ref_set):
+        is_reference_set = isinstance(ref_set, ReferenceSet)
 
         return is_reference_set
 

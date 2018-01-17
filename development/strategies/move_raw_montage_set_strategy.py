@@ -43,11 +43,19 @@ class MoveRawMontageSetStrategy(ExecutionStrategy):
         'development.strategies.move_raw_montage_set_strategy')
 
     def get_input(self, em_mset, storage_directory, task):
+        extra_flags = ['--remove-source-files']
+
+        if settings.DRY_RUN == True:
+            extra_flags.append('--dry-run')
+        
+        extra_flags_string = ' '.join(extra_flags)
+
         input_data = {
             'from': em_mset.get_storage_directory(
                 settings.BASE_FILE_PATH),
             'to': em_mset.get_storage_directory(
-                settings.LONG_TERM_BASE_FILE_PATH)
+                settings.LONG_TERM_BASE_FILE_PATH),
+            'extra': extra_flags_string
         }
 
         return input_data
