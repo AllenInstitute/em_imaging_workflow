@@ -1,8 +1,6 @@
 #!/bin/bash
 export BLUE_SKY_PACKAGE=at_em_imaging_workflow
 export QMASTER_HOST='hpc-login.corp.alleninstitute.org'
-export QMASTER_USERNAME='timf'
-export QMASTER_PASSWORD='BGT%nhy6'
 export QMASTER_PORT=22
 
 export BLUE_SKY_WORKER_NAME=pbs
