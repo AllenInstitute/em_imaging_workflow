@@ -17,6 +17,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = BASE_DIR
 
 BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/blue_sky_working/staging'
+LONG_TERM_BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/blue_sky_working/staging/long_term'
+DRY_RUN=True
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
 INGEST_MESSAGE_QUEUE_NAME = 'ingest_at_em_imaging_workflow'
@@ -163,16 +165,16 @@ DATABASES = {
         'NAME': 'at_em_imaging_staging',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'devdb2',
-        'PORT': '5942',
+        'HOST': 'devdb2.corp.alleninstitute.org',
+        'PORT': '5432',
     },
     'devdb2': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'at_em_imaging_staging',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'devdb2',
-        'PORT': '5942',
+        'HOST': 'devdb2.corp.alleninstitute.org',
+        'PORT': '5432',
     },
     'test': {
         'ENGINE': 'django.db.backends.sqlite3',

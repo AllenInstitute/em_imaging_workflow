@@ -20,7 +20,7 @@ PROJECT_ROOT = BASE_DIR
 #    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky/files/'
 BASE_FILE_PATH = '/example_data'
 LONG_TERM_BASE_FILE_PATH='/long/term'
-
+DRY_RUN=True
 PBS_FINISH_PATH = \
     '/allen/programs/celltypes/workgroups/array_tomography/blue_sky' + \
     '/at_em_imaging_workflow/pbs_execution_finish.py'

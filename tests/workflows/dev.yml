@@ -2,24 +2,9 @@ executables:
     mock:
         name: 'Mock Executable'
         path: '/data/aibstemp/timf/example_data/bin/mock_executable'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=128g'
-        pbs_walltime: 'walltime=5:00:00'
-
-    sleeper:
-        name: 'PBS Sleeper Executable'
-        path: '/data/aibstemp/timf/example_data/bin/sleeper'
-        remote_queue: 'pbs'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=128g'
-        pbs_walltime: 'walltime=5:00:00'
-
-    python:
-        name: 'Python'
-        path: '/opt/conda/bin/python'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=128g'
-        pbs_walltime: 'walltime=5:00:00'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=128g'
+        pbs_walltime: 'walltime=1:00:00'
 
     generate_em_tilespecs_from_metafile:
         name: 'EM Create Tilespecs'
@@ -31,8 +16,8 @@ executables:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'pbs'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=128g'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=128g'
         pbs_walltime: 'walltime=5:00:00'
 
     generate_lens_correction:
@@ -45,9 +30,22 @@ executables:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'pbs'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
+
+    move_tile_set:
+        name: 'Move Tile Set'
+        path: 'python'
+        args:
+        - '-m'
+        - 'workflow_client.modules.move_directory'
+        environment:
+        - PYTHONPATH=/data/aibstemp/timf/example_data/at_em_imaging_workflow
+        remote_queue: 'pbs'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=32g,nodes=1:ppn=2'
+        pbs_walltime: 'walltime=2:00:00'
 
     apply_lens_correction:
         name: 'Apply Lens Correction'
@@ -59,8 +57,8 @@ executables:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'pbs'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
     generate_point_matches:
@@ -74,8 +72,8 @@ executables:
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'pbs'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
     em_2d_solver:
@@ -90,8 +88,8 @@ executables:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'pbs'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=15:00:00'
 
     generate_mipmaps:
@@ -101,8 +99,8 @@ executables:
         - '-m'
         - "rendermodules.dataimport.generate_mipmaps"
         remote_queue: 'pbs'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
     apply_mipmaps:
@@ -115,8 +113,8 @@ executables:
         - '-m'
         - "rendermodules.dataimport.apply_mipmaps_to_render"
         remote_queue: 'pbs'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
     create_tilepairs:
@@ -129,8 +127,8 @@ executables:
         - '-m'
         - "rendermodules.pointmatch.create_tilepairs"
         remote_queue: 'pbs'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
     calculate_multiplicative_correction:
@@ -140,8 +138,8 @@ executables:
         - '-m'
         - "rendermodules.intensity_correction.calculate_multiplicative_correction"
         remote_queue: 'pbs'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
     apply_multiplicative_correction:
@@ -151,15 +149,8 @@ executables:
         - '-m'
         - "rendermodules.intensity_correction.apply_multiplicative_correction"
         remote_queue: 'pbs'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=192g,nodes=1:ppn=32'
-        pbs_walltime: 'walltime=5:00:00'
-
-    move:
-        name: 'Move'
-        path: '/data/aibstemp/timf/example_data/bin/mock_executable'
-        pbs_queue: 'lims2'
-        pbs_processor: 'vmem=128g'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
 run_states:
@@ -171,6 +162,7 @@ run_states:
     - "FAILED"
     - "SUCCESS"
     - "PROCESS_KILLED"
+
 workflows:
     em_2d_montage:
         ingest: "development.strategies.lens_correction_ingest.LensCorrectionIngest"
@@ -198,13 +190,13 @@ workflows:
               label: "Move Reference Set"
               class: "development.strategies.move_reference_set_strategy.MoveReferenceSetStrategy"
               enqueued_class: "development.models.reference_set.ReferenceSet"
-              executable: "move"
+              executable: "move_tile_set"
 
             - key: "move_raw_montage_set"
               label: "Move Raw Montage Sets"
               class: "development.strategies.move_raw_montage_set_strategy.MoveRawMontageSetStrategy"
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
-              executable: "move"
+              executable: "move_tile_set"
 
             - key: "generate_em_montage"
               label: "Generate Render Stack"
@@ -223,6 +215,7 @@ workflows:
               class: "development.strategies.apply_mip_maps_strategy.ApplyMipMapsStrategy"
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "apply_mipmaps"
+              batch_size: 2
 
             - key: "apply_lens_correction_new"
               label: "Apply Lens Correction"
@@ -241,12 +234,14 @@ workflows:
               class: "development.strategies.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy"
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "generate_point_matches"
+              batch_size: 15
 
             - key: "solver"
               label: "2D Montage Solver"
               class: "development.strategies.two_d_montage_solver_strategy.TwoDMontageSolverStrategy"
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "em_2d_solver"
+              batch_size: 5
 
             - key: "manual_qc"
               label: "Manual QC / High Degree Polynomial or Point Match Regeneration"

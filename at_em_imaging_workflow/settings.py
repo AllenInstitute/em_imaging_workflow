@@ -17,6 +17,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = BASE_DIR
 
 BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/timf/example_data/dev'
+LONG_TERM_BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/timf/long_term/dev'
+DRY_RUN=True
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
 INGEST_MESSAGE_QUEUE_NAME = 'ingest_at_em_imaging_workflow'
@@ -27,7 +29,7 @@ PBS_MESSAGE_QUEUE_NAME='pbs_' + MESSAGE_QUEUE_NAME
 
 PBS_CONDA_HOME='/shared/utils.x86_64/python-2.7'
 PBS_FINISH_MODULE='workflow_client.pbs_execution_finish'
-PBS_PYTHONPATH='/data/aibstemp/timf/example_data/blue_sky_workflow_engine'
+PBS_PYTHONPATH='/data/aibstemp/timf/example_data/at_em_imaging_workflow:/data/aibstemp/timf/example_data/blue_sky_workflow_engine'
 #PBS_CONDA_ENV='/allen/aibs/pipeline/image_processing/volume_assembly/conda_envs/volume_assembly/render-modules_linked'
 #PBS_CONDA_ENV='/data/aibstemp/timf/example_data/blue_sky_27'
 PBS_CONDA_ENV='/allen/aibs/pipeline/image_processing/volume_assembly/conda_envs/render-modules/dev'
@@ -173,7 +175,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'devdb2',
-        'PORT': '5942',
+        'PORT': '5432',
     },
     'test': {
         'ENGINE': 'django.db.backends.sqlite3',
