@@ -16,8 +16,8 @@ echo "from django.contrib.auth.models import User; User.objects.filter(email='ad
 export DEBUG_LOG=logs/superuser_pass.log
 printf "blue_sky_user\nt@a.org\nblue_sky_user\n" | python manage.py createsuperuser
 
-echo "reading workflows from workflow config yaml: " ${WORKFLOW_CONFIG_YAML}
-DEBUG_LOG=logs/import_workflows.log python -m manage import_workflows ${WORKFLOW_CONFIG_YAML}
+#echo "reading workflows from workflow config yaml: " ${WORKFLOW_CONFIG_YAML}
+#DEBUG_LOG=logs/import_workflows.log python -m manage import_workflows ${WORKFLOW_CONFIG_YAML}
 
 # Monitoring
 python -m celery flower --backend=rpc:// --broker=amqp://blue_sky_user:blue_sky_user@${MESSAGE_QUEUE_HOST}:${AMQP_PORT} -n flower@${APP_NAME} &
