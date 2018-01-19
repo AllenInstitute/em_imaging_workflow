@@ -56,4 +56,7 @@ class MoveReferenceSetStrategy(ExecutionStrategy):
             'extra': extra_flags_string
         }
 
+        # TODO: on finishing, need to update the storage directory in the database
         return input_data
+
+        

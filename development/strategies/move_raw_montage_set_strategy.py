@@ -51,11 +51,11 @@ class MoveRawMontageSetStrategy(ExecutionStrategy):
         extra_flags_string = ' '.join(extra_flags)
 
         input_data = {
-            'from': em_mset.get_storage_directory(
-                settings.BASE_FILE_PATH),
+            'from': em_mset.storage_directory,
             'to': em_mset.get_storage_directory(
                 settings.LONG_TERM_BASE_FILE_PATH),
             'extra': extra_flags_string
         }
-
+        
+        # TODO: on finishing, need to update the storage directory in the database
         return input_data
