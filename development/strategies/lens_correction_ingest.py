@@ -178,15 +178,6 @@ class LensCorrectionIngest(IngestStrategy):
     def create_section(self, section_message, metafile, specimen):
         LensCorrectionIngest._log.info('creating section')
 
-        # TODO: fix unused meta
-#         try:
-#             with open(metafile, 'r') as f:
-#                 meta = json.loads(f.read(f))
-#         except:
-#             LensCorrectionIngest._log.error(
-#                 'Could not read metafile: %s' % (metafile))
-#             meta = { 'message': 'error' }
-
         section = Section.objects.create(
             z_index=section_message['z_index'],
             metadata=None,
@@ -291,3 +282,9 @@ class LensCorrectionIngest(IngestStrategy):
             'enqueued_object_uid': enqueued_object.uid
         }
 
+#     def get_existing_montage_set(self, acquisition_time, microscope):
+#         EMMontageSet.objects.get(
+#             aquisition_date=acquisition_time,
+#             microscope
+#             )
+#         pass

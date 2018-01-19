@@ -5,17 +5,18 @@ django.setup()
 from django.test import TestCase
 from development.strategies.generate_render_stack_strategy \
     import GenerateRenderStackStrategy
-from mock import MagicMock
+
 
 class TestIngestGenerateRenderStackStrategy(TestCase):
     def test_get_input_data(self):
-        em_set = MagicMock()
-        em_set.section = MagicMock()
+        em_set = Mock()
+        em_set.section = Mock()
         test_z_index = 543
         em_set.section.z_index = test_z_index
+        em_set.section.specimen.uid = 'mock_specimen_uid'
         em_set.metafile = '/path/to/test/meta.file'
         em_set.render_stack_name = Mock(return_value='test_stack')
-        task = MagicMock()
+        task = Mock()
 
         storage_directory = '/example/storage/directory'
         strategy = GenerateRenderStackStrategy()
@@ -26,8 +27,7 @@ class TestIngestGenerateRenderStackStrategy(TestCase):
         assert input_json['render']['host'] == settings.RENDER_SERVICE_URL
         assert input_json['render']['port'] == int(settings.RENDER_SERVICE_PORT)
         assert input_json['render']['owner'] == settings.RENDER_SERVICE_USER
-        assert input_json['render']['project'] == \
-            settings.RENDER_SERVICE_PROJECT
+        assert input_json['render']['project'] == em_set.section.specimen.uid
         assert input_json['stack'] == 'em_2d_montage_ingest'
         assert input_json['render']['client_scripts'] == \
             settings.RENDER_CLIENT_SCRIPTS
