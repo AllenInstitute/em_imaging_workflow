@@ -23,7 +23,7 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
+        inp['render']['project'] = em_mset.section.specimen.uid
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
         inp['source_collection']['service_host'] = \
@@ -32,7 +32,7 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
             'http://' + settings.RENDER_SERVICE_URL + \
             ":" + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
         inp['source_collection']['owner'] = settings.RENDER_SERVICE_USER
-        inp['source_collection']['project'] = settings.RENDER_SERVICE_PROJECT
+        inp['source_collection']['project'] = em_mset.section.specimen.uid
         inp['source_collection']['renderbinPath'] = \
             settings.RENDER_CLIENT_SCRIPTS
         inp['source_collection']['stack'] = RENDER_STACK_LENS_CORRECTED
@@ -43,7 +43,7 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
             'http://' + settings.RENDER_SERVICE_URL + \
             ":" + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
         inp['target_collection']['owner'] = settings.RENDER_SERVICE_USER
-        inp['target_collection']['project'] = settings.RENDER_SERVICE_PROJECT
+        inp['target_collection']['project'] = em_mset.section.specimen.uid
         inp['target_collection']['renderbinPath'] = \
             settings.RENDER_CLIENT_SCRIPTS
         inp['target_collection']['stack'] = RENDER_STACK_SOLVED

@@ -25,10 +25,10 @@ class MICTasksStrategy(execution_strategy.ExecutionStrategy):
 
     #override if needed
     #set the data for the input file
-    def get_input(self, enqueued_object, storage_directory, task):
+    def get_input(self, em_mset, storage_directory, task):
         '''
         Args:
-            enqueued_object (EMMontageSet) 
+            em_mset (EMMontageSet) 
         '''
         MICTasksStrategy._log.info('MIC Tasks')
         inp = MICTasksStrategy.default_input
@@ -36,7 +36,7 @@ class MICTasksStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
+        inp['render']['project'] = em_mset.section.specimen.uid
         inp['render']['output_dir'] = '/example_data/scratch'
 
         inp['stack'] = 'test_LC'

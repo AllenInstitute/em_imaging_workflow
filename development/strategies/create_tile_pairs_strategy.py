@@ -19,7 +19,7 @@ class CreateTilePairsStrategy(ExecutionStrategy):
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
+        inp['render']['project'] = em_mset.section.specimen.uid
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
         inp['output_dir'] = em_mset.get_storage_directory()

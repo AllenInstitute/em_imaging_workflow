@@ -15,7 +15,7 @@ class GenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
 
     #override if needed
     #set the data for the input file
-    def get_input(self, em_set, storage_directory, task):
+    def get_input(self, em_mset, storage_directory, task):
         '''
         Args:
             em_set (EMMontageSet) the enqueued object
@@ -27,12 +27,12 @@ class GenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = settings.RENDER_SERVICE_PROJECT
+        inp['render']['project'] = em_mset.section.specimen.uid
         inp['stack'] = RENDER_STACK_INGEST
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
-        inp['metafile'] = em_set.metafile
+        inp['metafile'] = em_mset.metafile
         inp['close_stack'] = False
-        inp['z_index'] = self.get_z_index(em_set)
+        inp['z_index'] = self.get_z_index(em_mset)
 
         return GenerateEMTileSpecsParameters().dump(inp).data
 
