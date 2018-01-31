@@ -50,6 +50,12 @@ class EMMontageSet(MontageSet):
     def tile_pairs_file_description(self):
         return 'tile pairs file'
 
+    def get_point_collection_name(self):
+        return 'default_point_matches'
+
+    def get_render_project_name(self):
+        return self.section.specimen.uid
+
     def get_storage_directory(self, base_storage_directory=None):
         if base_storage_directory is None:
             base_storage_directory = settings.BASE_FILE_PATH

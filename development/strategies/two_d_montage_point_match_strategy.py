@@ -29,7 +29,7 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = em_mset.section.specimen.uid
+        inp['render']['project'] = em_mset.get_render_project_name()
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
         inp['owner'] = settings.RENDER_SERVICE_USER
@@ -48,7 +48,7 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
             'spark.driver.extraJavaOptions':
                 '-Dlog4j.configuration=file:%s' % (log4j_properties_path) }
 
-        inp['collection'] = self.get_collection_name()
+        inp['collection'] = em_mset.get_point_collection_name()
         inp['pairJson'] = self.get_tile_pairs_file_name(em_mset)
 
         mem = 128
@@ -74,10 +74,6 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
         return WellKnownFile.get(
             em_mset,
             em_mset.tile_pairs_file_description())
-
-    def get_collection_name(self):
-        return 'default_point_matches'
-        # return settings.POINT_MATCH_COLLECTION_NAME
 
     def on_finishing(self, em_mset, results, task):
         self.check_key(results, 'pairCount')

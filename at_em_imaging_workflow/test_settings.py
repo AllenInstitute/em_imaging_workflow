@@ -129,7 +129,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'at_em_imaging_workflow.urls'
+APP_PACKAGE='at_em_imaging_workflow'
+ROOT_URLCONF = APP_PACKAGE + '.urls'
 
 TEMPLATES = [
     {
@@ -161,6 +162,10 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': '',
         'PORT': ''
+    },
+    # Work around locked database table error w/ multiple processes
+    'OPTIONS': {
+        'timeout': 20
     }
 }
 

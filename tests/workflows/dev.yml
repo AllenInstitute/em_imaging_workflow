@@ -131,6 +131,34 @@ executables:
         pbs_processor: 'mem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
+    detect_montage_defects:
+        name: 'Detect Montage Defects'
+        path: 'python'
+        environment:
+        - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
+        - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        args:
+        - '-m'
+        - "rendermodules.em_montage_qc.detect_montage_defects"
+        remote_queue: 'pbs'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
+        pbs_walltime: 'walltime=5:00:00'
+
+    downsample:
+        name: 'Downsample'
+        path: 'python'
+        environment:
+        - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
+        - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        args:
+        - '-m'
+        - "rendermodules.materialize.render_downsample_sections"
+        remote_queue: 'pbs'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
+        pbs_walltime: 'walltime=5:00:00'
+        
     calculate_multiplicative_correction:
         name: 'Calculate Multiplicative Correction'
         path: 'python'
@@ -248,7 +276,7 @@ workflows:
               manual: true
               class: "development.strategies.manual_q_c_strategy.ManualQCStrategy"
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
-              executable: "mock"
+              executable: "detect_montage_defects"
 
             - key: "alignment"
               label: "Alignment"
@@ -267,7 +295,9 @@ workflows:
             - [ "create_tile_pairs", [ "2d_montage_point_match" ] ]
             - [ "2d_montage_point_match", [ "solver" ] ]
             - [ "solver", [ "manual_qc" ] ]
-            - [ "manual_qc", [ "alignment" ] ]
+            - [ "manual_qc", [ "downsample" ] ]
+            - [ "downsample", [ "alignment" ] ]
+
     em_2d_montage_mic:
         states:
             - key: "mic_task_builder"

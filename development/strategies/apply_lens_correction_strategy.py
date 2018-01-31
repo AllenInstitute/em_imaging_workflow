@@ -22,7 +22,7 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = em_mset.section.specimen.uid
+        inp['render']['project'] = em_mset.get_render_project_name()
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
         inp['zs'] = [ em_mset.section.z_index ]
         inp['inputStack'] = RENDER_STACK_APPLY_MIPMAPS

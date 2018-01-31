@@ -8,7 +8,8 @@ def test_get_input_data():
     em_mset.section = Mock()
     test_z_index = 28990
     em_mset.section.z_index = test_z_index
-    em_mset.section.specimen.uid = 'mock_specimen_uid'
+    em_mset.get_render_project_name = Mock(
+        return_value='mock_specimen_uid')
     em_mset.render_stack_name = Mock(return_value='test_stack')
     task = Mock()
     storage_directory = '/example/storage/directory'

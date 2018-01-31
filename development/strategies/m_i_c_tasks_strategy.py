@@ -36,23 +36,9 @@ class MICTasksStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = em_mset.section.specimen.uid
-        inp['render']['output_dir'] = '/example_data/scratch'
+        inp['render']['project'] = em_mset.get_render_project_name()
+        inp['render']['output_dir'] = storage_directory
 
         inp['stack'] = 'test_LC'
 
         return MultIntensityCorrParams().dump(inp).data
-
-    #override if needed
-    #called after the execution finishes
-    #process and save results to the database
-    def on_finishing(self, enqueued_object, results, task):
-        # self.check_key(results, 'output_json')
-        # self.set_well_known_file(results['output_json'], enqueued_object, 'description', task)
-        pass
-
-    #override if needed
-    #set the storage directory for an enqueued object
-    #def get_storage_directory(self, base_storage_directory, job):
-    #  enqueued_object = job.get_enqueued_object()
-    #  return os.path.join(base_storage_directory, 'reference_set_' + str(enqueued_object.id))
