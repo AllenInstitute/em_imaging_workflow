@@ -31,9 +31,6 @@ def test_get_input_data():
                              storage_directory,
                              task)
 
-    with open('/local1/git/at_em_imaging_workflow/dbg.json', 'w') as f:
-        f.write(json.dumps(inp, indent=4))
-
     assert inp['render']['project'] == 'MOCKSPECIMEN'
     assert inp['render']['owner'] == 'MOCK_USER'
     assert inp['render']['port'] == 9999
