@@ -42,6 +42,9 @@ class PyTest(TestCommand):
         self.test_suite = True
 
     def run_tests(self):
+        os.environ['PYTHONPATH'] = os.environ['PYTHONPATH'] + ':' + \
+            os.path.join(os.path.dirname(__file__),
+                         'tests')
         import pytest
         errno = pytest.main(self.pytest_args)
         sys.exit(errno)

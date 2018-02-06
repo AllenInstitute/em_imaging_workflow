@@ -34,7 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from development.strategies \
-    import RENDER_STACK_INGEST, RENDER_STACK_SOLVED
+    import RENDER_STACK_INGEST, RENDER_STACK_SOLVED, RENDER_STACK_LENS_CORRECTED
 from rendermodules.em_montage_qc.schemas \
     import DetectMontageDefectsParameters, \
     DetectMontageDefectsParametersOutput
@@ -64,7 +64,7 @@ class ManualQCStrategy(ExecutionStrategy):
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
         inp['prestitched_stack'] = RENDER_STACK_INGEST
-        inp['poststitched_stack'] = RENDER_STACK_SOLVED
+        inp['poststitched_stack'] = self.get_post_stitched_stack_name(em_mset)
 
         inp['minZ'] = em_mset.section.z_index
         inp['maxZ'] = em_mset.section.z_index
@@ -76,3 +76,9 @@ class ManualQCStrategy(ExecutionStrategy):
         data = DetectMontageDefectsParameters().dump(inp).data
 
         return data
+
+    def get_post_stitched_stack_name(self, em_mset):
+        return "%s_zs%d_ze%d" % (
+            RENDER_STACK_LENS_CORRECTED,
+            em_mset.section.z_index,
+            em_mset.section.z_index)

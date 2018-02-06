@@ -7,7 +7,8 @@ def test_get_input_data():
     task = None
     storage_directory = '/example/storage/directory'
     strategy = DownsampleSectionImageStrategy()
-    input = strategy.get_input(enqueued_object,
+    inp = strategy.get_input(enqueued_object,
                                storage_directory,
                                task)
-    assert input is not None
+
+    assert inp is not None

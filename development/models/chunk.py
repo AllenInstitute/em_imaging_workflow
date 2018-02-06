@@ -41,6 +41,7 @@ import logging
 class Chunk(models.Model):
     _log = logging.getLogger('at_em_imaging_workflow.models.chunk')
     size = models.IntegerField(null=True)
+    computed_index = models.IntegerField(null=True)
     chunk_state = models.CharField(max_length=255, null=True)
     rendered_volume = models.ForeignKey(RenderedVolume)
     preceding_chunk = \
@@ -58,14 +59,24 @@ class Chunk(models.Model):
         self.size = 0
 
     def is_complete(self):
-        raise Exception('unimplimented')
+        # raise Exception('unimplimented')
         return True
+
+    def get_render_project_name(self):
+        return self.sections[:1].specimen.uid
+
+    def z_range(self):
+        return (self.sections_set.z_index.max(),
+                self.sections_set.z_index.min())
+
+    @classmethod
+    def get_z_range(cls, em_mset):
+        z_index = em_mset.z_index()
 
     @classmethod
     def chunks_for_z_index(cls, z):
         ''' returns one or more chunks that would contain a z-index
         '''
-        # TODO: move to class config
         chunk_defaults = settings.CHUNK_DEFAULTS
         size = chunk_defaults['chunk_size']
         overlap = chunk_defaults['overlap']
@@ -83,13 +94,48 @@ class Chunk(models.Model):
         else:
             return [ chunk_id ]
 
+    @classmethod
+    def calculate_z_range(cls, c):
+        chunk_defaults = settings.CHUNK_DEFAULTS
+
+        z_start = (
+            c * chunk_defaults['chunk_size']
+            + chunk_defaults['start_z'])
+
+        z_end = z_start + chunk_defaults['chunk_size']
+
+        return (z_start, z_end)
 
     @classmethod
     def z_indices_for_chunk(cls, c):
-        chunk_defaults = settings.CHUNK_DEFAULTS
-        start = (
-            c * chunk_defaults['chunk_size']
-            + chunk_defaults['start_z'])
-        stop = start + chunk_defaults['chunk_size']
+        (z_start, z_end) = Chunk.calculate_z_range(c)
 
-        return list(range(start, stop))
+        return list(range(z_start, z_end))
+
+    @classmethod
+    def assign_montage_set_to_chunks(cls, mset):
+        mipmap_directory = '/path/to/mock/mipmaps'
+        default_state = 'PENDING'
+
+        volume, _ = RenderedVolume.objects.update_or_create(
+            specimen=mset.section.specimen,
+            defaults={
+                'mipmap_directory': mipmap_directory,
+            })
+
+        chunk_index_list = Chunk.chunks_for_z_index(
+            mset.get_section_z_index())
+        chunk_list = []
+
+        for c_idx in chunk_index_list:
+            c, _ = Chunk.objects.update_or_create(
+                computed_index=c_idx,
+                defaults={
+                    'size': settings.CHUNK_DEFAULTS['chunk_size'],
+                    'rendered_volume': volume,
+                    'chunk_state': default_state,
+                    'following_chunk_id': -1,
+                    'preceding_chunk_id': -1})
+            chunk_list.append(c)
+        
+        return chunk_list

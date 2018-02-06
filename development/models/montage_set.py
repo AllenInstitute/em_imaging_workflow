@@ -49,3 +49,5 @@ class MontageSet(TileImageSet):
     def __str__(self):
         return str(self.acquisition_date)
 
+    def get_section_z_index(self):
+        return self.section.z_index

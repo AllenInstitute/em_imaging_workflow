@@ -219,7 +219,6 @@ class LensCorrectionIngest(IngestStrategy):
             LensCorrectionIngest._log.warn("No enqueued object type tag")
             return None
 
-
     def create_em_montage_set(self, message):
         LensCorrectionIngest._log.info('create_em_montage_set')
 
