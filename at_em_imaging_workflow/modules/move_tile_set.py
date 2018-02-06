@@ -36,6 +36,7 @@
 import simplejson as json
 import argparse
 import sys
+import shutil
 import os
 
 
@@ -53,6 +54,12 @@ class MoveTileSet(object):
 
     def move(self, frm, to):
         os.system('%s %s %s' % (self.cmd, frm, to))
+        
+        def rm_error(fn, path, excinfo):
+            print('error removing %s' % (path))
+
+        shutil.rmtree(frm, onerror=rm_error)
+
 
     def parse_json(self, json_string):
         return json.loads(json_string)
@@ -78,7 +85,7 @@ class MoveTileSet(object):
         inp = mts.parse_json_file(parsed_args['input_json'])
 
         mts.move(inp['from'], inp['to'])
-
+        
         with open(parsed_args['output_json'], 'w') as f:
             f.write(json.dumps(inp))
 
