@@ -9,6 +9,7 @@ input_dict = {
     "input_stack": "mm2_acquire_8bit",
     "output_stack": "mm2_mipmap_test",
     "mipmap_dir": "/net/aidc-isi1-prd/scratch/aibs/scratch",
+    "overwrite_zlayer": True,
     "imgformat": "tif",
     "levels": 6,
     "zstart": 1015,

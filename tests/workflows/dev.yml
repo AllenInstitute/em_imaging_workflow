@@ -291,11 +291,11 @@ workflows:
             - [ "move_reference_set", [ "wait_for_lens_correction" ] ]
             - [ "wait_for_lens_correction", [ "apply_lens_correction_new" ] ]
             - [ "apply_lens_correction_new", [ "create_tile_pairs" ] ]
-            - [ "apply_lens_correction_new", [ "move_raw_montage_set" ] ]
             - [ "create_tile_pairs", [ "2d_montage_point_match" ] ]
             - [ "2d_montage_point_match", [ "solver" ] ]
             - [ "solver", [ "manual_qc" ] ]
             - [ "manual_qc", [ "downsample" ] ]
+            - [ "manual_qc", [ "move_raw_montage_set" ] ]
             - [ "downsample", [ "alignment" ] ]
 
     em_2d_montage_mic:

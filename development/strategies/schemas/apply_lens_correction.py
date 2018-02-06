@@ -13,6 +13,7 @@ input_dict = {
     "outputStack": "test_LC",
     "pool_size": 10,
     "close_stack": True,
+    "overwrite_zlayer": True,
     "zs": [2266],
     "transform": {
         "type": "leaf",

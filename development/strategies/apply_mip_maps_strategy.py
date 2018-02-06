@@ -1,6 +1,6 @@
 from workflow_engine.strategies import execution_strategy
 from django.conf import settings
-from development.strategies.schemas.generate_mip_maps import input_dict
+from development.strategies.schemas.apply_mip_maps import input_dict
 from rendermodules.dataimport.schemas import AddMipMapsToStackParameters
 from development.strategies \
     import RENDER_STACK_INGEST, RENDER_STACK_APPLY_MIPMAPS

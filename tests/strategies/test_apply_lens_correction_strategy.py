@@ -27,6 +27,6 @@ def test_get_input_data():
                                            storage_directory,
                                            task)
 
-    print(str(input_ret))
-    assert input_ret is not None
+    assert input_ret['overwrite_zlayer'] == True
+
 
