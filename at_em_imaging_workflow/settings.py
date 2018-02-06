@@ -20,6 +20,7 @@ PROJECT_ROOT = BASE_DIR
 
 BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/timf/example_data/dev'
 LONG_TERM_BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/timf/long_term/dev'
+MIPMAP_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/timf/mipmap/dev'
 DRY_RUN=True
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'

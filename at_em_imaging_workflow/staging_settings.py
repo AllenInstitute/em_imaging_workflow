@@ -18,6 +18,7 @@ PROJECT_ROOT = BASE_DIR
 
 BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/blue_sky_working/staging'
 LONG_TERM_BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/blue_sky_working/staging/long_term'
+MIPMAP_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/blue_sky_working/staging/mipmap'
 DRY_RUN=True
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'

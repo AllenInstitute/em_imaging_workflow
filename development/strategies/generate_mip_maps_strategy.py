@@ -13,11 +13,8 @@ class GenerateMipMapsStrategy(execution_strategy.ExecutionStrategy):
     def get_input(self, em_mset, storage_directory, task):
         GenerateMipMapsStrategy._log.info('get_input')
 
-        #em_mset.mipmap_directory = \
-        #    self.get_storage_directory(
-        #        em_mset.get_storage_directory(),
-        #        task.get_job())
-        em_mset.mipmap_directory = em_mset.get_storage_directory()
+        em_mset.mipmap_directory = em_mset.get_storage_directory(
+            base_storage_directory=settings.MIPMAP_FILE_PATH)
         em_mset.save()
 
         inp = input_dict
