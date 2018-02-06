@@ -271,13 +271,19 @@ workflows:
               executable: "em_2d_solver"
               batch_size: 5
 
-            - key: "manual_qc"
+            - key: "detect_defects"
               label: "Manual QC / High Degree Polynomial or Point Match Regeneration"
-              manual: true
               class: "development.strategies.manual_q_c_strategy.ManualQCStrategy"
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "detect_montage_defects"
 
+            - key: "wait_for_manual_qc"
+              label: "Manual QC / High Degree Polynomial or Point Match Regeneration"
+              manual: true
+              class: "development.strategies.wait_for_manual_qc.WaitForManualQc"
+              enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
+              executable: "mock"
+              
             - key: "alignment"
               label: "Alignment"
               workflow: true
@@ -293,9 +299,10 @@ workflows:
             - [ "apply_lens_correction_new", [ "create_tile_pairs" ] ]
             - [ "create_tile_pairs", [ "2d_montage_point_match" ] ]
             - [ "2d_montage_point_match", [ "solver" ] ]
-            - [ "solver", [ "manual_qc" ] ]
-            - [ "manual_qc", [ "downsample" ] ]
-            - [ "manual_qc", [ "move_raw_montage_set" ] ]
+            - [ "solver", [ "detect_defects" ] ]
+            - [ "detect_defects", [ "wait_for_manual_qc" ] ]
+            - [ "wait_for_manual_qc", [ "downsample" ] ]
+            - [ "wait_for_manual_qc", [ "move_raw_montage_set" ] ]
             - [ "downsample", [ "alignment" ] ]
 
     em_2d_montage_mic:
