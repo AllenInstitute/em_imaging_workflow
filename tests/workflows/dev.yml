@@ -277,6 +277,12 @@ workflows:
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "detect_montage_defects"
 
+            - key: "downsample"
+              label: "Generate Downampled Montage"
+              class: "development.strategies.render_downsample_stragety.RenderDownsampleStrategy"
+              enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
+              executable: "downsample"
+
             - key: "wait_for_manual_qc"
               label: "Manual QC / High Degree Polynomial or Point Match Regeneration"
               manual: true
@@ -285,7 +291,7 @@ workflows:
               executable: "mock"
               
             - key: "alignment"
-              label: "Alignment"
+              label: "Alignment" 
               workflow: true
 
         graph:
@@ -301,8 +307,7 @@ workflows:
             - [ "2d_montage_point_match", [ "solver" ] ]
             - [ "solver", [ "detect_defects" ] ]
             - [ "detect_defects", [ "wait_for_manual_qc" ] ]
-            - [ "wait_for_manual_qc", [ "downsample" ] ]
-            - [ "wait_for_manual_qc", [ "move_raw_montage_set" ] ]
+            - [ "wait_for_manual_qc", [ "downsample", "move_raw_montage_set" ] ]
             - [ "downsample", [ "alignment" ] ]
 
     em_2d_montage_mic:

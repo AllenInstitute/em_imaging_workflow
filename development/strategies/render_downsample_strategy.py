@@ -9,7 +9,7 @@ import logging
 
 class RenderDownsampleStrategy(execution_strategy.ExecutionStrategy):
     _log = logging.getLogger(
-        'development.strategies.apply_lens_correction_strategy')
+        'development.strategies.render_downsample_strategy')
     
     #override if needed
     #set the data for the input file
@@ -22,8 +22,8 @@ class RenderDownsampleStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
         inp['render']['project'] = em_mset.get_render_project_name()
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
-        inp['minZ'] = [ em_mset.section.z_index ]
-        inp['maxZ'] = [ em_mset.section.z_index ]
+        inp['minZ'] = em_mset.section.z_index
+        inp['maxZ'] = em_mset.section.z_index
         inp['input_stack'] = self.get_input_stack_name()
         inp['image_directory'] = self.get_or_create_task_storage_directory(task)
 
