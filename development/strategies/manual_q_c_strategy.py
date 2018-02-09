@@ -33,8 +33,10 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
+import shutil
+import os
 from development.strategies \
-    import RENDER_STACK_INGEST, RENDER_STACK_SOLVED, RENDER_STACK_LENS_CORRECTED
+    import RENDER_STACK_SOLVED, RENDER_STACK_LENS_CORRECTED
 from rendermodules.em_montage_qc.schemas \
     import DetectMontageDefectsParameters, \
     DetectMontageDefectsParametersOutput
@@ -63,7 +65,7 @@ class ManualQCStrategy(ExecutionStrategy):
         inp['render']['project'] = em_mset.get_render_project_name()
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
-        inp['prestitched_stack'] = RENDER_STACK_INGEST
+        inp['prestitched_stack'] = RENDER_STACK_LENS_CORRECTED
         inp['poststitched_stack'] = self.get_post_stitched_stack_name(em_mset)
 
         inp['minZ'] = em_mset.section.z_index
@@ -78,7 +80,28 @@ class ManualQCStrategy(ExecutionStrategy):
         return data
 
     def get_post_stitched_stack_name(self, em_mset):
-        return "%s_zs%d_ze%d" % (
-            RENDER_STACK_LENS_CORRECTED,
-            em_mset.section.z_index,
-            em_mset.section.z_index)
+        return RENDER_STACK_SOLVED
+
+    def on_finishing(self, em_mset, results, task):
+        self.check_key(results, 'qc_passed_sections')
+
+        z_index = em_mset.section.z_index
+
+        if z_index not in results['qc_passed_sections'] or \
+           z_index in results['gap_sections'] or \
+           z_index in results['seam_sections'] or \
+           z_index in results['hole_sections']:
+            raise Exception('Failed QC')
+
+        well_known_file_path = \
+            os.path.join(
+                em_mset.get_storage_directory(),
+                'defect_detection_output.json')
+        shutil.copy(self.get_output_file(task),
+                    well_known_file_path)
+
+        self.set_well_known_file(
+            well_known_file_path,
+            em_mset,
+            'defect_detection',
+            task)
