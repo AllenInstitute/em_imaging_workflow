@@ -1,5 +1,6 @@
 from mock import Mock
-from development.strategies import RENDER_STACK_INGEST, RENDER_STACK_SOLVED
+from development.strategies import RENDER_STACK_INGEST, RENDER_STACK_SOLVED,\
+    RENDER_STACK_LENS_CORRECTED
 from development.strategies.manual_q_c_strategy \
     import ManualQCStrategy
 from django.test.utils import override_settings
@@ -35,8 +36,8 @@ def test_get_input_data():
     assert inp['render']['port'] == 9999
     assert inp['render']['host'] == 'MOCK_URL'
     assert inp['render']['client_scripts'] == '/path/to/mock/client/scripts'
-    assert inp['prestitched_stack'] == RENDER_STACK_INGEST
-    assert inp['poststitched_stack'] == 'em_2d_montage_lc_zs1515_ze1515'
+    assert inp['prestitched_stack'] == RENDER_STACK_LENS_CORRECTED
+    assert inp['poststitched_stack'] == RENDER_STACK_SOLVED
     assert inp['match_collection'] == 'MOCK_COLLECTION'
     assert inp['minZ'] == 1515
     assert inp['maxZ'] == 1515
