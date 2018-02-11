@@ -6,6 +6,7 @@ from workflow_engine.models.well_known_file import WellKnownFile
 from django.conf import settings
 import simplejson as json
 import logging
+from development.strategies import RENDER_STACK_SOLVED
 
 class RenderDownsampleStrategy(execution_strategy.ExecutionStrategy):
     _log = logging.getLogger(
@@ -37,4 +38,4 @@ class RenderDownsampleStrategy(execution_strategy.ExecutionStrategy):
         return RenderSectionAtScaleParameters().dump(inp).data
 
     def get_input_stack_name(self):
-        return settings.RENDER_STACK_NAME
+        return RENDER_STACK_SOLVED
