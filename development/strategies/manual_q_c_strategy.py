@@ -87,11 +87,12 @@ class ManualQCStrategy(ExecutionStrategy):
 
         z_index = em_mset.section.z_index
 
-        if z_index not in results['qc_passed_sections'] or \
-           z_index in results['gap_sections'] or \
+        if z_index in results['qc_passed_sections']:
+            em_mset.workflow_state = 'MONTAGE_QC_PASSED'
+        elif z_index in results['gap_sections'] or \
            z_index in results['seam_sections'] or \
            z_index in results['hole_sections']:
-            raise Exception('Failed QC')
+            em_mset.workflow_state = 'MONTAGE_QC_FAILED'
 
         well_known_file_path = \
             os.path.join(
