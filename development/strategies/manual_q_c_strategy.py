@@ -93,6 +93,9 @@ class ManualQCStrategy(ExecutionStrategy):
            z_index in results['seam_sections'] or \
            z_index in results['hole_sections']:
             em_mset.workflow_state = 'MONTAGE_QC_FAILED'
+        else:
+            em_mset.workflow_state = 'MONTAGE_QC_FAILED'
+        em_mset.save()
 
         well_known_file_path = \
             os.path.join(
