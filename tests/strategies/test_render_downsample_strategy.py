@@ -44,7 +44,7 @@ def test_get_input_data():
                         storage_directory,
                         task)
 
-    assert inp['input_stack'] == 'test_stack'
+    assert inp['input_stack'] == 'em_2d_montage_solved'
     assert inp['render']['owner'] == 'test_user'
     assert inp['render']['host'] == 'test_render_host'
     assert inp['render']['port'] == 1234
