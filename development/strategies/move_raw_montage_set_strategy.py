@@ -36,6 +36,8 @@
 from django.conf import settings
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
 import logging
+from development.strategies.chmod_directories \
+    import chmod_directory
 
 
 class MoveRawMontageSetStrategy(ExecutionStrategy):
@@ -45,7 +47,7 @@ class MoveRawMontageSetStrategy(ExecutionStrategy):
     def get_input(self, em_mset, storage_directory, task):
         extra_flags = ['--remove-source-files']
 
-        if settings.DRY_RUN == True:
+        if settings.DRY_RUN is True:
             extra_flags.append('--dry-run')
         
         extra_flags_string = ' '.join(extra_flags)
@@ -56,6 +58,13 @@ class MoveRawMontageSetStrategy(ExecutionStrategy):
                 settings.LONG_TERM_BASE_FILE_PATH),
             'extra': extra_flags_string
         }
-        
-        # TODO: on finishing, need to update the storage directory in the database
+
         return input_data
+
+    def on_finishing(self, em_mset, results, task):
+        if settings.DRY_RUN is not True:
+            em_mset.storage_directory = \
+                em_mset.get_storage_directory(
+                    settings.LONG_TERM_BASE_FILE_PATH)
+            chmod_directory(
+                em_mset.storage_directory)

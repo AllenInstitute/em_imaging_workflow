@@ -6,7 +6,7 @@ from workflow_engine.models.task import Task
 from development.strategies.manual_q_c_strategy \
     import ManualQCStrategy
 from django.test.utils import override_settings
-from tests.models.test_chunk_model \
+from models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 
 

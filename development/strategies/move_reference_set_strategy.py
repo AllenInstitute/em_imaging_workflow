@@ -35,7 +35,10 @@
 #
 from django.conf import settings
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
+from development.strategies.chmod_directories \
+    import chmod_directory
 import logging
+
 
 class MoveReferenceSetStrategy(ExecutionStrategy):
     _log = logging.getLogger(
@@ -44,7 +47,7 @@ class MoveReferenceSetStrategy(ExecutionStrategy):
     def get_input(self, ref_set, storage_directory, task):
         extra_flags = ['--remove-source-files']
 
-        if settings.DRY_RUN == True:
+        if settings.DRY_RUN is True:
             extra_flags.append('--dry-run')
         
         extra_flags_string = ' '.join(extra_flags)
@@ -56,7 +59,12 @@ class MoveReferenceSetStrategy(ExecutionStrategy):
             'extra': extra_flags_string
         }
 
-        # TODO: on finishing, need to update the storage directory in the database
         return input_data
 
-        
+    def on_finishing(self, ref_set, results, task):
+        if settings.DRY_RUN is not True:
+            ref_set.storage_directory = \
+                ref_set.get_storage_directory(
+                    settings.LONG_TERM_BASE_FILE_PATH)
+
+            chmod_directory(ref_set.storage_directory)

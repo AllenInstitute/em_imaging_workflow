@@ -1,33 +1,36 @@
-import django; django.setup()
 from django.test.utils import override_settings
-from mock import Mock, patch, mock_open
+from mock import Mock, patch, mock_open, call
+from workflow_engine.models.job import Job
+from workflow_engine.models.task import Task
+import pytest
+from at_em_imaging_workflow.settings import LONG_TERM_BASE_FILE_PATH
 from development.strategies.render_downsample_strategy \
     import RenderDownsampleStrategy
+from models.test_chunk_model \
+    import cameras_etc, section_factory, lots_of_montage_sets
+
 
 try:
     import __builtin__ as builtins  # @UnresolvedImport
 except:
     import builtins  # @UnresolvedImport
 
+@pytest.mark.django_db
 @override_settings(
     BASE_FILE_PATH='/base',
+    LONG_TERM_BASE_FILE_PATH='/long/term',
     RENDER_STACK_NAME='test_stack',
     RENDER_SERVICE_USER='test_user',
     RENDER_SERVICE_URL='test_render_host',
     RENDER_SERVICE_PORT='1234',
     RENDER_CLIENT_SCRIPTS='/path/to/test/client/scripts'
     )
-def test_get_input_data():
-    em_mset = Mock()
-    em_mset.get_render_project_name = Mock(
-        return_value='test_project')
-    em_mset.section.z_index = 92384
-    em_mset.id = 9876
-    task = Mock()
-    task.id = 333
-    task.job = Mock()
-    task.job.id = 444
-    task.job.get_enqueued_object = Mock(return_value=em_mset)     
+def test_get_input_data(lots_of_montage_sets):
+    em_mset = lots_of_montage_sets[0]
+    job = Job(
+        id=444,
+        enqueued_object_id=em_mset.id)
+    task = Task(id=333, job=job)
     storage_directory = '/example/storage/directory'
     strategy = RenderDownsampleStrategy()
     
@@ -48,12 +51,39 @@ def test_get_input_data():
     assert inp['render']['owner'] == 'test_user'
     assert inp['render']['host'] == 'test_render_host'
     assert inp['render']['port'] == 1234
-    assert inp['render']['project'] == 'test_project'
+    assert inp['render']['project'] == 'MOCK SPECIMEN'
     assert inp['render']['client_scripts'] == '/path/to/test/client/scripts'
-    assert inp['minZ'] == 92384
-    assert inp['maxZ'] == 92384
-    assert inp['image_directory'] == '/base/9876/jobs/job_444/tasks/task_333'
+    assert inp['minZ'] == 1
+    assert inp['maxZ'] == 1
+    assert inp['image_directory'].startswith('/long/term')
 
     # useful for debugging
     # import simplejson as json; assert json.dumps(inp, indent=2) == ''
-    
+
+
+@pytest.mark.django_db
+@override_settings(
+    BASE_FILE_PATH='/base',
+    LONG_TERM_BASE_FILE_PATH='/long/term',
+    RENDER_STACK_NAME='test_stack',
+    RENDER_SERVICE_USER='test_user',
+    RENDER_SERVICE_URL='test_render_host',
+    RENDER_SERVICE_PORT='1234',
+    RENDER_CLIENT_SCRIPTS='/path/to/test/client/scripts'
+    )
+def test_on_finishing(lots_of_montage_sets):
+    em_mset = lots_of_montage_sets[0]
+    results = Mock()
+    job = Job(
+        id=444,
+        enqueued_object_id=em_mset.id)
+    task = Task(id=333, job=job)
+    strat = RenderDownsampleStrategy()
+
+    with patch('os.system') as oss:
+        strat.on_finishing(em_mset, results, task)
+
+    assert oss.call_args_list == [
+        call('find /long/term/em_montage_MOCK SPECIMEN_z1_2345_06_07_08_09_10 -type f -print -exec chmod go+r {} \\;'),
+        call('find /long/term/em_montage_MOCK SPECIMEN_z1_2345_06_07_08_09_10 -type d -print -exec chmod go+rx {} \\;')
+        ]

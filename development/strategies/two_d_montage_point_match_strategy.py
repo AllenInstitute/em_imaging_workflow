@@ -9,6 +9,8 @@ import os
 from development.strategies.schemas.two_d_montage_point_match \
     import input_dict
 from django.conf import settings
+from development.strategies.chmod_directories \
+    import chmod_directory
 import logging
 
 class TwoDMontagePointMatchStrategy(ExecutionStrategy):
@@ -82,6 +84,8 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
             em_mset,
             'point_match_output',
             task)
+        chmod_directory(
+            self.get_or_create_task_storage_directory(task))
 
     def create_log_configuration(self, log_file_path):
         env = jinja2.Environment(

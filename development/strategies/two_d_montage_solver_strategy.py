@@ -2,10 +2,11 @@ from workflow_engine.strategies import execution_strategy
 from rendermodules.montage.schemas import SolveMontageSectionParameters
 from development.strategies.schemas.two_d_montage_solver import input_dict
 from django.conf import settings
+from development.strategies.chmod_directories \
+    import chmod_directory
 import logging
 from development.strategies \
-    import RENDER_STACK_TILE_PAIRS, RENDER_STACK_SOLVED,\
-    RENDER_STACK_LENS_CORRECTED
+    import RENDER_STACK_SOLVED, RENDER_STACK_LENS_CORRECTED
 
 
 class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
@@ -70,3 +71,8 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
 
     def get_solver_executable_path(self):
         return settings.MONTAGE_SOLVER_BIN
+
+    def on_finishing(self, em_mset, results, task):
+            chmod_directory(
+                self.get_or_create_task_storage_directory(task))
+

@@ -4,8 +4,9 @@ from django.conf import settings
 from development.models import Chunk, RenderedVolume, Study, Specimen
 from django.test.utils import override_settings
 from development.models.e_m_montage_set import EMMontageSet
-from django.utils.timezone import now
+from django.utils.timezone import datetime
 from models.test_montage_set import cameras_etc, section_factory
+from datetime import timedelta
 
 def test_str():
     study = Study(
@@ -78,7 +79,9 @@ def lots_of_montage_sets(section_factory,
     for i in range(1,1000):
         em_montage_set = EMMontageSet.objects.create(
             uid="Montage Set %d" %(i),
-            acquisition_date=now(),
+            acquisition_date=datetime(
+                2345, 6, 7,
+                8, 9, 10) + timedelta(seconds=i-1),
             overlap=overlap,
             workflow_state='PENDING',
             mipmap_directory=None,

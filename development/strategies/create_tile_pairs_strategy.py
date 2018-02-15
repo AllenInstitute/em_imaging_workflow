@@ -6,14 +6,15 @@ from django.conf import settings
 import logging
 import copy
 from development.strategies \
-    import RENDER_STACK_LENS_CORRECTED, RENDER_STACK_TILE_PAIRS
+    import RENDER_STACK_LENS_CORRECTED
+from development.strategies.chmod_directories \
+    import chmod_directory
+
 
 class CreateTilePairsStrategy(ExecutionStrategy):
     _log = logging.getLogger('development.strategies.create_tile_pairs_strategy')
 
     def get_input(self, em_mset, storage_directory, task):
-        CreateTilePairsStrategy._log.info("get input")
-
         inp = copy.deepcopy(input_dict)
     
         inp['render']['host'] = settings.RENDER_SERVICE_URL
@@ -32,10 +33,10 @@ class CreateTilePairsStrategy(ExecutionStrategy):
         return TilePairClientParameters().dump(inp).data 
 
     def on_finishing(self, em_mset, results, task):
-        CreateTilePairsStrategy._log.info("ON FINISHING")
         self.check_key(results, 'tile_pair_file')
         self.set_well_known_file(
             results['tile_pair_file'],
             em_mset,
             em_mset.tile_pairs_file_description(),
             task)
+        chmod_directory(em_mset.get_storage_directory())
