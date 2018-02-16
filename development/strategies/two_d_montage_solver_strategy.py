@@ -2,6 +2,7 @@ from workflow_engine.strategies import execution_strategy
 from rendermodules.montage.schemas import SolveMontageSectionParameters
 from development.strategies.schemas.two_d_montage_solver import input_dict
 from django.conf import settings
+from development.strategies.chmod_strategy import ChmodStrategy
 from development.strategies.chmod_directories \
     import chmod_directory
 import logging
@@ -73,6 +74,8 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
         return settings.MONTAGE_SOLVER_BIN
 
     def on_finishing(self, em_mset, results, task):
-            chmod_directory(
-                self.get_or_create_task_storage_directory(task))
+        d = self.get_or_create_task_storage_directory(task)
+        ChmodStrategy.add_chmod_file(em_mset, d)
+        ChmodStrategy.add_chmod_dir(em_mset, d)
+        ChmodStrategy.enqueue_montage(em_mset)
 

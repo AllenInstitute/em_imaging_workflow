@@ -33,40 +33,61 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from django.conf import settings
-from workflow_engine.strategies.execution_strategy import ExecutionStrategy
-from development.strategies.chmod_strategy import ChmodStrategy
-import logging
+import simplejson as json
+import argparse
+import sys
+import os
 
 
-class MoveReferenceSetStrategy(ExecutionStrategy):
-    _log = logging.getLogger(
-        'development.strategies.move_reference_set_strategy')
+if __name__ == "__main__" and __package__ is None:
+    __package__ = "at_em_image_processing.modules.chmod_dirs"
 
-    def get_input(self, ref_set, storage_directory, task):
-        extra_flags = ['--remove-source-files']
+example = {
+    'dirs': [ '/path/to/dir1', '/path/to/dir2' ],
+    'files': [ '/destination/path' ]
+}
 
-        if settings.DRY_RUN is True:
-            extra_flags.append('--dry-run')
+class ChmodDirs(object):
+    def __init__(self):
+        pass
+
+    def chmod_dirs(self, spec):
+        for d in spec['dirs']:
+            os.system(
+                'find %s -type d -print -exec chmod go+rx {} \;' % (
+                    d))
+        for d in spec['files']:
+            os.system(
+                'find %s -type f -print -exec chmod go+r {} \;' % (
+                    d))
+
+    def parse_json(self, json_string):
+        return json.loads(json_string)
+
+    def parse_json_file(self, json_file):
+        with open(json_file, 'r') as f:
+            return self.parse_json(f.read())
+
+    def parse_args(self, args):
+        parser = argparse.ArgumentParser(
+            description='bulk change directory mode')
+        parser.add_argument('--input_json', help='input arguments')
+        parser.add_argument('--output_json', help='output results')
+
+        return vars(parser.parse_args(args))
+    
+    @classmethod
+    def main(cls, args):
+        chmd = ChmodDirs()
+        parsed_args = chmd.parse_args(args)
         
-        extra_flags_string = ' '.join(extra_flags)
+        inp = chmd.parse_json_file(parsed_args['input_json'])
 
-        input_data = {
-            'from': ref_set.storage_directory,
-            'to': ref_set.get_storage_directory(
-                settings.LONG_TERM_BASE_FILE_PATH),
-            'extra': extra_flags_string
-        }
+        chmd.chmod_dirs(inp)
+        
+        with open(parsed_args['output_json'], 'w') as f:
+            f.write(json.dumps(inp))
 
-        return input_data
 
-    def on_finishing(self, ref_set, results, task):
-        if settings.DRY_RUN is not True:
-            ref_set.storage_directory = \
-                ref_set.get_storage_directory(
-                    settings.LONG_TERM_BASE_FILE_PATH)
-            ChmodStrategy.add_chmod_file(
-                ref_set, ref_set.storage_directory)
-            ChmodStrategy.add_chmod_dir(
-                ref_set, ref_set.storage_directory)
-            ChmodStrategy.enqueue_reference(ref_set)
+if '__main__' == __name__:
+    ChmodDirs.main(sys.argv)

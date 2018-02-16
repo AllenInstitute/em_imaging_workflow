@@ -4,8 +4,7 @@ from development.strategies.schemas.generate_mip_maps import input_dict
 from rendermodules.dataimport.schemas import GenerateMipMapsParameters
 import logging
 from development.strategies import RENDER_STACK_INGEST
-from development.strategies.chmod_directories \
-    import chmod_directory 
+from development.strategies.chmod_strategy import ChmodStrategy
 
 
 class GenerateMipMapsStrategy(execution_strategy.ExecutionStrategy):
@@ -40,4 +39,8 @@ class GenerateMipMapsStrategy(execution_strategy.ExecutionStrategy):
         em_mset.mipmap_directory =  results['output_dir']
         em_mset.save()
 
-        chmod_directory(results['output_dir'])
+        ChmodStrategy.add_chmod_file(
+            em_mset, results['output_dir'])
+        ChmodStrategy.add_chmod_dir(
+            em_mset, results['output_dir'])
+        ChmodStrategy.enqueue_montage(em_mset)

@@ -1,9 +1,10 @@
-from mock import Mock, patch, call
+from mock import Mock, patch
 import pytest
 from django.test.utils import override_settings
 from workflow_engine.models.job import Job
 from workflow_engine.models.task import Task
-from development.strategies.move_raw_montage_set_strategy import MoveRawMontageSetStrategy
+from development.strategies.chmod_strategy import ChmodStrategy
+from workflow_engine.workflow_controller import WorkflowController
 from development.strategies.move_reference_set_strategy \
     import MoveReferenceSetStrategy
 from models.test_chunk_model \
@@ -44,11 +45,28 @@ def test_on_finishing(lots_of_montage_sets):
         return_value='/path/to/task/storage/directory')
     strat.set_well_known_file = Mock()
 
-    with patch('os.system') as oss:
-        strat.on_finishing(em_mset, results, task)
+    with patch('os.path.exists',
+               Mock(return_value=True)) as ope:
+        with patch.object(
+            WorkflowController,
+            'start_workflow') as strt:
+            strat.on_finishing(em_mset, results, task)
 
-    assert oss.call_args_list == [
-        call('find /path/to/task/storage/directory -type f -print -exec chmod go+r {} \\;'),
-        call('find /path/to/task/storage/directory -type d -print -exec chmod go+rx {} \\;')
-        ]
+    pending = [
+        ChmodStrategy.CHMOD_DIR_PENDING,
+        ChmodStrategy.CHMOD_FILE_PENDING]
+
+    wkfs = ChmodStrategy.find_chmod_files(
+        em_mset,
+        type_list=pending)
+
+    assert len(wkfs) == 2
+
+    for w in wkfs:
+        assert w.well_known_file_type in pending
+
+    strt.assert_called_once_with(
+        'em_2d_montage',
+        em_mset,
+        start_node_name='Chmod Reference')
 

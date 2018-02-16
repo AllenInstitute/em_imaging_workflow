@@ -37,6 +37,7 @@ from workflow_engine.strategies import execution_strategy
 from django.conf import settings
 from development.strategies.schemas.apply_mip_maps import input_dict
 from rendermodules.dataimport.schemas import AddMipMapsToStackParameters
+from development.strategies.chmod_strategy import ChmodStrategy
 from development.strategies \
     import RENDER_STACK_INGEST, RENDER_STACK_APPLY_MIPMAPS
 from development.strategies.chmod_directories \
@@ -68,5 +69,12 @@ class ApplyMipMapsStrategy(execution_strategy.ExecutionStrategy):
         return AddMipMapsToStackParameters().dump(inp).data
 
     def on_finishing(self, em_mset, results, task):
-        chmod_directory(em_mset.get_storage_directory())
-        chmod_directory(em_mset.mipmap_directory)
+        ChmodStrategy.add_chmod_dir(
+            em_mset, em_mset.get_storage_directory())
+        ChmodStrategy.add_chmod_file(
+            em_mset, em_mset.get_storage_directory())
+        ChmodStrategy.add_chmod_dir(
+            em_mset, em_mset.mipmap_directory)
+        ChmodStrategy.add_chmod_file(
+            em_mset, em_mset.mipmap_directory)
+        ChmodStrategy.enqueue_montage(em_mset)

@@ -1,9 +1,10 @@
 from django.test.utils import override_settings
-from mock import Mock, patch, mock_open, call
+from mock import Mock, patch, mock_open
 from workflow_engine.models.job import Job
 from workflow_engine.models.task import Task
 import pytest
-from at_em_imaging_workflow.settings import LONG_TERM_BASE_FILE_PATH
+from workflow_engine.workflow_controller import WorkflowController
+from development.strategies.chmod_strategy import ChmodStrategy
 from development.strategies.render_downsample_strategy \
     import RenderDownsampleStrategy
 from models.test_chunk_model \
@@ -80,10 +81,25 @@ def test_on_finishing(lots_of_montage_sets):
     task = Task(id=333, job=job)
     strat = RenderDownsampleStrategy()
 
-    with patch('os.system') as oss:
+    with patch.object(
+        WorkflowController,
+        'start_workflow') as strt:
         strat.on_finishing(em_mset, results, task)
 
-    assert oss.call_args_list == [
-        call('find /long/term/em_montage_MOCK SPECIMEN_z1_2345_06_07_08_09_10 -type f -print -exec chmod go+r {} \\;'),
-        call('find /long/term/em_montage_MOCK SPECIMEN_z1_2345_06_07_08_09_10 -type d -print -exec chmod go+rx {} \\;')
-        ]
+    pending = [
+        ChmodStrategy.CHMOD_DIR_PENDING,
+        ChmodStrategy.CHMOD_FILE_PENDING]
+
+    wkfs = ChmodStrategy.find_chmod_files(
+        em_mset,
+        type_list=pending)
+
+    assert len(wkfs) == 2
+
+    for w in wkfs:
+        assert w.well_known_file_type in pending
+
+    strt.assert_called_once_with(
+        'em_2d_montage',
+        em_mset,
+        start_node_name='Chmod Montage')
