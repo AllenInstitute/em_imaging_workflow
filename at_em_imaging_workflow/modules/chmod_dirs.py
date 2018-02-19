@@ -68,7 +68,8 @@ class ChmodDirs(object):
         with open(json_file, 'r') as f:
             return self.parse_json(f.read())
 
-    def parse_args(self, args):
+    @classmethod
+    def parse_args(cls, args):
         parser = argparse.ArgumentParser(
             description='bulk change directory mode')
         parser.add_argument('--input_json', help='input arguments')
@@ -78,16 +79,17 @@ class ChmodDirs(object):
     
     @classmethod
     def main(cls, args):
+        parsed_args = ChmodDirs.parse_args(args[1:])
+
         chmd = ChmodDirs()
-        parsed_args = chmd.parse_args(args)
-        
+
         inp = chmd.parse_json_file(parsed_args['input_json'])
 
         chmd.chmod_dirs(inp)
-        
+
         with open(parsed_args['output_json'], 'w') as f:
             f.write(json.dumps(inp))
 
 
 if '__main__' == __name__:
-    ChmodDirs.main(sys.argv)
+    sys.exit(ChmodDirs.main(sys.argv))
