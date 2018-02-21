@@ -18,7 +18,7 @@ input_dict = {
         "nbrs_step": 1,
         "xs_weight": 0,
         "min_points": 3,
-        "max_points": 80,
+        "max_points": 200,
         "filter_point_matches": 1,
         "outlier_lambda": 1000,
         "min_tiles": 3,
