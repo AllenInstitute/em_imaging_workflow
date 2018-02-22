@@ -46,6 +46,8 @@ MESSAGE_QUEUE_HOST = 'em-131db.corp.alleninstitute.org'
 MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
 MESSAGE_QUEUE_PORT = 9008
+FLOWER_MONITOR_URL='http://' + MESSAGE_QUEUE_HOST + ":" + 9003
+RABBIT_MONITOR_URL='http://' + MESSAGE_QUEUE_HOST + ":" + 9000
 
 RENDER_SERVICE_URL = 'em-131db.corp.alleninstitute.org'
 RENDER_SERVICE_PORT = '8081'
@@ -127,7 +129,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'workflow_engine',
-    'development'
+    'development',
+    'at_em_imaging_workflow'
 ]
 
 MIDDLEWARE = [

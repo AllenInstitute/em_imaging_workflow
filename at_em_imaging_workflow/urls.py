@@ -14,10 +14,13 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from at_em_imaging_workflow.views import chunk_view
 admin.autodiscover()
 
 urlpatterns = [
     url(r'^workflow_engine/', include('workflow_engine.urls')),
     url(r'^development/', include('development.urls')),
     url(r'^admin/', admin.site.urls),
+
+    url(r'^at_em/chunks', chunk_view.chunks_page, name='chunks')
 ]

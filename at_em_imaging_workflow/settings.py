@@ -52,6 +52,12 @@ MESSAGE_QUEUE_HOST = 'ibs-timf-ux1.corp.alleninstitute.org'
 MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
 MESSAGE_QUEUE_PORT = 9008
+MESSAGE_QUEUE_MONITOR_PORT = 9000
+UI_HOST = 'ibs-timf-ux1.corp.alleninstitute.org'
+UI_PORT = 9002
+FLOWER_MONITOR_URL='http://' + UI_HOST + ":" + str(9003)
+RABBIT_MONITOR_URL='http://' + UI_HOST + ":" + str(9000)
+ADMIN_URL='http://' + UI_HOST + ':' + str(9002) + '/admin'
 
 RENDER_SERVICE_URL = 'ibs-timf-ux1.corp.alleninstitute.org'
 RENDER_SERVICE_PORT = '9006'
@@ -133,7 +139,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'workflow_engine',
-    'development'
+    'development',
+    'at_em_imaging_workflow'
 ]
 
 MIDDLEWARE = [

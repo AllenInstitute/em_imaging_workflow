@@ -47,8 +47,6 @@ from development.models.sample_holder import SampleHolder
 from development.models.load import Load
 from development.models.e_m_montage_set import EMMontageSet
 import logging
-from rendermodules.ingest.schemas import \
-    example, ReferenceSetIngestSchema
 import uuid
 
 class LensCorrectionIngest(IngestStrategy):

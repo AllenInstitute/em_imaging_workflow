@@ -96,11 +96,13 @@ class Chunk(models.Model):
 
     @classmethod
     def calculate_z_range(cls, c):
+        # TODO: this does not take offset into account
         chunk_defaults = settings.CHUNK_DEFAULTS
 
         z_start = (
             c * chunk_defaults['chunk_size']
-            + chunk_defaults['start_z'])
+            + chunk_defaults['start_z']
+            - c * chunk_defaults['overlap'])
 
         z_end = z_start + chunk_defaults['chunk_size']
 
@@ -137,5 +139,10 @@ class Chunk(models.Model):
                     'following_chunk_id': -1,
                     'preceding_chunk_id': -1})
             chunk_list.append(c)
-        
+
+        mset_section = mset.section
+
+        for c in chunk_list:
+            mset_section.chunks.add(c)
+
         return chunk_list

@@ -1,8 +1,28 @@
 import pytest
 from development.strategies.lens_correction_ingest import LensCorrectionIngest
 from development.models.e_m_montage_set import EMMontageSet
-from rendermodules.ingest.schemas import example as body_data
 import copy
+
+body_data = {
+    "reference_set_id": "DEADBEEF",
+    "acquisition_data": {
+        "microscope": "temca2",
+        "camera": {
+            "camera_id": "4450428",
+            "height": 3840,
+            "width": 3840,
+            "model": "Ximea CB200MG"
+        },
+        "overlap": 0.07,
+        "acquisition_time": "2017-08-29T13:01:46"
+    },
+    "section": {
+        "z_index": 1050,
+        "specimen": 594089217,
+        "sample_holder": "reel0"
+    },
+    "storage_directory": "/allen/programs/celltypes/workgroups/em-connectomics/data/workflow_test_sqmm/001050/0/"
+}
 
 
 @pytest.mark.django_db

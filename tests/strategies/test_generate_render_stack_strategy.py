@@ -18,7 +18,8 @@ class TestIngestGenerateRenderStackStrategy(TestCase):
         em_set.section.z_index = test_z_index
         em_set.section.specimen.uid = 'mock_specimen_uid'
         em_set.metafile = '/path/to/test/meta.file'
-        em_set.render_stack_name = Mock(return_value='test_stack')
+        em_set.render_stack_name = Mock(
+            return_value='test_stack')
         task = Mock()
 
         storage_directory = '/example/storage/directory'
@@ -27,14 +28,19 @@ class TestIngestGenerateRenderStackStrategy(TestCase):
                                         storage_directory,
                                         task)
 
-        assert input_json['render']['host'] == settings.RENDER_SERVICE_URL
-        assert input_json['render']['port'] == int(settings.RENDER_SERVICE_PORT)
-        assert input_json['render']['owner'] == settings.RENDER_SERVICE_USER
-        assert input_json['render']['project'] == 'MOCKSPECIMEN'
-        assert input_json['stack'] == 'em_2d_montage_ingest'
+        assert input_json['render']['host'] == \
+            settings.RENDER_SERVICE_URL
+        assert input_json['render']['port'] == \
+            int(settings.RENDER_SERVICE_PORT)
+        assert input_json['render']['owner'] == \
+            settings.RENDER_SERVICE_USER
+        assert input_json['render']['project'] == \
+            'MOCKSPECIMEN'
+        assert input_json['output_stack'] == \
+            'em_2d_montage_ingest'
         assert input_json['render']['client_scripts'] == \
             settings.RENDER_CLIENT_SCRIPTS
         assert input_json['metafile'] == em_set.metafile
         assert input_json['close_stack'] == False
-        assert input_json['z_index'] == test_z_index
+        assert input_json['z'] == test_z_index
 

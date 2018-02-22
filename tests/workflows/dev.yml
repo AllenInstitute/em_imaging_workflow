@@ -47,6 +47,19 @@ executables:
         pbs_processor: 'mem=32g,nodes=1:ppn=2'
         pbs_walltime: 'walltime=2:00:00'
 
+    chmod_dirs:
+        name: 'Chmod Dirs'
+        path: 'python'
+        args:
+        - '-m'
+        - 'at_em_imaging_workflow.modules.chmod_dirs'
+        environment:
+        - PYTHONPATH=/data/aibstemp/timf/example_data/at_em_imaging_workflow
+        remote_queue: 'pbs'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=32g,nodes=1:ppn=2'
+        pbs_walltime: 'walltime=2:00:00'
+
     apply_lens_correction:
         name: 'Apply Lens Correction'
         path: 'python'
@@ -226,6 +239,12 @@ workflows:
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "move_tile_set"
 
+            - key: "chmod_dirs"
+              label: "Chmod Dirs"
+              class: "development.strategies.chmod_strategy.ChmodStrategy"
+              enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
+              executable: "chmod_dirs"
+
             - key: "generate_em_montage"
               label: "Generate Render Stack"
               class: "development.strategies.generate_render_stack_strategy.GenerateRenderStackStrategy"
@@ -307,7 +326,7 @@ workflows:
             - [ "2d_montage_point_match", [ "solver" ] ]
             - [ "solver", [ "detect_defects" ] ]
             - [ "detect_defects", [ "wait_for_manual_qc" ] ]
-            - [ "wait_for_manual_qc", [ "downsample", "move_raw_montage_set" ] ]
+            - [ "wait_for_manual_qc", [ "downsample", "move_raw_montage_set", "chmod_dirs" ] ]
             - [ "downsample", [ "alignment" ] ]
 
     em_2d_montage_mic:
