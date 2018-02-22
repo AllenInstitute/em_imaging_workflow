@@ -33,7 +33,6 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-import pytest
 from mock import patch, mock_open, MagicMock
 from development.strategies.apply_lens_correction_strategy \
     import ApplyLensCorrectionStrategy
@@ -63,5 +62,8 @@ def test_get_input_data():
                                            task)
 
     assert input_ret['overwrite_zlayer'] == True
+    assert set(input_ret['zValues']) == set([543])
+    assert input_ret['input_stack'] == 'em_2d_montage_apply_mipmaps'
+    assert input_ret['output_stack'] == 'em_2d_montage_lc'
 
 

@@ -141,8 +141,8 @@ executables:
         - "rendermodules.pointmatch.create_tilepairs"
         remote_queue: 'pbs'
         pbs_queue: 'emconnectome'
-        pbs_processor: 'mem=192g,nodes=1:ppn=32'
-        pbs_walltime: 'walltime=5:00:00'
+        pbs_processor: 'mem=10g,nodes=1:ppn=1'
+        pbs_walltime: 'walltime=1:00:00'
 
     detect_montage_defects:
         name: 'Detect Montage Defects'

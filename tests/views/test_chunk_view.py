@@ -33,43 +33,62 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from workflow_engine.strategies import execution_strategy
-from rendermodules.lens_correction.schemas import \
-  ApplyLensCorrectionParameters
-from development.strategies.schemas.apply_lens_correction import input_dict
-from workflow_engine.models.well_known_file import WellKnownFile
+import pytest
+from mock import patch, mock_open
+import django.test
 from django.conf import settings
+from at_em_imaging_workflow.views import chunk_view
+from workflow_engine.workflow_config import WorkflowConfig
 import simplejson as json
-import logging
-from development.strategies \
-    import RENDER_STACK_APPLY_MIPMAPS, RENDER_STACK_LENS_CORRECTED
+import os
+from lxml import etree
+from development.models.chunk import Chunk
+from development.strategies.define_chunks_strategy import DefineChunksStrategy
+from django.test.utils import override_settings
+from models.test_chunk_model \
+    import cameras_etc, section_factory, lots_of_montage_sets
+from django.utils.six import BytesIO
 
 
-class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
-    _log = logging.getLogger(
-        'development.strategies.apply_lens_correction_strategy')
-    
-    #override if needed
-    #set the data for the input file
-    def get_input(self, em_mset, storage_directory, task):
-        ApplyLensCorrectionStrategy._log.info('get_input')
-        inp = input_dict
+@pytest.fixture
+def rf():
+    return django.test.RequestFactory()
 
-        inp['render']['host'] = settings.RENDER_SERVICE_URL
-        inp['render']['port'] = settings.RENDER_SERVICE_PORT
-        inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = em_mset.get_render_project_name()
-        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
-        inp['zValues'] = [ em_mset.section.z_index ]
-        inp['input_stack'] = RENDER_STACK_APPLY_MIPMAPS
-        inp['output_stack'] = RENDER_STACK_LENS_CORRECTED
-        inp['close_stack'] = False
 
-        wkf = WellKnownFile.get(em_mset.reference_set, 'description')
-        ApplyLensCorrectionStrategy._log.info('WKF: %s' % (wkf))
+@pytest.mark.django_db
+@override_settings(
+    CHUNK_DEFAULTS = {
+        'overlap': 2,
+        'start_z': 1,
+        'chunk_size': 10 })
+def test_chunk_view(rf,
+                    lots_of_montage_sets):
+    for em_mset in lots_of_montage_sets:
+        strat = DefineChunksStrategy()
+        strat.must_wait(em_mset)
 
-        with open(wkf) as j:
-            json_data = json.loads(j.read())
-            inp['transform'] = json_data['transform']
+    #assert Chunk.objects.count() == 125
 
-        return ApplyLensCorrectionParameters().dump(inp).data
+    request = rf.get('/at_em_imaging_workflow/chunks.html')
+    response = chunk_view.chunks_page(request)
+    assert response.status_code == 200
+
+    html_parser = etree.HTMLParser()
+    tree = etree.parse(BytesIO(response.content),
+                       html_parser)
+
+    tbl = tree.xpath('//table[@id="chnk_table"]')
+    assert len(tbl) == 1
+    assert tbl[0].tag == 'table'
+    trs = tbl[0].xpath('tr[@class="chnk_tr"]')
+    assert len(trs) == 125
+
+    for tr in trs:
+        tds = tr.xpath('td')
+        assert len(tds) == settings.CHUNK_DEFAULTS['chunk_size'] + 1
+
+    with open('test_view.html', 'w') as f:
+        f.write(
+            etree.tostring(tree,
+                pretty_print=True,
+               method='html').decode('utf-8'))

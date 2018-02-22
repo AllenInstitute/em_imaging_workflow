@@ -3,8 +3,6 @@ from rendermodules.montage.schemas import SolveMontageSectionParameters
 from development.strategies.schemas.two_d_montage_solver import input_dict
 from django.conf import settings
 from development.strategies.chmod_strategy import ChmodStrategy
-from development.strategies.chmod_directories \
-    import chmod_directory
 import logging
 from development.strategies \
     import RENDER_STACK_SOLVED, RENDER_STACK_LENS_CORRECTED

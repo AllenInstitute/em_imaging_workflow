@@ -9,12 +9,12 @@ input_dict = {
             "em-connectomics/russelt/render_mc.old/render-ws-java-client/"
             "src/main/scripts")
     },
-    "inputStack": "test_noLC",
-    "outputStack": "test_LC",
+    "input_stack": "test_noLC",
+    "output_stack": "test_LC",
     "pool_size": 10,
     "close_stack": True,
     "overwrite_zlayer": True,
-    "zs": [2266],
+    "zValues": [2266],
     "transform": {
         "type": "leaf",
         "className": "lenscorrection.NonLinearTransform",

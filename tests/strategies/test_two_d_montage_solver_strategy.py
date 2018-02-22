@@ -24,7 +24,8 @@ def test_get_input_data():
                 storage_directory,
                 task)
 
-    assert inp is not None
+    assert inp['solver_options']['lambda_value'] == 1000
+    assert inp['solver_options']['transfac'] == 1e-5
 
 
 @pytest.mark.django_db
