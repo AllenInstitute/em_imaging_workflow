@@ -14,3 +14,4 @@ pylint>=1.5.4
 numpydoc>=0.6.0
 argschema>=1.15.9
 simplejson>=3.11.1
+lxml>=3.7.3
