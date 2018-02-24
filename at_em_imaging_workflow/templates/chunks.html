@@ -4,7 +4,7 @@
 <style>
 table,th,td {
     font-family: "Verdana,sans-serif";
-    font-size: 11px;
+    font-size: 5px;
 }
 </style>
 
@@ -29,9 +29,11 @@ table,th,td {
         <td class="chnk_td">{{ c.0 }}</td>
     {% for s in c.1 %}
         {% if s.complete == 'T' %}
-        <td class="chnk_td" style="background-color:rgb(150,255,150)">{{ s.z }}</td>
+        <td class="chnk_td" style="background-color:rgb(150,255,150)">
+            <span title="{{ s.z }}">&nbsp;</span></td>
         {% else %}
-        <td class="chnk_td" style="background-color:rgb(255,150,150)">{{ s.z }}</td>
+        <td class="chnk_td" style="background-color:rgb(255,150,150)">
+            <span title="{{ s.z }}">&nbsp;</span></td>
         {% endif %}
     {% endfor %}
 <!--<td class="wf_td">{{record.name}}</td>

@@ -25,6 +25,9 @@ def test_get_input_data():
                                      task)
 
     assert inp['overwrite_zlayer'] == True
+    assert set(inp['zValues']) == set([1015])
+    assert inp['input_stack'] == 'em_2d_montage_ingest'
+    assert inp['output_stack'] == 'em_2d_montage_apply_mipmaps'
 
 
 @pytest.mark.django_db

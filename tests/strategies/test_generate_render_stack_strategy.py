@@ -42,5 +42,5 @@ class TestIngestGenerateRenderStackStrategy(TestCase):
             settings.RENDER_CLIENT_SCRIPTS
         assert input_json['metafile'] == em_set.metafile
         assert input_json['close_stack'] == False
-        assert input_json['z'] == test_z_index
+        assert set(input_json['zValues']) == set([test_z_index])
 

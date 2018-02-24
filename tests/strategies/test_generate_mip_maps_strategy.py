@@ -32,6 +32,7 @@ def test_get_input_data(lots_of_montage_sets):
                                        storage_directory,
                                        task)
     assert inp['output_dir'].startswith('/path/to/mipmaps')
+    assert set(inp['zValues']) == set([1])
 
 
 @pytest.mark.django_db

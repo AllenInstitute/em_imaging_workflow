@@ -10,8 +10,6 @@ from development.strategies.chmod_strategy import ChmodStrategy
 from development.strategies.schemas.two_d_montage_point_match \
     import input_dict
 from django.conf import settings
-from development.strategies.chmod_directories \
-    import chmod_directory
 import logging
 
 class TwoDMontagePointMatchStrategy(ExecutionStrategy):

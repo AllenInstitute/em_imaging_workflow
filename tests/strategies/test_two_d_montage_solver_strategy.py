@@ -25,7 +25,7 @@ def test_get_input_data():
                 task)
 
     assert inp['solver_options']['lambda_value'] == 1000
-    #assert inp['solver_options']['transfac'] == 1e-5
+    assert inp['solver_options']['transfac'] == 1e-5
 
 
 @pytest.mark.django_db

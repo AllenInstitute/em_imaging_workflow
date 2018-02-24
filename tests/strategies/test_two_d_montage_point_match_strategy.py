@@ -9,6 +9,7 @@ from models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 from development.strategies.two_d_montage_point_match_strategy \
     import TwoDMontagePointMatchStrategy
+import simplejson as json
 try:
     import __builtin__ as builtins  # @UnresolvedImport
 except:
@@ -34,8 +35,13 @@ def test_get_input_data(lots_of_montage_sets):
                     em_mset,
                     storage_directory,
                     task)
-    assert inp is not None
-
+    assert inp['clipWidth'] == 800
+    assert inp['clipHeight'] == 800
+    assert inp['SIFTsteps'] == 3
+    assert inp['memory'] == '4g'
+    assert inp['SIFTfdSize'] == 8
+    assert inp['SIFTmaxScale'] == 0.82
+    assert inp['SIFTminScale'] == 0.38
 
 @pytest.mark.django_db
 @override_settings(

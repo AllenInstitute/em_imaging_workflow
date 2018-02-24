@@ -29,8 +29,7 @@ class GenerateMipMapsStrategy(execution_strategy.ExecutionStrategy):
 
         inp['output_dir'] = em_mset.mipmap_directory
 
-        inp['zstart'] = em_mset.section.z_index
-        inp['zend'] = em_mset.section.z_index
+        inp['zValues'] = [ em_mset.section.z_index ]
 
         return GenerateMipMapsParameters().dump(inp).data
 

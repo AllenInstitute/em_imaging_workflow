@@ -14,6 +14,5 @@ input_dict = {
     "imgformat": "tif",
     "levels": 6,
     "force_redo": "True",
-    "zstart": 1015,
-    "zend": 1015
+    "zValues": [ 1015 ]
 }

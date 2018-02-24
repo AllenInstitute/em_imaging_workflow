@@ -12,6 +12,5 @@ input_dict = {
     "overwrite_zlayer": True,
     "imgformat": "tif",
     "levels": 6,
-    "zstart": 1015,
-    "zend": 1015
+    "zValues": [1015]
 }

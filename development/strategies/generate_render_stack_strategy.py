@@ -23,7 +23,6 @@ class GenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
         GenerateRenderStackStrategy._log.info(
             'ingest/generate render stack')
         inp = copy.deepcopy(input_dict)
-
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
@@ -32,7 +31,7 @@ class GenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
         inp['metafile'] = em_mset.metafile
         inp['close_stack'] = False
-        inp['z'] = self.get_z_index(em_mset)
+        inp['zValues'] = [ self.get_z_index(em_mset) ]
 
         return GenerateEMTileSpecsParameters().dump(inp).data
 
