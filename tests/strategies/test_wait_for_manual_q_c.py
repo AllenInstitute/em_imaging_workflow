@@ -10,7 +10,8 @@ from development.strategies.wait_for_manual_qc \
     ('MONTAGE_QC_FAILED', True),
     ('REIMAGE', True),
     ('PENDING', True),
-    ('PROCESSING', True)])
+    ('PROCESSING', True),
+    ('MONTAGE_QC_FAILED_MOVE', False)])
 def test_get_input_data(state,expected):
     em_mset = Mock()
     em_mset.workflow_state = state
