@@ -5,7 +5,7 @@ export QMASTER_PORT=22
 
 export BLUE_SKY_WORKER_NAME=pbs
 python -m celery -A workflow_client.worker_client worker \
- --loglevel=debug --concurrency=10 \
+ --loglevel=debug --concurrency=2 \
  -Q ${BLUE_SKY_WORKER_NAME}_${BLUE_SKY_PACKAGE} \
  -n ${BLUE_SKY_WORKER_NAME}_${BLUE_SKY_PACKAGE}@${WORKER_HOST} 2>&1 | \
  tee /at_em_imaging_workflow/logs/${BLUE_SKY_WORKER_NAME}_worker.log &
