@@ -54,6 +54,16 @@ class ChmodDirs(object):
     def chmod_dirs(self, spec):
         for d in spec['dirs']:
             os.system(
+                'find %s -type d -print0 | xargs -0 -n1 -P2 chmod go+rx' % (
+                    d))
+        for d in spec['files']:
+            os.system(
+                'find %s -type f -print0 | xargs -0 -n1 -P2 chmod go+r' % (
+                    d))
+
+    def chmod_dirs2(self, spec):
+        for d in spec['dirs']:
+            os.system(
                 'find %s -type d -print -exec chmod go+rx {} \;' % (
                     d))
         for d in spec['files']:

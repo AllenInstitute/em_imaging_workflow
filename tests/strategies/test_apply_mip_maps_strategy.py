@@ -30,7 +30,7 @@ def test_get_input_data(lots_of_montage_sets):
     assert set(inp['zValues']) == set([1])
     assert inp['input_stack'] == 'em_2d_montage_ingest'
     assert inp['output_stack'] == 'em_2d_montage_apply_mipmaps'
-
+    assert inp['pool_size'] == 20
 
 @pytest.mark.django_db
 @override_settings(

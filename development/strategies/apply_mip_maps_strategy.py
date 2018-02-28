@@ -46,7 +46,7 @@ import logging
 class ApplyMipMapsStrategy(execution_strategy.ExecutionStrategy):
     _log = logging.getLogger(
         'development.strategies.apply_mip_maps_strategy')
-    
+
     def get_input(self, em_mset, storage_directory, task):
         ApplyMipMapsStrategy._log.info('get_input')
         inp = input_dict
