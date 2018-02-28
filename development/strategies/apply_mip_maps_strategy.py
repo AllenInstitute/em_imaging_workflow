@@ -40,8 +40,6 @@ from rendermodules.dataimport.schemas import AddMipMapsToStackParameters
 from development.strategies.chmod_strategy import ChmodStrategy
 from development.strategies \
     import RENDER_STACK_INGEST, RENDER_STACK_APPLY_MIPMAPS
-from development.strategies.chmod_directories \
-    import chmod_directory
 import logging
 
 
@@ -63,8 +61,7 @@ class ApplyMipMapsStrategy(execution_strategy.ExecutionStrategy):
         inp['mipmap_dir'] = em_mset.mipmap_directory
         inp['output_dir'] = em_mset.get_storage_directory()
 
-        inp['zstart'] = em_mset.section.z_index
-        inp['zend'] = em_mset.section.z_index
+        inp['zValues'] = [ em_mset.section.z_index ]
 
         return AddMipMapsToStackParameters().dump(inp).data
 
