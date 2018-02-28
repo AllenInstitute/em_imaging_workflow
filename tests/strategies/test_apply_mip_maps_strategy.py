@@ -9,10 +9,12 @@ from development.strategies.apply_mip_maps_strategy \
     import ApplyMipMapsStrategy
 from models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
+import simplejson as json
 
 
-def test_get_input_data():
-    em_mset = Mock()
+@pytest.mark.django_db
+def test_get_input_data(lots_of_montage_sets):
+    em_mset = lots_of_montage_sets[0]
     task = Mock()
     task.job = Mock()
     storage_directory = '/example/storage/directory'
@@ -25,7 +27,7 @@ def test_get_input_data():
                                      task)
 
     assert inp['overwrite_zlayer'] == True
-    assert set(inp['zValues']) == set([1015])
+    assert set(inp['zValues']) == set([1])
     assert inp['input_stack'] == 'em_2d_montage_ingest'
     assert inp['output_stack'] == 'em_2d_montage_apply_mipmaps'
 
