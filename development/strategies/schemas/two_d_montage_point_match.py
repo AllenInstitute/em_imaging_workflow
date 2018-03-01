@@ -21,7 +21,7 @@ input_dict = {
     "maxFeatureCacheGb": 15,
     "SIFTminScale": 0.38,
     "SIFTmaxScale": 0.82,
-    "renderScale": 0.4,
+    "renderScale": 0.5,
     "matchRod": 0.9,
     "matchMinInlierRatio": 0.0,
     "matchMinNumInliers": 8,
