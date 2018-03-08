@@ -45,7 +45,20 @@ class EMMontageSet(MontageSet):
     reference_set_uid = models.CharField(max_length=255, null=True)
 
     def __str__(self):
-        return str(self.acquisition_date)
+        try:
+            specimen_id = self.section.specimen.uid
+        except:
+            specimen_id = 'X'
+
+        try:
+            z_index = str(self.section.z_index)
+        except:
+            z_index = 'X'
+
+        return "%s_%s_%s" % (
+            specimen_id,
+            z_index,
+            str(self.acquisition_date))
 
     def tile_pairs_file_description(self):
         return 'tile pairs file'

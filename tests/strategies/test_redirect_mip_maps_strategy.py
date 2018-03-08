@@ -9,7 +9,6 @@ from models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 
 
-@pytest.mark.xfail
 @pytest.mark.django_db
 def test_get_input_data(lots_of_montage_sets):
     em_mset = lots_of_montage_sets[0]
