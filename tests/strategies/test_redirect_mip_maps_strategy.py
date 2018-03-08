@@ -1,15 +1,9 @@
 from mock import Mock, patch
 import pytest
-from django.test.utils import override_settings
-from workflow_engine.models.job import Job
-from workflow_engine.models.task import Task
-from workflow_engine.workflow_controller import WorkflowController
-from development.strategies.chmod_strategy import ChmodStrategy
 from development.strategies.redirect_mip_maps_strategy \
     import RedirectMipMapsStrategy
 from models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
-import simplejson as json
 
 
 @pytest.mark.django_db

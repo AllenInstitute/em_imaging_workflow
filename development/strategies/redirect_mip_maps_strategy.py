@@ -36,7 +36,7 @@
 from workflow_engine.strategies import execution_strategy
 from django.conf import settings
 from development.strategies.schemas.redirect_mip_maps import input_dict
-from rendermodules.dataimport.schemas import AddMipMapsToStackParameters
+from rendermodules.stack.schemas import RedirectMipMapsParameters
 import copy
 from development.strategies \
     import RENDER_STACK_SOLVED, RENDER_STACK_REDIRECT_MIPMAPS
@@ -67,4 +67,4 @@ class RedirectMipMapsStrategy(execution_strategy.ExecutionStrategy):
             "directory": em_mset.get_storage_directory(
                 settings.LONG_TERM_BASE_FILE_PATH) }]
 
-        return AddMipMapsToStackParameters().dump(inp).data
+        return RedirectMipMapsParameters().dump(inp).data
