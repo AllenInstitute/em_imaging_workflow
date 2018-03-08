@@ -297,8 +297,8 @@ workflows:
               executable: "detect_montage_defects"
 
             - key: "downsample"
-              label: "Generate Downampled Montage"
-              class: "development.strategies.render_downsample_stragety.RenderDownsampleStrategy"
+              label: "Generate Downsampled Montage"
+              class: "development.strategies.render_downsample_strategy.RenderDownsampleStrategy"
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "downsample"
 

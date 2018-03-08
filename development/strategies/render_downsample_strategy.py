@@ -6,8 +6,6 @@ from workflow_engine.models.well_known_file import WellKnownFile
 from django.conf import settings
 import simplejson as json
 from development.strategies.chmod_strategy import ChmodStrategy
-from development.strategies.chmod_directories \
-    import chmod_directory
 from development.strategies import RENDER_STACK_SOLVED
 import logging
 
@@ -15,9 +13,7 @@ import logging
 class RenderDownsampleStrategy(execution_strategy.ExecutionStrategy):
     _log = logging.getLogger(
         'development.strategies.render_downsample_strategy')
-    
-    #override if needed
-    #set the data for the input file
+
     def get_input(self, em_mset, storage_directory, task):
         RenderDownsampleStrategy._log.info('get_input')
         inp = input_dict

@@ -2,7 +2,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017. Allen Institute. All rights reserved.
+# Copyright 2018. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -33,62 +33,38 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-import pytest
-from mock import patch, mock_open
-import django.test
+from workflow_engine.strategies import execution_strategy
 from django.conf import settings
-from at_em_imaging_workflow.views import chunk_view
-from workflow_engine.workflow_config import WorkflowConfig
-import simplejson as json
-import os
-from lxml import etree
-from development.models.chunk import Chunk
-from development.strategies.rough.define_chunks_strategy import DefineChunksStrategy
-from django.test.utils import override_settings
-from models.test_chunk_model \
-    import cameras_etc, section_factory, lots_of_montage_sets
-from django.utils.six import BytesIO
+from development.strategies.schemas.redirect_mip_maps import input_dict
+from rendermodules.dataimport.schemas import AddMipMapsToStackParameters
+import copy
+from development.strategies \
+    import RENDER_STACK_SOLVED, RENDER_STACK_REDIRECT_MIPMAPS
+
+import logging
 
 
-@pytest.fixture
-def rf():
-    return django.test.RequestFactory()
+class RedirectMipMapsStrategy(execution_strategy.ExecutionStrategy):
+    _log = logging.getLogger(
+        'development.strategies.redirect_mip_maps_strategy')
 
+    def get_input(self, em_mset, storage_directory, task):
+        inp = copy.deepcopy(input_dict)
+        inp['render']['host'] = settings.RENDER_SERVICE_URL
+        inp['render']['port'] = settings.RENDER_SERVICE_PORT
+        inp['render']['owner'] = settings.RENDER_SERVICE_USER
+        inp['render']['project'] = em_mset.get_render_project_name()
+        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
-@pytest.mark.django_db
-@override_settings(
-    CHUNK_DEFAULTS = {
-        'overlap': 100,
-        'start_z': 1,
-        'chunk_size': 200 })
-def test_chunk_view(rf,
-                    lots_of_montage_sets):
-    for em_mset in lots_of_montage_sets:
-        strat = DefineChunksStrategy()
-        strat.must_wait(em_mset)
+        inp['input_stack'] = RENDER_STACK_SOLVED
+        inp['output_stack'] = RENDER_STACK_REDIRECT_MIPMAPS
+        inp['pool_size'] = 10
 
-    #assert Chunk.objects.count() == 125
+        inp['zValues'] = [ em_mset.section.z_index ]
 
-    request = rf.get('/at_em_imaging_workflow/chunks.html')
-    response = chunk_view.chunks_page(request)
-    assert response.status_code == 200
+        inp['new_mipmap_directories'] = [{
+            "level": 0,
+            "directory": em_mset.get_storage_directory(
+                settings.LONG_TERM_BASE_FILE_PATH) }]
 
-    html_parser = etree.HTMLParser()
-    tree = etree.parse(BytesIO(response.content),
-                       html_parser)
-
-    tbl = tree.xpath('//table[@id="chnk_table"]')
-    #assert len(tbl) == 1
-    #assert tbl[0].tag == 'table'
-    trs = tbl[0].xpath('tr[@class="chnk_tr"]')
-    #assert len(trs) == 125
-
-    for tr in trs:
-        tds = tr.xpath('td')
-        #assert len(tds) == settings.CHUNK_DEFAULTS['chunk_size'] + 1
-
-    with open('test_view.html', 'w') as f:
-        f.write(
-            etree.tostring(tree,
-                pretty_print=True,
-               method='html').decode('utf-8'))
+        return AddMipMapsToStackParameters().dump(inp).data

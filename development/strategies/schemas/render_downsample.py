@@ -10,6 +10,5 @@ input_dict = {
     "image_directory": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/scratch",
     "imgformat":"png",
     "scale": 0.01,
-    "minZ": 1047,
-    "maxZ": 1047
+    "zValues": [ 1047 ]
 }

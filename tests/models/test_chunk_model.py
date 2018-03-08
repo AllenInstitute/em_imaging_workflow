@@ -4,9 +4,11 @@ from django.conf import settings
 from development.models import Chunk, RenderedVolume, Study, Specimen
 from django.test.utils import override_settings
 from development.models.e_m_montage_set import EMMontageSet
+from django.utils import timezone
 from django.utils.timezone import datetime
 from models.test_montage_set import cameras_etc, section_factory
 from datetime import timedelta
+import pytz
 
 def test_str():
     study = Study(
@@ -75,6 +77,8 @@ def lots_of_montage_sets(section_factory,
     (camera, microscope, sample_holder) = cameras_etc
 
     montage_sets = []
+
+    timezone.activate(pytz.timezone('US/Pacific'))
 
     for i in range(1,1000):
         em_montage_set = EMMontageSet.objects.create(
