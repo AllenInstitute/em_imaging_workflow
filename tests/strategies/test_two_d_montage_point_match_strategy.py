@@ -42,7 +42,7 @@ def test_get_input_data(lots_of_montage_sets):
     assert inp['SIFTfdSize'] == 8
     assert inp['SIFTmaxScale'] == 0.82
     assert inp['SIFTminScale'] == 0.38
-    assert inp['renderScale'] == 0.5
+    assert inp['renderScale'] == 0.4
 
 @pytest.mark.django_db
 @override_settings(
