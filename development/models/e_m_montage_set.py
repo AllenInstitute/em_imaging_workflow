@@ -60,6 +60,15 @@ class EMMontageSet(MontageSet):
             z_index,
             str(self.acquisition_date))
 
+    def specimen(self):
+        return self.section.specimen
+
+    def z_index(self):
+        return self.section.z_index
+
+    specimen.admin_order_field = 'section__specimen__uid'
+    z_index.admin_order_field = 'section__z_index'
+
     def tile_pairs_file_description(self):
         return 'tile pairs file'
 

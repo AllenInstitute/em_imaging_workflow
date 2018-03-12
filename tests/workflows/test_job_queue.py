@@ -86,14 +86,14 @@ def test_job_queues_show_data(rf):
 
 
 @pytest.mark.django_db
-def xtest_job_queues(rf):
+def test_job_queues(rf):
     request = rf.get('/workflow_engine/jobs')
     response = job_queue_view.job_queues(request)
     assert response.status_code == 200
 
 
 @pytest.mark.django_db
-def xtest_job_queues_page(rf):
+def test_job_queues_page(rf):
     request = rf.get('/workflow_engine/jobs')
     page = 2
     response = job_queue_view.job_queues_page(request, page)
@@ -101,7 +101,7 @@ def xtest_job_queues_page(rf):
 
 
 @pytest.mark.django_db
-def xtest_get_enqueued_object_classes(rf):
+def test_get_enqueued_object_classes(rf):
     request = rf.get('/workflow_engine/jobs')
     response = job_queue_view.get_enqueued_object_classses(request)
     assert response.status_code == 200

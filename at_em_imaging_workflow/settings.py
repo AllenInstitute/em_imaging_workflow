@@ -179,10 +179,10 @@ WSGI_APPLICATION = 'at_em_imaging_workflow.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'at_em_imaging_workflow',
+        'NAME': 'at_em_imaging_staging',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'devdb2',
+        'HOST': 'devdb2.corp.alleninstitute.org',
         'PORT': '5432',
     },
     'devdb2': {
