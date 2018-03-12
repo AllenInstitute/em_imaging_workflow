@@ -25,4 +25,3 @@ class EMMontageSetAdmin(admin.ModelAdmin):
     
     pass_em_montage_set.short_description = \
         "Pass selected montage sets"
-    actions = [pass_em_montage_set]
