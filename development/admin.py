@@ -19,8 +19,6 @@ from development.models.tile_image_set import TileImageSet
 from at_em_imaging_workflow.admin.e_m_montage_set_admin \
     import EMMontageSetAdmin
 
-actions = [EMMontageSetAdmin.pass_em_montage_set]
-
 # Register your models here.
 admin.site.register(ATMontageSet)
 admin.site.register(Camera)
