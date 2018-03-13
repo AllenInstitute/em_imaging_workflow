@@ -5,7 +5,7 @@ def pass_em_montage_set(modeladmin, request, queryset):
     pass_em_montage_set.short_description = \
         "Pass selected montage sets"
 
-    queryset.update(workflow_status="MONTAGE_QC_PASSED")
+    queryset.update(workflow_state="MONTAGE_QC_PASSED")
 
 
 class EMMontageSetAdmin(admin.ModelAdmin):
