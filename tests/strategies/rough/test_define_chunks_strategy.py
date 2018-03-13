@@ -6,7 +6,7 @@ from workflow_engine.models.task import Task
 from development.models.e_m_montage_set import EMMontageSet
 from development.strategies.chmod_strategy \
     import ChmodStrategy
-from development.strategies.define_chunks_strategy \
+from development.strategies.rough.define_chunks_strategy \
     import DefineChunksStrategy
 from development.models.chunk import Chunk
 from models.test_chunk_model \

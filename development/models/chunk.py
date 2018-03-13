@@ -63,11 +63,19 @@ class Chunk(models.Model):
         return True
 
     def get_render_project_name(self):
-        return self.sections[:1].specimen.uid
+        return self.sections.first().specimen.uid
 
     def z_range(self):
-        return (self.sections_set.z_index.max(),
-                self.sections_set.z_index.min())
+        secs = self.sections.all()
+        zs = [sec.z_index for sec in secs]
+
+        return (min(zs), max(zs))
+
+    def get_point_collection_name(self):
+        return 'chunk_point_matches'
+
+    def tile_pairs_file_description(self):
+        return 'tile pairs file'
 
     @classmethod
     def get_z_range(cls, em_mset):
