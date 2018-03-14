@@ -12,7 +12,6 @@ input_dict = {
     "output_stack": "rough_test_rough_stack",
     "tilespec_directory": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/scratch/rough/jsonFiles",
     "set_new_z": "False",
-    "overwrite_zlayer": True,
     "consolidate_trasnforms": "True",
     "minZ": 1020,
     "maxZ": 1022,

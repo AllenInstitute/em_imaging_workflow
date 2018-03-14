@@ -17,6 +17,10 @@ except:
 
 @pytest.mark.django_db
 @override_settings(
+    RENDER_SERVICE_URL='MOCK_URL',
+    RENDER_SERVICE_PORT=9999,
+    RENDER_SERVICE_USER='MOCK_USER',
+    RENDER_CLIENT_SCRIPTS='/path/to/mock/client/scripts',
     CHUNK_DEFAULTS={
         'overlap': 2,
         'start_z': 1,

@@ -1,11 +1,11 @@
 from workflow_engine.strategies import execution_strategy
 from rendermodules.rough_align.schemas \
     import ApplyRoughAlignmentTransformParameters
-from development.strategies.schemas.apply_rough_alignment import input_dict
+from development.strategies.schemas.rough.apply_rough_alignment \
+    import input_dict
 from development.strategies import RENDER_STACK_SOLVED,\
     RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE, RENDER_STACK_ROUGH_ALIGN,\
     RENDER_STACK_LENS_CORRECTED
-from development.models.chunk import Chunk
 from django.conf import settings
 import copy
 
