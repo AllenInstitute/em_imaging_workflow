@@ -48,6 +48,7 @@ from at_em_imaging_workflow.views.page_satchel import page_satchel
 from workflow_engine.models.job import Job
 from workflow_engine.models.workflow_node import WorkflowNode
 from workflow_engine.models.run_state import RunState
+from workflow_engine.workflow_controller import WorkflowController
 from models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 from django.utils.six import BytesIO
@@ -64,7 +65,7 @@ def rf():
         'overlap': 100,
         'start_z': 1,
         'chunk_size': 200 })
-def xtest_temca_query(rf,
+def test_temca_query(rf,
                     lots_of_montage_sets):
     for em_mset in lots_of_montage_sets:
         strat = DefineChunksStrategy()
@@ -94,13 +95,9 @@ def test_find_sections(rf,
                          'dev.yml'))
 
         for em_mset in lots_of_montage_sets:
-            # TODO: make this a workflow_controller method
-            job = Job()
-            job.enqueued_object_id = em_mset.id
-            job.workflow_node = WorkflowNode.objects.first()
-            job.run_state = RunState.get_pending_state()
-            job.priority = job.workflow_node.priority
-            job.save()
+            WorkflowController.enqueue_object(
+                WorkflowNode.objects.first(),
+                em_mset)
 
         request = rf.get(
             '/at_em/page_satchel?q=find_sections'
