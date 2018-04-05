@@ -24,10 +24,13 @@ LONG_TERM_BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/t
 MIPMAP_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/timf/mipmap/dev'
 DRY_RUN=True
 
-MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
-INGEST_MESSAGE_QUEUE_NAME = 'ingest_at_em_imaging_workflow'
+MESSAGE_QUEUE_NAME = APP_PACKAGE
+INGEST_MESSAGE_QUEUE_NAME = 'ingest_'+ MESSAGE_QUEUE_NAME
 INGEST_STRATEGY='development.strategies.ingest_callbacks.IngestCallbacks'
+WORKFLOW_MESSAGE_QUEUE_NAME = 'workflow_' + MESSAGE_QUEUE_NAME
 CELERY_MESSAGE_QUEUE_NAME = 'celery_' + MESSAGE_QUEUE_NAME
+MOAB_MESSAGE_QUEUE_NAME = 'moab_' + MESSAGE_QUEUE_NAME
+RESULT_MESSAGE_QUEUE_NAME = 'result_' + MESSAGE_QUEUE_NAME
 SPARK_MESSAGE_QUEUE_NAME='spark_' + MESSAGE_QUEUE_NAME
 PBS_MESSAGE_QUEUE_NAME='pbs_' + MESSAGE_QUEUE_NAME
 
