@@ -1,8 +1,8 @@
 from workflow_engine.strategies import execution_strategy
 from rendermodules.rough_align.schemas \
     import ApplyRoughAlignmentTransformParameters
-from development.strategies.schemas.rough.apply_rough_alignment \
-    import input_dict
+# from development.strategies.schemas.rough.apply_rough_alignment \
+#     import input_dict
 from development.strategies import RENDER_STACK_SOLVED,\
     RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE, RENDER_STACK_ROUGH_ALIGN,\
     RENDER_STACK_LENS_CORRECTED
@@ -13,7 +13,9 @@ import copy
 class ApplyRoughAlignmentStrategy(execution_strategy.ExecutionStrategy):
 
     def get_input(self, chnk, storage_directory, task):
-        inp = copy.deepcopy(input_dict)
+        inp = Configuration.objects.get(
+            configuration_type='strategy_config',   # For example
+            )
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
@@ -35,3 +37,5 @@ class ApplyRoughAlignmentStrategy(execution_strategy.ExecutionStrategy):
             z_start, z_end)
 
         return ApplyRoughAlignmentTransformParameters().dump(inp).data
+
+from workflow_engine.models.configuration import Configuration

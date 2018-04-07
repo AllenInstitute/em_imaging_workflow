@@ -210,12 +210,15 @@ class LensCorrectionIngest(IngestStrategy):
             tags = ['EMMontageSet']
 
         if 'ReferenceSet' in tags:
-            return self.create_reference_set(message)
+            enqueued_object = self.create_reference_set(message)
+            start_node = 'Generate Lens Correction Transform'
         elif 'EMMontageSet' in tags:
-            return self.create_em_montage_set(message)
+            enqueued_object = self.create_em_montage_set(message)
         else:
             LensCorrectionIngest._log.warn("No enqueued object type tag")
-            return None
+            start_node = 'Generate Render Stack'
+
+        return enqueued_object, start_node
 
     def create_em_montage_set(self, message):
         LensCorrectionIngest._log.info('create_em_montage_set')

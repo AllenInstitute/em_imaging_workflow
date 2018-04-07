@@ -4,4 +4,4 @@ MESSAGE_QUEUE_USER: blue_sky_user
 MESSAGE_QUEUE_PASSWORD: blue_sky_user
 CELERY_MESSAGE_QUEUE_NAME: celery_at_em_imaging_workflow
 DEFAULT_MESSAGE_QUEUE_NAME: null
-WORKFLOW_CONFIG_YAML: /at_em_imaging_workflow/tests/workflows/dev.yml
+WORKFLOW_CONFIG_YAML: /local1/git/at_em_imaging_workflow/tests/workflows/dev.yml

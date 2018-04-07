@@ -1,5 +1,5 @@
 import pytest
-from development.strategies.rough_q_c_strategy \
+from development.strategies.rough.rough_q_c_strategy \
     import RoughQCStrategy
 
 def test_get_input_data():
