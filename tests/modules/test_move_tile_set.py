@@ -34,14 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from at_em_imaging_workflow.modules.move_tile_set import MoveTileSet
-import pytest
-import mock
-from mock import patch, mock_open, Mock
-import os
-try:
-    import __builtin__ as builtins  # @UnresolvedImport
-except:
-    import builtins  # @UnresolvedImport
+from mock import patch, mock_open
 
 def test_move():
     input_json_string = '''
@@ -52,7 +45,7 @@ def test_move():
 '''
 
     with patch('os.system') as os_sys:
-        with patch(builtins.__name__ + ".open",
+        with patch("builtins.open",
                    mock_open(read_data=input_json_string)):
             MoveTileSet.main(['--input_json', 'in.json',
                               '--output_json', 'out.json'])

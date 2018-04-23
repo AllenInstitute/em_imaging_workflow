@@ -5,7 +5,6 @@ from rendermodules.pointmatch.schemas import \
 from django.conf import settings
 import logging
 import copy
-from development.strategies.chmod_strategy import ChmodStrategy
 from development.strategies \
     import RENDER_STACK_LENS_CORRECTED
 
@@ -38,9 +37,3 @@ class CreateTilePairsStrategy(ExecutionStrategy):
             em_mset,
             em_mset.tile_pairs_file_description(),
             task)
-        #chmod_directory(em_mset.get_storage_directory())
-        ChmodStrategy.add_chmod_dir(
-            em_mset, em_mset.get_storage_directory())
-        ChmodStrategy.add_chmod_file(
-            em_mset, em_mset.get_storage_directory())
-        ChmodStrategy.enqueue_montage(em_mset)

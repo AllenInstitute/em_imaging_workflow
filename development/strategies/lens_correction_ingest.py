@@ -214,8 +214,10 @@ class LensCorrectionIngest(IngestStrategy):
             start_node = 'Generate Lens Correction Transform'
         elif 'EMMontageSet' in tags:
             enqueued_object = self.create_em_montage_set(message)
+            start_node = 'Generate Render Stack'
         else:
             LensCorrectionIngest._log.warn("No enqueued object type tag")
+            enqueued_object = None
             start_node = 'Generate Render Stack'
 
         return enqueued_object, start_node
@@ -248,6 +250,7 @@ class LensCorrectionIngest(IngestStrategy):
         reference_set = None
         reference_set_uid = None
 
+        # TODO fix this logic and raise real exception
         if 'reference_set_id' in message:
             reference_set_uid = message['reference_set_id']
             try:

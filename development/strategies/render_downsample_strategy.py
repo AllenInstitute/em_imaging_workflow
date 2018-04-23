@@ -5,7 +5,6 @@ from development.strategies.schemas.render_downsample import input_dict
 from workflow_engine.models.well_known_file import WellKnownFile
 from django.conf import settings
 import simplejson as json
-from development.strategies.chmod_strategy import ChmodStrategy
 from development.strategies import RENDER_STACK_SOLVED
 import logging
 
@@ -41,13 +40,3 @@ class RenderDownsampleStrategy(execution_strategy.ExecutionStrategy):
 
     def get_input_stack_name(self):
         return RENDER_STACK_SOLVED
-
-    def on_finishing(self, em_mset, results, task):
-        d = em_mset.get_storage_directory(
-                settings.LONG_TERM_BASE_FILE_PATH)
-
-        ChmodStrategy.add_chmod_file(em_mset, d)
-        ChmodStrategy.add_chmod_dir(em_mset, d)
-        ChmodStrategy.enqueue_montage(em_mset)
-
-

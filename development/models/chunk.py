@@ -2,7 +2,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017. Allen Institute. All rights reserved.
+# Copyright 2017-2018. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -37,6 +37,7 @@ from django.db import models
 from django.conf import settings
 from development.models.rendered_volume import RenderedVolume
 import logging
+import os
 
 class Chunk(models.Model):
     _log = logging.getLogger('at_em_imaging_workflow.models.chunk')
@@ -46,13 +47,15 @@ class Chunk(models.Model):
     rendered_volume = models.ForeignKey(RenderedVolume)
     preceding_chunk = \
         models.ForeignKey('self',
-        related_name='%(class)s_preceding_chunk')
+        related_name='%(class)s_preceding_chunk',
+        null=True, blank=True)
     following_chunk = \
         models.ForeignKey('self',
-        related_name='%(class)s_following_chunk')
+        related_name='%(class)s_following_chunk',
+        null=True, blank=True)
 
     def __str__(self):
-        return "Chunk Lorem Ipsum"  # TODO: better string
+        return 'chunk ' + str(self.computed_index)
 
     def set_chunk_size(self):
         #TODO
@@ -63,6 +66,7 @@ class Chunk(models.Model):
         return True
 
     def get_render_project_name(self):
+        # return '247488_8R'
         return self.sections.first().specimen.uid
 
     def z_range(self):
@@ -144,8 +148,8 @@ class Chunk(models.Model):
                     'size': settings.CHUNK_DEFAULTS['chunk_size'],
                     'rendered_volume': volume,
                     'chunk_state': default_state,
-                    'following_chunk_id': -1,
-                    'preceding_chunk_id': -1})
+                    'following_chunk_id': None,
+                    'preceding_chunk_id': None})
             chunk_list.append(c)
 
         mset_section = mset.section
@@ -154,3 +158,16 @@ class Chunk(models.Model):
             mset_section.chunks.add(c)
 
         return chunk_list
+
+    def get_storage_directory(self, base_storage_directory=None):
+        if base_storage_directory is None:
+            base_storage_directory = settings.BASE_FILE_PATH
+
+        z_start,z_end = Chunk.calculate_z_range(self.computed_index)
+
+        return os.path.join(base_storage_directory,
+                            'chunk_' + \
+                            str(self.computed_index) + '_zs' + \
+                            str(z_start) + '_ze' + \
+                            str(z_end))
+

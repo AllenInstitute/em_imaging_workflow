@@ -36,7 +36,6 @@
 from django.conf import settings
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
 import logging
-from development.strategies.chmod_strategy import ChmodStrategy
 
 
 class MoveRawMontageSetStrategy(ExecutionStrategy):
@@ -65,9 +64,4 @@ class MoveRawMontageSetStrategy(ExecutionStrategy):
             em_mset.storage_directory = \
                 em_mset.get_storage_directory(
                     settings.LONG_TERM_BASE_FILE_PATH)
-            ChmodStrategy.add_chmod_file(
-                em_mset, em_mset.storage_directory)
-            ChmodStrategy.add_chmod_dir(
-                em_mset, em_mset.storage_directory)
-            ChmodStrategy.enqueue_montage(em_mset)
 

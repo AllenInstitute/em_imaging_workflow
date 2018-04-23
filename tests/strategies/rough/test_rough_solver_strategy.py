@@ -8,11 +8,6 @@ from models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 from strategies.rough.test_rough_point_match_strategy \
     import lots_of_chunks
-import simplejson as json
-try:
-    import __builtin__ as builtins  # @UnresolvedImport
-except:
-    import builtins  # @UnresolvedImport
 
 
 @pytest.mark.django_db
@@ -37,7 +32,7 @@ def test_get_input_data(lots_of_chunks):
 
     with patch('os.makedirs'):
         with patch('os.path.exists', Mock(return_value=True)):
-            with patch(builtins.__name__ + ".open",
+            with patch("builtins.open",
                        mock_open(read_data='{{ log_file_path }}')):
 
                 inp = strategy.get_input(

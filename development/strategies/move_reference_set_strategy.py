@@ -35,7 +35,6 @@
 #
 from django.conf import settings
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
-from development.strategies.chmod_strategy import ChmodStrategy
 import logging
 
 
@@ -65,8 +64,3 @@ class MoveReferenceSetStrategy(ExecutionStrategy):
             ref_set.storage_directory = \
                 ref_set.get_storage_directory(
                     settings.LONG_TERM_BASE_FILE_PATH)
-            ChmodStrategy.add_chmod_file(
-                ref_set, ref_set.storage_directory)
-            ChmodStrategy.add_chmod_dir(
-                ref_set, ref_set.storage_directory)
-            ChmodStrategy.enqueue_reference(ref_set)

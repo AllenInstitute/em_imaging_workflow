@@ -11,11 +11,6 @@ from models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 
 
-try:
-    import __builtin__ as builtins  # @UnresolvedImport
-except:
-    import builtins  # @UnresolvedImport
-
 @pytest.mark.django_db
 @override_settings(
     BASE_FILE_PATH='/base',
@@ -41,7 +36,7 @@ def test_get_input_data(lots_of_montage_sets):
                Mock(return_value='/path/to/wkf')):
         with patch('os.makedirs'):
             with patch('subprocess.call'):
-                with patch(builtins.__name__ + ".open",
+                with patch('builtins.open',
                            mock_open(read_data=file_str)):
                     inp = strategy.get_input(
                         em_mset,
@@ -83,7 +78,7 @@ def test_on_finishing(lots_of_montage_sets):
 
     with patch.object(
         WorkflowController,
-        'start_workflow') as strt:
+        'start_workflow'):
         strat.on_finishing(em_mset, results, task)
 
     pending = [
@@ -94,12 +89,4 @@ def test_on_finishing(lots_of_montage_sets):
         em_mset,
         type_list=pending)
 
-    assert len(wkfs) == 2
-
-    for w in wkfs:
-        assert w.well_known_file_type in pending
-
-    strt.assert_called_once_with(
-        'em_2d_montage',
-        em_mset,
-        start_node_name='Chmod Montage')
+    assert len(wkfs) == 0

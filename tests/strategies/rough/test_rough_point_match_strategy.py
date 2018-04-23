@@ -1,3 +1,6 @@
+import os
+os.environ['BLUE_SKY_SETTINGS'] = '/local1/git/at_em_imaging_workflow/at_em_imaging_workflow/blue_sky_settings.yml'
+
 import pytest
 from mock import Mock, patch, mock_open
 from workflow_engine.models.task import Task
@@ -10,11 +13,6 @@ from models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 from development.strategies.rough.rough_point_match_strategy \
     import RoughPointMatchStrategy
-import simplejson as json
-try:
-    import __builtin__ as builtins  # @UnresolvedImport
-except:
-    import builtins  # @UnresolvedImport
 
 @pytest.fixture
 def lots_of_chunks(lots_of_montage_sets):
@@ -27,7 +25,6 @@ def lots_of_chunks(lots_of_montage_sets):
     return list(chnks)
 
 
-@pytest.mark.xfail
 @pytest.mark.django_db
 def test_get_input_data(lots_of_chunks):
     chnk = lots_of_chunks[0]
@@ -41,7 +38,7 @@ def test_get_input_data(lots_of_chunks):
 
     with patch('os.makedirs'):
         with patch('os.path.exists', Mock(return_value=True)):
-            with patch(builtins.__name__ + ".open",
+            with patch("builtins.open",
                        mock_open(read_data='{{ log_file_path }}')):
                 inp = strategy.get_input(
                     chnk,
@@ -57,7 +54,7 @@ def test_get_input_data(lots_of_chunks):
     assert inp['renderScale'] == 0.4
 
     assert inp['collection'] == 'chunk_point_matches'
-    assert inp['pairJson'] == ''
+    assert inp['pairJson'] == None
 
 
 @pytest.mark.django_db
@@ -85,7 +82,7 @@ def test_on_finishing(lots_of_montage_sets):
                Mock(return_value=True)) as ope:
         with patch.object(
             WorkflowController,
-            'start_workflow') as strt:
+            'start_workflow'):
             strat.on_finishing(em_mset, results, task)
 
     ope.assert_called_once_with(
@@ -98,12 +95,4 @@ def test_on_finishing(lots_of_montage_sets):
         em_mset,
         type_list=pending)
 
-    assert len(wkfs) == 2
-
-    for w in wkfs:
-        assert w.well_known_file_type in pending
-
-    strt.assert_called_once_with(
-        'em_2d_montage',
-        em_mset,
-        start_node_name='Chmod Montage')
+    assert len(wkfs) == 0

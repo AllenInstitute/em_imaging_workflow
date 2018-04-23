@@ -36,10 +36,6 @@
 from mock import patch, mock_open, MagicMock
 from development.strategies.apply_lens_correction_strategy \
     import ApplyLensCorrectionStrategy
-try:
-    import __builtin__ as builtins  # @UnresolvedImport
-except:
-    import builtins  # @UnresolvedImport
 
 
 def test_get_input_data():
@@ -55,7 +51,7 @@ def test_get_input_data():
     strategy = ApplyLensCorrectionStrategy()
     with patch('workflow_engine.models.well_known_file.WellKnownFile',
                wkf_mock):
-        with patch(builtins.__name__ + ".open",
+        with patch("builtins.open",
                    mock_open(read_data='{ "transform": "TEST_XFM" }')):
             input_ret = strategy.get_input(em_mset,
                                            storage_directory,

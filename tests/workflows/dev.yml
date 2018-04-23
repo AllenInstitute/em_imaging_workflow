@@ -145,7 +145,21 @@ executables:
         pbs_queue: 'emconnectome'
         pbs_processor: 'mem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
-        
+
+    montage_scapes:
+        name: 'Make Montage Scapes'
+        path: 'python'
+        environment:
+        - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
+        - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        args:
+        - '-m'
+        - "rendermodules.dataimport.make_montage_scapes_stack"
+        remote_queue: 'pbs'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
+        pbs_walltime: 'walltime=5:00:00'
+
     calculate_multiplicative_correction:
         name: 'Calculate Multiplicative Correction'
         path: 'python'
@@ -265,7 +279,19 @@ workflows:
               class: "development.strategies.wait_for_manual_qc.WaitForManualQc"
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "mock"
-              
+
+            - key: "chunk_assign"
+              label: "Chunk Assignment"
+              class: "development.strategies.rough.define_chunks_strategy.DefineChunksStrategy"
+              enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
+              executable: "mock"
+
+            - key: "make_montage_scapes"
+              label: "Make Montage Scapes"
+              class: "development.strategies.rough.make_montage_scapes_strategy.MakeMontageScapesStrategy"
+              enqueued_class: "development.models.chunk.Chunk"
+              executable: "montage_scapes"
+
             #- key: "rough_align_em_2d"
             #  label: "Alignment" 
             #  workflow: true
@@ -283,6 +309,8 @@ workflows:
             - [ "solver", [ "detect_defects" ] ]
             - [ "detect_defects", [ "wait_for_manual_qc" ] ]
             - [ "wait_for_manual_qc", [ "downsample" ] ]
+            - [ "downsample", [ "chunk_assign" ] ]
+            - [ "chunk_assign", [ "make_montage_scapes" ] ]
             #- [ "chmod_dirs", [ "alignment" ] ]
 
     rough_align_em_2d:
@@ -294,8 +322,8 @@ workflows:
               executable: "create_tilepairs"
 
             - key: "em_rough_align_point_match"
-              label: "EM Montage Point Match"
-              class: "development.strategies.rough.rough_point.match_strategy.RoughPointMatchStrategy"
+              label: "EM Rough Point Match"
+              class: "development.strategies.rough.rough_point_match_strategy.RoughPointMatchStrategy"
               enqueued_class: "development.models.chunk.Chunk"
               executable: "generate_point_matches"
               batch_size: 15

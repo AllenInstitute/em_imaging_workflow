@@ -6,7 +6,6 @@ import copy
 from workflow_engine.models.well_known_file import WellKnownFile
 import jinja2
 import os
-from development.strategies.chmod_strategy import ChmodStrategy
 from development.strategies.schemas.rough.rough_point_match \
     import input_dict
 from django.conf import settings
@@ -83,10 +82,6 @@ class RoughPointMatchStrategy(ExecutionStrategy):
             em_mset,
             'point_match_output',
             task)
-        d = self.get_or_create_task_storage_directory(task)
-        ChmodStrategy.add_chmod_file(em_mset, d)
-        ChmodStrategy.add_chmod_dir(em_mset, d)
-        ChmodStrategy.enqueue_montage(em_mset)
 
     def create_log_configuration(self, log_file_path):
         env = jinja2.Environment(

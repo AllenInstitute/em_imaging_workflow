@@ -5,7 +5,6 @@ from rendermodules.pointmatch.schemas import \
 from django.conf import settings
 import logging
 import copy
-from development.strategies.chmod_strategy import ChmodStrategy
 from development.strategies \
     import RENDER_STACK_LENS_CORRECTED
 
@@ -26,8 +25,9 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
         inp['baseStack'] = RENDER_STACK_LENS_CORRECTED
         inp['stack'] = RENDER_STACK_LENS_CORRECTED
 
-        inp["minZ"] = chnk.section.z_index
-        inp["maxZ"] = chnk.section.z_index
+        min_z,max_z = chnk.z_range()
+        inp["minZ"] = min_z
+        inp["maxZ"] = max_z
 
         return TilePairClientParameters().dump(inp).data 
 
@@ -38,9 +38,3 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
             chnk,
             chnk.tile_pairs_file_description(),
             task)
-        #chmod_directory(chnk.get_storage_directory())
-        ChmodStrategy.add_chmod_dir(
-            chnk, chnk.get_storage_directory())
-        ChmodStrategy.add_chmod_file(
-            chnk, chnk.get_storage_directory())
-        ChmodStrategy.enqueue_montage(chnk)

@@ -49,7 +49,7 @@ def test_on_finishing(lots_of_montage_sets):
                Mock(return_value=True)) as ope:
         with patch.object(
             WorkflowController,
-            'start_workflow') as strt:
+            'start_workflow'):
             strat.on_finishing(em_mset, results, task)
 
     pending = [
@@ -60,13 +60,4 @@ def test_on_finishing(lots_of_montage_sets):
         em_mset,
         type_list=pending)
 
-    assert len(wkfs) == 2
-
-    for w in wkfs:
-        assert w.well_known_file_type in pending
-
-    strt.assert_called_once_with(
-        'em_2d_montage',
-        em_mset,
-        start_node_name='Chmod Reference')
-
+    assert len(wkfs) == 0
