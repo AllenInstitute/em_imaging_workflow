@@ -2,7 +2,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017-2018. Allen Institute. All rights reserved.
+# Copyright 2018. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -36,11 +36,9 @@
 from django.db import models
 
 
-class SampleHolder(models.Model):
-    uid = models.CharField(max_length=255, null=True)
-    imaged_sections_count = models.IntegerField(null=True)
-    load = models.ForeignKey('Load')
+class ChunkAssignment(models.Model):
+    section = models.ForeignKey('Section')
+    chunk = models.ForeignKey('Chunk')
 
     def __str__(self):
-        return str(self.uid)
-
+        return "%s in %s" % (str(self.section), str(self.chunk))

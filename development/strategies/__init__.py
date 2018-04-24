@@ -13,5 +13,5 @@ RENDER_STACK_DOWNSAMPLED = 'em_2d_montage_downsample'
 RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE = \
     'em_rough_align_solved_downsample_zs%d_ze%d'
 RENDER_STACK_ROUGH_ALIGN_SCAPES_STACK = \
-    'em_rough_align_scapes_zs%d_ze_%d'
+    'em_rough_align_scapes_zs_%d_ze_%d'
 RENDER_STACK_ROUGH_ALIGN = 'em_rough_align_zs%d_ze%d'

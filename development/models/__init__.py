@@ -51,5 +51,6 @@ from development.models.reference_set import ReferenceSet
 from development.models.e_m_montage_set import EMMontageSet
 from development.models.registration_series import RegistrationSeries
 from development.models.a_t_montage_set import ATMontageSet
+from development.models.chunk_assignment import ChunkAssignment
 
 from workflow_engine.blue_sky_state_machine import BlueSkyStateMachine

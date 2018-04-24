@@ -2,7 +2,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017. Allen Institute. All rights reserved.
+# Copyright 2017-2018. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -35,18 +35,18 @@
 #
 from django.db import models
 from django.contrib.postgres.fields import JSONField
-from development.models.chunk import Chunk
-from development.models.specimen import Specimen
-from development.models.sample_holder import SampleHolder
+
 
 class Section(models.Model):
     section_id = models.CharField(max_length=255, null=True)
     z_index = models.IntegerField(null=True)
     metadata = JSONField(null=True)
-    specimen = models.ForeignKey(Specimen)
-    chunks = models.ManyToManyField(Chunk, related_name='sections')
-    sample_holders = models.ManyToManyField(SampleHolder, related_name='sample_holders')
+    specimen = models.ForeignKey('Specimen')
+    chunks = models.ManyToManyField(
+        'Chunk', related_name='sections',
+        through='ChunkAssignment')
+    sample_holders = models.ManyToManyField(
+        'SampleHolder', related_name='sample_holders')
 
     def __str__(self):
         return str(self.z_index)
-

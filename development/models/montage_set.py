@@ -2,7 +2,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017. Allen Institute. All rights reserved.
+# Copyright 2017-2018. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -35,15 +35,13 @@
 #
 from django.db import models
 from development.models.tile_image_set import TileImageSet
-from development.models.section import Section
-from development.models.sample_holder import SampleHolder
 
 
 class MontageSet(TileImageSet):
     uid = models.CharField(max_length=255, null=True)
     mipmap_directory = models.CharField(max_length=255, null=True)
-    section = models.ForeignKey(Section)
-    sample_holder = models.ForeignKey(SampleHolder)
+    section = models.ForeignKey('Section')
+    sample_holder = models.ForeignKey('SampleHolder')
     overlap = models.FloatField(null=True)
 
     def __str__(self):

@@ -38,13 +38,14 @@ from django.conf import settings
 from development.models.rendered_volume import RenderedVolume
 import logging
 import os
+from development.models.chunk_assignment import ChunkAssignment
 
 class Chunk(models.Model):
     _log = logging.getLogger('at_em_imaging_workflow.models.chunk')
     size = models.IntegerField(null=True)
     computed_index = models.IntegerField(null=True)
     chunk_state = models.CharField(max_length=255, null=True)
-    rendered_volume = models.ForeignKey(RenderedVolume)
+    rendered_volume = models.ForeignKey('RenderedVolume')
     preceding_chunk = \
         models.ForeignKey('self',
         related_name='%(class)s_preceding_chunk',
@@ -155,7 +156,9 @@ class Chunk(models.Model):
         mset_section = mset.section
 
         for c in chunk_list:
-            mset_section.chunks.add(c)
+            ChunkAssignment.objects.update_or_create(
+                section=mset_section,
+                chunk=c)
 
         return chunk_list
 

@@ -2,7 +2,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017. Allen Institute. All rights reserved.
+# Copyright 2017-2018. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -34,12 +34,11 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from development.models.specimen import Specimen
 
 
 class RenderedVolume(models.Model):
     mipmap_directory = models.CharField(max_length=255, null=True)
-    specimen = models.ForeignKey(Specimen)
+    specimen = models.ForeignKey('Specimen')
 
     def __str__(self):
         return "Rendered Volume for %s" % (str(self.specimen))

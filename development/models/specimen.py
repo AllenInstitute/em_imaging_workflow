@@ -2,7 +2,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017. Allen Institute. All rights reserved.
+# Copyright 2017-2018. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -34,14 +34,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from development.models.study import Study
 
 
 class Specimen(models.Model):
     uid = models.CharField(max_length=255, null=True)
     render_project = models.CharField(max_length=255, null=True)
     render_owner = models.CharField(max_length=255, null=True)
-    study = models.ForeignKey(Study)
+    study = models.ForeignKey('Study')
 
     def __str__(self):
         return str(self.uid)

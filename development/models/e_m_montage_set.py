@@ -1,7 +1,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017. Allen Institute. All rights reserved.
+# Copyright 2017-2018. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -35,12 +35,11 @@
 from django.db import models
 from django.conf import settings
 from development.models.montage_set import MontageSet
-from development.models.reference_set import ReferenceSet
 import os
 
 
 class EMMontageSet(MontageSet):
-    reference_set = models.ForeignKey(ReferenceSet, null=True)
+    reference_set = models.ForeignKey('ReferenceSet', null=True)
     reference_set_uid = models.CharField(max_length=255, null=True)
 
     def __str__(self):
