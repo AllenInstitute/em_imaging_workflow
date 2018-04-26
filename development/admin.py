@@ -2,6 +2,7 @@ from django.contrib import admin
 from development.models.a_t_montage_set import ATMontageSet
 from development.models.camera import Camera
 from development.models.chunk import Chunk
+from development.models.chunk_assignment import ChunkAssignment
 from development.models.e_m_montage_set import EMMontageSet
 from development.models.load import Load
 from development.models.microscope import Microscope
@@ -23,6 +24,7 @@ from at_em_imaging_workflow.admin.e_m_montage_set_admin \
 admin.site.register(ATMontageSet)
 admin.site.register(Camera)
 admin.site.register(Chunk)
+admin.site.register(ChunkAssignment)
 admin.site.register(EMMontageSet, EMMontageSetAdmin)
 admin.site.register(Load)
 admin.site.register(Microscope)

@@ -1,0 +1,30 @@
+version: "3"
+services:
+  message_queue:
+    restart: on-failure:3
+    image: rabbitmq:3-management
+    environment:
+    - RABBITMQ_DEFAULT_USER=blue_sky_user
+    - RABBITMQ_DEFAULT_PASS=blue_sky_user
+    ports:
+    - "9008:5672"
+    - "9000:15672"
+  at_em_test:
+    image: alleninstitute/at_em_imaging_workflow:timf
+    environment:
+    - PYTHONPATH=/at_em_imaging_workflow:/blue_sky_workflow_engine:/at_em_imaging_workflow/docker
+    - DJANGO_SETTINGS_MODULE=test_settings_docker
+    - BASE_DIR=/at_em_imaging_workflow
+    - BLUE_SKY_SETTINGS=/at_em_imaging_workflow/docker/blue_sky_settings_docker.yml
+    command: bash -c "cd /at_em_imaging_workflow; /bin/bash test_entry.sh"
+    ports:
+    - "9009:8888"
+    - "9002:8000"
+    - "9003:5555"
+    depends_on:
+    - message_queue
+    volumes:
+    - "/data:/data:shared"
+    - "/allen:/allen:shared"
+    - "/local1/git/blue_sky_workflow_engine:/blue_sky_workflow_engine"
+    - "/local1/git/at_em_imaging_workflow:/at_em_imaging_workflow"

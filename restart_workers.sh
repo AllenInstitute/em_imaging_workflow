@@ -4,7 +4,7 @@ pkill -9 -f "manage"
 pkill -9 -f "beat"
 pkill -9 -f "flower"
 
-export MOAB_AUTH='timf:2 Need a safe house'
+export MOAB_AUTH=''
 
 export BASE_DIR=/at_em_imaging_workflow
 

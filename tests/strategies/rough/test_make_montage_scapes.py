@@ -49,7 +49,7 @@ def test_get_input_data(lots_of_chunks):
 
 
 @pytest.mark.django_db
-def test_get__one_task_objects_for_queue(lots_of_chunks):
+def test_get_one_task_objects_for_queue(lots_of_chunks):
     chnk_assigns = ChunkAssignment.objects.filter(
         section__z_index=1)
     chnk_assign = chnk_assigns[0]
@@ -64,7 +64,7 @@ def test_get__one_task_objects_for_queue(lots_of_chunks):
 
 
 @pytest.mark.django_db
-def test_get__two_task_objects_for_queue(lots_of_chunks):
+def test_get_two_task_objects_for_queue(lots_of_chunks):
     chnk_assigns = ChunkAssignment.objects.filter(
         section__z_index=10)
     chnk_assign = chnk_assigns[0]
