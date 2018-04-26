@@ -19,11 +19,13 @@ from development.models.study import Study
 from development.models.tile_image_set import TileImageSet
 from at_em_imaging_workflow.admin.e_m_montage_set_admin \
     import EMMontageSetAdmin
+from at_em_imaging_workflow.admin.chunk_admin \
+    import ChunkAdmin
 
 # Register your models here.
 admin.site.register(ATMontageSet)
 admin.site.register(Camera)
-admin.site.register(Chunk)
+admin.site.register(Chunk, ChunkAdmin)
 admin.site.register(ChunkAssignment)
 admin.site.register(EMMontageSet, EMMontageSetAdmin)
 admin.site.register(Load)

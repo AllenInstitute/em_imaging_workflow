@@ -1,0 +1,26 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_static admin_list static %}
+
+{% block result_list %}
+    {% admin_actions %}
+    {% result_list cl %}
+
+    {% load staticfiles %}
+
+<div id='page_content'>
+<div id='header_options'>
+    {% include "number_of_records.html" %}
+</div>
+
+<div>
+<table id='chnk_table'>
+<tr>
+    <th class="chnk_th">Chunk</th>
+    <th colspan="{{ chunk_size }}">Sections</th>
+</tr>
+</table>
+</div>
+<script src="{% static 'development/javascript/chunk_table.js' %}"></script>
+</div>
+
+{% endblock %}

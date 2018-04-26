@@ -13,6 +13,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from development.models.microscope import Microscope
 from development.models.e_m_montage_set import EMMontageSet
 from workflow_engine.models.job_queue import JobQueue
+from development.models.chunk import Chunk
 
 
 context = {
@@ -105,6 +106,37 @@ def temca_query(result, get_params):
 
     return result
 
+def all_chunks(result, get_params):
+    chunks = Chunk.objects.all()
+
+    chunk_start_indices = sorted(chunks, key=lambda c: c.computed_index)
+
+    completed_sections = []
+
+    for chnk in chunk_start_indices:
+        complete_state = []
+        found_sections = [s.z_index for s in chnk.sections.all()]
+        z_start, z_end = Chunk.calculate_z_range(chnk.computed_index)
+
+        for z in range(z_start, z_end):
+            if z in found_sections:
+                complete_state.append({'z': z, 'complete': 'T'})
+            else:
+                complete_state.append({'z': z, 'complete': 'F' })
+
+        completed_sections.append((
+            chnk.computed_index,
+            complete_state))
+
+    result['success'] = True,
+    result['message'] = {}
+
+    result['message']['chunk_size'] = settings.CHUNK_DEFAULTS['chunk_size']
+    result['message']['chunk_sections'] = completed_sections
+
+    return result
+
+
 def page_satchel(request, url=None):
     success = False
     message = 'Nothing happened.'
@@ -118,7 +150,8 @@ def page_satchel(request, url=None):
         'manual_qc_update': manual_qc_update,
         'temca_query': temca_query,
         'reimaged_sections': reimaged_sections,
-        'find_sections': find_sections
+        'find_sections': find_sections,
+        'all_chunks': all_chunks
     }
 
     try:
