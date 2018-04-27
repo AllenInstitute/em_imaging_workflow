@@ -14,7 +14,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from at_em_imaging_workflow.views import chunk_view, page_satchel
+from at_em_imaging_workflow.views import page_satchel
 admin.autodiscover()
 
 urlpatterns = [
@@ -22,6 +22,5 @@ urlpatterns = [
     url(r'^development/', include('development.urls')),
     url(r'^admin/', admin.site.urls),
 
-    url(r'^at_em/chunks', chunk_view.chunks_page, name='chunks'),
     url(r'^at_em/page_satchel', page_satchel.page_satchel, name='page_satchel')
 ]
