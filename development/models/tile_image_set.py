@@ -34,6 +34,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
+from workflow_engine.models.configuration import Configuration
 import re
 
 
@@ -44,6 +46,8 @@ class TileImageSet(models.Model):
     microscope = models.ForeignKey('Microscope', null=True)
     metafile = models.CharField(max_length=255, null=True)
     acquisition_date = models.DateTimeField(null=True)
+    configurations = GenericRelation(Configuration)
+
 
     _ODD_FILE_CHARS = re.compile(r'[ :\.\-\+]')
 

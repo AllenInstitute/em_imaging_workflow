@@ -1,16 +1,18 @@
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
-from development.strategies.schemas.create_tile_pairs import input_dict
+from development.strategies.schemas.rough.create_rough_tile_pairs \
+    import input_dict
 from rendermodules.pointmatch.schemas import \
     TilePairClientParameters
 from django.conf import settings
 import logging
 import copy
 from development.strategies \
-    import RENDER_STACK_LENS_CORRECTED
+    import RENDER_STACK_MONTAGE_SCAPES_STACK
 
 
 class CreateRoughPairsStrategy(ExecutionStrategy):
-    _log = logging.getLogger('development.strategies.create_rough_pairs_strategy')
+    _log = logging.getLogger(
+        'development.strategies.create_rough_pairs_strategy')
 
     def get_input(self, chnk, storage_directory, task):
         inp = copy.deepcopy(input_dict)
@@ -22,12 +24,14 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
         inp['output_dir'] = chnk.get_storage_directory()
-        inp['baseStack'] = RENDER_STACK_LENS_CORRECTED
-        inp['stack'] = RENDER_STACK_LENS_CORRECTED
 
-        min_z,max_z = chnk.z_range()
+        min_z, max_z = chnk.z_range()
         inp["minZ"] = min_z
         inp["maxZ"] = max_z
+
+        stack = RENDER_STACK_MONTAGE_SCAPES_STACK % (min_z, max_z)
+        inp['baseStack'] = stack
+        inp['stack'] = stack
 
         return TilePairClientParameters().dump(inp).data 
 

@@ -10,7 +10,6 @@ input_dict = {
     "output_stack": "rough_test_downsample_montage_stack",
     "image_directory": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/scratch",
     "set_new_z":"False",
-    "new_z_start": 1020,
     "imgformat":"png",
     "scale": 0.1,
     "zstart": 1020,

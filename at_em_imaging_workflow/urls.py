@@ -14,10 +14,12 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from workflow_engine.views import home_view
 from at_em_imaging_workflow.views import page_satchel
 admin.autodiscover()
 
 urlpatterns = [
+    url(r'^$', home_view.index, name='index'),
     url(r'^workflow_engine/', include('workflow_engine.urls')),
     url(r'^development/', include('development.urls')),
     url(r'^admin/', admin.site.urls),

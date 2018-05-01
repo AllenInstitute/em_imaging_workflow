@@ -2,6 +2,7 @@ from workflow_engine.strategies import execution_strategy
 from rendermodules.materialize.schemas import \
   RenderSectionAtScaleParameters
 from development.strategies.schemas.render_downsample import input_dict
+from workflow_engine.models.configuration import Configuration
 from workflow_engine.models.well_known_file import WellKnownFile
 from django.conf import settings
 import simplejson as json
@@ -22,8 +23,11 @@ class RenderDownsampleStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
         inp['render']['project'] = em_mset.get_render_project_name()
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
+        inp['render']['memGB'] = '18G'
+
         inp['minZ'] = em_mset.section.z_index
         inp['maxZ'] = em_mset.section.z_index
+
         inp['input_stack'] = self.get_input_stack_name()
         inp['image_directory'] = \
             em_mset.get_storage_directory(
@@ -40,3 +44,30 @@ class RenderDownsampleStrategy(execution_strategy.ExecutionStrategy):
 
     def get_input_stack_name(self):
         return RENDER_STACK_SOLVED
+
+    def on_finishing(self, em_mset, results, task):
+        self.check_key(results, 'temp_stack')
+
+        downsample_configs = em_mset.configurations.filter(
+            configuration_type='downsample temp stack')
+
+        if len(downsample_configs) == 0:
+            downsample_config = Configuration(
+                content_object=em_mset,
+                name='%s downsample temp_stack' % str(em_mset),
+                configuration_type='downsample temp stack',
+                json_object={ 
+                    'downsample_temp_stack' : results['temp_stack']
+                })
+        else:
+            downsample_config = downsample_configs.first()
+
+        downsample_config.json_object[
+            'downsample_temp_stack'] = results['temp_stack']
+
+        if len(downsample_configs) > 1:
+            RenderDownsampleStrategy.error(
+                'Too many downsample stack configurations found')
+
+        downsample_config.save()
+

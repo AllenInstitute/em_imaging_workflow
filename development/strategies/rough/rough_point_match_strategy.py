@@ -29,7 +29,7 @@ class RoughPointMatchStrategy(ExecutionStrategy):
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = 'FIXME' # chnk.get_render_project_name()
+        inp['render']['project'] = chnk.get_render_project_name()
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
         inp['owner'] = settings.RENDER_SERVICE_USER
@@ -51,16 +51,10 @@ class RoughPointMatchStrategy(ExecutionStrategy):
         inp['collection'] = chnk.get_point_collection_name()
         inp['pairJson'] = self.get_tile_pairs_file_name(chnk)
 
-        mem = 128
-        ppn = 24
+        mem = 192
+        ppn = 30
         inp['memory'] = str(int((mem - ppn) / ppn)) + 'g'
         inp['driverMemory'] = str(int(mem)) +  'g'  # TODO roughly memory * ppn
-
-        clipWidth = 800
-        clipHeight = 800
-        inp['clipWidth'] = clipWidth
-        inp['clipHeight'] = clipHeight
-        inp['maxFeatureCacheGb'] = 3
 
         retries = 20
         inp['masterUrl'] = 'local[*,%d]' % (retries)

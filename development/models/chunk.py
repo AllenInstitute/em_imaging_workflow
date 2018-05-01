@@ -77,10 +77,10 @@ class Chunk(models.Model):
         return (min(zs), max(zs))
 
     def get_point_collection_name(self):
-        return 'chunk_point_matches'
+        return 'chunk_rough_align_point_matches'
 
     def tile_pairs_file_description(self):
-        return 'tile pairs file'
+        return 'rough tile pairs file'
 
     @classmethod
     def get_z_range(cls, em_mset):
