@@ -3,6 +3,7 @@ import simplejson as json
 from development.strategies.rough.make_montage_scapes_stack_strategy import MakeMontageScapesStackStrategy
 from development.models.chunk_assignment import ChunkAssignment
 from development.models.e_m_montage_set import EMMontageSet
+from workflow_engine.models.configuration import Configuration
 os.environ['BLUE_SKY_SETTINGS'] = '/local1/git/at_em_imaging_workflow/at_em_imaging_workflow/blue_sky_settings.yml'
 
 import pytest
@@ -26,18 +27,32 @@ def test_get_input_data(lots_of_chunks):
     strategy = MakeMontageScapesStackStrategy()
     storage_directory = '/example/storage/directory'
     task = Task(id=345)
+
+    em_mset = EMMontageSet.objects.filter(
+        section=chnk_assign.section).first()
+
+    downsample_config = Configuration(
+        content_object=em_mset,
+        name='%s downsample temp_stack' % str(em_mset),
+        configuration_type='downsample temp stack',
+        json_object={ 
+            'downsample_temp_stack' : 'mock_stack'
+        })
+    downsample_config.save()
+
     inp = strategy.get_input(
         chnk_assign,
         storage_directory,
         task)
 
     assert inp['minZ'] == 1
-    assert inp['maxZ'] == 10
+    assert inp['maxZ'] == 1
 
-    assert inp['image_directory'] == '/example/storage/directory'
+    assert inp['image_directory'] == \
+        '/long/term/em_montage_MOCK SPECIMEN_z1_2345_06_07_16_09_10_00_00'
 
-    assert inp['montage_stack'] == 'em_2d_montage_solved'
-    assert inp['output_stack'] == 'em_rough_align_scapes_zs_1_ze_10'
+    assert inp['montage_stack'] == 'mock_stack'
+    assert inp['output_stack'] == 'em_montage_scapes_zs_1_ze_10'
 
     assert inp['render']['host'] == 'renderservice'
     assert inp['render']['port'] == 8080

@@ -44,16 +44,14 @@ def test_get_input_data(lots_of_chunks):
                     chnk,
                     storage_directory,
                     task)
-    assert inp['clipWidth'] == 800
-    assert inp['clipHeight'] == 800
-    assert inp['SIFTsteps'] == 3
-    assert inp['memory'] == '4g'
+    assert inp['SIFTsteps'] == 5
+    assert inp['memory'] == '5g'
     assert inp['SIFTfdSize'] == 8
-    assert inp['SIFTmaxScale'] == 0.82
-    assert inp['SIFTminScale'] == 0.38
-    assert inp['renderScale'] == 0.4
+    assert inp['SIFTmaxScale'] == 1.0
+    assert inp['SIFTminScale'] == 0.2
+    assert inp['renderScale'] == 1.0
 
-    assert inp['collection'] == 'chunk_point_matches'
+    assert inp['collection'] == 'chunk_rough_align_point_matches'
     assert inp['pairJson'] == None
 
 

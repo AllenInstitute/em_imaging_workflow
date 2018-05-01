@@ -256,30 +256,42 @@ LOGGING = {
         }
     },    
     'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'formatter': 'detailed',
+            'stream': 'ext://sys.stdout'
+        },
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
+            'formatter': 'detailed',
             'filename': os.environ.get('DEBUG_LOG', 'debug.log'),
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file'],
             'level': 'WARN',
             'propagate': True,
         },
         'at_em_imaging_workflow': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file'],
             'level': 'WARN',
             'propagate': True,
         },
         'development': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file'],
             'level': 'WARN',
             'propagate': True,
         },
         'test_output': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'workflow_client': {
+            'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': True,
         },
@@ -300,7 +312,7 @@ LOGGING = {
         }        
     }
 } 
-CELERYD_HIJACK_ROOT_LOGGER = False
+CELERYD_HIJACK_ROOT_LOGGER = True
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 

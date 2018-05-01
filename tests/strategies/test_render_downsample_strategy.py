@@ -69,7 +69,7 @@ def test_get_input_data(lots_of_montage_sets):
     )
 def test_on_finishing(lots_of_montage_sets):
     em_mset = lots_of_montage_sets[0]
-    results = Mock()
+    results = { 'temp_stack': 'mock_stack'}
     job = Job(
         id=444,
         enqueued_object_id=em_mset.id)
