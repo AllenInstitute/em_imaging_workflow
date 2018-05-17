@@ -38,7 +38,7 @@ from workflow_engine.workflow_controller import WorkflowController
 from rendermodules.lens_correction.schemas \
     import LensCorrectionParameters
 from development.models.reference_set import ReferenceSet
-from development.strategies.schemas.generate_lens_correction_transform import input_dict
+from workflow_engine.models.configuration import Configuration
 from django.conf import settings
 from development.models import state_machines
 import logging
@@ -57,8 +57,10 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
         project_path = ref_set.storage_directory
         GenerateLensCorrectionTransformStrategy._log.info(
             'project path: %s' % (project_path))
-        
-        inp = input_dict 
+
+        inp = Configuration.objects.get(
+            name='Generate Lens Correction Input',
+            configuration_type='strategy_config').json_object
 
         inp['manifest_path'] = ref_set.manifest_path
         inp['project_path'] = project_path

@@ -2,12 +2,10 @@ from workflow_engine.strategies.execution_strategy import \
     ExecutionStrategy
 from rendermodules.pointmatch.schemas import \
     PointMatchClientParametersSpark
-import copy
+from workflow_engine.models.configuration import Configuration
 from workflow_engine.models.well_known_file import WellKnownFile
 import jinja2
 import os
-from development.strategies.schemas.two_d_montage_point_match \
-    import input_dict
 from django.conf import settings
 import logging
 
@@ -18,9 +16,9 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
     _log = logging.getLogger(_package)
 
     def get_input(self, em_mset, storage_directory, task):
-        TwoDMontagePointMatchStrategy._log.info("get input")
-
-        inp = copy.deepcopy(input_dict)
+        inp = Configuration.objects.get(
+            name='2D Montage Point Match Input',
+            configuration_type='strategy_config').json_object
 
         inp['sparkhome'] = settings.SPARK_HOME
         log_dir = self.get_or_create_task_storage_directory(task)

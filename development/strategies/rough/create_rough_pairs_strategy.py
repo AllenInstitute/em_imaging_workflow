@@ -1,11 +1,9 @@
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
-from development.strategies.schemas.rough.create_rough_tile_pairs \
-    import input_dict
+from workflow_engine.models.configuration import Configuration
 from rendermodules.pointmatch.schemas import \
     TilePairClientParameters
 from django.conf import settings
 import logging
-import copy
 from development.strategies \
     import RENDER_STACK_MONTAGE_SCAPES_STACK
 
@@ -15,8 +13,10 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
         'development.strategies.create_rough_pairs_strategy')
 
     def get_input(self, chnk, storage_directory, task):
-        inp = copy.deepcopy(input_dict)
-    
+        inp = Configuration.objects.get(
+            name='Apply Rough Alignment Input',
+            configuration_type='strategy_config').json_object
+
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER

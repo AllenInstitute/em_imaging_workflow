@@ -2,18 +2,18 @@ from workflow_engine.strategies.execution_strategy \
     import ExecutionStrategy
 from rendermodules.rough_align.schemas \
     import SolveRoughAlignmentParameters
-from development.strategies.schemas.rough.solve_rough_alignment \
-    import input_dict
+from workflow_engine.models.configuration import Configuration
 from development.strategies \
     import RENDER_STACK_MONTAGE_SCAPES_STACK, RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE
 from django.conf import settings
-import copy
 
 
 class SolveRoughAlignmentStrategy(ExecutionStrategy):
 
     def get_input(self, chnk, storage_directory, task):
-        inp = copy.deepcopy(input_dict)
+        inp = Configuration.objects.get(
+            name='Rough Alignment Solver Input',
+            configuration_type='strategy_config').json_object
 
         (z_start, z_end) = chnk.z_range()
 

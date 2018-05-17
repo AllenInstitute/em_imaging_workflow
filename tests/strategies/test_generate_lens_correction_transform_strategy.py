@@ -2,14 +2,18 @@ import pytest
 from mock import patch, Mock
 from development.models import ReferenceSet, state_machines
 from workflow_engine.workflow_controller import WorkflowController
+from tests.strategies.at_em_fixtures import strategy_configurations
 from development.strategies.generate_lens_correction_transform_strategy \
     import GenerateLensCorrectionTransformStrategy
-from development.strategies.schemas.generate_lens_correction_transform \
-    import input_dict
 from .at_em_fixtures import mock_run_states
+from django.test.utils import override_settings
 
 
-def test_get_input_data():
+@pytest.mark.django_db
+@override_settings(
+    FIJI_PATH='/path/to/fiji'
+)
+def test_get_input_data(strategy_configurations):
     enqueued_object = ReferenceSet(uid='deadbeef',
                                    manifest_path='manifest.json',
                                    project_path='/path/to/project')
@@ -22,7 +26,7 @@ def test_get_input_data():
                              task)
 
     assert inp['manifest_path'] == 'manifest.json'
-    assert inp['fiji_path'] == input_dict['fiji_path']
+    assert inp['fiji_path'] == '/path/to/fiji'
     assert inp is not None
 
 

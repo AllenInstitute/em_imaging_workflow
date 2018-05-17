@@ -4,8 +4,6 @@ from django.test.utils import override_settings
 from workflow_engine.models.job import Job
 from workflow_engine.models.task import Task
 from development.models.e_m_montage_set import EMMontageSet
-from development.strategies.chmod_strategy \
-    import ChmodStrategy
 from development.strategies.rough.define_chunks_strategy \
     import DefineChunksStrategy
 from development.models.chunk import Chunk
@@ -31,16 +29,5 @@ def test_must_wait(lots_of_montage_sets):
         strat = DefineChunksStrategy()
         strat.must_wait(em_mset)
 
-    pending = [
-        ChmodStrategy.CHMOD_DIR_PENDING,
-        ChmodStrategy.CHMOD_FILE_PENDING]
-
     assert Chunk.objects.count() == 125
     assert EMMontageSet.objects.count() == 999
-
-    wkfs = ChmodStrategy.find_chmod_files(
-        em_mset,
-        type_list=pending)
-
-    for w in wkfs:
-        assert w.well_known_file_type in pending

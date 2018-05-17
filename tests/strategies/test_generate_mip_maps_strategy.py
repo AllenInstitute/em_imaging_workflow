@@ -4,7 +4,7 @@ from mock import Mock, patch
 from workflow_engine.models.job import Job
 from workflow_engine.models.task import Task
 from workflow_engine.workflow_controller import WorkflowController
-from development.strategies.chmod_strategy import ChmodStrategy
+from tests.strategies.at_em_fixtures import strategy_configurations
 from development.strategies.generate_mip_maps_strategy \
     import GenerateMipMapsStrategy
 from models.test_chunk_model \
@@ -19,7 +19,8 @@ from models.test_chunk_model \
     RENDER_CLIENT_SCRIPTS='/path/to/mock/client/scripts',
     MIPMAP_FILE_PATH='/path/to/mipmaps',
 )
-def test_get_input_data(lots_of_montage_sets):
+def test_get_input_data(lots_of_montage_sets,
+                        strategy_configurations):
     em_mset = lots_of_montage_sets[0]
     task = Mock()
     task.job = Mock()
@@ -61,13 +62,3 @@ def test_on_finishing(lots_of_montage_sets):
         WorkflowController,
         'start_workflow'):
         strat.on_finishing(em_mset, results, task)
-
-    pending = [
-        ChmodStrategy.CHMOD_DIR_PENDING,
-        ChmodStrategy.CHMOD_FILE_PENDING]
-
-    wkfs = ChmodStrategy.find_chmod_files(
-        em_mset,
-        type_list=pending)
-
-    assert len(wkfs) == 0

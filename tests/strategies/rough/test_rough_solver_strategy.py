@@ -2,6 +2,7 @@ import pytest
 from mock import patch, Mock, mock_open
 from workflow_engine.models.task import Task
 from django.test.utils import override_settings
+from tests.strategies.at_em_fixtures import strategy_configurations
 from development.strategies.rough.solve_rough_alignment_strategy \
     import SolveRoughAlignmentStrategy
 from models.test_chunk_model \
@@ -20,7 +21,8 @@ from strategies.rough.test_rough_point_match_strategy \
         'overlap': 2,
         'start_z': 1,
         'chunk_size': 5 })
-def test_get_input_data(lots_of_chunks):
+def test_get_input_data(lots_of_chunks,
+                        strategy_configurations):
     chnk = lots_of_chunks[2]
     task = Task(id=345)
     storage_directory = '/example/storage/directory'

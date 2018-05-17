@@ -3,6 +3,7 @@ from development.strategies import RENDER_STACK_INGEST, RENDER_STACK_SOLVED,\
     RENDER_STACK_LENS_CORRECTED
 import pytest
 from workflow_engine.models.task import Task
+from tests.strategies.at_em_fixtures import strategy_configurations
 from development.strategies.manual_q_c_strategy \
     import ManualQCStrategy
 from django.test.utils import override_settings
@@ -10,13 +11,14 @@ from models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 
 
+@pytest.mark.django_db
 @override_settings(
     RENDER_SERVICE_URL='MOCK_URL',
     RENDER_SERVICE_PORT=9999,
     RENDER_SERVICE_USER='MOCK_USER',
     RENDER_CLIENT_SCRIPTS='/path/to/mock/client/scripts',
 )
-def test_get_input_data():
+def test_get_input_data(strategy_configurations):
     em_mset = Mock()
     em_mset.get_point_collection_name = Mock(
         return_value='MOCK_COLLECTION')

@@ -1,4 +1,5 @@
 import os
+from tests.strategies.at_em_fixtures import strategy_configurations
 os.environ['BLUE_SKY_SETTINGS'] = '/local1/git/at_em_imaging_workflow/at_em_imaging_workflow/blue_sky_settings.yml'
 
 import pytest
@@ -7,7 +8,6 @@ from workflow_engine.models.task import Task
 from workflow_engine.models.job import Job
 from django.test.utils import override_settings
 from workflow_engine.workflow_controller import WorkflowController
-from development.strategies.chmod_strategy import ChmodStrategy
 from development.models.chunk import Chunk
 from models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
@@ -26,7 +26,8 @@ def lots_of_chunks(lots_of_montage_sets):
 
 
 @pytest.mark.django_db
-def test_get_input_data(lots_of_chunks):
+def test_get_input_data(lots_of_chunks,
+                        strategy_configurations):
     chnk = lots_of_chunks[0]
     task = Task(id=345)
     storage_directory = '/example/storage/directory'
@@ -84,12 +85,3 @@ def test_on_finishing(lots_of_montage_sets):
 
     ope.assert_called_once_with(
         '/path/to/task/storage/directory/output_333.json')
-    pending = [
-        ChmodStrategy.CHMOD_DIR_PENDING,
-        ChmodStrategy.CHMOD_FILE_PENDING]
-
-    wkfs = ChmodStrategy.find_chmod_files(
-        em_mset,
-        type_list=pending)
-
-    assert len(wkfs) == 0

@@ -1,6 +1,6 @@
 from workflow_engine.strategies import execution_strategy
 from rendermodules.montage.schemas import SolveMontageSectionParameters
-from development.strategies.schemas.two_d_montage_solver import input_dict
+from workflow_engine.models.configuration import Configuration
 from django.conf import settings
 import logging
 from development.strategies \
@@ -17,7 +17,9 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
     def get_input(self, em_mset, storage_directory, task):
         TwoDMontageSolverStrategy._log.info("get input")
 
-        inp = input_dict
+        inp = Configuration.objects.get(
+            name='2D Montage Solver Input',
+            configuration_type='strategy_config').json_object
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT

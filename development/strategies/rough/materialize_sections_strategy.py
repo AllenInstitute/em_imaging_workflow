@@ -2,15 +2,14 @@ from workflow_engine.strategies.execution_strategy import \
     ExecutionStrategy
 from rendermodules.materialize.schemas import \
     MaterializeSectionsParameters
-import copy
 import jinja2
 import os
 from development.strategies import RENDER_STACK_ROUGH_ALIGN
 from development.models.chunk_assignment import ChunkAssignment
-from development.strategies.schemas.rough.materialize_sections \
-    import input_dict
+from workflow_engine.models.configuration import Configuration
 from django.conf import settings
 import logging
+
 
 class MaterializeSectionsStrategy(ExecutionStrategy):
     _strategies_package = 'development.strategies'
@@ -20,9 +19,9 @@ class MaterializeSectionsStrategy(ExecutionStrategy):
     _log = logging.getLogger(_package)
 
     def get_input(self, chnk_assign, storage_directory, task):
-        MaterializeSectionsStrategy._log.info("get input")
-
-        inp = copy.deepcopy(input_dict)
+        inp = Configuration.objects.get(
+            name='Materialize Sections Input',
+            configuration_type='strategy_config').json_object
 
         chnk = chnk_assign.chunk
         em_mset = chnk_assign.section.montageset_set.first()
@@ -59,7 +58,8 @@ class MaterializeSectionsStrategy(ExecutionStrategy):
         mem = 128
         inp['driverMemory'] = str(int(mem)) +  'g'  # TODO roughly memory * ppn
 
-        (inp['height'], inp['width']) = chnk.dimensions()
+        inp['height'] = em_mset.camera.height
+        inp['width']= em_mset.camera.width
         inp['zValues'] = [ em_mset.section.z_index ]
 
         return MaterializeSectionsParameters().dump(inp).data

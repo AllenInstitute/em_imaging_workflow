@@ -86,7 +86,7 @@ class Chunk(models.Model):
         return (min(zs), max(zs))
 
     def dimensions(self):
-        camera = self.sections.montageset_set.first().camera
+        camera = self.sections.first().montageset_set.first().camera
 
         return (camera.height, camera.width)
 

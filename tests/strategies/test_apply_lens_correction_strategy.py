@@ -33,12 +33,15 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
+import pytest
 from mock import patch, mock_open, MagicMock
+from tests.strategies.at_em_fixtures import strategy_configurations
 from development.strategies.apply_lens_correction_strategy \
     import ApplyLensCorrectionStrategy
 
 
-def test_get_input_data():
+@pytest.mark.django_db
+def test_get_input_data(strategy_configurations):
     em_mset = MagicMock()
     em_mset.section = MagicMock()
     test_z_index = 543

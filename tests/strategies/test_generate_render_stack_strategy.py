@@ -1,46 +1,47 @@
+import pytest
 from mock import Mock
 import django
 from django.conf import settings
+from tests.strategies.at_em_fixtures import strategy_configurations
 django.setup()
-from django.test import TestCase
 from development.strategies.generate_render_stack_strategy \
     import GenerateRenderStackStrategy
 
 
-class TestIngestGenerateRenderStackStrategy(TestCase):
-    def test_get_input_data(self):
-        em_set = Mock()
-        em_set.get_render_project_name = Mock(
-            return_value='MOCKSPECIMEN')
+@pytest.mark.django_db
+def test_get_input_data(strategy_configurations):
+    em_set = Mock()
+    em_set.get_render_project_name = Mock(
+        return_value='MOCKSPECIMEN')
 
-        em_set.section = Mock()
-        test_z_index = 543
-        em_set.section.z_index = test_z_index
-        em_set.section.specimen.uid = 'mock_specimen_uid'
-        em_set.metafile = '/path/to/test/meta.file'
-        em_set.render_stack_name = Mock(
-            return_value='test_stack')
-        task = Mock()
+    em_set.section = Mock()
+    test_z_index = 543
+    em_set.section.z_index = test_z_index
+    em_set.section.specimen.uid = 'mock_specimen_uid'
+    em_set.metafile = '/path/to/test/meta.file'
+    em_set.render_stack_name = Mock(
+        return_value='test_stack')
+    task = Mock()
 
-        storage_directory = '/example/storage/directory'
-        strategy = GenerateRenderStackStrategy()
-        input_json = strategy.get_input(em_set,
-                                        storage_directory,
-                                        task)
+    storage_directory = '/example/storage/directory'
+    strategy = GenerateRenderStackStrategy()
+    input_json = strategy.get_input(em_set,
+                                    storage_directory,
+                                    task)
 
-        assert input_json['render']['host'] == \
-            settings.RENDER_SERVICE_URL
-        assert input_json['render']['port'] == \
-            int(settings.RENDER_SERVICE_PORT)
-        assert input_json['render']['owner'] == \
-            settings.RENDER_SERVICE_USER
-        assert input_json['render']['project'] == \
-            'MOCKSPECIMEN'
-        assert input_json['output_stack'] == \
-            'em_2d_montage_ingest'
-        assert input_json['render']['client_scripts'] == \
-            settings.RENDER_CLIENT_SCRIPTS
-        assert input_json['metafile'] == em_set.metafile
-        assert input_json['close_stack'] == False
-        assert set(input_json['zValues']) == set([test_z_index])
+    assert input_json['render']['host'] == \
+        settings.RENDER_SERVICE_URL
+    assert input_json['render']['port'] == \
+        int(settings.RENDER_SERVICE_PORT)
+    assert input_json['render']['owner'] == \
+        settings.RENDER_SERVICE_USER
+    assert input_json['render']['project'] == \
+        'MOCKSPECIMEN'
+    assert input_json['output_stack'] == \
+        'em_2d_montage_ingest'
+    assert input_json['render']['client_scripts'] == \
+        settings.RENDER_CLIENT_SCRIPTS
+    assert input_json['metafile'] == em_set.metafile
+    assert input_json['close_stack'] == False
+    assert set(input_json['zValues']) == set([test_z_index])
 

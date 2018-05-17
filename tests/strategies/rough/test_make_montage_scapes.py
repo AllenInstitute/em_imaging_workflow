@@ -4,6 +4,7 @@ from development.strategies.rough.make_montage_scapes_stack_strategy import Make
 from development.models.chunk_assignment import ChunkAssignment
 from development.models.e_m_montage_set import EMMontageSet
 from workflow_engine.models.configuration import Configuration
+from tests.strategies.at_em_fixtures import strategy_configurations
 os.environ['BLUE_SKY_SETTINGS'] = '/local1/git/at_em_imaging_workflow/at_em_imaging_workflow/blue_sky_settings.yml'
 
 import pytest
@@ -20,7 +21,8 @@ from strategies.rough.test_rough_point_match_strategy \
 
 
 @pytest.mark.django_db
-def test_get_input_data(lots_of_chunks):
+def test_get_input_data(lots_of_chunks,
+                        strategy_configurations):
     chnk_assigns = ChunkAssignment.objects.filter(
         chunk=lots_of_chunks[0])
     chnk_assign = chnk_assigns[0]

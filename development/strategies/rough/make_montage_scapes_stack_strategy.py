@@ -3,13 +3,11 @@ from rendermodules.dataimport.schemas \
     import MakeMontageScapeSectionStackParameters
 from development.models.chunk_assignment import ChunkAssignment
 from development.models.e_m_montage_set import EMMontageSet
-from development.strategies.schemas.rough.make_montage_scapes_stack \
-     import input_dict
+from workflow_engine.models.configuration import Configuration
 from development.strategies \
     import RENDER_STACK_MONTAGE_SCAPES_STACK
 from django.conf import settings
 import logging
-import copy
 
 
 class MakeMontageScapesStackStrategy(execution_strategy.ExecutionStrategy):
@@ -18,8 +16,9 @@ class MakeMontageScapesStackStrategy(execution_strategy.ExecutionStrategy):
         '.make_montage_scapes_stack_strategy')
 
     def get_input(self, chunk_assignment, storage_directory, task):
-        MakeMontageScapesStackStrategy._log.info('get input')
-        inp = copy.deepcopy(input_dict)
+        inp = Configuration.objects.get(
+            name='Make Montage Scapes Input',
+            configuration_type='strategy_config').json_object
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT

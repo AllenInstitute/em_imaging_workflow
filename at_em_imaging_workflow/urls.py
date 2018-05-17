@@ -16,6 +16,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from workflow_engine.views import home_view
 from at_em_imaging_workflow.views import page_satchel
+from at_em_imaging_workflow.views.imaging_q_c_view import ImagingQCView
 admin.autodiscover()
 
 urlpatterns = [
@@ -24,5 +25,10 @@ urlpatterns = [
     url(r'^development/', include('development.urls')),
     url(r'^admin/', admin.site.urls),
 
-    url(r'^at_em/page_satchel', page_satchel.page_satchel, name='page_satchel')
+    url(r'^at_em/page_satchel', page_satchel.page_satchel, name='page_satchel'),
+    url(r'^at_em/imaging_qc', ImagingQCView.as_view())
+
 ]
+
+from rest_framework.urlpatterns import format_suffix_patterns
+urlpatterns = format_suffix_patterns(urlpatterns)

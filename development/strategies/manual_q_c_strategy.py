@@ -40,8 +40,7 @@ from development.strategies \
 from rendermodules.em_montage_qc.schemas \
     import DetectMontageDefectsParameters, \
     DetectMontageDefectsParametersOutput
-from development.strategies.schemas.detect_montage_defects \
-    import input_dict
+from workflow_engine.models.configuration import Configuration
 from workflow_engine.strategies.execution_strategy \
     import ExecutionStrategy
 from django.conf import settings
@@ -57,7 +56,9 @@ class ManualQCStrategy(ExecutionStrategy):
         Args:
             em_mset : EMMontageSet
         '''
-        inp = input_dict
+        inp = Configuration.objects.get(
+            name='Detect Montage Defects Input',
+            configuration_type='strategy_config').json_object
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT

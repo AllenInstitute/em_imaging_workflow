@@ -35,7 +35,7 @@
 #
 from workflow_engine.strategies import execution_strategy
 from django.conf import settings
-from development.strategies.schemas.apply_mip_maps import input_dict
+from workflow_engine.models.configuration import Configuration
 from rendermodules.dataimport.schemas import AddMipMapsToStackParameters
 from development.strategies \
     import RENDER_STACK_INGEST, RENDER_STACK_APPLY_MIPMAPS
@@ -47,8 +47,10 @@ class ApplyMipMapsStrategy(execution_strategy.ExecutionStrategy):
         'development.strategies.apply_mip_maps_strategy')
 
     def get_input(self, em_mset, storage_directory, task):
-        ApplyMipMapsStrategy._log.info('get_input')
-        inp = input_dict
+        inp = Configuration.objects.get(
+            name='Apply MIPmaps Input',
+            configuration_type='strategy_config').json_object
+
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER

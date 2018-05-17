@@ -1,7 +1,6 @@
 from workflow_engine.strategies import execution_strategy
 from rendermodules.materialize.schemas import \
   RenderSectionAtScaleParameters
-from development.strategies.schemas.render_downsample import input_dict
 from workflow_engine.models.configuration import Configuration
 from workflow_engine.models.well_known_file import WellKnownFile
 from django.conf import settings
@@ -16,7 +15,10 @@ class RenderDownsampleStrategy(execution_strategy.ExecutionStrategy):
 
     def get_input(self, em_mset, storage_directory, task):
         RenderDownsampleStrategy._log.info('get_input')
-        inp = input_dict
+
+        inp = Configuration.objects.get(
+            name='Render Downsample Montage Input',
+            configuration_type='strategy_config').json_object
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT

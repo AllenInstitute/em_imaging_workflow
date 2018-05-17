@@ -1,10 +1,9 @@
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
-from development.strategies.schemas.create_tile_pairs import input_dict
+from workflow_engine.models.configuration import Configuration
 from rendermodules.pointmatch.schemas import \
     TilePairClientParameters
 from django.conf import settings
 import logging
-import copy
 from development.strategies \
     import RENDER_STACK_LENS_CORRECTED
 
@@ -13,7 +12,9 @@ class CreateTilePairsStrategy(ExecutionStrategy):
     _log = logging.getLogger('development.strategies.create_tile_pairs_strategy')
 
     def get_input(self, em_mset, storage_directory, task):
-        inp = copy.deepcopy(input_dict)
+        inp = Configuration.objects.get(
+            name='Create Tile Pairs Input',
+            configuration_type='strategy_config').json_object
     
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT

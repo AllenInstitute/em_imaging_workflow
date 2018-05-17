@@ -1,5 +1,6 @@
 from workflow_engine.models.task import Task
 import pytest
+from tests.strategies.at_em_fixtures import strategy_configurations
 from development.strategies.rough.apply_rough_alignment_strategy \
     import ApplyRoughAlignmentStrategy
 from models.test_chunk_model \
@@ -21,7 +22,8 @@ from mock import Mock, patch
         'overlap': 2,
         'start_z': 1,
         'chunk_size': 5 })
-def test_get_input_data(lots_of_chunks):
+def test_get_input_data(lots_of_chunks,
+                        strategy_configurations):
     chnk = lots_of_chunks[2]
     task = Task(id=345)
 #     chnk.get_render_project_name = Mock(
