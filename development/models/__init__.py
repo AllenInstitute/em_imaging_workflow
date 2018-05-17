@@ -33,6 +33,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
+from django.conf import settings
 from development.models.study import Study
 from development.models.specimen import Specimen
 from development.models.rendered_volume import RenderedVolume
@@ -54,3 +55,7 @@ from development.models.a_t_montage_set import ATMontageSet
 from development.models.chunk_assignment import ChunkAssignment
 
 from workflow_engine.blue_sky_state_machine import BlueSkyStateMachine
+from workflow_engine.state_machine_yaml import StateMachineYaml
+
+state_machines = BlueSkyStateMachine(
+    StateMachineYaml.from_yaml_file(settings.STATE_MACHINE_YML))

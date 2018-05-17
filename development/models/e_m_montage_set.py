@@ -39,8 +39,10 @@ import os
 
 
 class EMMontageSet(MontageSet):
-    reference_set = models.ForeignKey('ReferenceSet', null=True)
-    reference_set_uid = models.CharField(max_length=255, null=True)
+    reference_set = models.ForeignKey('ReferenceSet',
+                                      null=True, blank=True)
+    reference_set_uid = models.CharField(max_length=255,
+                                         null=True, blank=True)
 
     def __str__(self):
         try:

@@ -97,6 +97,10 @@ CHUNK_DEFAULTS = {
     'chunk_size': 10
 }
 
+STATE_MACHINE_YML = os.path.join(
+    os.path.dirname(__file__),
+    'states.yml')
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -241,6 +245,12 @@ LOGGING = {
             'formatter': 'detailed',
             'filename': os.environ.get('DEBUG_LOG', 'debug_test.log')
         },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'formatter': 'detailed',
+            'stream': 'ext://sys.stdout'
+        },
     },
     'loggers': {
 #        'django': {
@@ -249,35 +259,40 @@ LOGGING = {
 #            'propagate': True,
 #        },
         'at_em_imaging_workflow': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file'],
             'level': 'WARN',
             'propagate': True,
         },
         'development': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file'],
             'level': 'WARN',
             'propagate': True,
         },
         'test_output': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': True,
         },
         'workflow_engine': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'workflow_client': {
+            'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': True,
         },
         'celery': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': True,
         },
         'celery.task': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': True,
-        }        
+        }
     }
 }
 CELERYD_HIJACK_ROOT_LOGGER = False

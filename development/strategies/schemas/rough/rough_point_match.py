@@ -18,7 +18,7 @@ input_dict = {
     "SIFTfdSize": 8,
     "SIFTsteps": 5,
     "matchMaxEpsilon": 20.0,
-    "maxFeatureCacheGb": 30,
+    "maxFeatureCacheGb": 3,
     "SIFTminScale": 0.2,
     "SIFTmaxScale": 1.0,
     "renderScale": 1.0,

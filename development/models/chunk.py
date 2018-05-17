@@ -36,9 +36,13 @@
 from django.db import models
 from django.conf import settings
 from development.models.rendered_volume import RenderedVolume
+from development.models.chunk_assignment import ChunkAssignment
+from django.contrib.contenttypes.fields import GenericRelation
+from workflow_engine.models.configuration import Configuration
+from workflow_engine.models.well_known_file import WellKnownFile
 import logging
 import os
-from development.models.chunk_assignment import ChunkAssignment
+
 
 class Chunk(models.Model):
     _log = logging.getLogger('at_em_imaging_workflow.models.chunk')
@@ -54,6 +58,11 @@ class Chunk(models.Model):
         models.ForeignKey('self',
         related_name='%(class)s_following_chunk',
         null=True, blank=True)
+    configurations = GenericRelation(Configuration)
+    well_known_files = GenericRelation(
+        WellKnownFile,
+        content_type_field='attachable_type',
+        object_id_field='attachable_id')
 
     def __str__(self):
         return 'chunk ' + str(self.computed_index)
@@ -75,6 +84,12 @@ class Chunk(models.Model):
         zs = [sec.z_index for sec in secs]
 
         return (min(zs), max(zs))
+
+    def dimensions(self):
+        camera = self.sections.montageset_set.first().camera
+
+        return (camera.height, camera.width)
+
 
     def get_point_collection_name(self):
         return 'chunk_rough_align_point_matches'

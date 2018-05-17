@@ -19,6 +19,10 @@ DEVELOPMENT_PACKAGE='development'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = BASE_DIR
 
+STATE_MACHINE_YML = os.path.join(
+    os.path.dirname(__file__),
+    'states.yml')
+
 BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/timf/example_data/dev'
 LONG_TERM_BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/timf/long_term/dev'
 MIPMAP_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/timf/mipmap/dev'

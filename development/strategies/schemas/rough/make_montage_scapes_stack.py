@@ -11,7 +11,7 @@ input_dict = {
     "image_directory": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/scratch",
     "set_new_z":"False",
     "imgformat":"png",
-    "scale": 0.1,
+    "scale": 0.01,
     "zstart": 1020,
     "zend": 1022,
     "pool_size": 20

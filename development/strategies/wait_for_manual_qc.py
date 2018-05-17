@@ -1,7 +1,3 @@
-from workflow_engine.strategies.wait_strategy \
-    import WaitStrategy
-
-
 # Allen Institute Software License - This software license is the 2-clause BSD
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
@@ -36,12 +32,13 @@ from workflow_engine.strategies.wait_strategy \
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-#
+from workflow_engine.strategies.wait_strategy \
+    import WaitStrategy
+from development.models import state_machines
+
+
 class WaitForManualQc(WaitStrategy):
     def must_wait(self, em_mset):
-        if em_mset.workflow_state is not None and \
-            ('MONTAGE_QC_PASSED' == em_mset.workflow_state or
-             'MONTAGE_QC_FAILED_MOVE' == em_mset.workflow_state):
-            return False
-
-        return True
+        return not state_machines.in_state(
+            em_mset, 'workflow_state',
+            [state_machines.states(em_mset).MONTAGE_QC_PASSED])

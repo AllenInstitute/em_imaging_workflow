@@ -36,6 +36,7 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
 from workflow_engine.models.configuration import Configuration
+from workflow_engine.models.well_known_file import WellKnownFile
 import re
 
 
@@ -47,6 +48,10 @@ class TileImageSet(models.Model):
     metafile = models.CharField(max_length=255, null=True)
     acquisition_date = models.DateTimeField(null=True)
     configurations = GenericRelation(Configuration)
+    well_known_files = GenericRelation(
+        WellKnownFile,
+        content_type_field='attachable_type',
+        object_id_field='attachable_id')
 
 
     _ODD_FILE_CHARS = re.compile(r'[ :\.\-\+]')

@@ -9,6 +9,6 @@ input_dict = {
     "input_stack": "Secs_1015_1099_5_reflections_mml6_montage",
     "image_directory": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/scratch",
     "imgformat":"png",
-    "scale": 0.1,
+    "scale": 0.01,
     "zValues": [ 1047 ]
 }

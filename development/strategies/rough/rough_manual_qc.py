@@ -1,3 +1,4 @@
+from development.models import state_machines
 from workflow_engine.strategies.wait_strategy \
     import WaitStrategy
 
@@ -37,11 +38,10 @@ from workflow_engine.strategies.wait_strategy \
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
+from development.models import state_machines
+
 class RoughManualQc(WaitStrategy):
     def must_wait(self, chnk):
-        if chnk.workflow_state is not None and \
-            ('MONTAGE_QC_PASSED' == chnk.workflow_state or
-             'MONTAGE_QC_FAILED_MOVE' == chnk.workflow_state):
-            return False
-
-        return True
+        return not state_machines.in_state(
+            chnk, 'chunk_state',
+            [ state_machines.states(chnk).ROUGH_QC_PASSED ])

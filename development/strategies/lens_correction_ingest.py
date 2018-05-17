@@ -46,6 +46,7 @@ from development.models.section import Section
 from development.models.sample_holder import SampleHolder
 from development.models.load import Load
 from development.models.e_m_montage_set import EMMontageSet
+from development.models import state_machines
 import logging
 import uuid
 
@@ -140,7 +141,8 @@ class LensCorrectionIngest(IngestStrategy):
                 defaults= {
                     'storage_directory': message['storage_directory'],
                     'metafile': metafile,
-                    'workflow_state': 'PENDING',
+                    'workflow_state': state_machines.states(
+                        ReferenceSet).pending,
                     'camera': camera,
                     'microscope': microscope,
                     'acquisition_date':
@@ -263,7 +265,7 @@ class LensCorrectionIngest(IngestStrategy):
             uid=uuid.uuid4(),
             acquisition_date=message['acquisition_data']['acquisition_time'],
             overlap=message['acquisition_data']['overlap'],
-            workflow_state='PENDING',
+            workflow_state=state_machines.states(ReferenceSet).PENDING,
             mipmap_directory=None,
             section=section,
             sample_holder=sample_holder,

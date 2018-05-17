@@ -45,7 +45,6 @@ def test_get_input_data(lots_of_chunks):
                     storage_directory,
                     task)
     assert inp['SIFTsteps'] == 5
-    assert inp['memory'] == '5g'
     assert inp['SIFTfdSize'] == 8
     assert inp['SIFTmaxScale'] == 1.0
     assert inp['SIFTminScale'] == 0.2

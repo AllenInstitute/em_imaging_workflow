@@ -17,6 +17,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = BASE_DIR
 UI_HOST = 'ibs-timf-ux1'
 
+STATE_MACHINE_YML = os.path.join(
+    os.path.dirname(__file__),
+    '..',
+    'at_em_imaging_workflow',
+    'states.yml')
+
 #BASE_FILE_PATH = \
 #    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky/files/'
 BASE_FILE_PATH = '/example_data'

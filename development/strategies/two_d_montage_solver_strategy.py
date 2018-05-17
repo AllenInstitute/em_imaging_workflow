@@ -65,6 +65,9 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
         # this needs to match mic scratch directory
         inp['solver_options']['dir_scratch'] = em_mset.get_storage_directory()
 
+        inp['solver_options']['Height'] = em_mset.camera.height
+        inp['solver_options']['Width'] = em_mset.camera.height
+
         return  SolveMontageSectionParameters().dump(inp).data
 
     def get_solver_executable_path(self):

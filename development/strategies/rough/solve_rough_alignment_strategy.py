@@ -4,7 +4,8 @@ from rendermodules.rough_align.schemas \
     import SolveRoughAlignmentParameters
 from development.strategies.schemas.rough.solve_rough_alignment \
     import input_dict
-from development.strategies import RENDER_STACK_SOLVED
+from development.strategies \
+    import RENDER_STACK_MONTAGE_SCAPES_STACK, RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE
 from django.conf import settings
 import copy
 
@@ -13,6 +14,8 @@ class SolveRoughAlignmentStrategy(ExecutionStrategy):
 
     def get_input(self, chnk, storage_directory, task):
         inp = copy.deepcopy(input_dict)
+
+        (z_start, z_end) = chnk.z_range()
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
@@ -29,7 +32,9 @@ class SolveRoughAlignmentStrategy(ExecutionStrategy):
         inp['source_collection']['project'] = chnk.get_render_project_name()
         inp['source_collection']['renderbinPath'] = \
             settings.RENDER_CLIENT_SCRIPTS
-        inp['source_collection']['stack'] = RENDER_STACK_SOLVED
+
+        inp['source_collection']['stack'] = \
+            RENDER_STACK_MONTAGE_SCAPES_STACK % (z_start, z_end)
 
         inp['target_collection']['service_host'] = \
             settings.RENDER_SERVICE_URL + ":" + str(settings.RENDER_SERVICE_PORT)
@@ -40,7 +45,8 @@ class SolveRoughAlignmentStrategy(ExecutionStrategy):
         inp['target_collection']['project'] = chnk.get_render_project_name()
         inp['target_collection']['renderbinPath'] = \
             settings.RENDER_CLIENT_SCRIPTS
-        inp['target_collection']['stack'] = RENDER_STACK_SOLVED
+        inp['target_collection']['stack'] = \
+            RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE % (z_start, z_end)
 
         inp['source_point_match_collection']['server'] = \
             'http://' + settings.RENDER_SERVICE_URL + \
@@ -50,7 +56,6 @@ class SolveRoughAlignmentStrategy(ExecutionStrategy):
         inp['source_point_match_collection']['match_collection'] = \
             chnk.get_point_collection_name()
 
-        (z_start, z_end) = chnk.z_range()
         inp['first_section'] = z_start
         inp['last_section'] = z_end
 

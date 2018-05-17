@@ -51,10 +51,12 @@ class RoughPointMatchStrategy(ExecutionStrategy):
         inp['collection'] = chnk.get_point_collection_name()
         inp['pairJson'] = self.get_tile_pairs_file_name(chnk)
 
-        mem = 192
-        ppn = 30
-        inp['memory'] = str(int((mem - ppn) / ppn)) + 'g'
+        mem = 128
+        ppn = 24
+        # inp['memory'] = str(int((mem - ppn) / ppn)) + 'g'
         inp['driverMemory'] = str(int(mem)) +  'g'  # TODO roughly memory * ppn
+
+        inp['maxFeatureCacheGb'] = 3
 
         retries = 20
         inp['masterUrl'] = 'local[*,%d]' % (retries)

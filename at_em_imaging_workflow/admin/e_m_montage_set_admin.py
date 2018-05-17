@@ -1,11 +1,18 @@
 from django.contrib import admin
+from development.models import state_machines
 
 
 def pass_em_montage_set(modeladmin, request, queryset):
     pass_em_montage_set.short_description = \
         "Pass selected montage sets"
 
-    queryset.update(workflow_state="MONTAGE_QC_PASSED")
+    if queryset:
+        for em_mset in queryset.iterator():
+            state_machines.transition(
+                em_mset,
+                'workflow_state',
+                state_machines.states(em_mset).montage_qc_passed)
+            em_mset.save()
 
 
 class EMMontageSetAdmin(admin.ModelAdmin):

@@ -1,79 +1,68 @@
 from workflow_engine.strategies.execution_strategy import \
     ExecutionStrategy
-from rendermodules.pointmatch.schemas import \
-    PointMatchClientParametersSpark
+from rendermodules.materialize.schemas import \
+    MaterializeSectionsParameters
 import copy
-from workflow_engine.models.well_known_file import WellKnownFile
 import jinja2
 import os
+from development.strategies import RENDER_STACK_ROUGH_ALIGN
+from development.models.chunk_assignment import ChunkAssignment
 from development.strategies.schemas.rough.materialize_sections \
     import input_dict
 from django.conf import settings
 import logging
 
 class MaterializeSectionsStrategy(ExecutionStrategy):
-    _package = 'development.strategies.two_d_montage_point_match_strategy'
+    _strategies_package = 'development.strategies'
+    _package = 'development.strategies.rough.materialize_sections_strategy'
     _templates = 'templates'
     _log_configuration_template = 'spark_log4j_template.properties'
     _log = logging.getLogger(_package)
 
-    def get_input(self, chnk, storage_directory, task):
+    def get_input(self, chnk_assign, storage_directory, task):
         MaterializeSectionsStrategy._log.info("get input")
 
         inp = copy.deepcopy(input_dict)
 
+        chnk = chnk_assign.chunk
+        em_mset = chnk_assign.section.montageset_set.first()
+
+        (z_start, z_end) = chnk.z_range()
+
         inp['sparkhome'] = settings.SPARK_HOME
         log_dir = self.get_or_create_task_storage_directory(task)
-        inp['logdir'] = log_dir
-
-        inp['render']['host'] = settings.RENDER_SERVICE_URL
-        inp['render']['port'] = settings.RENDER_SERVICE_PORT
-        inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = chnk.get_render_project_name()
-        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
-
-        inp['owner'] = settings.RENDER_SERVICE_USER
-
-        inp['jarfile'] = settings.RENDER_SPARK_JARFILE
-
         log4j_properties_path = os.path.join(log_dir, 'log4j.properties')
         log4j_log_path = os.path.join(log_dir, 'spark.log')
+        inp['spark_conf'] = {
+            'spark.driver.extraJavaOptions':
+                '-Dlog4j.configuration=file:%s' % (log4j_properties_path) }
+
+        retries = 20
+        inp['masterUrl'] = 'local[*,%d]' % (retries)
+        inp['jarfile'] = settings.RENDER_SPARK_JARFILE
+        inp['baseDataUrl'] = \
+            'http://' + settings.RENDER_SERVICE_URL + \
+            ':' + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
+        inp['owner'] = settings.RENDER_SERVICE_USER
+        inp['project'] = chnk.get_render_project_name()
+        inp['stack'] = RENDER_STACK_ROUGH_ALIGN % (
+            z_start, z_end)
+
+        inp['rootDirectory'] = chnk.get_storage_directory()
 
         with open(log4j_properties_path, 'w') as file_handle:
             file_handle.write(
                 self.create_log_configuration(log4j_log_path))
 
         inp['spark_files'] = [ log4j_properties_path ]
-        inp['spark_conf'] = {
-            'spark.driver.extraJavaOptions':
-                '-Dlog4j.configuration=file:%s' % (log4j_properties_path) }
-
-        inp['collection'] = chnk.get_point_collection_name()
-        inp['pairJson'] = self.get_tile_pairs_file_name(chnk)
 
         mem = 128
-        ppn = 24
-        inp['memory'] = str(int((mem - ppn) / ppn)) + 'g'
         inp['driverMemory'] = str(int(mem)) +  'g'  # TODO roughly memory * ppn
 
-        clipWidth = 800
-        clipHeight = 800
-        inp['clipWidth'] = clipWidth
-        inp['clipHeight'] = clipHeight
-        inp['maxFeatureCacheGb'] = 3
+        (inp['height'], inp['width']) = chnk.dimensions()
+        inp['zValues'] = [ em_mset.section.z_index ]
 
-        retries = 20
-        inp['masterUrl'] = 'local[*,%d]' % (retries)
-        inp['baseDataUrl'] = \
-            'http://' + settings.RENDER_SERVICE_URL + \
-            ':' + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
-
-        return PointMatchClientParametersSpark().dump(inp).data
-
-    def get_tile_pairs_file_name(self, chnk):
-        return WellKnownFile.get(
-            chnk,
-            chnk.tile_pairs_file_description())
+        return MaterializeSectionsParameters().dump(inp).data
 
     def on_finishing(self, chnk, results, task):
         self.check_key(results, 'pairCount')
@@ -82,15 +71,17 @@ class MaterializeSectionsStrategy(ExecutionStrategy):
             chnk,
             'point_match_output',
             task)
-        d = self.get_or_create_task_storage_directory(task)
 
     def create_log_configuration(self, log_file_path):
         env = jinja2.Environment(
            loader=jinja2.PackageLoader(
-               MaterializeSectionsStrategy._package,
+               MaterializeSectionsStrategy._strategies_package,
                MaterializeSectionsStrategy._templates))
         log4j_template = env.get_template(
             MaterializeSectionsStrategy._log_configuration_template)
 
         return log4j_template.render(log_file_path=log_file_path)
 
+    def get_task_objects_for_queue(self, chnk):
+        return list(ChunkAssignment.objects.filter(
+            chunk=chnk))

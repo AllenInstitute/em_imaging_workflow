@@ -40,6 +40,7 @@ from rendermodules.lens_correction.schemas \
 from development.models.reference_set import ReferenceSet
 from development.strategies.schemas.generate_lens_correction_transform import input_dict
 from django.conf import settings
+from development.models import state_machines
 import logging
 import os
 
@@ -70,8 +71,18 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
 
     def on_running(self, task):
         ref_set = WorkflowController.get_enqueued_object(task)
-        ref_set.workflow_state = "PROCESSING"
-        ref_set.save()
+        state_machines.transition(
+            ref_set,
+            'workflow_state',
+            state_machines.states(ref_set).PROCESSING)
+
+    def on_failure(self, task):
+        ref_set = WorkflowController.get_enqueued_object(task)
+
+        state_machines.transition(
+            ref_set,
+            'workflow_state',
+            state_machines.states(ref_set).FAILED)
 
     def on_finishing(self, ref_set, results, task):
         ''' called after the execution finishes
@@ -86,8 +97,14 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
             ref_set,
             'description',
             task)
-        ref_set.workflow_state = 'DONE'
         ref_set.save()
+
+        state_machines.transition(
+            ref_set,
+            'workflow_state',
+            state_machines.states(ref_set).DONE)
+        ref_set.save()
+
 
         # trigger waiting jobs
         WorkflowController.set_jobs_for_run(

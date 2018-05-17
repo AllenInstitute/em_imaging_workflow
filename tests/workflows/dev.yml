@@ -182,6 +182,50 @@ executables:
         pbs_processor: 'mem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
+    do_rough_alignment:
+        name: 'Rough Align Solver'
+        path: 'python'
+        environment:
+        - 'MCRROOT=/allen/aibs/pipeline/image_processing/volume_assembly/MATLAB_Runtime/v91'
+        - 'LD_LIBRARY_PATH=${MCRROOT}/runtime/glnxa64:${MCRROOT}/bin/glnxa64:${MCRROOT}/sys/os/glnxa64:${MCRROOT}/sys/opengl/lib/glnxa64'
+        - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
+        - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        args:
+        - '-m'
+        - "rendermodules.rough_align.do_rough_alignment"
+        remote_queue: 'pbs'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
+        pbs_walltime: 'walltime=5:00:00'
+
+    apply_rough_align:
+        name: 'Apply Rough Alignment'
+        path: 'python'
+        environment:
+        - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
+        - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        args:
+        - '-m'
+        - "rendermodules.rough_align.apply_rough_alignment_to_montages"
+        remote_queue: 'pbs'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
+        pbs_walltime: 'walltime=1:00:00'
+
+    materialize_rough_align:
+        name: 'Materialize Rough Alignment'
+        path: 'python'
+        environment:
+        - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
+        - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        args:
+        - '-m'
+        - "rendermodules.materialize.materialize_sections"
+        remote_queue: 'pbs'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
+        pbs_walltime: 'walltime=1:00:00'
+
 run_states:
     - "PENDING"
     - "QUEUED"
@@ -330,15 +374,15 @@ workflows:
 
             - key: "rough_solver"
               label: "EM Rough Alignment Solver"
-              class: "development.strategies.solve_rough_alignment_strategy.SolveRoughAlignmentStrategy"
+              class: "development.strategies.rough.solve_rough_alignment_strategy.SolveRoughAlignmentStrategy"
               enqueued_class: "development.models.chunk.Chunk"
-              executable: "mock"
+              executable: "do_rough_alignment"
               batch_size: 5
 
             - key: "rough_manual_qc"
               label: "Rough Align Manual QC"
               manual: true
-              class: "development.strategies.rough_manual_qc.RoughManualQc"
+              class: "development.strategies.rough.rough_manual_qc.RoughManualQc"
               enqueued_class: "development.models.chunk.Chunk"
               executable: "mock"
 

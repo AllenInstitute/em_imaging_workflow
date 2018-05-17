@@ -56,7 +56,5 @@ class MakeMontageScapesStackStrategy(execution_strategy.ExecutionStrategy):
         return chunk_assignment.section.specimen.uid
 
     def get_task_objects_for_queue(self, em_montage_set):
-        MakeMontageScapesStackStrategy._log.info('get task objects for queue')
-
         return list(ChunkAssignment.objects.filter(
             section=em_montage_set.section))
