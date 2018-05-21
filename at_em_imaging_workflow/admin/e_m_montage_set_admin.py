@@ -16,6 +16,7 @@ def pass_em_montage_set(modeladmin, request, queryset):
 
 
 class EMMontageSetAdmin(admin.ModelAdmin):
+    change_list_template = 'admin/em_montage_set_change_list.html'
     list_display = [
         'id',
         'specimen',
@@ -33,3 +34,8 @@ class EMMontageSetAdmin(admin.ModelAdmin):
         'microscope__uid',
         'workflow_state']
     actions = [pass_em_montage_set]
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context)
+
+        return response
