@@ -7,6 +7,7 @@ from workflow_engine.models.workflow_node import WorkflowNode
 from workflow_engine.models.run_state import RunState
 from at_em_imaging_workflow.serializers.progress_serializer \
     import ProgressSerializer
+from development.models.e_m_montage_set import EMMontageSet
 import pandas as pd
 from django_pandas.io import read_frame
 
@@ -48,9 +49,17 @@ class ProgressView(PandasView):
             by=['end_run_time'], axis='rows',
             ascending=True, na_position='first')
 
-        return pd.pivot_table(df,
+        pt =  pd.pivot_table(df,
         values='name',
         index=['section'],
         columns=['job_queue'],
         aggfunc='last')
 
+        pt['section'] = pt.index.map(int)
+        min_z = pt['section'].min()
+        max_z = pt['section'].max()
+        index_by_one = pd.Index(range(min_z, max_z + 1), name='section')
+
+        pt = pt.set_index('section').reindex(index_by_one).reset_index()
+
+        return pt

@@ -21,7 +21,6 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'^$', home_view.index, name='index'),
-    url(r'^/$', home_view.index, name='index'),
     url(r'^workflow_engine/', include('workflow_engine.urls')),
     url(r'^development/', include('development.urls')),
     url(r'^admin/', admin.site.urls),
