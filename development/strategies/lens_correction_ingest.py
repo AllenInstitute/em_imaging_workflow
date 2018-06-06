@@ -142,7 +142,7 @@ class LensCorrectionIngest(IngestStrategy):
                     'storage_directory': message['storage_directory'],
                     'metafile': metafile,
                     'workflow_state': state_machines.states(
-                        ReferenceSet).pending,
+                        ReferenceSet).PENDING,
                     'camera': camera,
                     'microscope': microscope,
                     'acquisition_date':
@@ -178,10 +178,12 @@ class LensCorrectionIngest(IngestStrategy):
     def create_section(self, section_message, metafile, specimen):
         LensCorrectionIngest._log.info('creating section')
 
-        section = Section.objects.create(
+        section, _ = Section.objects.update_or_create(
             z_index=section_message['z_index'],
-            metadata=None,
-            specimen=specimen)
+            specimen=specimen,
+            defaults={
+                'metadata': None
+            })
 
         return section
 
@@ -274,8 +276,7 @@ class LensCorrectionIngest(IngestStrategy):
             storage_directory=message['storage_directory'],
             metafile=message['metafile'],
             camera=camera,
-            microscope=microscope
-        )
+            microscope=microscope)
         LensCorrectionIngest._log.info(str(em_montage_set))
 
         return em_montage_set
@@ -286,10 +287,3 @@ class LensCorrectionIngest(IngestStrategy):
         return {
             'enqueued_object_uid': enqueued_object.uid
         }
-
-#     def get_existing_montage_set(self, acquisition_time, microscope):
-#         EMMontageSet.objects.get(
-#             aquisition_date=acquisition_time,
-#             microscope
-#             )
-#         pass

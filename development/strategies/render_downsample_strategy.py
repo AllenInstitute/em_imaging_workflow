@@ -1,6 +1,7 @@
 from workflow_engine.strategies import execution_strategy
 from rendermodules.materialize.schemas import \
   RenderSectionAtScaleParameters
+from development.models.chunk import Chunk
 from workflow_engine.models.configuration import Configuration
 from workflow_engine.models.well_known_file import WellKnownFile
 from django.conf import settings
@@ -72,4 +73,5 @@ class RenderDownsampleStrategy(execution_strategy.ExecutionStrategy):
                 'Too many downsample stack configurations found')
 
         downsample_config.save()
+        Chunk.assign_montage_set_to_chunks(em_mset)
 

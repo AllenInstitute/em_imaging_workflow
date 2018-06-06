@@ -7,7 +7,6 @@ from workflow_engine.models.workflow_node import WorkflowNode
 from workflow_engine.models.run_state import RunState
 from at_em_imaging_workflow.serializers.progress_serializer \
     import ProgressSerializer
-from development.models.e_m_montage_set import EMMontageSet
 import pandas as pd
 from django_pandas.io import read_frame
 
@@ -25,6 +24,7 @@ class ProgressView(PandasView):
         archived=False)
 
     def transform_dataframe(self, df):
+        df.loc[:,'job_id'] = df.index
         enqueued_ids = list(df.enqueued_object_id)
 
         msets = read_frame(
@@ -32,8 +32,13 @@ class ProgressView(PandasView):
                 'section').filter(
                     id__in=enqueued_ids).values_list(
                 'id', 'section__z_index'))
+        msets.loc[:,'z_index'] = msets.section.map(int)
+        msets.loc[:,'em_montage_set_id'] = msets['id']
+
         df = df.merge(
-            msets, left_on='enqueued_object_id', right_on='id', how='left')
+            msets,
+            left_on='enqueued_object_id',
+            right_on='em_montage_set_id', how='left')
 
         wnodes = read_frame(WorkflowNode.objects.all())
 
@@ -43,23 +48,31 @@ class ProgressView(PandasView):
         run_states = read_frame(RunState.objects.all())
 
         df = df.merge(
-            run_states, left_on='run_state', right_on='id', how='left')
+            run_states,
+            left_on='run_state',
+            right_on='id',
+            how='left')
 
         df = df.sort_values(
             by=['end_run_time'], axis='rows',
             ascending=True, na_position='first')
 
+        df.loc[:,'job_and_state'] = \
+            df['job_id'].apply(str) + '/' + \
+            df['name'] + '/' + df['em_montage_set_id'].apply(str)
+
         pt =  pd.pivot_table(df,
-        values='name',
-        index=['section'],
-        columns=['job_queue'],
-        aggfunc='last')
+            values='job_and_state',
+            index='z_index',
+            columns=['job_queue'],
+            aggfunc='last')
 
-        pt['section'] = pt.index.map(int)
-        min_z = pt['section'].min()
-        max_z = pt['section'].max()
-        index_by_one = pd.Index(range(min_z, max_z + 1), name='section')
-
-        pt = pt.set_index('section').reindex(index_by_one).reset_index()
+        pt['z_index'] = pt.index.map(int)
+        min_z = pt['z_index'].min()
+        max_z = pt['z_index'].max()
+        index_by_one = pd.Index(
+            range(int(min_z), int(max_z) + 1),
+            name='z_index')
+        pt = pt.set_index('z_index').reindex(index_by_one).reset_index()
 
         return pt

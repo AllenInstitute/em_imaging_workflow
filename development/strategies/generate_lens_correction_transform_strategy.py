@@ -73,10 +73,14 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
 
     def on_running(self, task):
         ref_set = WorkflowController.get_enqueued_object(task)
-        state_machines.transition(
-            ref_set,
-            'workflow_state',
-            state_machines.states(ref_set).PROCESSING)
+        try:
+            state_machines.transition(
+                ref_set,
+                'workflow_state',
+                state_machines.states(ref_set).PROCESSING)
+        except Exception as e:
+            GenerateLensCorrectionTransformStrategy._log.warn(
+                'Cannot transfer to processing state')
 
     def on_failure(self, task):
         ref_set = WorkflowController.get_enqueued_object(task)
