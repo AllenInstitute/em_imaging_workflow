@@ -57,8 +57,13 @@ class ManualQCStrategy(ExecutionStrategy):
             em_mset : EMMontageSet
         '''
         inp = Configuration.objects.get(
-            name='Detect Montage Defects Input',
-            configuration_type='strategy_config').json_object
+            enqueued_object=em_mset,
+            configuration_type='strategy_config')
+
+        if inp is None:
+            inp = Configuration.objects.get(
+                name='Detect Montage Defects Input',
+                configuration_type='strategy_config').json_object
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
@@ -88,8 +93,12 @@ class ManualQCStrategy(ExecutionStrategy):
 
         z_index = em_mset.section.z_index
 
-        if z_index in results['qc_passed_sections']:
-            em_mset.workflow_state = 'MONTAGE_QC_PASSED'
+        if self.check_redo_point_match(em_mset, results):
+            pass
+        elif self.check_redo_montage_solver(em_mset, results): 
+            pass
+        elif z_index in results['qc_passed_sections']:
+            em_mset.workflow_state = 'MONTAGE_QC_PASSED'  # TODO: use state machine
         elif z_index in results['gap_sections'] or \
            z_index in results['seam_sections'] or \
            z_index in results['hole_sections']:
@@ -110,3 +119,9 @@ class ManualQCStrategy(ExecutionStrategy):
             em_mset,
             'defect_detection',
             task)
+
+    def check_redo_point_match(self, em_mset, results):
+        return False
+
+    def check_redo_montage_solver(self, em_mset, results): 
+        return False

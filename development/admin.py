@@ -21,6 +21,8 @@ from at_em_imaging_workflow.admin.e_m_montage_set_admin \
     import EMMontageSetAdmin
 from at_em_imaging_workflow.admin.chunk_admin \
     import ChunkAdmin
+from at_em_imaging_workflow.admin.section_admin \
+    import SectionAdmin
 
 # Register your models here.
 admin.site.register(ATMontageSet)
@@ -36,7 +38,7 @@ admin.site.register(RegistrationSeries)
 admin.site.register(ReferenceSet)
 admin.site.register(RenderedVolume)
 admin.site.register(SampleHolder)
-admin.site.register(Section)
+admin.site.register(Section, SectionAdmin)
 admin.site.register(Stain)
 admin.site.register(Specimen)
 admin.site.register(Study)

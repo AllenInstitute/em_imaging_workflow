@@ -61,3 +61,27 @@ td.run_state_unknown {
 td.run_state_unknown a:link, td.run_state_unknown a:visited {
     color: white;
 }
+
+td.montage_qc_passed {
+    background-color: green;
+}
+
+td.montage_qc_passed a:link, td.montage_qc_passed a:visited {
+    color: white;
+}
+
+td.montage_qc_failed {
+    background-color: red;
+}
+
+td.montage_qc_failed a:link, td.montage_qc_failed a:visited {
+    color: white;
+}
+
+td.montage_state_unknown {
+    background-color: rgb(150,150,150);
+}
+
+td.montage_state_unknown a:link, td.montage_state_unknown a:visited {
+    color: white;
+}

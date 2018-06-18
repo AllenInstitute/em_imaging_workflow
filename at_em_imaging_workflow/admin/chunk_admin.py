@@ -1,4 +1,9 @@
 from django.contrib import admin
+from development.models.chunk import Chunk
+
+
+class SectionInline(admin.StackedInline):
+    model = Chunk.sections.through
 
 
 class ChunkAdmin(admin.ModelAdmin):
@@ -14,7 +19,7 @@ class ChunkAdmin(admin.ModelAdmin):
     list_select_related = []
     list_filter = []
     actions = []
-    inlines = []
+    inlines = [SectionInline,]
 
     def changelist_view(self, request, extra_context=None):
         response = super().changelist_view(request, extra_context)

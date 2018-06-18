@@ -27,8 +27,20 @@ function draw_chunks(msg) {
             "PROCESS_KILLED": "run_state_process_killed",
         }; 
 
+    var montage_state_class = {
+            "MONTAGE_QC_FAILED": "montage_qc_failed",
+            "MONTAGE_QC_PASSED": "montage_qc_passed"
+        };
+ 
     var section_row = $("<tr></tr>");
+
     var queue_td = $("<td></td>").text('z index');
+    section_row.append(queue_td);
+
+    queue_td = $("<td></td>").text('state');
+    section_row.append(queue_td);
+
+    queue_td = $("<td></td>").text('chunks');
     section_row.append(queue_td);
 
     var idx = 0;
@@ -43,8 +55,26 @@ function draw_chunks(msg) {
     var zlen = msg.length;
     for (var i = 0; i < zlen; i++) {
         section_row = $("<tr></tr>");
+        
         var index_td = $("<td></td>").text(msg[i]['z_index']);
         section_row.append(index_td);
+
+        var montage_state_text = msg[i]['workflow_state']
+        var montage_state_td = $("<td></td>").text(montage_state_text);
+
+        try {
+            montage_state_td.attr(
+                'class',
+                montage_state_class[montage_state_text]);
+        } catch (err) {
+            montage_state_td.attr('class', 'montage_state_unknown');
+        }
+        section_row.append(montage_state_td);
+
+        var chunk_text = msg[i]['chunks']
+        var chunk_td = $("<td></td>").text(chunk_text);
+        section_row.append(chunk_td);
+
         for (var j = 0; j < qlen; j++) {
             var qname = qnames[j]
 
