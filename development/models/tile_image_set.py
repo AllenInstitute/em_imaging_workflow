@@ -35,8 +35,6 @@
 #
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
-from workflow_engine.models.configuration import Configuration
-from workflow_engine.models.well_known_file import WellKnownFile
 import re
 
 
@@ -47,9 +45,9 @@ class TileImageSet(models.Model):
     microscope = models.ForeignKey('Microscope', null=True)
     metafile = models.CharField(max_length=255, null=True)
     acquisition_date = models.DateTimeField(null=True)
-    configurations = GenericRelation(Configuration)
+    configurations = GenericRelation('workflow_engine.Configuration')
     well_known_files = GenericRelation(
-        WellKnownFile,
+        'workflow_engine.WellKnownFile',
         content_type_field='attachable_type',
         object_id_field='attachable_id')
 
@@ -64,3 +62,7 @@ class TileImageSet(models.Model):
                       '_',
                       str(self.acquisition_date))
 
+
+# circular imports
+from workflow_engine.models.configuration import Configuration
+from workflow_engine.models.well_known_file import WellKnownFile

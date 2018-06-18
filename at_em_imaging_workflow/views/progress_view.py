@@ -31,7 +31,9 @@ class ProgressView(PandasView):
         mset_query = EMMontageSet.objects.prefetch_related(
             'section__chunks').select_related(
                 'section').filter(
-                    id__in=enqueued_ids).order_by('id')
+                    id__in=enqueued_ids).order_by('id') # .values_list(
+                        #'id',
+                        #'section__z_index') 
 
         msets = read_frame(mset_query)
         msets.loc[:,'z_index'] = msets.section.map(int)
@@ -97,10 +99,10 @@ class ProgressView(PandasView):
         pt = pt.join(
             extra_df,
             how='left')
-
+      
         index_by_one = pd.Index(
             range(int(min_z), int(max_z) + 1),
             name='z_index')
         pt = pt.reindex(index_by_one).reset_index()
-
+ 
         return pt

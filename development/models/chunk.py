@@ -35,11 +35,7 @@
 #
 from django.db import models
 from django.conf import settings
-from development.models.rendered_volume import RenderedVolume
-from development.models.chunk_assignment import ChunkAssignment
 from django.contrib.contenttypes.fields import GenericRelation
-from workflow_engine.models.configuration import Configuration
-from workflow_engine.models.well_known_file import WellKnownFile
 import logging
 import os
 
@@ -58,9 +54,9 @@ class Chunk(models.Model):
         models.ForeignKey('self',
         related_name='%(class)s_following_chunk',
         null=True, blank=True)
-    configurations = GenericRelation(Configuration)
+    configurations = GenericRelation('workflow_engine.Configuration')
     well_known_files = GenericRelation(
-        WellKnownFile,
+        'workflow_engine.WellKnownFile',
         content_type_field='attachable_type',
         object_id_field='attachable_id')
 
@@ -189,3 +185,9 @@ class Chunk(models.Model):
                             str(z_start) + '_ze' + \
                             str(z_end))
 
+
+# circular imports
+from development.models.rendered_volume import RenderedVolume
+from development.models.chunk_assignment import ChunkAssignment
+from workflow_engine.models.configuration import Configuration
+from workflow_engine.models.well_known_file import WellKnownFile
