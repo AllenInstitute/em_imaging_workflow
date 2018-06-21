@@ -4,6 +4,7 @@ RENDER_STACK_APPLY_MIPMAPS = 'em_2d_montage_apply_mipmaps'
 RENDER_STACK_TILE_PAIRS = 'em_2d_montage_tile_pairs'
 RENDER_STACK_POINT_MATCH = 'em_2d_montage_point_match'
 RENDER_STACK_SOLVED = 'em_2d_montage_solved'
+RENDER_STACK_SOLVED_PYTHON = 'em_2d_montage_solved_py'
 RENDER_STACK_REDIRECT_MIPMAPS = 'em_2d_montage_redirect_mipmaps'
 RENDER_STACK_DOWNSAMPLED = 'em_2d_montage_downsample'
 

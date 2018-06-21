@@ -35,18 +35,19 @@ def test_str():
         'chunk_size': 5 })
 def test_chunks_for_z_index():
     # TODO: 0?
-    cks_1 = Chunk.chunks_for_z_index(1)
-    cks_2 = Chunk.chunks_for_z_index(2)
-    cks_3 = Chunk.chunks_for_z_index(3)
-    cks_4 = Chunk.chunks_for_z_index(4)
-    cks_5 = Chunk.chunks_for_z_index(5)
-    cks_6 = Chunk.chunks_for_z_index(6)
-    cks_7 = Chunk.chunks_for_z_index(7)
-    cks_8 = Chunk.chunks_for_z_index(8)
-    cks_9 = Chunk.chunks_for_z_index(9)
-    cks_10 = Chunk.chunks_for_z_index(10)
-    cks_11 = Chunk.chunks_for_z_index(11)
-    cks_12 = Chunk.chunks_for_z_index(12)
+    load_offset = 10
+    cks_1 = Chunk.chunks_for_z_index(load_offset, 1)
+    cks_2 = Chunk.chunks_for_z_index(load_offset, 2)
+    cks_3 = Chunk.chunks_for_z_index(load_offset, 3)
+    cks_4 = Chunk.chunks_for_z_index(load_offset, 4)
+    cks_5 = Chunk.chunks_for_z_index(load_offset, 5)
+    cks_6 = Chunk.chunks_for_z_index(load_offset, 6)
+    cks_7 = Chunk.chunks_for_z_index(load_offset, 7)
+    cks_8 = Chunk.chunks_for_z_index(load_offset, 8)
+    cks_9 = Chunk.chunks_for_z_index(load_offset, 9)
+    cks_10 = Chunk.chunks_for_z_index(load_offset, 10)
+    cks_11 = Chunk.chunks_for_z_index(load_offset, 11)
+    cks_12 = Chunk.chunks_for_z_index(load_offset, 12)
 
     assert [0] == cks_1
     assert [0] == cks_2

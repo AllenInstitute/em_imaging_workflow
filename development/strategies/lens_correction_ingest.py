@@ -187,13 +187,20 @@ class LensCorrectionIngest(IngestStrategy):
 
         return section
 
-    # TODO: ask RobY, Russel doesn't know what a load is.
     def create_load(self, load_message):
-        LensCorrectionIngest._log.warn('creating load - UNIMPLEMENTED')
+        LensCorrectionIngest._log.warn('creating load')
 
-        load, _ = Load.objects.update_or_create(
-            uid='Load'
-        )
+        if load_message is not None:
+            load, _ = Load.objects.update_or_create(
+                uid=load_message['uid'],
+                defaults={
+                    'offset': load_message['offset']})
+        else:
+            load, _ = Load.objects.update_or_create(
+                uid='Load',
+                defaults = {
+                    'offset': 0
+                })
 
         return load
 
@@ -236,7 +243,11 @@ class LensCorrectionIngest(IngestStrategy):
         section = self.create_section(message['section'],
                                       message['metafile'],
                                       specimen)
-        load = self.create_load(None)
+        if 'load' in message:
+            load = self.create_load(message['load'])
+        else:
+            load = self.create_load(None)
+            
         sample_holder = self.create_sample_holder(
             message['section']['sample_holder'],
             load)

@@ -34,8 +34,8 @@ def cameras_etc():
             })
 
     load, _ = Load.objects.update_or_create(
-        uid='Mock Load'
-    )
+        uid='Mock Load',
+        offset=1)
 
     sample_holder, _ = SampleHolder.objects.update_or_create(
         uid='Mock Sample Holder',

@@ -98,14 +98,14 @@ class Chunk(models.Model):
         z_index = em_mset.z_index()
 
     @classmethod
-    def chunks_for_z_index(cls, z):
+    def chunks_for_z_index(cls, load_offset, z):
         ''' returns one or more chunks that would contain a z-index
         '''
         chunk_defaults = settings.CHUNK_DEFAULTS
         size = chunk_defaults['chunk_size']
         overlap = chunk_defaults['overlap']
         size_minus_overlap = size - overlap 
-        offset = chunk_defaults['start_z']
+        offset = load_offset
         z_no_offset = z - offset
         chunk_id = z_no_offset // size_minus_overlap
         z_within_chunk = z_no_offset % size_minus_overlap
@@ -150,6 +150,7 @@ class Chunk(models.Model):
             })
 
         chunk_index_list = Chunk.chunks_for_z_index(
+            mset.sample_holder.load.offset,
             mset.get_section_z_index())
         chunk_list = []
 

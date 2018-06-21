@@ -477,6 +477,65 @@ def strategy_configurations():
   "prealigned_stack": "rough_test_montage_stack",
   "tilespec_directory": "/allen/programs/celltypes/workgroups/em-connectomics/gayathrim/nc-em2/Janelia_Pipeline/scratch/rough/jsonFiles",
   "consolidate_trasnforms": "True"
+}, "2D Montage Python Solver Input": {
+  "pointmatch": {
+    "host": "em-131fs",
+    "name": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_Fine_rev1039",
+    "port": 8080,
+    "owner": "gayathri_MM2",
+    "mongo_host": "em-131fs",
+    "mongo_port": 27017,
+    "db_interface": "mongo",
+    "client_scripts": "/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/production/scripts",
+    "collection_type": "pointmatch"
+  },
+  "solve_type": "montage",
+  "close_stack": "True",
+  "input_stack": {
+    "host": "em-131fs",
+    "name": "mm2_acquire_8bit_reimage_postVOXA_TEMCA2_rev1039",
+    "port": 8080,
+    "owner": "gayathri",
+    "project": "MM2",
+    "mongo_host": "em-131fs",
+    "mongo_port": 27017,
+    "db_interface": "mongo",
+    "client_scripts": "/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/production/scripts",
+    "collection_type": "stack"
+  },
+  "output_mode": "stack",
+  "hdf5_options": {
+    "output_dir": "/allen/programs/celltypes/workgroups/em-connectomics/danielk/example_output/",
+    "chunks_per_file": -1
+  },
+  "last_section": 1020,
+  "output_stack": {
+    "host": "em-131fs",
+    "name": "python_montage_results",
+    "port": 8080,
+    "owner": "danielk",
+    "project": "Tests",
+    "mongo_host": "em-131fs",
+    "mongo_port": 27017,
+    "db_interface": "render",
+    "client_scripts": "/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/production/scripts",
+    "collection_type": "stack"
+  },
+  "first_section": 1020,
+  "regularization": {
+    "default_lambda": 1000.0,
+    "translation_factor": 1e-05
+  },
+  "transformation": "affine",
+  "matrix_assembly": {
+    "depth": 2,
+    "npts_max": 500,
+    "npts_min": 5,
+    "inverse_dz": "True",
+    "cross_pt_weight": 0.5,
+    "montage_pt_weight": 1.0
+  },
+  "start_from_file": ""
 }
     }"""
     
