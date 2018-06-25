@@ -8,6 +8,7 @@ from django.utils.safestring import mark_safe
 from workflow_engine.models.well_known_file import WellKnownFile
 from development.models.e_m_montage_set import EMMontageSet
 import simplejson as json
+from development.models.chunk import Chunk
 
 
 def pass_em_montage_set(modeladmin, request, queryset):
@@ -21,6 +22,19 @@ def pass_em_montage_set(modeladmin, request, queryset):
                 'workflow_state',
                 state_machines.states(em_mset).montage_qc_passed)
             em_mset.save()
+
+
+def redo_point_match(modeladmin, request, queryset):
+    pass
+
+
+def redo_solver(modeladmin, request, queryset):
+    pass
+
+
+def assign_chunk(modeladmin, request, queryset):
+    for em_mset in queryset:
+        Chunk.assign_montage_set_to_chunks(em_mset)
 
 
 class ConfigurationInline(GenericStackedInline):
@@ -51,7 +65,12 @@ class EMMontageSetAdmin(admin.ModelAdmin):
         'section__specimen__uid',
         'microscope__uid',
         'workflow_state']
-    actions = [pass_em_montage_set]
+    actions = [
+        assign_chunk,
+        redo_point_match,
+        redo_solver,
+        pass_em_montage_set
+    ]
     inlines = (ConfigurationInline,)
 
     def microscope_link(self, em_montage_set_object):
@@ -91,10 +110,15 @@ class EMMontageSetAdmin(admin.ModelAdmin):
 
 
     def reference_set_link(self, em_montage_set_object):
-        return mark_safe('<a href="{}">{}</a>'.format(
-            reverse("admin:development_referenceset_change",
-                    args=(em_montage_set_object.reference_set.pk,)),
-            str(em_montage_set_object.reference_set)))
+        try:
+            pk = em_montage_set_object.reference_set.pk
+            return mark_safe('<a href="{}">{}</a>'.format(
+                reverse("admin:development_referenceset_change",
+                        args=(pk,)),
+                str(em_montage_set_object.reference_set)))
+        except:
+            return ''
+
 
     def changelist_view(self, request, extra_context=None):
         response = super().changelist_view(request, extra_context)

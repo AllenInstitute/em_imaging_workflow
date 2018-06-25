@@ -75,9 +75,14 @@ class Chunk(models.Model):
         # return '247488_8R'
         return self.sections.first().specimen.uid
 
-    def z_range(self):
+    def z_list(self):
         secs = self.sections.all()
         zs = [sec.z_index for sec in secs]
+
+        return zs
+
+    def z_range(self):
+        zs = self.z_list()
 
         return (min(zs), max(zs))
 
