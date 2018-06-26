@@ -34,6 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from workflow_engine.strategies import execution_strategy
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from rendermodules.lens_correction.schemas import \
   ApplyLensCorrectionParameters
 from workflow_engine.models.configuration import Configuration
@@ -41,6 +42,8 @@ from workflow_engine.models.well_known_file import WellKnownFile
 from django.conf import settings
 import simplejson as json
 import logging
+from development.strategies.generate_mesh_lens_correction \
+    import GenerateMeshLensCorrection
 from development.strategies \
     import RENDER_STACK_APPLY_MIPMAPS, RENDER_STACK_LENS_CORRECTED
 
@@ -66,11 +69,29 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
         inp['output_stack'] = RENDER_STACK_LENS_CORRECTED
         inp['close_stack'] = False
 
+        try:
+            inp['transform'] = self.read_transform_from_configuration(em_mset)
+        except ObjectDoesNotExist:
+            inp['transform'] = self.read_transform_from_well_known_file()
+        except MultipleObjectsReturned as e:
+            ApplyLensCorrectionStrategy._log.error(
+                "Too many lens correction transform configurations")
+            raise(e)
+
+        return ApplyLensCorrectionParameters().dump(inp).data
+
+    def read_transform_from_configuration(self, em_mset):
+        conf = em_mset.reference_set.configurations.get(
+            configuration_type=GenerateMeshLensCorrection.CONFIGURATION_TYPE)
+
+        return conf.json_object[GenerateMeshLensCorrection.TRANSFORM]
+
+    def read_transform_from_well_known_file(self, em_mset):
         wkf = WellKnownFile.get(em_mset.reference_set, 'description')
         ApplyLensCorrectionStrategy._log.info('WKF: %s' % (wkf))
 
         with open(wkf) as j:
             json_data = json.loads(j.read())
-            inp['transform'] = json_data['transform']
-
-        return ApplyLensCorrectionParameters().dump(inp).data
+            transform = json_data['transform']
+        
+        return transform
