@@ -35,9 +35,10 @@
 #
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
 from workflow_engine.workflow_controller import WorkflowController
-from rendermodules.lens_correction.schemas \
-    import LensCorrectionParameters
-from django.contrib.contenttypes.models import ContentType
+from development.strategies import RENDER_STACK_MESH_LENS_RAW,\
+    RENDER_STACK_MESH_LENS_CORRECTED, RENDER_LENS_COLLECTION
+from rendermodules.mesh_lens_correction.schemas \
+    import MeshLensCorrectionSchema
 from development.models.reference_set import ReferenceSet
 from workflow_engine.models.configuration import Configuration
 from django.conf import settings
@@ -66,14 +67,25 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
             name='Generate Mesh Lens Correction Input',
             configuration_type='strategy_config').json_object
 
-        inp['manifest_path'] = ref_set.manifest_path
-        inp['project_path'] = project_path
-        inp['fiji_path'] = settings.FIJI_PATH
-        inp['outfile'] = os.path.join(storage_directory,
-                                        'lens_correction_out.json')
-        inp['processing_directory'] = None
+        inp['render'] = {}
+        inp['render']['host'] = settings.RENDER_SERVICE_URL
+        inp['render']['port'] = settings.RENDER_SERVICE_PORT
+        inp['render']['owner'] = settings.RENDER_SERVICE_USER
+        inp['render']['project'] = "em_2d_montage_staging" # ref_set.get_render_project_name()
+        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
-        return LensCorrectionParameters().dump(inp).data
+        inp['input_stack'] = RENDER_STACK_MESH_LENS_RAW
+        inp['output_stack'] = RENDER_STACK_MESH_LENS_CORRECTED
+        inp['match_collection'] = RENDER_LENS_COLLECTION
+
+        inp['metafile'] = ref_set.metafile
+        inp['z_index'] = ref_set.id
+        inp['outfile'] = os.path.join(storage_directory,
+                                      'lens_correction_out.json')
+        inp['output_dir'] = storage_directory
+        inp['out_html_dir'] = storage_directory
+
+        return MeshLensCorrectionSchema().dump(inp).data
 
     def on_running(self, task):
         ref_set = WorkflowController.get_enqueued_object(task)
@@ -102,13 +114,6 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
 
         GenerateMeshLensCorrection._log.info(
             'lens_correction_transform output %s' % (str(results)))
-
-        self.set_well_known_file(
-            results['output_json'],
-            ref_set,
-            'description',
-            task)
-        ref_set.save()
 
         transform_configuration_data = {
             'output_json': results['output_json']

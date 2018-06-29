@@ -95,14 +95,17 @@ class ProgressView(PandasView):
                         :,
                         ['workflow_state',
                          'chunks']]
- 
-        pt = pt.join(
-            extra_df,
-            how='left')
-      
-        index_by_one = pd.Index(
-            range(int(min_z), int(max_z) + 1),
-            name='z_index')
-        pt = pt.reindex(index_by_one).reset_index()
+
+        show_blanks = False
+
+        if show_blanks:
+            pt = pt.join(
+                extra_df,
+                how='left')
+          
+            index_by_one = pd.Index(
+                range(int(min_z), int(max_z) + 1),
+                name='z_index')
+            pt = pt.reindex(index_by_one).reset_index()
  
         return pt

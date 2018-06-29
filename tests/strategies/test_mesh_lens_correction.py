@@ -25,8 +25,6 @@ def test_get_input_data(strategy_configurations):
                              storage_directory,
                              task)
 
-    assert inp['manifest_path'] == 'manifest.json'
-    assert inp['fiji_path'] == '/path/to/fiji'
     assert inp is not None
 
 
@@ -65,8 +63,4 @@ def test_on_finishing(mock_run_states):
         strategy.on_finishing(ref_set, results, task)
 
     assert ref_set.workflow_state == 'DONE'
-    swkf_mock.assert_called_once_with(
-        'mock_out',
-        ref_set,
-        'description',  # TODO: better name
-        task)
+    swkf_mock.assert_not_called()

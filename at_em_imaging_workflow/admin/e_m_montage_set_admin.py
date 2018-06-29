@@ -55,16 +55,22 @@ class EMMontageSetAdmin(admin.ModelAdmin):
         'reference_set_link',
         'acquisition_date',
         'workflow_state',
+        'load_uid',
         'qc_link']
     list_select_related = [
         'microscope',
         'reference_set',
         'section',
-        'section__specimen']
+        'section__specimen',
+        'sample_holder',
+        'sample_holder__load',
+    ]
     list_filter = [
         'section__specimen__uid',
         'microscope__uid',
-        'workflow_state']
+        'workflow_state',
+        'sample_holder__load'
+    ]
     actions = [
         assign_chunk,
         redo_point_match,
@@ -72,6 +78,18 @@ class EMMontageSetAdmin(admin.ModelAdmin):
         pass_em_montage_set
     ]
     inlines = (ConfigurationInline,)
+
+    def load_uid(self, em_montage_set_object):
+        try:
+            l = em_montage_set_object.sample_holder.load
+        except:
+            return ''
+
+        if l:
+            return mark_safe('<a href="{}">{}</a>'.format(
+                reverse("admin:development_load_change",
+                        args=(l.pk,)),
+                str(l.uid)))
 
     def microscope_link(self, em_montage_set_object):
         return mark_safe('<a href="{}">{}</a>'.format(

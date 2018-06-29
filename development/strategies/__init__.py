@@ -1,5 +1,8 @@
 RENDER_STACK_INGEST = 'em_2d_montage_ingest'
 RENDER_STACK_LENS_CORRECTED = 'em_2d_montage_lc'
+RENDER_STACK_MESH_LENS_RAW = 'em_2d_raw_lc_stack'
+RENDER_STACK_MESH_LENS_CORRECTED = 'em_2d_lc_corrected'
+RENDER_LENS_COLLECTION = 'em_2d_lens_matches'
 RENDER_STACK_APPLY_MIPMAPS = 'em_2d_montage_apply_mipmaps'
 RENDER_STACK_TILE_PAIRS = 'em_2d_montage_tile_pairs'
 RENDER_STACK_POINT_MATCH = 'em_2d_montage_point_match'

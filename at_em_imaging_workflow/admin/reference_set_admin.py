@@ -57,15 +57,24 @@ class ConfigurationInline(GenericStackedInline):
 #class WellKnownFileInline(GenericStackedInline):
 #    model = WellKnownFile
 
+def set_refset_to_pending(modeladmin, request, queryset):
+    set_refset_to_pending.short_description = \
+        "Set to PENDING"
+
+    if queryset:
+        for refset in queryset.iterator():
+            refset.workflow_state = 'PENDING'
+            refset.save()
 
 class ReferenceSetAdmin(admin.ModelAdmin):
     # change_list_template = 'admin/em_montage_set_change_list.html'
     list_display = [
         'id',
+        'workflow_state',
         'microscope_link',
         'manifest_path',
         'acquisition_date',
-        'workflow_state']
+    ]
     list_select_related = [
         'microscope'
     ]
@@ -73,7 +82,9 @@ class ReferenceSetAdmin(admin.ModelAdmin):
         'microscope__uid',
         'workflow_state'
     ]
-    actions = []
+    actions = [
+        set_refset_to_pending,
+    ]
     inlines = (ConfigurationInline,)
 
     def microscope_link(self, em_montage_set_object):

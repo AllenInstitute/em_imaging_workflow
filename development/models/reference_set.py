@@ -47,6 +47,9 @@ class ReferenceSet(TileImageSet):
     def __str__(self):
         return str(self.acquisition_date)
 
+    def get_render_project_name(self):
+        return "em_2d_montage_staging"
+
     def get_storage_directory(self, base_storage_directory=None):
         if base_storage_directory is None:
             base_storage_directory = settings.BASE_FILE_PATH
