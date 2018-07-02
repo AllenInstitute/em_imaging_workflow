@@ -20,9 +20,20 @@ def pass_em_montage_set(modeladmin, request, queryset):
             state_machines.transition(
                 em_mset,
                 'workflow_state',
-                state_machines.states(em_mset).montage_qc_passed)
+                state_machines.states(EMMontageSet).MONTAGE_QC_PASSED)
             em_mset.save()
 
+def fail_em_montage_set(modeladmin, request, queryset):
+    fail_em_montage_set.short_description = \
+        "FAIL selected montage sets"
+
+    if queryset:
+        for em_mset in queryset.iterator():
+            state_machines.transition(
+                em_mset,
+                'workflow_state',
+                state_machines.states(EMMontageSet).FAILED)
+            em_mset.save()
 
 def redo_point_match(modeladmin, request, queryset):
     pass
@@ -75,7 +86,8 @@ class EMMontageSetAdmin(admin.ModelAdmin):
         assign_chunk,
         redo_point_match,
         redo_solver,
-        pass_em_montage_set
+        pass_em_montage_set,
+        fail_em_montage_set
     ]
     inlines = (ConfigurationInline,)
 
