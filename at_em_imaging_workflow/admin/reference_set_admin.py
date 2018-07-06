@@ -54,6 +54,11 @@ class ConfigurationInline(GenericStackedInline):
     max_num=1
 
 
+class EMMontageInline(admin.StackedInline):
+    model = EMMontageSet
+    fk_name = "reference_set"
+    extra = 0
+
 #class WellKnownFileInline(GenericStackedInline):
 #    model = WellKnownFile
 
@@ -85,7 +90,7 @@ class ReferenceSetAdmin(admin.ModelAdmin):
     actions = [
         set_refset_to_pending,
     ]
-    inlines = (ConfigurationInline,)
+    inlines = (ConfigurationInline, EMMontageInline)
 
     def microscope_link(self, em_montage_set_object):
         return mark_safe('<a href="{}">{}</a>'.format(

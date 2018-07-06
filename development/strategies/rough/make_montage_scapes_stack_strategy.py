@@ -5,7 +5,7 @@ from development.models.chunk_assignment import ChunkAssignment
 from development.models.e_m_montage_set import EMMontageSet
 from workflow_engine.models.configuration import Configuration
 from development.strategies \
-    import RENDER_STACK_MONTAGE_SCAPES_STACK
+    import RENDER_STACK_SOLVED, RENDER_STACK_DOWNSAMPLED
 from django.conf import settings
 import logging
 
@@ -39,15 +39,15 @@ class MakeMontageScapesStackStrategy(execution_strategy.ExecutionStrategy):
             settings.LONG_TERM_BASE_FILE_PATH)
 
         # TODO: error reporting
-        downsample_config = em_mset.configurations.filter(
-            configuration_type='downsample temp stack').first()
+        #downsample_config = em_mset.configurations.filter(
+        #    configuration_type='downsample temp stack').first()
 
-        inp['montage_stack'] = downsample_config.json_object[
-            'downsample_temp_stack']
+        inp['montage_stack'] = RENDER_STACK_SOLVED
+        # downsample_config.json_object[
+        #    'downsample_temp_stack']
 
         (z_start, z_end) = chunk_assignment.chunk.z_range()
-        inp['output_stack'] = RENDER_STACK_MONTAGE_SCAPES_STACK % (
-            z_start, z_end)
+        inp['output_stack'] = RENDER_STACK_DOWNSAMPLED
 
         return MakeMontageScapeSectionStackParameters().dump(inp).data
 

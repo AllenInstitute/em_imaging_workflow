@@ -56,14 +56,14 @@ class ManualQCStrategy(ExecutionStrategy):
         Args:
             em_mset : EMMontageSet
         '''
-        inp = Configuration.objects.get(
-            enqueued_object=em_mset,
-            configuration_type='strategy_config')
+        #inp = Configuration.objects.get(
+        #    enqueued_object=em_mset,
+        #    configuration_type='strategy_config')
 
-        if inp is None:
-            inp = Configuration.objects.get(
-                name='Detect Montage Defects Input',
-                configuration_type='strategy_config').json_object
+        #if inp is None:
+        inp = Configuration.objects.get(
+            name='Detect Montage Defects Input',
+            configuration_type='strategy_config').json_object
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT

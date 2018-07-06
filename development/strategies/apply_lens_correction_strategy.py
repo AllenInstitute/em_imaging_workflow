@@ -84,7 +84,13 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
         conf = em_mset.reference_set.configurations.get(
             configuration_type=GenerateMeshLensCorrection.CONFIGURATION_TYPE)
 
-        return conf.json_object[GenerateMeshLensCorrection.TRANSFORM]
+        output_json = conf.json_object['output_json']
+
+        with open(output_json) as j:
+            json_data = json.loads(j.read())
+            transform = json_data
+
+        return transform
 
     def read_transform_from_well_known_file(self, em_mset):
         wkf = WellKnownFile.get(em_mset.reference_set, 'description')
@@ -93,5 +99,5 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
         with open(wkf) as j:
             json_data = json.loads(j.read())
             transform = json_data['transform']
-        
+
         return transform

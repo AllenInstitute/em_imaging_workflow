@@ -2,6 +2,9 @@ from workflow_engine.strategies import execution_strategy
 from rendermodules.materialize.schemas import \
   RenderSectionAtScaleParameters
 from development.models.chunk import Chunk
+from development.strategies.generate_mesh_lens_correction \
+    import GenerateMeshLensCorrection
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from workflow_engine.models.configuration import Configuration
 from workflow_engine.models.well_known_file import WellKnownFile
 from django.conf import settings
@@ -39,9 +42,10 @@ class RenderDownsampleStrategy(execution_strategy.ExecutionStrategy):
         wkf = WellKnownFile.get(em_mset.reference_set, 'description')
         RenderDownsampleStrategy._log.info('WKF: %s', wkf)
 
-        with open(wkf) as j:
-            json_data = json.loads(j.read())
-            inp['transform'] = json_data['transform']
+        try:
+            inp['transform'] = self.read_transform_from_configuration(em_mset)
+        except ObjectDoesNotExist:
+            inp['transform'] = self.read_transform_from_well_known_file()
 
         return RenderSectionAtScaleParameters().dump(inp).data
 
@@ -75,3 +79,23 @@ class RenderDownsampleStrategy(execution_strategy.ExecutionStrategy):
         downsample_config.save()
         Chunk.assign_montage_set_to_chunks(em_mset)
 
+    def read_transform_from_configuration(self, em_mset):
+        conf = em_mset.reference_set.configurations.get(
+            configuration_type=GenerateMeshLensCorrection.CONFIGURATION_TYPE)
+
+        output_json = conf.json_object['output_json']
+
+        with open(output_json) as j:
+            json_data = json.loads(j.read())
+            transform = json_data
+
+        return transform
+
+    def read_transform_from_well_known_file(self, em_mset):
+        wkf = WellKnownFile.get(em_mset.reference_set, 'description')
+
+        with open(wkf) as j:
+            json_data = json.loads(j.read())
+            transform = json_data['transform'][0]
+
+        return transform

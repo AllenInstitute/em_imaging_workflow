@@ -2,6 +2,7 @@
 {% load i18n admin_static admin_list static %}
 
 {% block result_list %}
+    {% block pagination %} {{ block.super }} {% endblock %}
     {% admin_actions %}
     {% result_list cl %}
 

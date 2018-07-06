@@ -9,7 +9,7 @@ function draw_chunks(msg) {
     "Apply Lens Correction",
     "Create Tile Pairs",
     "2D Montage Point Match",
-    "2D Montage Solver",
+    "2D Montage Python Solver",
     "Detect Defects",
     "Manual QC / High Degree Polynomial or Point Match Regeneration",
     "Generate Downsampled Montage",
@@ -28,13 +28,23 @@ function draw_chunks(msg) {
         }; 
 
     var montage_state_class = {
+            "PENDING": "pending",
+            "PROCESSING": "processing",
+            "MONTAGE_QC": "montage_qc",
+            "REIMAGE": "reimage",
+            "MONTAGE_QC_FAILED": "montage_qc_failed",
+            "MONTAGE_QC_PASSED": "montage_qc_passed",
+            "REDO_POINT_MATCH": "redo_point_match",
+            "REDO_SOLVER": "redo_solver",
+            "FAILED": "failed",
+            "GAP": "gap",
             "MONTAGE_QC_FAILED": "montage_qc_failed",
             "MONTAGE_QC_PASSED": "montage_qc_passed"
         };
  
     var section_row = $("<tr></tr>");
 
-    var queue_td = $("<td></td>").text('z index');
+    var queue_td = $("<td></td>").text('Z index');
     section_row.append(queue_td);
 
     queue_td = $("<td></td>").text('state');
@@ -48,9 +58,24 @@ function draw_chunks(msg) {
     for (idx = 0; idx < qlen; idx++) {
         queue_td = $("<td></td>").text(qnames[idx]);
         section_row.append(queue_td);
-
-        $('#chnk_table').append(section_row)
     }
+    $('#chnk_table').append(section_row)
+
+    var totals_row = $("<tr></tr>");
+    var total_td = $("<td></td>").text('totals');
+    totals_row.append(total_td);
+    var spacer_td = $("<td colspan=2></td>");
+    totals_row.append(spacer_td);
+
+    var idx = 0;
+    var qlen = qnames.length;
+    var totals = msg.pop()
+    for (idx = 0; idx < qlen; idx++) {
+        total_td = $("<td></td>").text(totals[qnames[idx]]);
+        totals_row.append(total_td);
+    }
+
+    $('#chnk_table').append(totals_row)
 
     var zlen = msg.length;
     for (var i = 0; i < zlen; i++) {

@@ -11,6 +11,30 @@ import simplejson as json
 from development.models.chunk import Chunk
 
 
+def redo_point_match(modeladmin, request, queryset):
+    pass_em_montage_set.short_description = \
+        "Pass selected montage sets"
+
+    if queryset:
+        for em_mset in queryset.iterator():
+            state_machines.transition(
+                em_mset,
+                'workflow_state',
+                state_machines.states(EMMontageSet).REDO_POINT_MATCH)
+            em_mset.save()
+
+def redo_solver(modeladmin, request, queryset):
+    pass_em_montage_set.short_description = \
+        "Pass selected montage sets"
+
+    if queryset:
+        for em_mset in queryset.iterator():
+            state_machines.transition(
+                em_mset,
+                'workflow_state',
+                state_machines.states(EMMontageSet).REDO_SOLVER)
+            em_mset.save()
+
 def pass_em_montage_set(modeladmin, request, queryset):
     pass_em_montage_set.short_description = \
         "Pass selected montage sets"
@@ -35,13 +59,6 @@ def fail_em_montage_set(modeladmin, request, queryset):
                 state_machines.states(EMMontageSet).FAILED)
             em_mset.save()
 
-def redo_point_match(modeladmin, request, queryset):
-    pass
-
-
-def redo_solver(modeladmin, request, queryset):
-    pass
-
 
 def assign_chunk(modeladmin, request, queryset):
     for em_mset in queryset:
@@ -60,14 +77,15 @@ class EMMontageSetAdmin(admin.ModelAdmin):
     change_list_template = 'admin/em_montage_set_change_list.html'
     list_display = [
         'id',
+        'z_index',
+        'qc_link',
         'specimen_link',
         'microscope_link',
-        'z_index',
         'reference_set_link',
         'acquisition_date',
         'workflow_state',
-        'load_uid',
-        'qc_link']
+        'load_uid'
+    ]
     list_select_related = [
         'microscope',
         'reference_set',
@@ -130,7 +148,7 @@ class EMMontageSetAdmin(admin.ModelAdmin):
 
             with open(filename) as j:
                 json_data = json.loads(j.read())
-                url = 'file:////' + json_data['output_html']
+                url = 'file:////' + json_data['output_html'][0]
             text = 'Plot'
         except:
             url = ''

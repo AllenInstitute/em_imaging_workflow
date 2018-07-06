@@ -209,9 +209,9 @@ class LensCorrectionIngest(IngestStrategy):
 
         sample_holder, _ = SampleHolder.objects.update_or_create(
             uid=sample_holder_message,
+            load=load,
             defaults={
-                'imaged_sections_count': 0,
-                'load': load
+                'imaged_sections_count': 0
             })
 
         return sample_holder

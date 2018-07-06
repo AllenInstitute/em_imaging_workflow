@@ -100,6 +100,8 @@ class ProgressView(PandasView):
             extra_df,
             how='left')
 
+        pt.loc[-1,:] = pt.count()
+
         show_blanks = False
 
         if show_blanks:
