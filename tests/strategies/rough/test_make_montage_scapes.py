@@ -53,8 +53,8 @@ def test_get_input_data(lots_of_chunks,
     assert inp['image_directory'] == \
         '/long/term/em_montage_MOCK SPECIMEN_z1_2345_06_07_16_09_10_00_00'
 
-    assert inp['montage_stack'] == 'mock_stack'
-    assert inp['output_stack'] == 'em_montage_scapes_zs_1_ze_10'
+    assert inp['montage_stack'] == 'em_2d_montage_solved'
+    assert inp['output_stack'] == 'em_2d_montage_downsample'
 
     assert inp['render']['host'] == 'renderservice'
     assert inp['render']['port'] == 8080

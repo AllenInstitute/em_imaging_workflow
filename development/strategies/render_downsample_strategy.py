@@ -42,11 +42,6 @@ class RenderDownsampleStrategy(execution_strategy.ExecutionStrategy):
         wkf = WellKnownFile.get(em_mset.reference_set, 'description')
         RenderDownsampleStrategy._log.info('WKF: %s', wkf)
 
-        try:
-            inp['transform'] = self.read_transform_from_configuration(em_mset)
-        except ObjectDoesNotExist:
-            inp['transform'] = self.read_transform_from_well_known_file()
-
         return RenderSectionAtScaleParameters().dump(inp).data
 
     def get_input_stack_name(self):
@@ -78,24 +73,3 @@ class RenderDownsampleStrategy(execution_strategy.ExecutionStrategy):
 
         downsample_config.save()
         Chunk.assign_montage_set_to_chunks(em_mset)
-
-    def read_transform_from_configuration(self, em_mset):
-        conf = em_mset.reference_set.configurations.get(
-            configuration_type=GenerateMeshLensCorrection.CONFIGURATION_TYPE)
-
-        output_json = conf.json_object['output_json']
-
-        with open(output_json) as j:
-            json_data = json.loads(j.read())
-            transform = json_data
-
-        return transform
-
-    def read_transform_from_well_known_file(self, em_mset):
-        wkf = WellKnownFile.get(em_mset.reference_set, 'description')
-
-        with open(wkf) as j:
-            json_data = json.loads(j.read())
-            transform = json_data['transform'][0]
-
-        return transform
