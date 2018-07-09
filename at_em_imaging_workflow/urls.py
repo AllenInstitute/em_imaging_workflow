@@ -17,6 +17,7 @@ from django.contrib import admin
 from workflow_engine.views import home_view
 from at_em_imaging_workflow.views import page_satchel
 from at_em_imaging_workflow.views.progress_view import ProgressView
+from at_em_imaging_workflow.views.imaging_q_c_view import ImagingQCView
 admin.autodiscover()
 
 urlpatterns = [
@@ -26,7 +27,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     url(r'^at_em/page_satchel', page_satchel.page_satchel, name='page_satchel'),
-    url(r'^at_em/progress$', ProgressView.as_view())
+    url(r'^at_em/progress$', ProgressView.as_view()),
+    url(r'^at_em/reimage$', ImagingQCView.as_view())
 ]
 
 from rest_framework.urlpatterns import format_suffix_patterns

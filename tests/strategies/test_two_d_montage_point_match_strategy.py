@@ -41,6 +41,39 @@ def test_get_input_data(lots_of_montage_sets,
     assert inp['SIFTminScale'] == 0.38
     assert inp['renderScale'] == 0.4
 
+
+@pytest.mark.django_db
+def test_get_input_data_redo(
+        lots_of_montage_sets,
+        strategy_configurations):
+    em_mset = lots_of_montage_sets[0]
+    em_mset.workflow_state = 'REDO_POINT_MATCH'
+    task = Task(id=345)
+    storage_directory = '/example/storage/directory'
+    strategy = TwoDMontagePointMatchStrategy()
+    strategy.create_log_configuration = Mock(
+        return_value='/path/to/log/dir')
+    strategy.get_or_create_task_storage_directory = Mock(
+        return_value='/path/to/task/storage/directory')
+
+    with patch('os.makedirs'):
+        with patch('os.path.exists', Mock(return_value=True)):
+            with patch("builtins.open",
+                       mock_open(read_data='{{ log_file_path }}')):
+                inp = strategy.get_input(
+                    em_mset,
+                    storage_directory,
+                    task)
+    assert inp['clipWidth'] == 800
+    assert inp['clipHeight'] == 800
+    assert inp['SIFTsteps'] == 3
+    assert inp['memory'] == '4g'
+    assert inp['SIFTfdSize'] == 8
+    assert inp['SIFTmaxScale'] == 0.82
+    assert inp['SIFTminScale'] == 0.38
+    assert inp['renderScale'] == 0.45
+
+
 @pytest.mark.django_db
 @override_settings(
     BASE_FILE_PATH='/base',

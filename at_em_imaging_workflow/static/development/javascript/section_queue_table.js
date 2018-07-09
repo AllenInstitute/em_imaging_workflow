@@ -37,9 +37,7 @@ function draw_chunks(msg) {
             "REDO_POINT_MATCH": "redo_point_match",
             "REDO_SOLVER": "redo_solver",
             "FAILED": "failed",
-            "GAP": "gap",
-            "MONTAGE_QC_FAILED": "montage_qc_failed",
-            "MONTAGE_QC_PASSED": "montage_qc_passed"
+            "GAP": "gap"
         };
  
     var section_row = $("<tr></tr>");
@@ -77,11 +75,23 @@ function draw_chunks(msg) {
 
     $('#chnk_table').append(totals_row)
 
+    var last_z = -1
+    var current_z = -1
+
     var zlen = msg.length;
     for (var i = 0; i < zlen; i++) {
+        current_z = msg[i]['z_index']
+
+        if ((last_z > -1) && ((current_z - last_z) > 1)) {
+            skip_row = $('<tr><td colspan="200"></td></tr>');
+            $('#chnk_table').append(skip_row)
+        }
+
+	last_z = current_z
+
         section_row = $("<tr></tr>");
-        
-        var index_td = $("<td></td>").text(msg[i]['z_index']);
+
+        var index_td = $("<td></td>").text(current_z);
         section_row.append(index_td);
 
         var montage_state_text = msg[i]['workflow_state']

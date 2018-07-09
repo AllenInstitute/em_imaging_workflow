@@ -43,7 +43,7 @@ def test_get_input_data(lots_of_chunks,
     downsample_config.save()
 
     inp = strategy.get_input(
-        chnk_assign,
+        em_mset,
         storage_directory,
         task)
 
@@ -92,5 +92,5 @@ def test_get_two_task_objects_for_queue(lots_of_chunks):
     tsks = strategy.get_task_objects_for_queue(em_mset)
 
     assert tsks is not None
-    assert len(tsks) == 2
+    assert len(tsks) == 1
 

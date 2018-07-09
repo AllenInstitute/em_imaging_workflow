@@ -20,6 +20,21 @@ executables:
         pbs_processor: 'mem=128g'
         pbs_walltime: 'walltime=5:00:00'
 
+    mesh_lens_correction:
+        name: 'Mesh Lens Correction'
+        path: 'python'
+        args:
+        - '-m'
+        - "rendermodules.mesh_lens_correction.do_mesh_lens_correction"
+        environment:
+        - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
+        - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        remote_queue: 'pbs'
+        pbs_queue: 'emconnectome'
+        pbs_processor: 'mem=192g,nodes=1:ppn=32'
+        pbs_walltime: 'walltime=5:00:00'
+
     generate_lens_correction:
         name: 'Generate Lens Correction'
         path: 'python'
@@ -29,6 +44,7 @@ executables:
         environment:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'pbs'
         pbs_queue: 'emconnectome'
         pbs_processor: 'mem=192g,nodes=1:ppn=32'
@@ -43,6 +59,7 @@ executables:
         environment:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'pbs'
         pbs_queue: 'emconnectome'
         pbs_processor: 'mem=192g,nodes=1:ppn=32'
@@ -74,6 +91,7 @@ executables:
         - 'LD_LIBRARY_PATH=${MCRROOT}/runtime/glnxa64:${MCRROOT}/bin/glnxa64:${MCRROOT}/sys/os/glnxa64:${MCRROOT}/sys/opengl/lib/glnxa64'
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         remote_queue: 'pbs'
         pbs_queue: 'emconnectome'
         pbs_processor: 'mem=192g,nodes=1:ppn=32'
@@ -96,6 +114,7 @@ executables:
         environment:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         args:
         - '-m'
         - "rendermodules.dataimport.apply_mipmaps_to_render"
@@ -110,6 +129,7 @@ executables:
         environment:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         args:
         - '-m'
         - "rendermodules.pointmatch.create_tilepairs"
@@ -124,6 +144,7 @@ executables:
         environment:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         args:
         - '-m'
         - "rendermodules.em_montage_qc.detect_montage_defects"
@@ -138,6 +159,7 @@ executables:
         environment:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         args:
         - '-m'
         - "rendermodules.materialize.render_downsample_sections"
@@ -152,6 +174,7 @@ executables:
         environment:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         args:
         - '-m'
         - "rendermodules.dataimport.make_montage_scapes_stack"
@@ -190,6 +213,7 @@ executables:
         - 'LD_LIBRARY_PATH=${MCRROOT}/runtime/glnxa64:${MCRROOT}/bin/glnxa64:${MCRROOT}/sys/os/glnxa64:${MCRROOT}/sys/opengl/lib/glnxa64'
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         args:
         - '-m'
         - "rendermodules.rough_align.do_rough_alignment"
@@ -198,12 +222,13 @@ executables:
         pbs_processor: 'mem=192g,nodes=1:ppn=32'
         pbs_walltime: 'walltime=5:00:00'
 
-    apply_rough_align:
+    apply_rough_align_to_montages:
         name: 'Apply Rough Alignment'
         path: 'python'
         environment:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         args:
         - '-m'
         - "rendermodules.rough_align.apply_rough_alignment_to_montages"
@@ -218,6 +243,7 @@ executables:
         environment:
         - RENDER_CLIENT_JAR=/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging/render-ws-java-client-standalone.jar
         - RENDER_JAVA_HOME=/shared/utils.x86_64/jdk_8u91
+        - JAVA_HOME=/shared/utils.x86_64/jdk_8u91
         args:
         - '-m'
         - "rendermodules.materialize.materialize_sections"
@@ -253,6 +279,12 @@ workflows:
               enqueued_class: "development.models.reference_set.ReferenceSet"
               executable: "generate_lens_correction"
 
+            - key: "generate_mesh_lens_correction"
+              label: "Generate Mesh Lens Correction"
+              class: "development.strategies.generate_mesh_lens_correction.GenerateMeshLensCorrection"
+              enqueued_class: "development.models.reference_set.ReferenceSet"
+              executable: "generate_lens_correction"
+
             - key: "wait_for_lens_correction"
               label: "Wait for Lens Correction"
               class: "development.strategies.wait_for_lens_correction.WaitForLensCorrection"
@@ -270,6 +302,7 @@ workflows:
               class: "development.strategies.generate_mip_maps_strategy.GenerateMipMapsStrategy"
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "generate_mipmaps"
+              batch_size: 15
 
             - key: "apply_mipmaps"
               label: "Apply MIPMaps"
@@ -277,6 +310,7 @@ workflows:
               enqueued_class: "development.models.e_m_montage_set.EMMontageSet"
               executable: "apply_mipmaps"
               batch_size: 2
+              batch_size: 15
 
             - key: "apply_lens_correction_new"
               label: "Apply Lens Correction"

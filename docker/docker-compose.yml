@@ -13,7 +13,7 @@ services:
     image: alleninstitute/at_em_imaging_workflow:timf
     environment:
     - PYTHONPATH=/at_em_imaging_workflow:/blue_sky_workflow_engine:/at_em_imaging_workflow/docker
-    - DJANGO_SETTINGS_MODULE=test_settings_docker
+    - DJANGO_SETTINGS_MODULE=at_em_imaging_workflow.settings
     - BASE_DIR=/at_em_imaging_workflow
     - BLUE_SKY_SETTINGS=/at_em_imaging_workflow/docker/blue_sky_settings_docker.yml
     command: bash -c "cd /at_em_imaging_workflow; /bin/bash test_entry.sh"

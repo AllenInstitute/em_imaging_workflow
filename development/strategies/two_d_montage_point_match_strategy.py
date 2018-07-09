@@ -4,6 +4,7 @@ from rendermodules.pointmatch.schemas import \
     PointMatchClientParametersSpark
 from workflow_engine.models.configuration import Configuration
 from workflow_engine.models.well_known_file import WellKnownFile
+from django.core.exceptions import ObjectDoesNotExist
 import jinja2
 import os
 from django.conf import settings
@@ -66,12 +67,37 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
             'http://' + settings.RENDER_SERVICE_URL + \
             ':' + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
 
+        if em_mset.workflow_state == 'REDO_POINT_MATCH':
+            inp['renderScale'] = self.get_render_scale_from_configuration(
+                em_mset,
+                0.4)
+
         return PointMatchClientParametersSpark().dump(inp).data
 
     def get_tile_pairs_file_name(self, em_mset):
         return WellKnownFile.get(
             em_mset,
             em_mset.tile_pairs_file_description())
+
+    def get_render_scale_from_configuration(self, em_mset, initial_render_scale):
+        try:
+            config = em_mset.configurations.get(
+                configuration_type='point_match_parameters').json_object
+        except ObjectDoesNotExist:
+            point_match_state = {
+                'render_scale': initial_render_scale
+            }
+            config = Configuration(
+                content_object=em_mset,
+                name='point match params for {}'.format(str(em_mset)),
+                configuration_type='point_match_parameters',
+                json_object=point_match_state)
+
+        render_scale = config.json_object['render_scale'] + 0.05
+        config.json_object['render_scale'] = render_scale
+        config.save()
+
+        return render_scale
 
     def on_finishing(self, em_mset, results, task):
         self.check_key(results, 'pairCount')
