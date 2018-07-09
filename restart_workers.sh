@@ -4,9 +4,11 @@ pkill -9 -f "manage"
 pkill -9 -f "beat"
 pkill -9 -f "flower"
 
-export MOAB_AUTH=''
+export MOAB_AUTH='svc_vol_assem:ToC$m3sc'
 
 export BASE_DIR=/at_em_imaging_workflow
+
+export PYTHONPATH=$PYTHONPATH:/EM_aligner_python
 
 rm ${BASE_DIR}/logs/worker.log
 rm ${BASE_DIR}/logs/ui.log

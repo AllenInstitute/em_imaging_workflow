@@ -3,7 +3,7 @@ from rendermodules.dataimport.schemas \
     import MakeMontageScapeSectionStackParameters
 from workflow_engine.models.configuration import Configuration
 from development.strategies \
-    import RENDER_STACK_SOLVED, RENDER_STACK_DOWNSAMPLED
+    import RENDER_STACK_SOLVED_PYTHON, RENDER_STACK_DOWNSAMPLED
 from django.conf import settings
 import logging
 
@@ -30,7 +30,7 @@ class MakeMontageScapesStackStrategy(execution_strategy.ExecutionStrategy):
         inp['image_directory'] = em_mset.get_storage_directory(
             settings.LONG_TERM_BASE_FILE_PATH)
 
-        inp['montage_stack'] = RENDER_STACK_SOLVED
+        inp['montage_stack'] = RENDER_STACK_SOLVED_PYTHON
 
         inp['output_stack'] = RENDER_STACK_DOWNSAMPLED
 
