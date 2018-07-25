@@ -137,19 +137,16 @@ class LensCorrectionIngest(IngestStrategy):
         manifest_path = message['manifest_path']
 
         reference_set, _ = ReferenceSet.objects.update_or_create(
-                uid=uuid.uuid4(),
+                camera=camera,
+                microscope=microscope,
+                storage_directory=message['storage_directory'],
+                acquisition_date=message['acquisition_data']['acquisition_time'],
+                manifest_path=manifest_path,
+                metafile= metafile,
                 defaults= {
-                    'storage_directory': message['storage_directory'],
-                    'metafile': metafile,
+                    'uid': uuid.uuid4(),
                     'workflow_state': state_machines.states(
                         ReferenceSet).PENDING,
-                    'camera': camera,
-                    'microscope': microscope,
-                    'acquisition_date':
-                        message['acquisition_data']['acquisition_time'],
-                    # 'project_path': '/example_data', # deprecated
-                    'manifest_path': manifest_path,
-                    'metafile': metafile
                 })
 
         return reference_set

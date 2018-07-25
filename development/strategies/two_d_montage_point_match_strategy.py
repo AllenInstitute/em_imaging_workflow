@@ -70,7 +70,7 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
         if em_mset.workflow_state == 'REDO_POINT_MATCH':
             inp['renderScale'] = self.get_render_scale_from_configuration(
                 em_mset,
-                0.4)
+                inp['renderScale'])
 
         return PointMatchClientParametersSpark().dump(inp).data
 
@@ -82,7 +82,7 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
     def get_render_scale_from_configuration(self, em_mset, initial_render_scale):
         try:
             config = em_mset.configurations.get(
-                configuration_type='point_match_parameters').json_object
+                configuration_type='point_match_parameters')
         except ObjectDoesNotExist:
             point_match_state = {
                 'render_scale': initial_render_scale
@@ -93,8 +93,8 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
                 configuration_type='point_match_parameters',
                 json_object=point_match_state)
 
-        render_scale = config.json_object['render_scale'] + 0.05
-        config.json_object['render_scale'] = render_scale
+        render_scale = 0.5
+        config.json_object['render_scale'] = 0.5
         config.save()
 
         return render_scale

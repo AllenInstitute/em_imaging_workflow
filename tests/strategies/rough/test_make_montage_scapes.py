@@ -21,6 +21,13 @@ from strategies.rough.test_rough_point_match_strategy \
 
 
 @pytest.mark.django_db
+@patch('development.strategies.rough'
+       '.make_montage_scapes_stack_strategy'
+       '.get_workflow_node_input_template',
+       Mock(return_value={
+           'montage_stack': "",
+           'output_stack': "",
+           'render': { } } ))
 def test_get_input_data(lots_of_chunks,
                         strategy_configurations):
     chnk_assigns = ChunkAssignment.objects.filter(
@@ -53,8 +60,8 @@ def test_get_input_data(lots_of_chunks,
     assert inp['image_directory'] == \
         '/long/term/em_montage_MOCK SPECIMEN_z1_2345_06_07_16_09_10_00_00'
 
-    assert inp['montage_stack'] == 'em_2d_montage_solved'
-    assert inp['output_stack'] == 'em_2d_montage_downsample'
+    assert inp['montage_stack'] == 'em_2d_montage_solved_py'
+    assert inp['output_stack'] == 'em_2d_montage_downsample_0_01'
 
     assert inp['render']['host'] == 'renderservice'
     assert inp['render']['port'] == 8080

@@ -71,7 +71,7 @@ def test_get_input_data_redo(
     assert inp['SIFTfdSize'] == 8
     assert inp['SIFTmaxScale'] == 0.82
     assert inp['SIFTminScale'] == 0.38
-    assert inp['renderScale'] == 0.45
+    assert inp['renderScale'] == 0.5
 
 
 @pytest.mark.django_db

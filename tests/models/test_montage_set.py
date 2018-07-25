@@ -10,6 +10,7 @@ from development.models.microscope import Microscope
 from development.models.section import Section
 from development.models.load import Load
 from development.models.sample_holder import SampleHolder
+from workflow_engine.models.configuration import Configuration
 
 
 @pytest.fixture
@@ -36,6 +37,12 @@ def cameras_etc():
     load, _ = Load.objects.update_or_create(
         uid='Mock Load',
         offset=1)
+
+    z_mapping, _ = load.configurations.update_or_create(
+        name='mock_z_mapping',
+        configuration_type='z_mapping',
+        defaults={
+            'json_object': { "1": 2 } })
 
     sample_holder, _ = SampleHolder.objects.update_or_create(
         uid='Mock Sample Holder',

@@ -1,25 +1,22 @@
 from workflow_engine.strategies import execution_strategy
 from rendermodules.montage.schemas import SolveMontageSectionParameters
-from workflow_engine.models.configuration import Configuration
 from django.conf import settings
 import logging
 from development.strategies \
-    import RENDER_STACK_SOLVED, RENDER_STACK_LENS_CORRECTED
+    import RENDER_STACK_SOLVED, RENDER_STACK_LENS_CORRECTED, \
+    get_workflow_node_input_template
 
 
 class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
     _log = logging.getLogger(
         'development.strategies.two_d_montage_solver_strategy')
 
-
     #override if needed
     #set the data for the input file
     def get_input(self, em_mset, storage_directory, task):
         TwoDMontageSolverStrategy._log.info("get input")
 
-        inp = Configuration.objects.get(
-            name='2D Montage Solver Input',
-            configuration_type='strategy_config').json_object
+        inp = get_workflow_node_input_template(task)
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
@@ -47,7 +44,9 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
         inp['target_collection']['project'] = em_mset.get_render_project_name()
         inp['target_collection']['renderbinPath'] = \
             settings.RENDER_CLIENT_SCRIPTS
-        inp['target_collection']['stack'] = RENDER_STACK_SOLVED
+
+        if inp['target_collection']['stack'] == '':
+            inp['target_collection']['stack'] = RENDER_STACK_SOLVED
 
         inp['source_point_match_collection']['server'] = \
             'http://' + settings.RENDER_SERVICE_URL + \

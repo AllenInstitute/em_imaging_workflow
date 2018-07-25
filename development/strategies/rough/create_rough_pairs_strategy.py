@@ -1,21 +1,27 @@
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
 from workflow_engine.models.configuration import Configuration
+from development.models.chunk_assignment import ChunkAssignment
+from development.strategies.rough.solve_rough_alignment_strategy \
+    import SolveRoughAlignmentStrategy
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from rendermodules.pointmatch.schemas import \
     TilePairClientParameters
 from django.conf import settings
 import logging
 from development.strategies \
-    import RENDER_STACK_MONTAGE_SCAPES_STACK
+    import RENDER_STACK_DOWNSAMPLED
 
 
 class CreateRoughPairsStrategy(ExecutionStrategy):
     _log = logging.getLogger(
         'development.strategies.create_rough_pairs_strategy')
 
-    def get_input(self, chnk, storage_directory, task):
+    def get_input(self, chk_assgn, storage_directory, task):
         inp = Configuration.objects.get(
             name='Apply Rough Alignment Input',
             configuration_type='strategy_config').json_object
+
+        chnk = chk_assgn.chunk
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
@@ -25,20 +31,57 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
 
         inp['output_dir'] = chnk.get_storage_directory()
 
-        min_z, max_z = chnk.z_range()
-        inp["minZ"] = min_z
-        inp["maxZ"] = max_z
+        tile_pair_ranges = \
+            SolveRoughAlignmentStrategy.get_tile_pair_ranges(chnk)
 
-        stack = RENDER_STACK_MONTAGE_SCAPES_STACK % (min_z, max_z)
+        section_z_index = chk_assgn.section.z_index
+
+        for k in tile_pair_ranges.keys():
+            tile_pair_range = tile_pair_ranges[k]
+            if tile_pair_range['minz'] == section_z_index:
+                min_z = tile_pair_range['minz']
+                max_z = tile_pair_range['maxz']
+
+                inp["minZ"] = min_z
+                inp["maxZ"] = max_z
+                inp["zNeighborDistance"] = tile_pair_range["zNeighborDistance"]
+
+        stack = RENDER_STACK_DOWNSAMPLED
         inp['baseStack'] = stack
         inp['stack'] = stack
 
-        return TilePairClientParameters().dump(inp).data 
+        return TilePairClientParameters().dump(inp).data
 
-    def on_finishing(self, chnk, results, task):
+    def on_finishing(self, chk_assgn, results, task):
+        chnk = chk_assgn.chunk
+        z_index = str(chk_assgn.section.z_index)
+
         self.check_key(results, 'tile_pair_file')
-        self.set_well_known_file(
-            results['tile_pair_file'],
-            chnk,
-            chnk.tile_pairs_file_description(),
-            task)
+
+        cfg, created = chnk.configurations.get_or_create(
+            configuration_type='rough_tile_pair_file')
+
+        if created:
+            cfg.json_object = {
+                z_index: {
+                    'tile_pair_file': results['tile_pair_file']
+                }
+            }
+        else:
+            cfg.json_object[z_index] = {
+                'tile_pair_file': results['tile_pair_file']
+            }
+        cfg.save()
+
+    def get_task_objects_for_queue(self, chnk):
+        tile_pair_ranges = \
+            SolveRoughAlignmentStrategy.get_tile_pair_ranges(chnk)
+
+        chunk_assignments = [
+            ChunkAssignment.objects.get(
+                chunk=chnk,
+                section=chnk.sections.get(
+                    z_index=tile_pair_ranges[x]['minz'])
+            ) for x in tile_pair_ranges.keys()]
+
+        return chunk_assignments

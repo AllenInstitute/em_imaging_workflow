@@ -6,34 +6,51 @@ from development.models import state_machines
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from workflow_engine.models.well_known_file import WellKnownFile
+from workflow_engine.workflow_controller import WorkflowController
 from development.models.e_m_montage_set import EMMontageSet
 import simplejson as json
 from development.models.chunk import Chunk
 
 
 def redo_point_match(modeladmin, request, queryset):
-    pass_em_montage_set.short_description = \
-        "Pass selected montage sets"
+    redo_point_match.short_description = \
+        "Redo point match"
 
     if queryset:
         for em_mset in queryset.iterator():
-            state_machines.transition(
-                em_mset,
-                'workflow_state',
-                state_machines.states(EMMontageSet).REDO_POINT_MATCH)
+            #state_machines.transition(
+            #    em_mset,
+            #    'workflow_state',
+            #    state_machines.states(EMMontageSet).REDO_POINT_MATCH)
+            em_mset.workflow_state = 'REDO_POINT_MATCH'
             em_mset.save()
+
+            WorkflowController.start_workflow_2(
+                'em_2d_montage',
+                em_mset,
+                start_node_name='2D Montage Point Match',
+                reuse_job=True,
+                raise_priority=True)
 
 def redo_solver(modeladmin, request, queryset):
-    pass_em_montage_set.short_description = \
-        "Pass selected montage sets"
+    redo_solver.short_description = \
+        "Redo solver"
 
     if queryset:
         for em_mset in queryset.iterator():
-            state_machines.transition(
-                em_mset,
-                'workflow_state',
-                state_machines.states(EMMontageSet).REDO_SOLVER)
+            #state_machines.transition(
+            #    em_mset,
+            #    'workflow_state',
+            #    state_machines.states(EMMontageSet).REDO_SOLVER)
+            em_mset.workflow_state = 'REDO_SOLVER'
             em_mset.save()
+
+            WorkflowController.start_workflow_2(
+                'em_2d_montage',
+                em_mset,
+                start_node_name='2D Montage Python Solver',
+                reuse_job=True,
+                raise_priority=True)
 
 def pass_em_montage_set(modeladmin, request, queryset):
     pass_em_montage_set.short_description = \
@@ -41,10 +58,11 @@ def pass_em_montage_set(modeladmin, request, queryset):
 
     if queryset:
         for em_mset in queryset.iterator():
-            state_machines.transition(
-                em_mset,
-                'workflow_state',
-                state_machines.states(EMMontageSet).MONTAGE_QC_PASSED)
+            #state_machines.transition(
+            #    em_mset,
+            #    'workflow_state',
+            #    state_machines.states(EMMontageSet).MONTAGE_QC_PASSED)
+            em_mset.workflow_state='MONTAGE_QC_PASSED'
             em_mset.save()
 
 def fail_em_montage_set(modeladmin, request, queryset):
@@ -53,10 +71,11 @@ def fail_em_montage_set(modeladmin, request, queryset):
 
     if queryset:
         for em_mset in queryset.iterator():
-            state_machines.transition(
-                em_mset,
-                'workflow_state',
-                state_machines.states(EMMontageSet).FAILED)
+            em_mset.workflow_state='FAILED'
+            #state_machines.transition(
+            #    em_mset,
+            #    'workflow_state',
+            #    state_machines.states(EMMontageSet).FAILED)
             em_mset.save()
 
 
@@ -66,11 +85,15 @@ def assign_chunk(modeladmin, request, queryset):
 
 
 class ConfigurationInline(GenericStackedInline):
-    model = Configuration
+    model=Configuration
+    extra=0
 
 
 class WellKnownFileInline(GenericStackedInline):
     model = WellKnownFile
+    ct_field='attachable_type'
+    ct_fk_field='attachable_id'
+    extra=0
 
 
 class EMMontageSetAdmin(admin.ModelAdmin):
@@ -107,7 +130,7 @@ class EMMontageSetAdmin(admin.ModelAdmin):
         pass_em_montage_set,
         fail_em_montage_set
     ]
-    inlines = (ConfigurationInline,)
+    inlines = (ConfigurationInline,WellKnownFileInline)
 
     def load_uid(self, em_montage_set_object):
         try:

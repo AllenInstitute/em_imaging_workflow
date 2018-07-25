@@ -4,6 +4,7 @@ from development.models.section import Section
 
 class ChunkInline(admin.StackedInline):
     model = Section.chunks.through
+    extra=0
 
 
 class SectionAdmin(admin.ModelAdmin):

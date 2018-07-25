@@ -21,9 +21,29 @@ from strategies.rough.test_rough_point_match_strategy \
         'overlap': 2,
         'start_z': 1,
         'chunk_size': 5 })
+@patch('development.strategies.rough'
+       '.solve_rough_alignment_strategy'
+       '.get_workflow_node_input_template',
+       Mock(return_value={
+           'montage_stack': "",
+           'source_collection': {},
+           'solver_options': {},
+           'source_point_match_collection': {},
+           'target_collection': {},
+           'output_stack': "",
+           'render': { 'source_collection': '' } } ))
 def test_get_input_data(lots_of_chunks,
                         strategy_configurations):
     chnk = lots_of_chunks[2]
+    chnk.configurations.update_or_create(
+        name='chunk 2 configuration',
+        configuration_type='chunk_configuration',
+        defaults={
+            'json_object': { 'tile_pair_ranges': {
+                "1": { "minz": 1,
+                      "maxz": 1
+                    }
+                } } })
     task = Task(id=345)
     storage_directory = '/example/storage/directory'
     strategy = SolveRoughAlignmentStrategy()
@@ -42,8 +62,8 @@ def test_get_input_data(lots_of_chunks,
                     storage_directory,
                     task)
 
-    assert inp['first_section'] == 17
-    assert inp['last_section'] == 26
+    assert inp['first_section'] == 1
+    assert inp['last_section'] == 1
     assert set(inp.keys()) == {
         'render',
         'log_level',

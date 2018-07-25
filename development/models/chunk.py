@@ -94,6 +94,7 @@ class Chunk(models.Model):
 
     def get_point_collection_name(self):
         return 'chunk_rough_align_point_matches'
+        #return '17797_1R_rough_point_matches'
 
     def tile_pairs_file_description(self):
         return 'rough tile pairs file'

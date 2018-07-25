@@ -12,7 +12,8 @@ from django.utils.safestring import mark_safe
 class ChunkConfigurationForm(ModelForm):
     class Meta:
         model=Configuration
-        fields=('json_object',)
+        fields=('name', 'configuration_type', 'json_object',)
+        extra=0
 
     def clean_json_object(self):
         jo = self.cleaned_data.get('json_object', {})
@@ -20,7 +21,7 @@ class ChunkConfigurationForm(ModelForm):
         if jo is None:
             raise ValidationError("Invalid JSON object")
         else:
-            jo['cleaned'] = True
+            pass
 
         return jo
 

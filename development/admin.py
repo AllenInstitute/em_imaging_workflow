@@ -27,6 +27,9 @@ from at_em_imaging_workflow.admin.section_admin \
     import SectionAdmin
 from at_em_imaging_workflow.admin.sample_holder_admin \
     import SampleHolderAdmin
+from at_em_imaging_workflow.admin.load_admin \
+    import LoadAdmin
+
 
 # Register your models here.
 admin.site.register(ATMontageSet)
@@ -34,7 +37,7 @@ admin.site.register(Camera)
 admin.site.register(Chunk, ChunkAdmin)
 admin.site.register(ChunkAssignment)
 admin.site.register(EMMontageSet, EMMontageSetAdmin)
-admin.site.register(Load)
+admin.site.register(Load, LoadAdmin)
 admin.site.register(Microscope)
 admin.site.register(MicroscopeType)
 admin.site.register(MontageSet)

@@ -12,7 +12,7 @@ function draw_chunks(msg) {
     "2D Montage Python Solver",
     "Detect Defects",
     "Manual QC / High Degree Polynomial or Point Match Regeneration",
-    "Generate Downsampled Montage",
+    //"Generate Downsampled Montage",
     "Make Montage Scapes",
     "Chunk Assignment"
     ];
@@ -140,7 +140,17 @@ function draw_chunks(msg) {
                 run_state_link.attr("title", msg[i]['z_index'])
                 run_state_link.text(run_state_text);
                 run_state_td.append(run_state_link);
-                
+
+                var run_state_legacy_link = $("<a>");
+                run_state_legacy_link.attr(
+                    "href",
+                    "/workflow_engine/jobs?job_ids=" + job_id);
+                run_state_legacy_link.attr(
+                    "title",
+                    "Open start/kill view for " + job_id + " in new tab");
+                run_state_legacy_link.text('O');
+                run_state_td.append(run_state_legacy_link)
+
                 var em_montage_link = $("<a>");
                 em_montage_link.attr(
                     "href",

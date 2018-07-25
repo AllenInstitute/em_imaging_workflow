@@ -34,11 +34,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
 
 
 class Load(models.Model):
     uid = models.CharField(max_length=255, null=True)
-    offset = models.IntegerField(null=True) 
+    offset = models.IntegerField(null=True)
+    configurations = GenericRelation('workflow_engine.Configuration')
 
     def __str__(self):
         return str(self.uid)

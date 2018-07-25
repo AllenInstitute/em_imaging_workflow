@@ -36,11 +36,11 @@
 import shutil
 import os
 from development.strategies \
-    import RENDER_STACK_SOLVED, RENDER_STACK_LENS_CORRECTED
+    import RENDER_STACK_SOLVED_PYTHON, RENDER_STACK_LENS_CORRECTED, \
+    get_workflow_node_input_template
 from rendermodules.em_montage_qc.schemas \
     import DetectMontageDefectsParameters, \
     DetectMontageDefectsParametersOutput
-from workflow_engine.models.configuration import Configuration
 from workflow_engine.strategies.execution_strategy \
     import ExecutionStrategy
 from django.conf import settings
@@ -56,14 +56,7 @@ class ManualQCStrategy(ExecutionStrategy):
         Args:
             em_mset : EMMontageSet
         '''
-        #inp = Configuration.objects.get(
-        #    enqueued_object=em_mset,
-        #    configuration_type='strategy_config')
-
-        #if inp is None:
-        inp = Configuration.objects.get(
-            name='Detect Montage Defects Input',
-            configuration_type='strategy_config').json_object
+        inp = get_workflow_node_input_template(task)
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
@@ -71,13 +64,17 @@ class ManualQCStrategy(ExecutionStrategy):
         inp['render']['project'] = em_mset.get_render_project_name()
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
-        inp['prestitched_stack'] = RENDER_STACK_LENS_CORRECTED
-        inp['poststitched_stack'] = self.get_post_stitched_stack_name(em_mset)
+        if inp['prestitched_stack'] == '':
+            inp['prestitched_stack'] = RENDER_STACK_LENS_CORRECTED
+
+        if inp['poststitched_stack'] == '':
+            inp['poststitched_stack'] = self.get_post_stitched_stack_name(em_mset)
 
         inp['minZ'] = em_mset.section.z_index
         inp['maxZ'] = em_mset.section.z_index
 
-        inp['match_collection'] = em_mset.get_point_collection_name()
+        if inp['match_collection'] == '':
+            inp['match_collection'] = em_mset.get_point_collection_name()
 
         inp['out_html_dir'] = storage_directory
 
@@ -86,23 +83,24 @@ class ManualQCStrategy(ExecutionStrategy):
         return data
 
     def get_post_stitched_stack_name(self, em_mset):
-        return RENDER_STACK_SOLVED
+        return RENDER_STACK_SOLVED_PYTHON
 
     def on_finishing(self, em_mset, results, task):
         self.check_key(results, 'qc_passed_sections')
 
         z_index = em_mset.section.z_index
 
-        if self.check_redo_point_match(em_mset, results):
-            pass
-        elif self.check_redo_montage_solver(em_mset, results): 
-            pass
-        elif z_index in results['qc_passed_sections']:
-            em_mset.workflow_state = 'MONTAGE_QC_PASSED'  # TODO: use state machine
+        if z_index in results['qc_passed_sections']:
+            em_mset.workflow_state = 'MONTAGE_QC_PASSED'
         elif z_index in results['gap_sections'] or \
            z_index in results['seam_sections'] or \
            z_index in results['hole_sections']:
-            em_mset.workflow_state = 'MONTAGE_QC_FAILED'
+            if em_mset.workflow_state == 'REDO_POINT_MATCH':
+                em_mset.workflow_state = 'MONTAGE_QC_FAILED'
+            elif em_mset.workflow_state == 'REDO_SOLVER':
+                em_mset.workflow_state = 'MONTAGE_QC_FAILED'
+            else:
+                em_mset.workflow_state = 'MONTAGE_QC_FAILED'
         else:
             em_mset.workflow_state = 'MONTAGE_QC_FAILED'
         em_mset.save()
@@ -119,9 +117,3 @@ class ManualQCStrategy(ExecutionStrategy):
             em_mset,
             'defect_detection',
             task)
-
-    def check_redo_point_match(self, em_mset, results):
-        return False
-
-    def check_redo_montage_solver(self, em_mset, results): 
-        return False

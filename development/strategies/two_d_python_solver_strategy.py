@@ -1,15 +1,16 @@
 from workflow_engine.strategies import execution_strategy
 from workflow_engine.models.configuration import Configuration
+from django.core.exceptions import ObjectDoesNotExist
 from development.strategies \
     import RENDER_STACK_LENS_CORRECTED, RENDER_STACK_SOLVED_PYTHON
 from django.conf import settings
-import logging  
+import logging
 
 
 # TODO - do for rouch alignment also
 class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
     _log = logging.getLogger(
-        'development.strategies.python_solver_strategy')
+        'development.strategies.two_d_python_solver_strategy')
 
     #override if needed
     #set the data for the input file
@@ -46,7 +47,7 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
 
         inp['first_section'] = em_mset.section.z_index
         inp['last_section'] = em_mset.section.z_index
-        inp['solve_type'] = 'montage'  # TODO: also do a rough version
+        inp['solve_type'] = 'montage'
         inp['close_stack'] = False
         
         # TODO: remove this in on_finishing() - for fine alignment
@@ -54,7 +55,35 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
         task_dir = self.get_or_create_task_storage_directory(task)
         inp['hdf5_options']['output_dir'] = task_dir
 
+        if em_mset.workflow_state == 'REDO_SOLVER':
+            inp['regularization']['default_lambda'] = \
+                self.get_default_lambda(
+                    em_mset,
+                    inp['regularization']['default_lambda'])
+
         return EMA_Schema().dump(inp).data
+
+    def get_default_lambda(
+        self, em_mset, initial_default_lambda):
+
+        try:
+            config = em_mset.configurations.get(
+                configuration_type='point_match_parameters')
+        except ObjectDoesNotExist:
+            updated_state = {
+                'default_lambda': initial_default_lambda
+            }
+            config = Configuration(
+                content_object=em_mset,
+                name='point match params for {}'.format(str(em_mset)),
+                configuration_type='point_match_parameters',
+                json_object=updated_state)
+
+        default_lambda = 5.0
+        config.json_object['default_lambda'] = default_lambda
+        config.save()
+
+        return default_lambda
 
 
 try:

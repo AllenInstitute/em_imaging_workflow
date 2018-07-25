@@ -13,6 +13,7 @@ from models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 from development.strategies.rough.rough_point_match_strategy \
     import RoughPointMatchStrategy
+from development.models.chunk_assignment import ChunkAssignment
 
 @pytest.fixture
 def lots_of_chunks(lots_of_montage_sets):
@@ -28,7 +29,11 @@ def lots_of_chunks(lots_of_montage_sets):
 @pytest.mark.django_db
 def test_get_input_data(lots_of_chunks,
                         strategy_configurations):
-    chnk = lots_of_chunks[0]
+    chnk_assign = ChunkAssignment.objects.first()
+    tpj = { "1": { "tile_pair_file": "/path/to/file" }}
+    chnk_assign.chunk.configurations.update_or_create(
+        configuration_type='rough_tile_pair_file',
+        json_object=tpj)
     task = Task(id=345)
     storage_directory = '/example/storage/directory'
     strategy = RoughPointMatchStrategy()
@@ -42,7 +47,7 @@ def test_get_input_data(lots_of_chunks,
             with patch("builtins.open",
                        mock_open(read_data='{{ log_file_path }}')):
                 inp = strategy.get_input(
-                    chnk,
+                    chnk_assign,
                     storage_directory,
                     task)
     assert inp['SIFTsteps'] == 5
@@ -52,7 +57,7 @@ def test_get_input_data(lots_of_chunks,
     assert inp['renderScale'] == 1.0
 
     assert inp['collection'] == 'chunk_rough_align_point_matches'
-    assert inp['pairJson'] == None
+    assert inp['pairJson'] == '/path/to/file'
 
 
 @pytest.mark.django_db
@@ -65,23 +70,34 @@ def test_get_input_data(lots_of_chunks,
     RENDER_SERVICE_PORT='1234',
     RENDER_CLIENT_SCRIPTS='/path/to/test/client/scripts'
     )
-def test_on_finishing(lots_of_montage_sets):
-    em_mset = lots_of_montage_sets[0]
+def test_on_finishing(lots_of_chunks):
+    chnk_assign = ChunkAssignment.objects.first()
+    tpj = { "1": { "tile_pair_file": "/path/to/file" }}
+    cfg, _ = chnk_assign.chunk.configurations.update_or_create(
+        configuration_type='rough_tile_pair_file',
+        json_object=tpj)
     results = { 'pairCount': 5 }
     job = Job(
         id=444,
-        enqueued_object_id=em_mset.id)
+        enqueued_object_id=chnk_assign.id)
     task = Task(id=333, job=job)
     strat = RoughPointMatchStrategy()
     strat.get_or_create_task_storage_directory = Mock(
         return_value='/path/to/task/storage/directory')
 
-    with patch('os.path.exists',
-               Mock(return_value=True)) as ope:
-        with patch.object(
-            WorkflowController,
-            'start_workflow'):
-            strat.on_finishing(em_mset, results, task)
+    with patch.object(
+        WorkflowController,
+        'start_workflow'):
+        strat.on_finishing(
+            chnk_assign,
+            results,
+            task)
 
-    ope.assert_called_once_with(
-        '/path/to/task/storage/directory/output_333.json')
+    cfg = chnk_assign.chunk.configurations.get(
+        configuration_type='rough_tile_pair_file')
+
+    assert cfg.json_object["1"]["tile_pair_file"] == \
+        '/path/to/file'
+    assert cfg.json_object["1"]["pairCount"] == 5
+    assert cfg.json_object["1"]["point_match_output"] == \
+        '/path/to/task/storage/directory/output_333.json'

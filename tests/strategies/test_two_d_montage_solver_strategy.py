@@ -12,6 +12,14 @@ from models.test_chunk_model \
 
 
 @pytest.mark.django_db
+@patch('development.strategies.two_d_montage_solver_strategy'
+       '.get_workflow_node_input_template',
+       Mock(return_value={
+           'render': {},
+           'source_collection': {},
+           'source_point_match_collection': {},
+           'target_collection': { 'stack': '' },
+           'solver_options': {} }))
 def test_get_input_data(strategy_configurations):
     em_mset = Mock()
     task = Mock()
