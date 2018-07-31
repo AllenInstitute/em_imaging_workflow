@@ -4,9 +4,11 @@ from rendermodules.materialize.schemas import \
     MaterializeSectionsParameters
 import jinja2
 import os
-from development.strategies import RENDER_STACK_ROUGH_ALIGN
+from development.strategies import RENDER_STACK_ROUGH_ALIGN, \
+    get_workflow_node_input_template
 from development.models.chunk_assignment import ChunkAssignment
-from workflow_engine.models.configuration import Configuration
+from development.strategies.rough.solve_rough_alignment_strategy \
+    import SolveRoughAlignmentStrategy
 from django.conf import settings
 import logging
 
@@ -19,14 +21,29 @@ class MaterializeSectionsStrategy(ExecutionStrategy):
     _log = logging.getLogger(_package)
 
     def get_input(self, chnk_assign, storage_directory, task):
-        inp = Configuration.objects.get(
-            name='Materialize Sections Input',
-            configuration_type='strategy_config').json_object
+        inp = get_workflow_node_input_template(
+            task,
+            name='Materialize Sections Input')
 
         chnk = chnk_assign.chunk
         em_mset = chnk_assign.section.montageset_set.first()
 
-        (z_start, z_end) = chnk.z_range()
+        chunk_load = \
+            SolveRoughAlignmentStrategy.get_load(chnk)
+        z_mapping = \
+            SolveRoughAlignmentStrategy.get_z_mapping(chunk_load)
+        tile_pair_ranges = \
+            SolveRoughAlignmentStrategy.get_tile_pair_ranges(chnk)
+        min_z, max_z = \
+            SolveRoughAlignmentStrategy.calculate_z_min_max(tile_pair_ranges)
+        clipped_z_mapping = \
+            SolveRoughAlignmentStrategy.clip_z_mapping_to_min_max(
+                z_mapping, min_z, max_z)
+
+        mapped_from = clipped_z_mapping.keys()
+
+        #old_zs = [int(z) for z in mapped_from]
+        #new_zs = [clipped_z_mapping[z] for z in mapped_from]
 
         inp['sparkhome'] = settings.SPARK_HOME
         log_dir = self.get_or_create_task_storage_directory(task)
@@ -45,7 +62,7 @@ class MaterializeSectionsStrategy(ExecutionStrategy):
         inp['owner'] = settings.RENDER_SERVICE_USER
         inp['project'] = chnk.get_render_project_name()
         inp['stack'] = RENDER_STACK_ROUGH_ALIGN % (
-            z_start, z_end)
+            min_z, max_z)
 
         inp['rootDirectory'] = chnk.get_storage_directory()
 
@@ -58,19 +75,18 @@ class MaterializeSectionsStrategy(ExecutionStrategy):
         mem = 128
         inp['driverMemory'] = str(int(mem)) +  'g'  # TODO roughly memory * ppn
 
-        inp['height'] = em_mset.camera.height
-        inp['width']= em_mset.camera.width
-        inp['zValues'] = [ em_mset.section.z_index ]
+        mapped_z = clipped_z_mapping[str(em_mset.section.z_index)]
+        inp['zValues'] = [ mapped_z ]
 
         return MaterializeSectionsParameters().dump(inp).data
 
-    def on_finishing(self, chnk, results, task):
-        self.check_key(results, 'pairCount')
-        self.set_well_known_file(
-            self.get_output_file(task),
-            chnk,
-            'point_match_output',
-            task)
+#     def on_finishing(self, chnk, results, task):
+#         self.check_key(results, 'pairCount')
+#         self.set_well_known_file(
+#             self.get_output_file(task),
+#             chnk,
+#             'point_match_output',
+#             task)
 
     def create_log_configuration(self, log_file_path):
         env = jinja2.Environment(
@@ -81,7 +97,3 @@ class MaterializeSectionsStrategy(ExecutionStrategy):
             MaterializeSectionsStrategy._log_configuration_template)
 
         return log4j_template.render(log_file_path=log_file_path)
-
-    def get_task_objects_for_queue(self, chnk):
-        return list(ChunkAssignment.objects.filter(
-            chunk=chnk))

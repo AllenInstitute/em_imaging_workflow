@@ -27,6 +27,13 @@ def lots_of_chunks(lots_of_montage_sets):
 
 
 @pytest.mark.django_db
+@patch('development.strategies.rough'
+       '.rough_point_match_strategy'
+       '.get_workflow_node_input_template',
+       Mock(return_value={
+            'SIFTsteps': 5,
+            'render': { }
+       } ))
 def test_get_input_data(lots_of_chunks,
                         strategy_configurations):
     chnk_assign = ChunkAssignment.objects.first()
@@ -51,10 +58,6 @@ def test_get_input_data(lots_of_chunks,
                     storage_directory,
                     task)
     assert inp['SIFTsteps'] == 5
-    assert inp['SIFTfdSize'] == 8
-    assert inp['SIFTmaxScale'] == 1.0
-    assert inp['SIFTminScale'] == 0.2
-    assert inp['renderScale'] == 1.0
 
     assert inp['collection'] == 'chunk_rough_align_point_matches'
     assert inp['pairJson'] == '/path/to/file'

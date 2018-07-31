@@ -26,10 +26,12 @@ from strategies.rough.test_rough_point_match_strategy \
        '.get_workflow_node_input_template',
        Mock(return_value={
            'montage_stack': "",
-           'source_collection': {},
+           'source_collection': { 'stack': '' },
            'solver_options': {},
-           'source_point_match_collection': {},
-           'target_collection': {},
+           'source_point_match_collection': {
+               'match_collection': '' 
+            },
+           'target_collection': { 'stack': '' },
            'output_stack': "",
            'render': { 'source_collection': '' } } ))
 def test_get_input_data(lots_of_chunks,
@@ -40,8 +42,8 @@ def test_get_input_data(lots_of_chunks,
         configuration_type='chunk_configuration',
         defaults={
             'json_object': { 'tile_pair_ranges': {
-                "1": { "minz": 1,
-                      "maxz": 1
+                "1": { "minz": 2,
+                      "maxz": 2
                     }
                 } } })
     task = Task(id=345)
@@ -62,8 +64,8 @@ def test_get_input_data(lots_of_chunks,
                     storage_directory,
                     task)
 
-    assert inp['first_section'] == 1
-    assert inp['last_section'] == 1
+    assert inp['first_section'] == 2
+    assert inp['last_section'] == 2
     assert set(inp.keys()) == {
         'render',
         'log_level',

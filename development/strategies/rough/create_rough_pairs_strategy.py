@@ -1,15 +1,14 @@
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
-from workflow_engine.models.configuration import Configuration
 from development.models.chunk_assignment import ChunkAssignment
 from development.strategies.rough.solve_rough_alignment_strategy \
     import SolveRoughAlignmentStrategy
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from rendermodules.pointmatch.schemas import \
     TilePairClientParameters
 from django.conf import settings
 import logging
 from development.strategies \
-    import RENDER_STACK_DOWNSAMPLED
+    import RENDER_STACK_DOWNSAMPLED, \
+    get_workflow_node_input_template
 
 
 class CreateRoughPairsStrategy(ExecutionStrategy):
@@ -17,9 +16,7 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
         'development.strategies.create_rough_pairs_strategy')
 
     def get_input(self, chk_assgn, storage_directory, task):
-        inp = Configuration.objects.get(
-            name='Apply Rough Alignment Input',
-            configuration_type='strategy_config').json_object
+        inp = get_workflow_node_input_template(task)
 
         chnk = chk_assgn.chunk
 
@@ -38,7 +35,7 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
 
         for k in tile_pair_ranges.keys():
             tile_pair_range = tile_pair_ranges[k]
-            if tile_pair_range['minz'] == section_z_index:
+            if tile_pair_range['tempz'] == section_z_index:
                 min_z = tile_pair_range['minz']
                 max_z = tile_pair_range['maxz']
 
@@ -47,8 +44,10 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
                 inp["zNeighborDistance"] = tile_pair_range["zNeighborDistance"]
 
         stack = RENDER_STACK_DOWNSAMPLED
-        inp['baseStack'] = stack
-        inp['stack'] = stack
+        if inp['baseStack'] == '':
+            inp['baseStack'] = stack
+        if inp['stack'] == '':
+            inp['stack'] = stack
 
         return TilePairClientParameters().dump(inp).data
 
@@ -80,8 +79,7 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
         chunk_assignments = [
             ChunkAssignment.objects.get(
                 chunk=chnk,
-                section=chnk.sections.get(
-                    z_index=tile_pair_ranges[x]['minz'])
+                section__z_index=tile_pair_ranges[x]['tempz']
             ) for x in tile_pair_ranges.keys()]
 
         return chunk_assignments

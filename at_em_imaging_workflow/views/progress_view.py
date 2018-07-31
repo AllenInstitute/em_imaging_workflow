@@ -13,7 +13,8 @@ from django_pandas.io import read_frame
 
 
 class ProgressView(PandasView):
-    queryset = Job.objects.all()
+    queryset = Job.objects.filter(
+        workflow_node__workflow__name='em_2d_montage')
     serializer_class = ProgressSerializer
     renderer_classes = [PandasCSVRenderer, PandasJSONRenderer]
 

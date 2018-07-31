@@ -1,11 +1,12 @@
 from workflow_engine.strategies.execution_strategy import \
     ExecutionStrategy
-from development.strategies.rough.solve_rough_alignment_strategy \
-    import SolveRoughAlignmentStrategy
+from development.strategies \
+    import get_workflow_node_input_template
 from rendermodules.pointmatch.schemas import \
     PointMatchClientParametersSpark
 from development.models.chunk_assignment import ChunkAssignment
-from workflow_engine.models.configuration import Configuration
+from development.strategies.rough.solve_rough_alignment_strategy \
+    import SolveRoughAlignmentStrategy
 from workflow_engine.models.well_known_file import WellKnownFile
 import jinja2
 import os
@@ -19,14 +20,10 @@ class RoughPointMatchStrategy(ExecutionStrategy):
     _log = logging.getLogger(_package)
 
     def get_input(self, chnk_assgn, storage_directory, task):
-        RoughPointMatchStrategy._log.info("get input")
+        inp = get_workflow_node_input_template(task)
 
         chnk = chnk_assgn.chunk
         z_index = chnk_assgn.section.z_index
-
-        inp = Configuration.objects.get(
-            name='Rough Point Match Input',
-            configuration_type='strategy_config').json_object
 
         inp['sparkhome'] = settings.SPARK_HOME
         log_dir = self.get_or_create_task_storage_directory(task)
@@ -118,7 +115,7 @@ class RoughPointMatchStrategy(ExecutionStrategy):
             ChunkAssignment.objects.get(
                 chunk=chnk,
                 section=chnk.sections.get(
-                    z_index=tile_pair_ranges[x]['minz'])
+                    z_index=tile_pair_ranges[x]['tempz'])
             ) for x in tile_pair_ranges.keys()]
 
         return chunk_assignments
