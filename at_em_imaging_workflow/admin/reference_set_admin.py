@@ -71,6 +71,16 @@ def set_refset_to_pending(modeladmin, request, queryset):
             refset.workflow_state = 'PENDING'
             refset.save()
 
+
+def set_refset_to_done(modeladmin, request, queryset):
+    set_refset_to_done.short_description = \
+        "Set to DONE"
+
+    if queryset:
+        for refset in queryset.iterator():
+            refset.workflow_state = 'DONE'
+            refset.save()
+
 class ReferenceSetAdmin(admin.ModelAdmin):
     # change_list_template = 'admin/em_montage_set_change_list.html'
     list_display = [
@@ -89,6 +99,7 @@ class ReferenceSetAdmin(admin.ModelAdmin):
     ]
     actions = [
         set_refset_to_pending,
+        set_refset_to_done
     ]
     inlines = (ConfigurationInline, EMMontageInline)
 

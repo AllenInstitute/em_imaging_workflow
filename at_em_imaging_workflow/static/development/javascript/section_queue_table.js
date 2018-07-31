@@ -27,6 +27,16 @@ function draw_chunks(msg) {
             "PROCESS_KILLED": "run_state_process_killed",
         }; 
 
+    var run_state_abbr = {
+            "PENDING": " P ",
+            "QUEUED": " Q ",
+            "RUNNING": " R ",
+            "SUCCESS": " S ",
+            "FAILED_EXECUTION": " FE ",
+            "FAILED": " F ",
+            "PROCESS_KILLED": " K ",
+        }; 
+
     var montage_state_class = {
             "PENDING": "pending",
             "PROCESSING": "processing",
@@ -129,7 +139,7 @@ function draw_chunks(msg) {
                 em_montage_set_id = -1
             }
 
-            var run_state_text = state_name;
+            var run_state_text = run_state_abbr[state_name];
             var run_state_td = $("<td></td>");
 
             if (job_id != null) {
@@ -141,16 +151,6 @@ function draw_chunks(msg) {
                 run_state_link.text(run_state_text);
                 run_state_td.append(run_state_link);
 
-                var run_state_legacy_link = $("<a>");
-                run_state_legacy_link.attr(
-                    "href",
-                    "/workflow_engine/jobs?job_ids=" + job_id);
-                run_state_legacy_link.attr(
-                    "title",
-                    "Open start/kill view for " + job_id + " in new tab");
-                run_state_legacy_link.text('O');
-                run_state_td.append(run_state_legacy_link)
-
                 var em_montage_link = $("<a>");
                 em_montage_link.attr(
                     "href",
@@ -158,14 +158,26 @@ function draw_chunks(msg) {
                 em_montage_link.text('(' + em_montage_set_id + ')');
                 run_state_td.append(em_montage_link);
 
+                var run_state_legacy_link = $("<a>");
+                run_state_legacy_link.attr(
+                    "href",
+                    "/workflow_engine/jobs?job_ids=" + job_id);
+                run_state_legacy_link.attr(
+                    "title",
+                    "Open start/kill view for " + job_id + " in new tab");
+                run_state_legacy_link.text(' O ');
+                run_state_td.append(run_state_legacy_link)
+
+
                 // run state and montage set links open in admin tab/window
                 run_state_link.attr("target", "workflow_admin");
+                run_state_legacy_link.attr("target", "workflow_admin");
                 em_montage_link.attr("target", "workflow_admin");
 
                 try {
                     run_state_td.attr(
                         'class',
-                        run_state_class[run_state_text]);
+                        run_state_class[state_name]);
                 } catch (err) {
                     run_state_td.attr('class', 'run_state_unknown');
                 }

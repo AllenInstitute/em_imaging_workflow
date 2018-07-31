@@ -86,11 +86,13 @@ def assign_chunk(modeladmin, request, queryset):
 
 class ConfigurationInline(GenericStackedInline):
     model=Configuration
+    fields=('name', 'configuration_type', 'json_object')
     extra=0
 
 
 class WellKnownFileInline(GenericStackedInline):
     model = WellKnownFile
+    fields=('well_known_file_type',)
     ct_field='attachable_type'
     ct_fk_field='attachable_id'
     extra=0

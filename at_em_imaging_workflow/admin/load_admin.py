@@ -25,7 +25,7 @@ class LoadConfigurationForm(ModelForm):
     def clean_configuration_type(self):
         config_type = self.cleaned_data.get('configuration_type', 'z_mapping')
 
-        if 'z_mapping' == config_type:
+        if 'z_mapping' != config_type:
             raise ValidationError("Only z_mapping configurations allowed")
 
         return config_type
