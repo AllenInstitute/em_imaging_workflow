@@ -1,5 +1,4 @@
-from development.strategies.rough.make_montage_scapes_stack_strategy \
-    import MakeMontageScapesStackStrategy
+from development.strategies.rough.remap_z_strategy import RemapZStrategy
 from development.models.chunk_assignment import ChunkAssignment
 from development.models.e_m_montage_set import EMMontageSet
 from workflow_engine.models.configuration import Configuration
@@ -17,7 +16,7 @@ from strategies.rough.test_rough_point_match_strategy \
 
 @pytest.mark.django_db
 @patch('development.strategies.rough'
-       '.make_montage_scapes_stack_strategy'
+       '.remap_z_strategy'
        '.get_workflow_node_input_template',
        Mock(return_value={
            'montage_stack': "",
@@ -28,7 +27,7 @@ def test_get_input_data(lots_of_chunks,
     chnk_assigns = ChunkAssignment.objects.filter(
         chunk=lots_of_chunks[0])
     chnk_assign = chnk_assigns[0]
-    strategy = MakeMontageScapesStackStrategy()
+    strategy = RemapZStrategy()
     storage_directory = '/example/storage/directory'
     task = Task(id=345)
 
@@ -49,15 +48,11 @@ def test_get_input_data(lots_of_chunks,
         storage_directory,
         task)
 
-    assert inp['set_new_z'] == False
-    assert inp['minZ'] == 1
-    assert inp['maxZ'] == 1
+    assert inp['zValues'] == [1]
+    assert inp['new_zValues'] == [2]
 
-    assert inp['image_directory'] == \
-        '/long/term/em_montage_MOCK SPECIMEN_z1_2345_06_07_16_09_10_00_00'
-
-    assert inp['montage_stack'] == 'em_2d_montage_solved_py'
-    assert inp['output_stack'] == 'em_2d_montage_downsample_0_01'
+    assert inp['input_stack'] == 'em_2d_montage_downsample_0_01'
+    assert inp['output_stack'] == 'em_2d_montage_downsample_0_01_mapped'
 
     assert inp['render']['host'] == 'renderservice'
     assert inp['render']['port'] == 8080
@@ -75,7 +70,7 @@ def test_get_one_task_objects_for_queue(lots_of_chunks):
     chnk_assign = chnk_assigns[0]
     em_mset = EMMontageSet.objects.filter(
         section=chnk_assign.section)[0]
-    strategy = MakeMontageScapesStackStrategy()
+    strategy = RemapZStrategy()
 
     tsks = strategy.get_task_objects_for_queue(em_mset)
 
@@ -90,7 +85,7 @@ def test_get_two_task_objects_for_queue(lots_of_chunks):
     chnk_assign = chnk_assigns[0]
     em_mset = EMMontageSet.objects.filter(
         section=chnk_assign.section)[0]
-    strategy = MakeMontageScapesStackStrategy()
+    strategy = RemapZStrategy()
 
     tsks = strategy.get_task_objects_for_queue(em_mset)
 
