@@ -1,4 +1,4 @@
-var $ = django.jQuery;
+// var $ = django.jQuery;
 
 function draw_chunks(msg) {
     var qnames = [

@@ -2,8 +2,8 @@
 
 # export APP_NAME=at_em_imaging_workflow
 mkdir -p logs
-#sleep 15
-#DEBUG_LOG=logs/migrate.log python -m manage migrate  --noinput
+sleep 15
+DEBUG_LOG=logs/migrate.log python -m manage migrate  --noinput
 #sleep 15
 
 #export WORKFLOW_CONFIG_YAML=$(python -c "import ${DJANGO_SETTINGS_MODULE} as settings; print(settings.WORKFLOW_CONFIG_YAML)")

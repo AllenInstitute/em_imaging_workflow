@@ -33,57 +33,45 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-import celery
-import django; django.setup()
-from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.http import HttpResponse
+from django.template import loader
+from workflow_engine.views import shared, HEADER_PAGES
+import django
+import sys
+import workflow_engine
 
-from workflow_client.client_settings import configure_worker_app
-from celery import signature
-import logging.config
+context = {
+    'pages': HEADER_PAGES,
+}
 
+ZERO = 0
+ONE = 1
+TWO = 2
+MILLISECONDS_IN_SECOND = 1000
 
-app = celery.Celery('at_em_imaging_workflow.celery.monitor_tasks')
-configure_worker_app(app, settings.APP_PACKAGE)
-app.conf.imports = (
-    'at_em_imaging_workflow.celery.monitor_tasks',
-)
+def get_python_version():
+    info = sys.version_info
+    return str(info.major) + '.' + str(info.minor) + '.' + str(info.micro)
 
-update_job_grid_json_signature = signature(
-    'at_em_imaging_workflow.celery.monitor_tasks'
-    '.update_job_grid_json')
-update_job_grid_json_signature.set(
-    broker_connection_timeout=10,
-    broker_connection_retry=False,
-    delivery_mode='transient',  # see celery issue 3620
-    # exchange=_EXCHANGE,
-    # routing_key='monitor',
-    queue='monitor_at_em_imaging_workflow') # settings.MOAB_MESSAGE_QUEUE_NAME)
+def index(request):
+    context['selected_page'] = 'index'
+    context['base_path'] = settings.BASE_FILE_PATH
+    context['workflow_version']  = workflow_engine.__version__
+    context['python_version']  = get_python_version()
+    context['django_version']  = django.get_version()
+    context['database_host'] = settings.DATABASES['default']['HOST']
+    context['database_name'] = settings.DATABASES['default']['NAME']
+    context['database_port'] = settings.DATABASES['default']['PORT']
+    context['results_per_page']  = settings.RESULTS_PER_PAGE
 
-@app.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
-    sender.add_periodic_task(
-        300.0,
-        update_job_grid_json_signature)
+    context['flower_monitor_url'] = settings.FLOWER_MONITOR_URL
+    context['rabbit_monitor_url'] = settings.RABBIT_MONITOR_URL
+    context['message_queue_host']  = settings.MESSAGE_QUEUE_HOST
+    context['admin_url'] = settings.ADMIN_URL
 
-
-@celery.signals.after_setup_task_logger.connect
-def after_setup_celery_task_logger(logger, **kwargs):
-    logging.config.dictConfig(settings.LOGGING)
-
-
-class Command(BaseCommand):
-    help = 'monitor handler for the message queues'
-
-    def handle(self, *args, **options):
-        app_name = settings.APP_PACKAGE
-
-        app.start(argv=[
-            'celery', 
-            '-A',
-            'development.management.commands.monitor_worker',
-            'worker',
-            '--concurrency=1',
-            '--heartbeat-interval=30',
-            '-Q', 'at_em_broadcast', # settings.MONITOR_MESSAGE_QUEUE_NAME,
-            '-n', 'monitor@' + app_name])
+    context['seconds_between_refresh'] = 300
+    shared.add_settings_info_to_context(context)
+    
+    template = loader.get_template('grid.html')
+    return HttpResponse(template.render(context, request))
