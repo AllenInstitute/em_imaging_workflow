@@ -3,7 +3,7 @@ from rendermodules.stack.schemas \
     import RemapZsParameters
 from development.strategies \
     import RENDER_STACK_DOWNSAMPLED, \
-    RENDER_STACK_DOWNSAMPLED_MAPPED, \
+    RENDER_STACK_DOWNSAMPLED_UNMAPPED, \
     get_workflow_node_input_template
 
 from django.conf import settings
@@ -27,12 +27,12 @@ class RemapZStrategy(execution_strategy.ExecutionStrategy):
         inp['overwrite_zlayer'] = True
         inp['close_stack'] = False
         z_index = em_mset.section.z_index
-        inp['zValues'] = [ z_index ]
         z_mapping = em_mset.sample_holder.load.configurations.get(
             configuration_type='z_mapping').json_object
-        inp['new_zValues'] = z_mapping[str(z_index)]
+        inp['zValues'] = z_mapping[str(z_index)]
+        inp['new_zValues'] = [ z_index ]
 
         inp['input_stack'] = RENDER_STACK_DOWNSAMPLED
-        inp['output_stack'] = RENDER_STACK_DOWNSAMPLED_MAPPED
+        inp['output_stack'] = RENDER_STACK_DOWNSAMPLED_UNMAPPED
 
         return RemapZsParameters().dump(inp).data

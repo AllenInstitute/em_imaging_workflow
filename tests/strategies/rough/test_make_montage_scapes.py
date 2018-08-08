@@ -13,6 +13,7 @@ from models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 from strategies.rough.test_rough_point_match_strategy \
     import lots_of_chunks
+# import simplejson as json
 
 
 @pytest.mark.django_db
@@ -49,15 +50,16 @@ def test_get_input_data(lots_of_chunks,
         storage_directory,
         task)
 
-    assert inp['set_new_z'] == False
+    assert inp['set_new_z'] == True
     assert inp['minZ'] == 1
     assert inp['maxZ'] == 1
+    assert inp['new_z_start'] == 2
 
     assert inp['image_directory'] == \
         '/long/term/em_montage_MOCK SPECIMEN_z1_2345_06_07_16_09_10_00_00'
 
     assert inp['montage_stack'] == 'em_2d_montage_solved_py'
-    assert inp['output_stack'] == 'em_2d_montage_downsample_0_01'
+    assert inp['output_stack'] == 'em_2d_montage_downsampled_no_scale_z_mapped'
 
     assert inp['render']['host'] == 'renderservice'
     assert inp['render']['port'] == 8080

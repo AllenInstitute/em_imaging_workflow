@@ -23,7 +23,7 @@ class MakeMontageScapesStackStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['project'] = em_mset.get_render_project_name()
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
-        inp['set_new_z'] = False
+        inp['set_new_z'] = True
         z_index = em_mset.section.z_index
         inp['minZ'] = z_index
         inp['maxZ'] = z_index
@@ -34,7 +34,10 @@ class MakeMontageScapesStackStrategy(execution_strategy.ExecutionStrategy):
         inp['image_directory'] = em_mset.get_storage_directory(
             settings.LONG_TERM_BASE_FILE_PATH)
 
-        inp['montage_stack'] = RENDER_STACK_SOLVED_PYTHON
-        inp['output_stack'] = RENDER_STACK_DOWNSAMPLED
+        if inp['montage_stack'] == '':
+            inp['montage_stack'] = RENDER_STACK_SOLVED_PYTHON
+
+        if inp['output_stack'] == '':
+            inp['output_stack'] = RENDER_STACK_DOWNSAMPLED
 
         return MakeMontageScapeSectionStackParameters().dump(inp).data
