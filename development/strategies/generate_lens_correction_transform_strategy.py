@@ -39,6 +39,7 @@ from rendermodules.lens_correction.schemas \
     import LensCorrectionParameters
 from development.models.reference_set import ReferenceSet
 from workflow_engine.models.configuration import Configuration
+from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from development.models import state_machines
 import logging
@@ -69,7 +70,26 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
                                         'lens_correction_out.json')
         inp['processing_directory'] = None
 
+        if ref_set.workflow_state == 'REDO_LENS_CORRECTION':
+            additional_config = self.get_good_solve_from_configuration(ref_set)
+            inp.update(additional_config)
+
         return LensCorrectionParameters().dump(inp).data
+
+    def get_good_solve_from_configuration(
+        self, ref_set):
+        default_json_obj = {
+            'good_solve': {
+                'error_mean': 0.2,
+                'error_std': 3.0,
+                'scale_dev': 0.1 }}
+        config = ref_set.configurations.get_or_create(
+            configuration_type='ref_set_alternate_parameters',
+            defaults={
+                name='ref set params for {}'.format(str(ref_set)),
+                json_object=default_json_obj })
+
+        return config.json_object 
 
     def on_running(self, task):
         ref_set = WorkflowController.get_enqueued_object(task)
@@ -81,14 +101,16 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
         except Exception as e:
             GenerateLensCorrectionTransformStrategy._log.warn(
                 'Cannot transfer to processing state')
+            ref_set.workflow_state = 'PROCESSING'
 
     def on_failure(self, task):
         ref_set = WorkflowController.get_enqueued_object(task)
 
-        state_machines.transition(
-            ref_set,
-            'workflow_state',
-            state_machines.states(ref_set).FAILED)
+        #state_machines.transition(
+        #    ref_set,
+        #    'workflow_state',
+        #    state_machines.states(ref_set).FAILED)
+        ref_set.workflow_state = 'FAILED'
 
     def on_finishing(self, ref_set, results, task):
         ''' called after the execution finishes

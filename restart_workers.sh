@@ -5,7 +5,7 @@ pkill -9 -f "ui_server"
 pkill -9 -f "beat"
 pkill -9 -f "manage"
 
-export MOAB_AUTH='svc_vol_assem:ToC$m3sc'
+export MOAB_AUTH=''
 
 export BASE_DIR=/at_em_imaging_workflow
 
@@ -14,6 +14,7 @@ export PYTHONPATH=$PYTHONPATH:/EM_aligner_python
 rm ${BASE_DIR}/logs/worker.log
 rm ${BASE_DIR}/logs/ui.log
 rm ${BASE_DIR}/logs/moab.log
+rm ${BASE_DIR}/logs/monitor.log
 rm ${BASE_DIR}/logs/workflow.log
 rm ${BASE_DIR}/logs/result.log
 rm ${BASE_DIR}/logs/beat.log
@@ -30,7 +31,7 @@ DEBUG_LOG=${BASE_DIR}/logs/result.log python -m manage result_worker &
 DEBUG_LOG=${BASE_DIR}/logs/worker.log python -m manage server_worker &
 DEBUG_LOG=${BASE_DIR}/logs/workflow.log python -m manage workflow_worker &
 DEBUG_LOG=${BASE_DIR}/logs/moab.log python -m manage moab_worker &
-#DEBUG_LOG=${BASE_DIR}/logs/ui.log python -m manage runserver 0.0.0.0:8000 &
+DEBUG_LOG=${BASE_DIR}/logs/monitor.log python -m manage monitor_worker &
 DEBUG_LOG=${BASE_DIR}/logs/ui.log python -m workflow_engine.ui_server &
 sleep 20
 DEBUG_LOG=${BASE_DIR}/logs/beat.log python -m celery -A workflow_engine.celery.moab_beat beat \

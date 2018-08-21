@@ -14,6 +14,7 @@ function draw_chunks(msg) {
     "Manual QC / High Degree Polynomial or Point Match Regeneration",
     //"Generate Downsampled Montage",
     "Make Montage Scapes",
+    "Remap Zs",
     "Chunk Assignment"
     ];
 
@@ -93,7 +94,7 @@ function draw_chunks(msg) {
         current_z = msg[i]['z_index']
 
         if ((last_z > -1) && ((current_z - last_z) > 1)) {
-            skip_row = $('<tr><td colspan="200"></td></tr>');
+            skip_row = $('<tr><td colspan="200" height="2">&nbsp;</td></tr>');
             $('#chnk_table').append(skip_row)
         }
 

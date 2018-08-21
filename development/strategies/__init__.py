@@ -9,12 +9,16 @@ RENDER_STACK_POINT_MATCH = 'em_2d_montage_point_match'
 RENDER_STACK_SOLVED = 'em_2d_montage_solved'
 RENDER_STACK_SOLVED_PYTHON = 'em_2d_montage_solved_py'
 RENDER_STACK_REDIRECT_MIPMAPS = 'em_2d_montage_redirect_mipmaps'
-RENDER_STACK_DOWNSAMPLED = 'em_2d_montage_downsampled_no_scale_z_mapped'
-RENDER_STACK_DOWNSAMPLED_UNMAPPED = 'em_2d_montage_downsampled_no_scale_no_mapping'
+#RENDER_STACK_DOWNSAMPLED = 'em_2d_montage_downsampled_no_scale_z_mapped'
+RENDER_STACK_DOWNSAMPLED = 'em_2d_montage_solved_py_0_01_mapped'
+# RENDER_STACK_DOWNSAMPLED_UNMAPPED = 'em_2d_montage_downsampled_no_scale_no_mapping'
+RENDER_STACK_DOWNSAMPLED_UNMAPPED = 'em_2d_montage_downsampled_no_mapping'
 
 
 # ROUGH ALIGN
 # string interpolation values are zmin, zmax
+RENDER_STACK_RIGID_ALIGN_DOWNSAMPLE = \
+    'em_rigid_align_solved_downsample_zs%d_ze%d'
 RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE = \
     'em_rough_align_solved_downsample_zs%d_ze%d'
 RENDER_STACK_MONTAGE_SCAPES_STACK = \

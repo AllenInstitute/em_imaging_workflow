@@ -15,6 +15,15 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
     _log = logging.getLogger(
         'development.strategies.create_rough_pairs_strategy')
 
+    #
+    # Don't get anything for now.  Stop processing.
+    # Todo: check if all sections are in a good state
+    # then return the chunk object
+    def get_objects_for_queue(self, prev_queue_job):
+        objects = []
+        # objects.append(prev_queue_job.get_enqueued_object())
+        return objects
+
     def get_input(self, chk_assgn, storage_directory, task):
         inp = get_workflow_node_input_template(task)
 

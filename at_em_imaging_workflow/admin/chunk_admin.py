@@ -4,6 +4,9 @@ from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.forms import generic_inlineformset_factory
 from workflow_engine.models.configuration \
     import Configuration
+from development.strategies.rough.solve_rough_alignment_strategy \
+    import SolveRoughAlignmentStrategy as SRAS
+from development.models.section import Section
 from django.contrib.contenttypes.admin import GenericStackedInline
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -35,6 +38,37 @@ class ChunkConfigurationInline(GenericStackedInline):
 def remap_chunk(modeladmin, request, queryset):
     pass
 
+
+def update_chunk_assignment(c):
+    chunk_load = SRAS.get_load(c)
+    z_mapping = SRAS.get_z_mapping(chunk_load)
+    tile_pair_ranges = SRAS.get_tile_pair_ranges(c)
+    min_z, max_z = SRAS.calculate_z_min_max(tile_pair_ranges)
+    clipped_z_mapping = SRAS.clip_z_mapping_to_min_max(
+        z_mapping, min_z, max_z) 
+    cas = c.chunkassignment_set.all()
+    temp_zs = [int(k) for k in clipped_z_mapping.keys()]
+    bad_cas = c.chunkassignment_set.all().exclude(
+        section__z_index__in=temp_zs)
+    # TODO: delete bad cas
+    already_assigned = [ca.section.z_index for ca in cas]
+    new_assignments = set(temp_zs) - set(already_assigned)
+
+    for temp_z in new_assignments:
+        try:
+            assigned_section = Section.objects.get(
+                z_index=temp_z)
+            new_ca, _ = c.chunkassignment_set.get_or_create(
+                chunk=c,
+                section=assigned_section)
+        except:
+            pass
+
+def update_chunk_assignments(modeladmin, request, queryset):
+    for chnk in queryset:
+        update_chunk_assignment(chnk)
+        
+
 def initialize_z_mapping(modeladmin, request, queryset):
     for chnk in queryset:
         z_mapping = { z: z for z in chnk.z_list() }
@@ -57,7 +91,7 @@ class ChunkAdmin(admin.ModelAdmin):
         'following_link']
     list_select_related = []
     list_filter = []
-    actions = [initialize_z_mapping, remap_chunk]
+    actions = [initialize_z_mapping, update_chunk_assignments]
     inlines = [ChunkConfigurationInline]
 
     def changelist_view(self, request, extra_context=None):

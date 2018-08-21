@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.forms import generic_inlineformset_factory
 from django.contrib.contenttypes.admin import GenericStackedInline
+from workflow_engine.workflow_controller import WorkflowController
 from workflow_engine.models.configuration import Configuration
 from development.models import state_machines
 from django.urls import reverse
@@ -13,6 +14,27 @@ import simplejson as json
 from development.models.chunk import Chunk
 from development.strategies.generate_mesh_lens_correction \
     import GenerateMeshLensCorrection
+
+
+def redo_lens_correction(modeladmin, request, queryset):
+    redo_lens_correction.short_description = \
+        "Redo point match"
+
+    if queryset:
+        for em_mset in queryset.iterator():
+            #state_machines.transition(
+            #    em_mset,
+            #    'workflow_state',
+            #    state_machines.states(EMMontageSet).REDO_POINT_MATCH)
+            em_mset.workflow_state = 'REDO_LENS_CORRECTION'
+            em_mset.save()
+
+            WorkflowController.start_workflow_2(
+                'em_2d_montage',
+                em_mset,
+                start_node_name='Generate Lens Correction Transform',
+                reuse_job=True,
+                raise_priority=True)
 
 
 class LensCorrectionConfigurationForm(ModelForm):
@@ -99,7 +121,8 @@ class ReferenceSetAdmin(admin.ModelAdmin):
     ]
     actions = [
         set_refset_to_pending,
-        set_refset_to_done
+        set_refset_to_done,
+        redo_lens_correction
     ]
     inlines = (ConfigurationInline, EMMontageInline)
 

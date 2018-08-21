@@ -85,26 +85,48 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
         inp['output_dir'] = storage_directory
         inp['out_html_dir'] = storage_directory
 
+        if ref_set.workflow_state == 'REDO_LENS_CORRECTION':
+            additional_config = self.get_good_solve_from_configuration(ref_set)
+            inp.update(additional_config)
+
         return MeshLensCorrectionSchema().dump(inp).data
+
+    def get_good_solve_from_configuration(
+        self, ref_set):
+        default_json_obj = {
+            'good_solve': {
+                'error_mean': 0.2,
+                'error_std': 3.0,
+                'scale_dev': 0.1 }}
+        config, _ = ref_set.configurations.get_or_create(
+            configuration_type='ref_set_alternate_parameters',
+            defaults={
+                'name': 'ref set params for {}'.format(str(ref_set)),
+                'json_object': default_json_obj })
+        return config.json_object 
 
     def on_running(self, task):
         ref_set = WorkflowController.get_enqueued_object(task)
-        try:
-            state_machines.transition(
-                ref_set,
-                'workflow_state',
-                state_machines.states(ref_set).PROCESSING)
-        except Exception as e:
-            GenerateMeshLensCorrection._log.warn(
-                'Cannot transfer to processing state')
+        #try:
+        #    state_machines.transition(
+        #        ref_set,
+        #        'workflow_state',
+        #        state_machines.states(ref_set).PROCESSING)
+        #except Exception as e:
+        #    GenerateMeshLensCorrection._log.warn(
+        #        'Cannot transfer to processing state')
+        ref_set.workflow_state = 'PROCESSING'
+        ref_set.save()
 
     def on_failure(self, task):
         ref_set = WorkflowController.get_enqueued_object(task)
 
-        state_machines.transition(
-            ref_set,
-            'workflow_state',
-            state_machines.states(ref_set).FAILED)
+        #state_machines.transition(
+        #    ref_set,
+        #    'workflow_state',
+        #    state_machines.states(ref_set).FAILED)
+        ref_set.workflow_state = 'FAILED'
+        ref_set.save()
 
     def on_finishing(self, ref_set, results, task):
         ''' called after the execution finishes
@@ -128,10 +150,11 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
                 'name': lens_correction_configuration_name,
                 'json_object': transform_configuration_data })
 
-        state_machines.transition(
-            ref_set,
-            'workflow_state',
-            state_machines.states(ref_set).DONE)
+        #state_machines.transition(
+        #    ref_set,
+        #    'workflow_state',
+        #    state_machines.states(ref_set).DONE)
+        ref_set.workflow_state = 'DONE'
         ref_set.save()
 
         # trigger waiting jobs
