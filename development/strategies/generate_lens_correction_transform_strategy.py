@@ -86,8 +86,8 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
         config = ref_set.configurations.get_or_create(
             configuration_type='ref_set_alternate_parameters',
             defaults={
-                name='ref set params for {}'.format(str(ref_set)),
-                json_object=default_json_obj })
+                'name': 'ref set params for {}'.format(str(ref_set)),
+                'json_object': default_json_obj })
 
         return config.json_object 
 
