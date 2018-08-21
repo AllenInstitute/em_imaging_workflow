@@ -52,8 +52,8 @@ def test_get_input_data(lots_of_chunks,
     assert inp['zValues'] == [2]
     assert inp['new_zValues'] == [1]
 
-    assert inp['input_stack'] == 'em_2d_montage_downsampled_no_scale_z_mapped'
-    assert inp['output_stack'] == 'em_2d_montage_downsampled_no_scale_no_mapping'
+    assert inp['input_stack'] == 'em_2d_montage_solved_py_0_01_mapped'
+    assert inp['output_stack'] == 'em_2d_montage_downsampled_no_mapping'
 
     assert inp['render']['host'] == 'renderservice'
     assert inp['render']['port'] == 8080
