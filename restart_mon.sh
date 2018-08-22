@@ -13,6 +13,6 @@ export MESSAGE_QUEUE_HOST=$(python -c "import ${DJANGO_SETTINGS_MODULE} as setti
 export MESSAGE_QUEUE_PORT=$(python -c "import ${DJANGO_SETTINGS_MODULE} as settings; print(settings.MESSAGE_QUEUE_PORT)")
 
 DEBUG_LOG=${BASE_DIR}/logs/monitor.log python -m manage monitor_worker &
-DEBUG_LOG=${BASE_DIR}/logs/monitor_beat.log python -m celery -A development.management.commands.monitor_worker beat \
- --broker=amqp://blue_sky_user:blue_sky_user@${MESSAGE_QUEUE_HOST}:${MESSAGE_QUEUE_PORT} &
+#DEBUG_LOG=${BASE_DIR}/logs/monitor_beat.log python -m celery -A development.management.commands.monitor_worker beat \
+# --broker=amqp://blue_sky_user:blue_sky_user@${MESSAGE_QUEUE_HOST}:${MESSAGE_QUEUE_PORT} &
 

@@ -39,22 +39,25 @@ import logging
 from at_em_imaging_workflow.views.progress_view \
     import ProgressView
 from rest_framework.test import APIRequestFactory
+from workflow_engine.celery.monitor_tasks import append_extra_function
 
 
 _log = logging.getLogger('at_em_imaging_workflow.celery.monitor_tasks')
 
 
-@celery.shared_task(bind=True, trail=True)
-def update_job_grid_json(self):
+# @celery.shared_task(bind=True, trail=True)
+def update_job_grid_json():
     v = ProgressView.as_view()
     f = APIRequestFactory()
     r = f.get('/at_em/progress.json')
     resp = v(r, format='json')
     resp.render()
 
-    outfile = '/var/www/static/demo.js'
+    outfile = '/var/www/static/progress.json'
 
     with open(outfile, 'w') as o:
         o.write(resp.content.decode('utf-8'))
 
     return 'OK'
+
+append_extra_function(update_job_grid_json)

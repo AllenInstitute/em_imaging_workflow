@@ -190,17 +190,25 @@ function draw_chunks(msg) {
     }
 }
 
-$(document).ready(function(){
-    progress_url = '/at_em/progress.json';
+function render_progress_grid() {
+    progress_url = '/static/progress.json';
     fetch(progress_url, {
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Cache-Control': 'no-cache'
         }
     })
     .then((response) => {
         response.json().then(msg => {
             draw_chunks(msg)
+        }).catch(err => {
+            $('#chnk_table').empty();
         })
     })
+}
+
+$(document).ready(function(){
+    render_progress_grid();
+    setInterval(render_progress_grid, 15*1000)
 })
