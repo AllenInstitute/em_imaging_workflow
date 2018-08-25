@@ -1,22 +1,17 @@
 // var $ = django.jQuery;
 
 function draw_chunks(msg) {
-    var qnames = [
-    "Generate Render Stack",
-    "Generate MIPMaps",
-    "Apply MIPMaps",
-    "Wait for Lens Correction",
-    "Apply Lens Correction",
-    "Create Tile Pairs",
-    "2D Montage Point Match",
-    "2D Montage Python Solver",
-    "Detect Defects",
-    "Manual QC / High Degree Polynomial or Point Match Regeneration",
-    //"Generate Downsampled Montage",
-    "Make Montage Scapes",
-    "Remap Zs",
-    "Chunk Assignment"
-    ];
+    var schema = msg['schema'];
+    msg = msg['data'];
+
+    var qnames = [];
+
+    for (idx in schema['fields']) {
+        var workflow_node_name = schema['fields'][idx]['name'];
+        if (schema['primaryKey'].indexOf(workflow_node_name) == -1) {
+            qnames.push(workflow_node_name);
+        }
+    }
 
     var run_state_class = {
             "PENDING": "run_state_pending",
@@ -210,5 +205,5 @@ function render_progress_grid() {
 
 $(document).ready(function(){
     render_progress_grid();
-    setInterval(render_progress_grid, 15*1000)
+    //setInterval(render_progress_grid, 15*1000)
 })

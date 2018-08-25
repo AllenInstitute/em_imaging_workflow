@@ -33,13 +33,10 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-import celery
-import django; django.setup()
-import logging
-from at_em_imaging_workflow.views.progress_view \
-    import ProgressView
-from rest_framework.test import APIRequestFactory
 from workflow_engine.celery.monitor_tasks import append_extra_function
+from at_em_imaging_workflow.views.e_m_montage_set_job_grid \
+    import EMMontageSetJobGrid
+import logging
 
 
 _log = logging.getLogger('at_em_imaging_workflow.celery.monitor_tasks')
@@ -47,16 +44,15 @@ _log = logging.getLogger('at_em_imaging_workflow.celery.monitor_tasks')
 
 # @celery.shared_task(bind=True, trail=True)
 def update_job_grid_json():
-    v = ProgressView.as_view()
-    f = APIRequestFactory()
-    r = f.get('/at_em/progress.json')
-    resp = v(r, format='json')
-    resp.render()
+    grid = EMMontageSetJobGrid()
+    grid.query_workflow_objects()
+    grid.query_enqueued_objects()
+
+    df = grid.generate_grid()
 
     outfile = '/var/www/static/progress.json'
 
-    with open(outfile, 'w') as o:
-        o.write(resp.content.decode('utf-8'))
+    df.to_json(outfile, orient='table')
 
     return 'OK'
 
