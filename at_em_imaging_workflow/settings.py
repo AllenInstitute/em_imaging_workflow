@@ -15,6 +15,9 @@ import os
 APP_PACKAGE='at_em_imaging_workflow'
 DEVELOPMENT_PACKAGE='development'
 
+JOB_GRID_CLASS="at_em_imaging_workflow.views.e_m_montage_set_job_grid.EMMontageSetJobGrid"
+MONITOR_TASK_MODULES=[]
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = BASE_DIR
@@ -188,7 +191,7 @@ WSGI_APPLICATION = 'at_em_imaging_workflow.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'at_em_imaging_timf',
+        'NAME': 'at_em_imaging_dev',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'devdb2.corp.alleninstitute.org',
@@ -196,7 +199,7 @@ DATABASES = {
     },
     'devdb2': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'at_em_imaging_timf',
+        'NAME': 'at_em_imaging_dev',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'devdb2',

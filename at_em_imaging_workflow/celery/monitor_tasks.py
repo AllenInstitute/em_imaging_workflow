@@ -50,7 +50,7 @@ def update_job_grid_json():
 
     df = grid.generate_grid()
 
-    outfile = '/var/www/static/progress.json'
+    outfile = '/var/www/static/job_grid_data.json'
 
     df.to_json(outfile, orient='table')
 
