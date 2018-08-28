@@ -20,6 +20,11 @@ class MaterializeSectionsStrategy(ExecutionStrategy):
     _log_configuration_template = 'spark_log4j_template.properties'
     _log = logging.getLogger(_package)
 
+    def get_objects_for_queue(self, prev_queue_job):
+        chnk = prev_queue_job.get_enqueued_object()
+
+        return list(chnk.chunkassignment_set.all())
+
     def get_input(self, chnk_assign, storage_directory, task):
         inp = get_workflow_node_input_template(
             task,

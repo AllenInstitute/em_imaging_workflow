@@ -72,7 +72,7 @@ class SolveRoughAlignmentPython(ExecutionStrategy):
 
 
 try:
-    from EMaligner.EM_aligner_python_schema import EMA_Schema
+    from EMaligner.schemas import EMA_Schema
 except:
     SolveRoughAlignmentPython._log.warn('Could not import EMA_Schema')
 
