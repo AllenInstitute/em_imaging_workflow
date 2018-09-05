@@ -55,7 +55,7 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
         task_dir = self.get_or_create_task_storage_directory(task)
         inp['hdf5_options']['output_dir'] = task_dir
 
-        if em_mset.workflow_state == 'REDO_SOLVER':
+        if em_mset.object_state == 'REDO_SOLVER':
             inp['regularization']['default_lambda'] = \
                 self.get_default_lambda(
                     em_mset,
@@ -87,6 +87,6 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
 
 
 try:
-    from EMaligner.schemas import EMA_Schema
+    from EMaligner.schema import EMA_Schema
 except:
     TwoDPythonSolverStrategy._log.warn('Could not import EMA_Schema')

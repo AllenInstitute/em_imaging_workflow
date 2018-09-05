@@ -1,3 +1,4 @@
+from development.models import ReferenceSet
 from workflow_engine.strategies.wait_strategy \
     import WaitStrategy
 
@@ -9,7 +10,8 @@ class WaitForLensCorrection(WaitStrategy):
         ref_set = em_mset.reference_set
         
         if ref_set is None or \
-            'DONE' != em_mset.reference_set.workflow_state:
+            ReferenceSet.STATE.LENS_CORRECTION_DONE != \
+                em_mset.reference_set.object_state:
             return True
 
         return False

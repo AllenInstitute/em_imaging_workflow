@@ -67,7 +67,7 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
             'http://' + settings.RENDER_SERVICE_URL + \
             ':' + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
 
-        if em_mset.workflow_state == 'REDO_POINT_MATCH':
+        if em_mset.object_state == 'REDO_POINT_MATCH':
             inp['renderScale'] = self.get_render_scale_from_configuration(
                 em_mset,
                 inp['renderScale'])

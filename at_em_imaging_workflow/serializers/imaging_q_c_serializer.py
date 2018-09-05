@@ -12,4 +12,4 @@ class ImagingQCSerializer(ModelSerializer):
 
     class Meta:
         model = EMMontageSet
-        fields = ('id', 'workflow_state', 'sample_holder', 'section')
+        fields = ('id', 'object_state', 'sample_holder', 'section')

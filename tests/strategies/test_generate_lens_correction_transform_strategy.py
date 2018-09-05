@@ -1,6 +1,6 @@
 import pytest
 from mock import patch, Mock
-from development.models import ReferenceSet, state_machines
+from development.models import ReferenceSet
 from workflow_engine.workflow_controller import WorkflowController
 from tests.strategies.at_em_fixtures import strategy_configurations
 from development.strategies.generate_lens_correction_transform_strategy \
@@ -36,7 +36,7 @@ def test_on_failure():
         uid='deadbeef',
         manifest_path='manifest.json',
         project_path='/path/to/project',
-        workflow_state=state_machines.states(ReferenceSet).PROCESSING)
+        object_state=ReferenceSet.STATE.LENS_CORRECTION_PROCESSING)
     task = Mock()
 
     with patch.object(WorkflowController,
@@ -45,7 +45,7 @@ def test_on_failure():
         strategy = GenerateLensCorrectionTransformStrategy()
         strategy.on_failure(task)
 
-    assert ref_set.workflow_state == 'FAILED'
+    assert ref_set.object_state == 'FAILED'
     mock_get_enqueued.assert_called_once()
 
 
@@ -55,7 +55,7 @@ def test_on_finishing(mock_run_states):
         uid='deadbeef',
         manifest_path='manifest.json',
         project_path='/path/to/project',
-        workflow_state=state_machines.states(ReferenceSet).PROCESSING)
+        object_state=ReferenceSet.STATE.LENS_CORRECTION_PROCESSING)
     task = Mock()
 
     strategy = GenerateLensCorrectionTransformStrategy()
@@ -64,7 +64,7 @@ def test_on_finishing(mock_run_states):
         results = {'output_json': 'mock_out'}
         strategy.on_finishing(ref_set, results, task)
 
-    assert ref_set.workflow_state == 'DONE'
+    assert ref_set.object_state == 'DONE'
     swkf_mock.assert_called_once_with(
         'mock_out',
         ref_set,

@@ -87,7 +87,7 @@ def mock_tile_set(section_factory,
 
     montage_set = MontageSet.objects.create(
         acquisition_date=now(),
-        workflow_state='PENDING',
+        object_state='PENDING',
         section=section_factory(1),
         sample_holder=sample_holder,
         storage_directory=storage_directory,

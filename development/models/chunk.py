@@ -36,15 +36,34 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
+from django_fsm import FSMField, transition
 import logging
 import os
 
 
 class Chunk(models.Model):
+    class STATE:
+        CHUNK_INCOMPLETE = "INCOMPLETE"
+        CHUNK_PROCESSING = "PROCESSING"
+        CHUNK_ROUGH_QC = "ROUGH_QC"
+        CHUNK_ROUGH_QC_FAILED = "ROUGH_QC_FAILED"
+        CHUNK_ROUGH_QC_PASSED = "ROUGH_QC_PASSED"
+        CHUNK_POINT_MATCH_QC_FAILED = "POINT_MATCH_QC_FAILED"
+        CHUNK_POINT_MATCH_QC_PASSED = "POINT_MATCH_QC_PASSED"
+        CHUNK_FINE_QC_FAILED = "FINE_QC_FAILED"
+        CHUNK_FINE_QC_PASSED = "FINE_QC_PASSED"
+        CHUNK_PENDING_FUSION = "PENDING_FUSION"
+        CHUNK_FUSING = "FUSING"
+        CHUNK_FUSION_QC = "FUSION_QC"
+        CHUNK_FUSION_QC_FAILED = "FUSION_QC_FAILED"
+        CHUNK_FUSION_QC_PASSED = "FUSION_QC_PASSED"
+        CHUNK_PENDING_RENDER = "PENDING_RENDER"
+
     _log = logging.getLogger('at_em_imaging_workflow.models.chunk')
     size = models.IntegerField(null=True)
     computed_index = models.IntegerField(null=True)
     chunk_state = models.CharField(max_length=255, null=True)
+    object_state = FSMField(default=STATE.CHUNK_INCOMPLETE)
     rendered_volume = models.ForeignKey('RenderedVolume')
     preceding_chunk = \
         models.ForeignKey('self',
@@ -166,7 +185,7 @@ class Chunk(models.Model):
                 defaults={
                     'size': settings.CHUNK_DEFAULTS['chunk_size'],
                     'rendered_volume': volume,
-                    'chunk_state': default_state,
+                    'object_state': Chunk.STATE.CHUNK_INCOMPLETE,
                     'following_chunk_id': None,
                     'preceding_chunk_id': None})
             chunk_list.append(c)
@@ -192,6 +211,103 @@ class Chunk(models.Model):
                             str(z_start) + '_ze' + \
                             str(z_end))
 
+    @transition(
+        field='object_state',
+        source=STATE.CHUNK_INCOMPLETE,
+        target=STATE.CHUNK_PROCESSING)
+    def start_processing(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.CHUNK_PROCESSING,
+        target=STATE.CHUNK_INCOMPLETE)
+    def reset_incomplete(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.CHUNK_PROCESSING,
+        target=STATE.CHUNK_ROUGH_QC)
+    def finish_processing(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.CHUNK_ROUGH_QC,
+        target=STATE.CHUNK_PROCESSING)
+    def redo_processing(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.CHUNK_ROUGH_QC,
+        target=STATE.CHUNK_ROUGH_QC_FAILED)
+    def rough_qc_fail(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.CHUNK_ROUGH_QC,
+        target=STATE.CHUNK_ROUGH_QC_PASSED)
+    def rough_qc_pass(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.CHUNK_ROUGH_QC_PASSED,
+        target=STATE.CHUNK_POINT_MATCH_QC_FAILED)
+    def point_match_fail(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.CHUNK_ROUGH_QC_PASSED,
+        target=STATE.CHUNK_POINT_MATCH_QC_PASSED)
+    def point_match_pass(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.CHUNK_POINT_MATCH_QC_PASSED,
+        target=STATE.CHUNK_PENDING_FUSION)
+    def pending_fusion(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.CHUNK_PENDING_FUSION,
+        target=STATE.CHUNK_FUSING)
+    def start_fusion(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.CHUNK_FUSING,
+        target=STATE.CHUNK_FUSION_QC)
+    def stop_fusion(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.CHUNK_FUSION_QC,
+        target=STATE.CHUNK_FUSION_QC_FAILED)
+    def fusion_qc_fail(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.CHUNK_FUSION_QC,
+        target=STATE.CHUNK_FUSION_QC_PASSED)
+    def fusion_qc_pass(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.CHUNK_FUSION_QC_PASSED,
+        target=STATE.CHUNK_PENDING_RENDER)
+    def pending_render(self):
+        pass
 
 # circular imports
 from development.models.rendered_volume import RenderedVolume

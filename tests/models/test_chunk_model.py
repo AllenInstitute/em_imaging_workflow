@@ -24,7 +24,7 @@ def test_str():
         mipmap_directory="/Lorem/ipsum/dolor/sit/amet/consectetur")
     chuck = Chunk(
         size=20,
-        chunk_state="Something",
+        object_state="Something",
         rendered_volume=rendered_volume)  # TODO: preceding and following
     assert str(chuck.rendered_volume.specimen.study) == study.name
 
@@ -88,7 +88,7 @@ def lots_of_montage_sets(section_factory,
                 2345, 6, 7,
                 8, 9, 10) + timedelta(seconds=i-1),
             overlap=overlap,
-            workflow_state='PENDING',
+            object_state='PENDING',
             mipmap_directory=None,
             section=section_factory(i),
             sample_holder=sample_holder,

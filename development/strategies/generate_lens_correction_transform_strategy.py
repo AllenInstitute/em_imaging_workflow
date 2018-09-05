@@ -2,7 +2,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017. Allen Institute. All rights reserved.
+# Copyright 2017-2018. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -41,7 +41,7 @@ from development.models.reference_set import ReferenceSet
 from workflow_engine.models.configuration import Configuration
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
-from development.models import state_machines
+from django_fsm import can_proceed
 import logging
 import os
 
@@ -70,7 +70,7 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
                                         'lens_correction_out.json')
         inp['processing_directory'] = None
 
-        if ref_set.workflow_state == 'REDO_LENS_CORRECTION':
+        if ref_set.object_state == 'REDO_LENS_CORRECTION':
             additional_config = self.get_good_solve_from_configuration(ref_set)
             inp.update(additional_config)
 
@@ -93,24 +93,14 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
 
     def on_running(self, task):
         ref_set = WorkflowController.get_enqueued_object(task)
-        try:
-            state_machines.transition(
-                ref_set,
-                'workflow_state',
-                state_machines.states(ref_set).PROCESSING)
-        except Exception as e:
-            GenerateLensCorrectionTransformStrategy._log.warn(
-                'Cannot transfer to processing state')
-            ref_set.workflow_state = 'PROCESSING'
+        ref_set.start_processing()
+        ref_set.save()
 
     def on_failure(self, task):
         ref_set = WorkflowController.get_enqueued_object(task)
-
-        #state_machines.transition(
-        #    ref_set,
-        #    'workflow_state',
-        #    state_machines.states(ref_set).FAILED)
-        ref_set.workflow_state = 'FAILED'
+        if can_proceed(ref_set.fail):
+            ref_set.fail()
+            ref_set.save()
 
     def on_finishing(self, ref_set, results, task):
         ''' called after the execution finishes
@@ -125,14 +115,8 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
             ref_set,
             'description',
             task)
+        ref_set.finish_processing()
         ref_set.save()
-
-        state_machines.transition(
-            ref_set,
-            'workflow_state',
-            state_machines.states(ref_set).DONE)
-        ref_set.save()
-
 
         # trigger waiting jobs
         WorkflowController.set_jobs_for_run(

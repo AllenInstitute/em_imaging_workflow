@@ -34,11 +34,24 @@
 #
 from django.db import models
 from django.conf import settings
+from django_fsm import transition
 from development.models.montage_set import MontageSet
 import os
 
 
 class EMMontageSet(MontageSet):
+    class STATE:
+        EM_MONTAGE_SET_PENDING = "PENDING"
+        EM_MONTAGE_SET_PROCESSING = "PROCESSING"
+        EM_MONTAGE_SET_QC = "MONTAGE_QC"
+        EM_MONTAGE_SET_REIMAGE = "REIMAGE"
+        EM_MONTAGE_SET_QC_FAILED = "MONTAGE_QC_FAILED"
+        EM_MONTAGE_SET_QC_PASSED = "MONTAGE_QC_PASSED"
+        EM_MONTAGE_SET_REDO_POINT_MATCH = "REDO_POINT_MATCH"
+        EM_MONTAGE_SET_REDO_SOLVER = "REDO_SOLVER"
+        EM_MONTAGE_SET_FAILED = "FAILED"
+        EM_MONTAGE_SET_GAP = "GAP"
+
     reference_set = models.ForeignKey('ReferenceSet',
                                       null=True, blank=True)
     reference_set_uid = models.CharField(max_length=255,
@@ -59,6 +72,83 @@ class EMMontageSet(MontageSet):
             specimen_id,
             z_index,
             str(self.acquisition_date))
+
+    @transition(
+        field='object_state',
+        source=STATE.EM_MONTAGE_SET_PENDING,
+        target=STATE.EM_MONTAGE_SET_PROCESSING)
+    def start_processing(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.EM_MONTAGE_SET_PROCESSING,
+        target=STATE.EM_MONTAGE_SET_QC)
+    def finish_processing(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.EM_MONTAGE_SET_REDO_POINT_MATCH,
+        target=STATE.EM_MONTAGE_SET_QC)
+    def finish_redo_point_match(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.EM_MONTAGE_SET_REDO_SOLVER,
+        target=STATE.EM_MONTAGE_SET_QC)
+    def finish_redo_solver(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.EM_MONTAGE_SET_QC,
+        target=STATE.EM_MONTAGE_SET_QC_PASSED)
+    def pass_qc(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.EM_MONTAGE_SET_QC,
+        target=STATE.EM_MONTAGE_SET_QC_FAILED)
+    def fail_qc(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.EM_MONTAGE_SET_QC_FAILED,
+        target=STATE.EM_MONTAGE_SET_REDO_POINT_MATCH)
+    def redo_point_match(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.EM_MONTAGE_SET_QC_FAILED,
+        target=STATE.EM_MONTAGE_SET_REDO_SOLVER)
+    def redo_solver(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.EM_MONTAGE_SET_QC_FAILED,
+        target=STATE.EM_MONTAGE_SET_REIMAGE)
+    def reimage(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.EM_MONTAGE_SET_QC_FAILED,
+        target=STATE.EM_MONTAGE_SET_FAILED)
+    def fail(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.EM_MONTAGE_SET_QC_FAILED,
+        target=STATE.EM_MONTAGE_SET_GAP)
+    def gap(self):
+        pass
 
     def specimen(self):
         return self.section.specimen

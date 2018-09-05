@@ -8,7 +8,7 @@ class EMMontageSetJobGrid(JobGrid):
         return 'z_index'
 
     def extra_columns(self):
-        return ['workflow_state', 'chunks']
+        return ['object_state', 'chunks']
 
     def query_enqueued_objects(self):
         self.enqueued_objects = EMMontageSet.objects.prefetch_related(
@@ -16,8 +16,10 @@ class EMMontageSetJobGrid(JobGrid):
                 'section').order_by('section__z_index')
         self.enqueued_object_df = read_frame(
             self.enqueued_objects, index_col='id')
-        self.enqueued_object_df = self.enqueued_object_df[['workflow_state', 'section']]
-        self.enqueued_object_df = self.enqueued_object_df.dropna(subset=['section'])
+        self.enqueued_object_df = self.enqueued_object_df[
+            ['object_state', 'section']]
+        self.enqueued_object_df = self.enqueued_object_df.dropna(
+            subset=['section'])
         self.enqueued_object_df.loc[:,'z_index'] = [
             int(s) for s in list(self.enqueued_object_df['section'])
         ]

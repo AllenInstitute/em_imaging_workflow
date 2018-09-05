@@ -42,8 +42,7 @@ from rendermodules.mesh_lens_correction.schemas \
 from development.models.reference_set import ReferenceSet
 from workflow_engine.models.configuration import Configuration
 from django.conf import settings
-from development.models import state_machines
-import simplejson as json
+from django_fsm import can_proceed
 import logging
 import os
 
@@ -85,7 +84,7 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
         inp['output_dir'] = storage_directory
         inp['out_html_dir'] = storage_directory
 
-        if ref_set.workflow_state == 'REDO_LENS_CORRECTION':
+        if ref_set.object_state == ReferenceSet.STATE.LENS_CORRECTION_REDO:
             additional_config = self.get_good_solve_from_configuration(ref_set)
             inp.update(additional_config)
 
@@ -107,59 +106,44 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
 
     def on_running(self, task):
         ref_set = WorkflowController.get_enqueued_object(task)
-        #try:
-        #    state_machines.transition(
-        #        ref_set,
-        #        'workflow_state',
-        #        state_machines.states(ref_set).PROCESSING)
-        #except Exception as e:
-        #    GenerateMeshLensCorrection._log.warn(
-        #        'Cannot transfer to processing state')
-        ref_set.workflow_state = 'PROCESSING'
+        ref_set.start_processing()
         ref_set.save()
 
     def on_failure(self, task):
         ref_set = WorkflowController.get_enqueued_object(task)
-
-        #state_machines.transition(
-        #    ref_set,
-        #    'workflow_state',
-        #    state_machines.states(ref_set).FAILED)
-        ref_set.workflow_state = 'FAILED'
-        ref_set.save()
+        if can_proceed(ref_set.fail):
+            ref_set.fail()
+            ref_set.save()
 
     def on_finishing(self, ref_set, results, task):
         ''' called after the execution finishes
             process and save results to the database
         '''
-        self.check_key(results, 'output_json')
+        if can_proceed(ref_set.finish_processing):
+            self.check_key(results, 'output_json')
 
-        GenerateMeshLensCorrection._log.info(
-            'lens_correction_transform output %s' % (str(results)))
+            GenerateMeshLensCorrection._log.info(
+                'lens_correction_transform output %s' % (str(results)))
 
-        transform_configuration_data = {
-            'output_json': results['output_json']
-        }
+            transform_configuration_data = {
+                'output_json': results['output_json']
+            }
 
-        lens_correction_configuration_name = \
-            "lens correction for {}".format(str(ref_set))
+            lens_correction_configuration_name = \
+                "lens correction for {}".format(str(ref_set))
 
-        ref_set.configurations.update_or_create(
-            configuration_type=GenerateMeshLensCorrection.CONFIGURATION_TYPE,
-            defaults={
-                'name': lens_correction_configuration_name,
-                'json_object': transform_configuration_data })
+            ref_set.configurations.update_or_create(
+                configuration_type=GenerateMeshLensCorrection.CONFIGURATION_TYPE,
+                defaults={
+                    'name': lens_correction_configuration_name,
+                    'json_object': transform_configuration_data })
 
-        #state_machines.transition(
-        #    ref_set,
-        #    'workflow_state',
-        #    state_machines.states(ref_set).DONE)
-        ref_set.workflow_state = 'DONE'
-        ref_set.save()
+            ref_set.finish_processing()
+            ref_set.save()
 
-        # trigger waiting jobs
-        WorkflowController.set_jobs_for_run(
-            'Wait for Lens Correction')
+            # trigger waiting jobs
+            WorkflowController.set_jobs_for_run(
+                'Wait for Lens Correction')
 
     # TODO: this isn't used.  Ingest picks it directly
     def can_transition(self, ref_set):

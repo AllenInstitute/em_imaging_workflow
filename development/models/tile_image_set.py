@@ -35,17 +35,23 @@
 #
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
+from django_fsm import FSMField
 import re
 
 
 class TileImageSet(models.Model):
     storage_directory = models.CharField(max_length=255, null=True)
     workflow_state = models.CharField(max_length=255, null=True)
+    object_state = FSMField(default='PENDING')
     camera = models.ForeignKey('Camera', null=True)
     microscope = models.ForeignKey('Microscope', null=True)
     metafile = models.CharField(max_length=255, null=True)
     acquisition_date = models.DateTimeField(null=True)
     configurations = GenericRelation('workflow_engine.Configuration')
+    jobs=GenericRelation(
+        'workflow_engine.Job',
+        content_type_field='enqueued_object_type',
+        object_id_field='enqueued_object_id')
     well_known_files = GenericRelation(
         'workflow_engine.WellKnownFile',
         content_type_field='attachable_type',
@@ -61,8 +67,3 @@ class TileImageSet(models.Model):
         return re.sub(TileImageSet._ODD_FILE_CHARS,
                       '_',
                       str(self.acquisition_date))
-
-
-# circular imports
-from workflow_engine.models.configuration import Configuration
-from workflow_engine.models.well_known_file import WellKnownFile

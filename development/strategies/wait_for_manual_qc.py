@@ -2,7 +2,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017. Allen Institute. All rights reserved.
+# Copyright 2017-2018. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -32,13 +32,14 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+from development.models import EMMontageSet
 from workflow_engine.strategies.wait_strategy \
     import WaitStrategy
-from development.models import state_machines
 
 
 class WaitForManualQc(WaitStrategy):
     def must_wait(self, em_mset):
-        return not state_machines.in_state(
-            em_mset, 'workflow_state',
-            [state_machines.states(em_mset).MONTAGE_QC_PASSED])
+        return not em_mset.object_state in set([
+            EMMontageSet.STATE.EM_MONTAGE_SET_QC_PASSED,
+            EMMontageSet.STATE.EM_MONTAGE_SET_REIMAGE
+        ])

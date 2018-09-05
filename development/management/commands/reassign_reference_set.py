@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from development.models.e_m_montage_set import EMMontageSet
 from development.models.reference_set import ReferenceSet
-from workflow_engine.models.job import Job
+
 
 archive_workflow_nodes = [
     "Apply Lens Correction",
@@ -36,8 +36,8 @@ class Command(BaseCommand):
         except:
             print("error finding failed refset")
 
-        if failed_refset.workflow_state != 'FAILED':
-            print("Failed refset is not in the FAILED workflow state.")
+        if failed_refset.object_state != 'FAILED':
+            print("Failed refset is not in the FAILED state.")
             return
 
         print("Reassigning EM montage sets")

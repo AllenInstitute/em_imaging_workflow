@@ -14,10 +14,10 @@ class ImagingQCView(PandasView):
     serializer_class = ImagingQCSerializer
 
     def filter_queryset(self, qs):
-        state = self.request.GET.get('workflow_state')
+        state = self.request.GET.get('object_state')
 
         if state is not None:
-            qs.filter(workflow_state__in=state.split(','))
+            qs.filter(object_state__in=state.split(','))
 
         return qs
 

@@ -56,6 +56,3 @@ from development.models.chunk_assignment import ChunkAssignment
 
 from workflow_engine.blue_sky_state_machine import BlueSkyStateMachine
 from workflow_engine.state_machine_yaml import StateMachineYaml
-
-state_machines = BlueSkyStateMachine(
-    StateMachineYaml.from_yaml_file(settings.STATE_MACHINE_YML))

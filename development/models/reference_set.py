@@ -35,11 +35,19 @@
 #
 from django.db import models
 from django.conf import settings
+from django_fsm import transition
 from development.models.tile_image_set import TileImageSet
 import os
 
 
 class ReferenceSet(TileImageSet):
+    class STATE:
+        LENS_CORRECTION_PENDING = "PENDING"
+        LENS_CORRECTION_PROCESSING = "PROCESSING"
+        LENS_CORRECTION_DONE = "DONE"
+        LENS_CORRECTION_REDO = "REDO_LENS_CORRECTION"
+        LENS_CORRECTION_FAILED = "FAILED"
+
     uid = models.CharField(max_length=255, null=True)
     project_path = models.CharField(max_length=255) # deprecate for storage_dir
     manifest_path = models.CharField(max_length=255, null=True) # well_known_file?
@@ -57,3 +65,38 @@ class ReferenceSet(TileImageSet):
         return os.path.join(base_storage_directory,
                             'reference_' + \
                             self.clean_acquisition_date())
+
+    @transition(
+        field='object_state',
+        source='*',
+        target=STATE.LENS_CORRECTION_PENDING)
+    def reset_pending(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.LENS_CORRECTION_PENDING,
+        target=STATE.LENS_CORRECTION_PROCESSING)
+    def start_processing(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.LENS_CORRECTION_PROCESSING,
+        target=STATE.LENS_CORRECTION_DONE)
+    def finish_processing(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source='*',
+        target=STATE.LENS_CORRECTION_FAILED)
+    def fail(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.LENS_CORRECTION_FAILED,
+        target=STATE.LENS_CORRECTION_REDO)
+    def redo(self):
+        pass

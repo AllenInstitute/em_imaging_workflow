@@ -5,7 +5,6 @@ from django.contrib.contenttypes.forms import generic_inlineformset_factory
 from django.contrib.contenttypes.admin import GenericStackedInline
 from workflow_engine.workflow_controller import WorkflowController
 from workflow_engine.models.configuration import Configuration
-from development.models import state_machines
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from workflow_engine.models.well_known_file import WellKnownFile
@@ -22,11 +21,7 @@ def redo_lens_correction(modeladmin, request, queryset):
 
     if queryset:
         for em_mset in queryset.iterator():
-            #state_machines.transition(
-            #    em_mset,
-            #    'workflow_state',
-            #    state_machines.states(EMMontageSet).REDO_POINT_MATCH)
-            em_mset.workflow_state = 'REDO_LENS_CORRECTION'
+            em_mset.redo_lens_correction()
             em_mset.save()
 
             WorkflowController.start_workflow_2(
@@ -81,8 +76,6 @@ class EMMontageInline(admin.StackedInline):
     fk_name = "reference_set"
     extra = 0
 
-#class WellKnownFileInline(GenericStackedInline):
-#    model = WellKnownFile
 
 def set_refset_to_pending(modeladmin, request, queryset):
     set_refset_to_pending.short_description = \
@@ -90,7 +83,7 @@ def set_refset_to_pending(modeladmin, request, queryset):
 
     if queryset:
         for refset in queryset.iterator():
-            refset.workflow_state = 'PENDING'
+            refset.reset_pending()
             refset.save()
 
 
@@ -100,14 +93,14 @@ def set_refset_to_done(modeladmin, request, queryset):
 
     if queryset:
         for refset in queryset.iterator():
-            refset.workflow_state = 'DONE'
+            refset.finish_processing()
             refset.save()
 
 class ReferenceSetAdmin(admin.ModelAdmin):
     # change_list_template = 'admin/em_montage_set_change_list.html'
     list_display = [
         'id',
-        'workflow_state',
+        'object_state',
         'microscope_link',
         'manifest_path',
         'acquisition_date',
@@ -117,7 +110,7 @@ class ReferenceSetAdmin(admin.ModelAdmin):
     ]
     list_filter = [
         'microscope__uid',
-        'workflow_state'
+        'object_state'
     ]
     actions = [
         set_refset_to_pending,

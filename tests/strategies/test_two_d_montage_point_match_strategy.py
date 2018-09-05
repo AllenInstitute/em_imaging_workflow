@@ -4,6 +4,7 @@ from workflow_engine.models.task import Task
 from workflow_engine.models.job import Job
 from django.test.utils import override_settings
 from workflow_engine.workflow_controller import WorkflowController
+from development.models import EMMontageSet
 from tests.strategies.at_em_fixtures import strategy_configurations
 from models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
@@ -47,7 +48,7 @@ def test_get_input_data_redo(
         lots_of_montage_sets,
         strategy_configurations):
     em_mset = lots_of_montage_sets[0]
-    em_mset.workflow_state = 'REDO_POINT_MATCH'
+    em_mset.object_state = EMMontageSet.STATE.EM_MONTAGE_SET_REDO_POINT_MATCH
     task = Task(id=345)
     storage_directory = '/example/storage/directory'
     strategy = TwoDMontagePointMatchStrategy()

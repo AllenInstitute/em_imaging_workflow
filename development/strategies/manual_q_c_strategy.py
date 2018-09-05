@@ -91,18 +91,18 @@ class ManualQCStrategy(ExecutionStrategy):
         z_index = em_mset.section.z_index
 
         if z_index in results['qc_passed_sections']:
-            em_mset.workflow_state = 'MONTAGE_QC_PASSED'
+            em_mset.pass_qc()
         elif z_index in results['gap_sections'] or \
            z_index in results['seam_sections'] or \
            z_index in results['hole_sections']:
-            if em_mset.workflow_state == 'REDO_POINT_MATCH':
-                em_mset.workflow_state = 'MONTAGE_QC_FAILED'
-            elif em_mset.workflow_state == 'REDO_SOLVER':
-                em_mset.workflow_state = 'MONTAGE_QC_FAILED'
+            if em_mset.object_state == 'REDO_POINT_MATCH':
+                em_mset.fail_qc()
+            elif em_mset.object_state == 'REDO_SOLVER':
+                em_mset.fail_qc()
             else:
-                em_mset.workflow_state = 'MONTAGE_QC_FAILED'
+                em_mset.fail_qc()
         else:
-            em_mset.workflow_state = 'MONTAGE_QC_FAILED'
+            em_mset.fail_qc()
         em_mset.save()
 
         well_known_file_path = \

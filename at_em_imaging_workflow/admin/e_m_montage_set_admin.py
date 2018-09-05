@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericStackedInline
 from workflow_engine.models.configuration import Configuration
 from django.contrib.contenttypes.models import ContentType
-from development.models import state_machines
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from workflow_engine.models.well_known_file import WellKnownFile
@@ -17,12 +16,9 @@ def redo_point_match(modeladmin, request, queryset):
         "Redo point match"
 
     if queryset:
+        
         for em_mset in queryset.iterator():
-            #state_machines.transition(
-            #    em_mset,
-            #    'workflow_state',
-            #    state_machines.states(EMMontageSet).REDO_POINT_MATCH)
-            em_mset.workflow_state = 'REDO_POINT_MATCH'
+            em_mset.redo_point_match()
             em_mset.save()
 
             WorkflowController.start_workflow_2(
@@ -38,11 +34,7 @@ def redo_solver(modeladmin, request, queryset):
 
     if queryset:
         for em_mset in queryset.iterator():
-            #state_machines.transition(
-            #    em_mset,
-            #    'workflow_state',
-            #    state_machines.states(EMMontageSet).REDO_SOLVER)
-            em_mset.workflow_state = 'REDO_SOLVER'
+            em_mset.redo_solver()
             em_mset.save()
 
             WorkflowController.start_workflow_2(
@@ -58,12 +50,13 @@ def pass_em_montage_set(modeladmin, request, queryset):
 
     if queryset:
         for em_mset in queryset.iterator():
-            #state_machines.transition(
-            #    em_mset,
-            #    'workflow_state',
-            #    state_machines.states(EMMontageSet).MONTAGE_QC_PASSED)
-            em_mset.workflow_state='MONTAGE_QC_PASSED'
+            em_mset.pass_qc()
             em_mset.save()
+
+        WorkflowController.enqueue_next_queue_by_workflow_node(
+            'em_2d_montage',
+            em_mset,
+            start_node_name='Manual QC / High Degree Polynomial or Point Match Regeneration')
 
 def fail_em_montage_set(modeladmin, request, queryset):
     fail_em_montage_set.short_description = \
@@ -71,12 +64,10 @@ def fail_em_montage_set(modeladmin, request, queryset):
 
     if queryset:
         for em_mset in queryset.iterator():
-            em_mset.workflow_state='FAILED'
-            #state_machines.transition(
-            #    em_mset,
-            #    'workflow_state',
-            #    state_machines.states(EMMontageSet).FAILED)
+            em_mset.fail_qc()
             em_mset.save()
+
+            # TODO: Fail or kill job in QC job queue
 
 
 def assign_chunk(modeladmin, request, queryset):
@@ -108,7 +99,7 @@ class EMMontageSetAdmin(admin.ModelAdmin):
         'microscope_link',
         'reference_set_link',
         'acquisition_date',
-        'workflow_state',
+        'object_state',
         'load_uid'
     ]
     list_select_related = [
@@ -122,7 +113,7 @@ class EMMontageSetAdmin(admin.ModelAdmin):
     list_filter = [
         'section__specimen__uid',
         'microscope__uid',
-        'workflow_state',
+        'object_state',
         'sample_holder__load'
     ]
     actions = [

@@ -1,13 +1,8 @@
-from development.models import state_machines
-from workflow_engine.strategies.wait_strategy \
-    import WaitStrategy
-
-
 # Allen Institute Software License - This software license is the 2-clause BSD
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017. Allen Institute. All rights reserved.
+# Copyright 2017-2018. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -38,10 +33,12 @@ from workflow_engine.strategies.wait_strategy \
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from development.models import state_machines
+from development.models import Chunk
+from workflow_engine.strategies.wait_strategy \
+    import WaitStrategy
+
 
 class RoughManualQc(WaitStrategy):
     def must_wait(self, chnk):
-        return not state_machines.in_state(
-            chnk, 'chunk_state',
-            [ state_machines.states(chnk).ROUGH_QC_PASSED ])
+        return not chnk.object_state in set(
+            [ Chunk.STATE.CHUNK_ROUGH_QC_PASSED ])
