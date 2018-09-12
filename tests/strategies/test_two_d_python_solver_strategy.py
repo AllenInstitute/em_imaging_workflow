@@ -3,6 +3,7 @@ from mock import Mock, patch
 from workflow_engine.models.job import Job
 from workflow_engine.models.task import Task
 from workflow_engine.workflow_controller import WorkflowController
+from development.models import EMMontageSet
 from tests.strategies.at_em_fixtures import strategy_configurations
 from development.strategies.two_d_python_solver_strategy \
     import TwoDPythonSolverStrategy
@@ -61,7 +62,13 @@ def test_get_input_data(strategy_configurations):
     RENDER_SERVICE_PORT='1234',
     RENDER_CLIENT_SCRIPTS='/path/to/test/client/scripts'
     )
-def test_on_finishing(lots_of_montage_sets):
+@pytest.mark.parametrize(
+    'state', [
+    EMMontageSet.STATE.EM_MONTAGE_SET_PROCESSING,
+    EMMontageSet.STATE.EM_MONTAGE_SET_REDO_POINT_MATCH,
+    EMMontageSet.STATE.EM_MONTAGE_SET_REDO_SOLVER,
+])
+def test_on_finishing(lots_of_montage_sets, state):
     em_mset = lots_of_montage_sets[0]
     results = Mock()
     job = Job(
@@ -71,6 +78,8 @@ def test_on_finishing(lots_of_montage_sets):
     strat = TwoDPythonSolverStrategy()
     strat.get_or_create_task_storage_directory = Mock(
         return_value='/path/to/task/storage/directory')
+
+    em_mset.object_state = state
 
     with patch.object(
         WorkflowController,
