@@ -27,7 +27,7 @@ export APP_PACKAGE=$(python -c "import ${DJANGO_SETTINGS_MODULE} as settings; pr
 export MESSAGE_QUEUE_HOST=$(python -c "import ${DJANGO_SETTINGS_MODULE} as settings; print(settings.MESSAGE_QUEUE_HOST)")
 export MESSAGE_QUEUE_PORT=$(python -c "import ${DJANGO_SETTINGS_MODULE} as settings; print(settings.MESSAGE_QUEUE_PORT)")
 
-python -m celery flower --url_prefix=flower --backend=rpc:// --broker=amqp://blue_sky_user:blue_sky_user@${MESSAGE_QUEUE_HOST}:${AMQP_PORT} -n flower@${APP_PACKAGE} &
+python -m celery flower --url_prefix=flower --backend=rpc:// --broker=amqp://blue_sky_user:blue_sky_user@${MESSAGE_QUEUE_HOST}:${MESSAGE_QUEUE_PORT} -n flower@${APP_PACKAGE} &
 DEBUG_LOG=${BASE_DIR}/logs/result.log python -m manage result_worker &
 DEBUG_LOG=${BASE_DIR}/logs/worker.log python -m manage server_worker &
 DEBUG_LOG=${BASE_DIR}/logs/workflow.log python -m manage workflow_worker &
