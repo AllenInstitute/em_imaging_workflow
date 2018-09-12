@@ -44,6 +44,20 @@ def redo_solver(modeladmin, request, queryset):
                 reuse_job=True,
                 raise_priority=True)
 
+def reimage(modeladmin, request, queryset):
+    reimage.short_description = \
+        "Request Reimage"
+
+    if queryset:
+        for em_mset in queryset.iterator():
+            em_mset.reimage()
+            em_mset.save()
+
+        WorkflowController.enqueue_next_queue_by_workflow_node(
+            'em_2d_montage',
+            em_mset,
+            start_node_name='Manual QC / High Degree Polynomial or Point Match Regeneration')
+
 def pass_em_montage_set(modeladmin, request, queryset):
     pass_em_montage_set.short_description = \
         "Pass selected montage sets"

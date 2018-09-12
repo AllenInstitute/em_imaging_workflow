@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from development.strategies \
     import RENDER_STACK_LENS_CORRECTED, RENDER_STACK_SOLVED_PYTHON
 from django.conf import settings
+from development.models import EMMontageSet
 import logging
 
 
@@ -63,6 +64,10 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
 
         return EMA_Schema().dump(inp).data
 
+    def on_finishing(self, em_mset, results, task):
+        em_mset.finish_processing()
+        em_mset.save()
+
     def get_default_lambda(
         self, em_mset, initial_default_lambda):
 
@@ -87,6 +92,6 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
 
 
 try:
-    from EMaligner.schema import EMA_Schema
+    from EMaligner.schemas import EMA_Schema
 except:
     TwoDPythonSolverStrategy._log.warn('Could not import EMA_Schema')

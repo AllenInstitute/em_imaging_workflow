@@ -82,7 +82,11 @@ class EMMontageSet(MontageSet):
 
     @transition(
         field='object_state',
-        source=STATE.EM_MONTAGE_SET_PROCESSING,
+        source=[
+            STATE.EM_MONTAGE_SET_PROCESSING,
+            STATE.EM_MONTAGE_SET_REDO_POINT_MATCH,
+            STATE.EM_MONTAGE_SET_REDO_SOLVER
+        ],
         target=STATE.EM_MONTAGE_SET_QC)
     def finish_processing(self):
         pass
@@ -103,14 +107,24 @@ class EMMontageSet(MontageSet):
 
     @transition(
         field='object_state',
-        source=STATE.EM_MONTAGE_SET_QC,
+        source=[
+            STATE.EM_MONTAGE_SET_QC,
+            STATE.EM_MONTAGE_SET_REDO_POINT_MATCH,
+            STATE.EM_MONTAGE_SET_REDO_SOLVER,
+            STATE.EM_MONTAGE_SET_QC_FAILED,
+        ],
         target=STATE.EM_MONTAGE_SET_QC_PASSED)
     def pass_qc(self):
         pass
 
     @transition(
         field='object_state',
-        source=STATE.EM_MONTAGE_SET_QC,
+        source=[
+            STATE.EM_MONTAGE_SET_QC,
+            STATE.EM_MONTAGE_SET_REDO_POINT_MATCH,
+            STATE.EM_MONTAGE_SET_REDO_SOLVER,
+            STATE.EM_MONTAGE_SET_PENDING,
+        ],
         target=STATE.EM_MONTAGE_SET_QC_FAILED)
     def fail_qc(self):
         pass

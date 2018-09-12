@@ -60,16 +60,24 @@ QMASTER_PORT=22
 QMASTER_USERNAME='timf'
 QMASTER_CRED='/local1/git/at_em_imaging_workflow/qmaster_cred.txt'
 
-MESSAGE_QUEUE_HOST = 'ibs-timf-ux1.corp.alleninstitute.org'
+MESSAGE_QUEUE_HOST = 'message_queue'
 MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
-MESSAGE_QUEUE_PORT = 9008
-MESSAGE_QUEUE_MONITOR_PORT = 9000
+MESSAGE_QUEUE_PORT = 5672
+MESSAGE_QUEUE_MONITOR_PORT = 15672
 UI_HOST = 'ibs-timf-ux1.corp.alleninstitute.org'
 UI_PORT = 9002
-FLOWER_MONITOR_URL='http://' + UI_HOST + ":" + str(9003)
-RABBIT_MONITOR_URL='http://' + UI_HOST + ":" + str(9000)
-ADMIN_URL='http://' + UI_HOST + ':' + str(9002) + '/admin'
+FLOWER_MONITOR_URL='http://' + UI_HOST + ":" + str(UI_PORT) + '/flower/'
+RABBIT_MONITOR_URL='http://' + UI_HOST + ":" + str(UI_PORT) + '/rabbitmq/'
+ADMIN_URL='http://' + UI_HOST + ':' + str(UI_PORT) + '/admin'
+NOTEBOOK_URL='http://' + UI_HOST + ':' + str(UI_PORT) + '/nb/'
+
+NOTEBOOK_ARGUMENTS = [
+    '--ip', '0.0.0.0',
+    '--port', '8888',
+    '--notebook-dir',
+    '/at_em_imaging_workflow/nb'
+]
 
 RENDER_SERVICE_URL = 'ibs-timf-ux1.corp.alleninstitute.org'
 RENDER_SERVICE_PORT = '9006'
@@ -150,7 +158,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'django_fsm',
+
     'workflow_engine',
     'development',
     'at_em_imaging_workflow'

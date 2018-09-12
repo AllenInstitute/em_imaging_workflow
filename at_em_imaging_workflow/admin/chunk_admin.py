@@ -85,7 +85,7 @@ class ChunkAdmin(admin.ModelAdmin):
     list_display = [
         'id',
         'computed_index',
-        'chunk_state',
+        'object_state',
         'rendered_volume',
         'preceding_link',
         'following_link']

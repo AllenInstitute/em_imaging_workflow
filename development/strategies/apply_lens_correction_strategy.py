@@ -40,6 +40,7 @@ from rendermodules.lens_correction.schemas import \
 from workflow_engine.models.configuration import Configuration
 from workflow_engine.models.well_known_file import WellKnownFile
 from django.conf import settings
+from django_fsm import can_proceed
 import simplejson as json
 import logging
 from development.strategies.generate_mesh_lens_correction \
@@ -51,7 +52,16 @@ from development.strategies \
 class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
     _log = logging.getLogger(
         'development.strategies.apply_lens_correction_strategy')
-    
+
+    def can_transition(self, em_mset):
+        if can_proceed(em_mset.start_processing):
+            em_mset.start_processing()
+            em_mset.save()
+
+            return True
+        else:
+            return False
+
     #override if needed
     #set the data for the input file
     def get_input(self, em_mset, storage_directory, task):

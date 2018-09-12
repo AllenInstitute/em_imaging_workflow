@@ -15,3 +15,4 @@ class WaitForLensCorrection(WaitStrategy):
             return True
 
         return False
+
