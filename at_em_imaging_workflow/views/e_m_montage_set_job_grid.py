@@ -4,11 +4,11 @@ from django_pandas.io import read_frame
 
 
 class EMMontageSetJobGrid(JobGrid):
-    def index_field(self):
-        return 'z_index'
+    def sort_columns(self):
+        return ['z_index']
 
     def extra_columns(self):
-        return ['object_state', 'chunks']
+        return ['z_index', 'object_state', 'chunks']
 
     def query_enqueued_objects(self):
         self.enqueued_objects = EMMontageSet.objects.prefetch_related(
@@ -35,4 +35,3 @@ class EMMontageSetJobGrid(JobGrid):
         return self.sorted_nodes_df[
             (self.sorted_nodes_df.enqueued_object_type=='em montage set') &
             (self.sorted_nodes_df.workflow != 'matlab_montage_solver')]
-

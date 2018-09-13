@@ -195,3 +195,16 @@ class EMMontageSet(MontageSet):
                             str(section.z_index) + '_' + \
                             self.clean_acquisition_date())
 
+    def reimage_index(self):
+        unique_section = self.section
+
+        em_msets = [
+            mset.emmontageset 
+            for mset
+            in unique_section.montageset_set.all()
+        ]
+
+        em_mset_ids = [em_mset.id for em_mset in em_msets]
+        reimage_idx = em_mset_ids.index(em_mset.id)
+
+        return reimage_idx
