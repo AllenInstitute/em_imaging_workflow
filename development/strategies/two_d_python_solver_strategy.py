@@ -1,14 +1,13 @@
 from workflow_engine.strategies import execution_strategy
 from workflow_engine.models.configuration import Configuration
 from django.core.exceptions import ObjectDoesNotExist
-from development.strategies \
-    import RENDER_STACK_LENS_CORRECTED, RENDER_STACK_SOLVED_PYTHON
+from at_em_imaging_workflow.two_d_stack_name_manager \
+    import TwoDStackNameManager
 from django.conf import settings
-from development.models import EMMontageSet
 import logging
 
 
-# TODO - do for rouch alignment also
+# TODO - do for rough alignment also
 class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
     _log = logging.getLogger(
         'development.strategies.two_d_python_solver_strategy')
@@ -21,6 +20,9 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
         inp = Configuration.objects.get(
             name='2D Montage Python Solver Input',
             configuration_type='strategy_config').json_object
+
+        stack_names = \
+            TwoDStackNameManager.two_d_python_solver_stacks(em_mset)
 
         inp['pointmatch']['host'] = settings.RENDER_SERVICE_URL
         inp['pointmatch']['port'] = settings.RENDER_SERVICE_PORT
@@ -35,7 +37,7 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
         inp['input_stack']['owner'] = settings.RENDER_SERVICE_USER
         inp['input_stack']['project'] = em_mset.get_render_project_name()
         inp['input_stack']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
-        inp['input_stack']['name'] = RENDER_STACK_LENS_CORRECTED
+        inp['input_stack']['name'] = stack_names['input_stack']
         inp['input_stack']['db_interface'] = 'render'
 
         inp['output_stack']['host'] = settings.RENDER_SERVICE_URL
@@ -43,7 +45,7 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
         inp['output_stack']['owner'] = settings.RENDER_SERVICE_USER
         inp['output_stack']['project'] = em_mset.get_render_project_name()
         inp['output_stack']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
-        inp['output_stack']['name'] = RENDER_STACK_SOLVED_PYTHON
+        inp['output_stack']['name'] = stack_names['output_stack']
         inp['output_stack']['db_interface'] = 'render'
 
         inp['first_section'] = em_mset.section.z_index

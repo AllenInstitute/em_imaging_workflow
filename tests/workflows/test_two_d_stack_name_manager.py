@@ -42,14 +42,14 @@ from mock import Mock
 @pytest.fixture
 def ref_set():
     ref_set = Mock()
-    ref_set.reimage_level = Mock(return_value=None)
+    ref_set.reimage_index = Mock(return_value=0)
 
     return ref_set
 
 @pytest.fixture
 def em_mset():
     em_mset = Mock()
-    em_mset.reimage_level = Mock(return_value=None)
+    em_mset.reimage_index = Mock(return_value=0)
 
     return em_mset
 
@@ -57,7 +57,7 @@ def em_mset():
 @pytest.fixture
 def em_mset_reimage_one():
     em_mset = Mock()
-    em_mset.reimage_level = Mock(return_value=1)
+    em_mset.reimage_index = Mock(return_value=1)
 
     return em_mset
 
@@ -126,15 +126,15 @@ def test_create_tile_pairs_stacks_reimage(em_mset_reimage_one):
 def test_two_d_solver_stacks(em_mset):
     stacks = TwoDStackNameManager.two_d_solver_stacks(em_mset)
 
-    assert stacks['input_stack'] == 'em_2d_montage_lc'
-    assert stacks['output_stack'] == 'em_2d_montage_solved'
+    assert stacks['source_collection'] == 'em_2d_montage_lc'
+    assert stacks['target_collection'] == 'em_2d_montage_solved'
 
 
 def test_two_d_solver_stacks_reimage(em_mset_reimage_one):
     stacks = TwoDStackNameManager.two_d_solver_stacks(em_mset_reimage_one)
 
-    assert stacks['input_stack'] == 'em_2d_montage_lc_reimage_1'
-    assert stacks['output_stack'] == 'em_2d_montage_solved_reimage_1'
+    assert stacks['source_collection'] == 'em_2d_montage_lc_reimage_1'
+    assert stacks['target_collection'] == 'em_2d_montage_solved_reimage_1'
 
 
 def test_two_d_solver_python_stacks(em_mset):

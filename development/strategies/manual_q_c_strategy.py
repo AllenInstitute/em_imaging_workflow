@@ -2,7 +2,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017. Allen Institute. All rights reserved.
+# Copyright 2017-2018. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -35,9 +35,9 @@
 #
 import shutil
 import os
-from development.strategies \
-    import RENDER_STACK_SOLVED_PYTHON, RENDER_STACK_LENS_CORRECTED, \
-    get_workflow_node_input_template
+from at_em_imaging_workflow.two_d_stack_name_manager \
+    import TwoDStackNameManager
+from development.strategies import get_workflow_node_input_template
 from rendermodules.em_montage_qc.schemas \
     import DetectMontageDefectsParameters, \
     DetectMontageDefectsParametersOutput
@@ -58,17 +58,17 @@ class ManualQCStrategy(ExecutionStrategy):
         '''
         inp = get_workflow_node_input_template(task)
 
+        stack_names = \
+            TwoDStackNameManager.detect_defects_stacks(em_mset)
+
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
         inp['render']['project'] = em_mset.get_render_project_name()
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
-        if inp['prestitched_stack'] == '':
-            inp['prestitched_stack'] = RENDER_STACK_LENS_CORRECTED
-
-        if inp['poststitched_stack'] == '':
-            inp['poststitched_stack'] = self.get_post_stitched_stack_name(em_mset)
+        inp['prestitched_stack'] = stack_names['prestitched_stack']
+        inp['poststitched_stack'] = stack_names['poststitched_stack']
 
         inp['minZ'] = em_mset.section.z_index
         inp['maxZ'] = em_mset.section.z_index

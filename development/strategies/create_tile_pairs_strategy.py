@@ -4,8 +4,8 @@ from rendermodules.pointmatch.schemas import \
     TilePairClientParameters
 from django.conf import settings
 import logging
-from development.strategies \
-    import RENDER_STACK_LENS_CORRECTED
+from at_em_imaging_workflow.two_d_stack_name_manager \
+    import TwoDStackNameManager
 
 
 class CreateTilePairsStrategy(ExecutionStrategy):
@@ -15,7 +15,10 @@ class CreateTilePairsStrategy(ExecutionStrategy):
         inp = Configuration.objects.get(
             name='Create Tile Pairs Input',
             configuration_type='strategy_config').json_object
-    
+
+        stack_names = \
+            TwoDStackNameManager.create_tile_pairs_stacks(em_mset)
+
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
@@ -23,8 +26,8 @@ class CreateTilePairsStrategy(ExecutionStrategy):
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
         inp['output_dir'] = em_mset.get_storage_directory()
-        inp['baseStack'] = RENDER_STACK_LENS_CORRECTED
-        inp['stack'] = RENDER_STACK_LENS_CORRECTED
+        inp['baseStack'] = stack_names['baseStack']
+        inp['stack'] = stack_names['stack']
 
         inp["minZ"] = em_mset.section.z_index
         inp["maxZ"] = em_mset.section.z_index

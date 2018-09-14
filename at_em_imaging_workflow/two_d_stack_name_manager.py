@@ -15,6 +15,15 @@ class TwoDStackNameManager(object):
     # RENDER_STACK_DOWNSAMPLED_UNMAPPED = 'em_2d_montage_downsampled_no_scale_no_mapping'
     RENDER_STACK_DOWNSAMPLED_UNMAPPED = 'em_2d_montage_downsampled_no_mapping{}'
 
+    RENDER_STACK_RIGID_ALIGN_DOWNSAMPLE = \
+        'em_rigid_align_solved_downsample_zs{}_ze{}'
+    RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE = \
+        'em_rough_align_solved_downsample_zs{}_ze{}'
+    RENDER_STACK_MONTAGE_SCAPES_STACK = \
+        'em_montage_scapes_zs_{}_ze_{}'
+    RENDER_STACK_ROUGH_ALIGN = 'em_rough_align_zs{}_ze{}'
+    RENDER_STACK_ROUGH_SOLVED = 'em_rough_align_zs{}_ze{}_solved'
+
     @classmethod
     def mesh_lens_correction_raw_stack(cls, ref_set):
         return cls.RENDER_STACK_MESH_LENS_RAW
@@ -42,7 +51,7 @@ class TwoDStackNameManager(object):
 
     @classmethod
     def get_reimage_suffix(cls, em_mset):
-        reimage_level = em_mset.reimage_level()
+        reimage_level = em_mset.reimage_index()
 
         if reimage_level:
             reimage_suffix = '_reimage_{}'.format(reimage_level)
@@ -77,8 +86,13 @@ class TwoDStackNameManager(object):
 
     @classmethod
     def downsampled_unmapped_stack(cls, em_mset):
+        if em_mset:
+            suffix = cls.get_reimage_suffix(em_mset)
+        else:
+            suffix = ''
+
         return cls.RENDER_STACK_DOWNSAMPLED_UNMAPPED.format(
-            cls.get_reimage_suffix(em_mset))
+            suffix)
 
 
     @classmethod
@@ -117,8 +131,8 @@ class TwoDStackNameManager(object):
     @classmethod
     def two_d_solver_stacks(cls, em_mset):
         return {
-            'input_stack': cls.lens_corrected_stack(em_mset),
-            'output_stack': cls.solved_stack(em_mset)
+            'source_collection': cls.lens_corrected_stack(em_mset),
+            'target_collection': cls.solved_stack(em_mset)
         }
 
     @classmethod
@@ -147,4 +161,11 @@ class TwoDStackNameManager(object):
         return {
             'input_stack': cls.downsampled_stack(em_mset),
             'output_stack': cls.downsampled_unmapped_stack(em_mset)
+        }
+
+    @classmethod
+    def create_rough_pair_stacks(cls, chk_assn):
+        return {
+            'baseStack': cls.downsampled_unmapped_stack(None),
+            'stack': cls.downsampled_unmapped_stack(None)
         }

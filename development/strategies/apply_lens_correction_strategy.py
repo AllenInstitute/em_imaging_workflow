@@ -45,8 +45,8 @@ import simplejson as json
 import logging
 from development.strategies.generate_mesh_lens_correction \
     import GenerateMeshLensCorrection
-from development.strategies \
-    import RENDER_STACK_APPLY_MIPMAPS, RENDER_STACK_LENS_CORRECTED
+from at_em_imaging_workflow.two_d_stack_name_manager \
+    import TwoDStackNameManager
 
 
 class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
@@ -69,14 +69,17 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
             name='Apply Lens Correction Input',
             configuration_type='strategy_config').json_object
 
+        stack_names = \
+            TwoDStackNameManager.apply_lens_correction_stacks(em_mset)
+
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
         inp['render']['project'] = em_mset.get_render_project_name()
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
         inp['zValues'] = [ em_mset.section.z_index ]
-        inp['input_stack'] = RENDER_STACK_APPLY_MIPMAPS
-        inp['output_stack'] = RENDER_STACK_LENS_CORRECTED
+        inp['input_stack'] = stack_names['input_stack']
+        inp['output_stack'] = stack_names['output_stack']
         inp['close_stack'] = False
 
         try:

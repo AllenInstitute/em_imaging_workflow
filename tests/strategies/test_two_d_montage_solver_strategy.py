@@ -22,6 +22,7 @@ from models.test_chunk_model \
            'solver_options': {} }))
 def test_get_input_data(strategy_configurations):
     em_mset = Mock()
+    em_mset.reimage_index = Mock(return_value=0)
     task = Mock()
     storage_directory = '/example/storage/directory'
 

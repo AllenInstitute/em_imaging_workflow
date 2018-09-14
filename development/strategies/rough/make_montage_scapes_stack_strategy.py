@@ -1,9 +1,9 @@
 from workflow_engine.strategies import execution_strategy
 from rendermodules.dataimport.schemas \
     import MakeMontageScapeSectionStackParameters
-from development.strategies \
-    import RENDER_STACK_SOLVED_PYTHON, RENDER_STACK_DOWNSAMPLED, \
-    get_workflow_node_input_template
+from development.strategies import get_workflow_node_input_template
+from at_em_imaging_workflow.two_d_stack_name_manager \
+    import TwoDStackNameManager
 
 from django.conf import settings
 import logging
@@ -16,6 +16,9 @@ class MakeMontageScapesStackStrategy(execution_strategy.ExecutionStrategy):
 
     def get_input(self, em_mset, storage_directory, task):
         inp = get_workflow_node_input_template(task)
+
+        stack_names = \
+            TwoDStackNameManager.make_montage_scapes_stacks(em_mset)
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
@@ -34,10 +37,8 @@ class MakeMontageScapesStackStrategy(execution_strategy.ExecutionStrategy):
         inp['image_directory'] = em_mset.get_storage_directory(
             settings.LONG_TERM_BASE_FILE_PATH)
 
-        if inp['montage_stack'] == '':
-            inp['montage_stack'] = RENDER_STACK_SOLVED_PYTHON
+        inp['montage_stack'] = stack_names['montage_stack']
 
-        if inp['output_stack'] == '':
-            inp['output_stack'] = RENDER_STACK_DOWNSAMPLED
+        inp['output_stack'] = stack_names['output_stack']
 
         return MakeMontageScapeSectionStackParameters().dump(inp).data

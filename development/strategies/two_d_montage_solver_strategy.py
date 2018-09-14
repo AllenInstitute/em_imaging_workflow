@@ -1,10 +1,10 @@
 from workflow_engine.strategies import execution_strategy
 from rendermodules.montage.schemas import SolveMontageSectionParameters
 from django.conf import settings
+from at_em_imaging_workflow.two_d_stack_name_manager \
+    import TwoDStackNameManager
+from development.strategies import get_workflow_node_input_template
 import logging
-from development.strategies \
-    import RENDER_STACK_SOLVED, RENDER_STACK_LENS_CORRECTED, \
-    get_workflow_node_input_template
 
 
 class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
@@ -17,6 +17,9 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
         TwoDMontageSolverStrategy._log.info("get input")
 
         inp = get_workflow_node_input_template(task)
+
+        stack_names = \
+            TwoDStackNameManager.two_d_solver_stacks(em_mset)
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
@@ -33,7 +36,7 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
         inp['source_collection']['project'] = em_mset.get_render_project_name()
         inp['source_collection']['renderbinPath'] = \
             settings.RENDER_CLIENT_SCRIPTS
-        inp['source_collection']['stack'] = RENDER_STACK_LENS_CORRECTED
+        inp['source_collection']['stack'] = stack_names['source_collection']
 
         inp['target_collection']['service_host'] = \
             settings.RENDER_SERVICE_URL + ":" + settings.RENDER_SERVICE_PORT
@@ -46,7 +49,7 @@ class TwoDMontageSolverStrategy(execution_strategy.ExecutionStrategy):
             settings.RENDER_CLIENT_SCRIPTS
 
         if inp['target_collection']['stack'] == '':
-            inp['target_collection']['stack'] = RENDER_STACK_SOLVED
+            inp['target_collection']['stack'] = stack_names['target_collection']
 
         inp['source_point_match_collection']['server'] = \
             'http://' + settings.RENDER_SERVICE_URL + \

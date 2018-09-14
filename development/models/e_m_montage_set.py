@@ -177,7 +177,14 @@ class EMMontageSet(MontageSet):
         return 'tile pairs file'
 
     def get_point_collection_name(self):
-        return 'default_point_matches'
+        reimage_index = self.reimage_index()
+
+        if reimage_index:
+            reimage_suffix = '_reimage_{}'.format(reimage_index)
+        else:
+            reimage_suffix = ''
+
+        return 'default_point_matches{}'.format(reimage_suffix)
 
     def get_render_project_name(self):
         return self.section.specimen.uid
@@ -205,6 +212,6 @@ class EMMontageSet(MontageSet):
         ]
 
         em_mset_ids = [em_mset.id for em_mset in em_msets]
-        reimage_idx = em_mset_ids.index(em_mset.id)
+        reimage_idx = em_mset_ids.index(self.id)
 
         return reimage_idx

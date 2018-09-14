@@ -14,6 +14,6 @@ DEBUG_LOG=logs/migrate.log python -m manage migrate  --noinput
 #export DEBUG_LOG=logs/superuser_pass.log
 #printf "blue_sky_user\nt@a.org\nblue_sky_user\n" | python manage.py createsuperuser
 
-/bin/bash restart_workers.sh&
+/bin/bash ./restart_workers.sh&
 
-while true; do sleep 2; done
+while true; do sleep 600; done

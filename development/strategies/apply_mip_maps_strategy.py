@@ -2,7 +2,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017. Allen Institute. All rights reserved.
+# Copyright 2017-2018. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -37,8 +37,8 @@ from workflow_engine.strategies import execution_strategy
 from django.conf import settings
 from workflow_engine.models.configuration import Configuration
 from rendermodules.dataimport.schemas import AddMipMapsToStackParameters
-from development.strategies \
-    import RENDER_STACK_INGEST, RENDER_STACK_APPLY_MIPMAPS
+from at_em_imaging_workflow.two_d_stack_name_manager \
+    import TwoDStackNameManager
 import logging
 
 
@@ -51,14 +51,17 @@ class ApplyMipMapsStrategy(execution_strategy.ExecutionStrategy):
             name='Apply MIPmaps Input',
             configuration_type='strategy_config').json_object
 
+        stack_names = \
+            TwoDStackNameManager.apply_mip_maps_stacks(em_mset)
+
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
         inp['render']['owner'] = settings.RENDER_SERVICE_USER
         inp['render']['project'] = em_mset.get_render_project_name()
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
-        inp['input_stack'] = RENDER_STACK_INGEST
-        inp['output_stack'] = RENDER_STACK_APPLY_MIPMAPS
+        inp['input_stack'] = stack_names['input_stack']
+        inp['output_stack'] = stack_names['output_stack']
         inp['mipmap_dir'] = em_mset.mipmap_directory
         inp['output_dir'] = em_mset.get_storage_directory()
 

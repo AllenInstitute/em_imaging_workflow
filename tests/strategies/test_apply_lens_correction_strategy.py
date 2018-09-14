@@ -47,6 +47,7 @@ def test_get_input_data(strategy_configurations):
     test_z_index = 543
     em_mset.section.z_index = test_z_index
     em_mset.metafile = '/path/to/test/meta.file'
+    em_mset.reimage_index = MagicMock(return_value=0)
     task = MagicMock()
     wkf_mock = MagicMock()
     wkf_mock.get = MagicMock(return_value='/path/to/xform.json')

@@ -6,9 +6,9 @@ from rendermodules.pointmatch.schemas import \
     TilePairClientParameters
 from django.conf import settings
 import logging
-from development.strategies \
-    import RENDER_STACK_DOWNSAMPLED, \
-    get_workflow_node_input_template
+from development.strategies import get_workflow_node_input_template
+from at_em_imaging_workflow.two_d_stack_name_manager \
+    import TwoDStackNameManager
 
 
 class CreateRoughPairsStrategy(ExecutionStrategy):
@@ -28,6 +28,10 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
         inp = get_workflow_node_input_template(task)
 
         chnk = chk_assgn.chunk
+
+        stack_names = \
+            TwoDStackNameManager.create_rough_pair_stacks(
+                chk_assgn)
 
         inp['render']['host'] = settings.RENDER_SERVICE_URL
         inp['render']['port'] = settings.RENDER_SERVICE_PORT
@@ -52,11 +56,8 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
                 inp["maxZ"] = max_z
                 inp["zNeighborDistance"] = tile_pair_range["zNeighborDistance"]
 
-        stack = RENDER_STACK_DOWNSAMPLED
-        if inp['baseStack'] == '':
-            inp['baseStack'] = stack
-        if inp['stack'] == '':
-            inp['stack'] = stack
+        inp['baseStack'] = stack_names['baseStack']
+        inp['stack'] = stack_names['stack']
 
         return TilePairClientParameters().dump(inp).data
 
