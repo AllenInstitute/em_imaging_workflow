@@ -35,6 +35,7 @@
 #
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
+import pandas as pd
 
 
 class Load(models.Model):
@@ -45,3 +46,29 @@ class Load(models.Model):
     def __str__(self):
         return str(self.uid)
 
+    def read_mapping_spreadsheet(self, mapping_xls_filename, sheet=None):
+        if sheet is None:
+            sheet = self.uid
+
+        xls_df = pd.read_excel(
+            mapping_xls_filename, sheet_name=self.uid)
+
+        return xls_df
+
+    def update_z_mapping(self, tape_df):
+        tape_df = tape_df[
+            tape_df['Barcode'].notnull() &
+            tape_df['Z'].notnull() &
+            (tape_df['Z and TAO agree?'] == True)]
+
+        self.configurations.update_or_create(
+            configuration_type='z_mapping',
+            defaults={
+                'name': '{} Z Mapping'.format(self.uid),
+                'json_object': {
+                    str(self.offset + barcode): int(perm_z)
+                    for (_, barcode, perm_z)
+                    in tape_df.loc[:,['Barcode','Z']].itertuples()
+                }
+            }
+        )
