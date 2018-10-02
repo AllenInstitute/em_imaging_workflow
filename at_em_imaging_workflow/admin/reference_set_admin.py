@@ -43,24 +43,10 @@ class LensCorrectionConfigurationForm(ModelForm):
     def clean_configuration_type(self):
         ct = self.cleaned_data.get('configuration_type', None)
 
-        if ct is None:
-            raise ValidationError("Invalid configuration type")
-        elif GenerateMeshLensCorrection.CONFIGURATION_TYPE != ct:
-            raise ValidationError("Configuration type must be {}".format(
-                GenerateMeshLensCorrection.CONFIGURATION_TYPE))
-
         return ct
 
     def clean_json_object(self):
         jo = self.cleaned_data.get('json_object', {})
-
-        if jo is None:
-            raise ValidationError("Invalid JSON object")
-        elif GenerateMeshLensCorrection.TRANSFORM not in jo:
-            raise ValidationError("Must specify {}".format(
-                GenerateMeshLensCorrection.TRANSFORM))
-        else:
-            jo['cleaned'] = True
 
         return jo
 
@@ -68,7 +54,7 @@ class LensCorrectionConfigurationForm(ModelForm):
 class ConfigurationInline(GenericStackedInline):
     model = Configuration
     form=LensCorrectionConfigurationForm
-    max_num=1
+    extra=0
 
 
 class EMMontageInline(admin.StackedInline):

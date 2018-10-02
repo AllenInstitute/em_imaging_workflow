@@ -2,6 +2,7 @@ import pytest
 from mock import patch, Mock
 from development.models import ReferenceSet
 from workflow_engine.workflow_controller import WorkflowController
+from workflow_engine.models.configuration import Configuration
 from tests.strategies.at_em_fixtures import strategy_configurations
 from development.strategies.generate_lens_correction_transform_strategy \
     import GenerateLensCorrectionTransformStrategy
@@ -17,7 +18,16 @@ def test_get_input_data(strategy_configurations):
     enqueued_object = ReferenceSet(uid='deadbeef',
                                    manifest_path='manifest.json',
                                    project_path='/path/to/project')
-    task = None
+    task = Mock()
+    task.job = Mock()
+    task.job.workflow_node = Mock()
+
+    cfg = Configuration(
+        content_object=task.job.workflow_node,
+        name='Generate Mesh Lens Correction Input',
+        configuration_type='strategy_config',
+        json_object={})
+
     storage_directory = '/example/storage/directory'
 
     strategy = GenerateLensCorrectionTransformStrategy()

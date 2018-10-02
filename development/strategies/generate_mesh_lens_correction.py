@@ -36,11 +36,11 @@
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
 from workflow_engine.workflow_controller import WorkflowController
 from development.strategies import RENDER_STACK_MESH_LENS_RAW,\
-    RENDER_STACK_MESH_LENS_CORRECTED, RENDER_LENS_COLLECTION
+    RENDER_STACK_MESH_LENS_CORRECTED, RENDER_LENS_COLLECTION, \
+    get_workflow_node_input_template
 from rendermodules.mesh_lens_correction.schemas \
     import MeshLensCorrectionSchema
 from development.models.reference_set import ReferenceSet
-from workflow_engine.models.configuration import Configuration
 from django.conf import settings
 from django_fsm import can_proceed
 import logging
@@ -49,11 +49,13 @@ import os
 
 class GenerateMeshLensCorrection(ExecutionStrategy):
     CONFIGURATION_TYPE='lens correction transform'
+    CONFIGURATION_NAME='Generate Mesh Lens Correction Input'
+    TEMCA3_CONFIGURATION='Generate Mesh Lens Correction TEMCA3 Input'
     TRANSFORM='transform'
     _log = logging.getLogger(
         'development.strategies.generate_mesh_correction')
 
-    def get_input(self, ref_set, storage_directory, task):
+    def get_input(self, ref_set, task_storage_directory, task):
         '''
         Args:
             ref_set : ReferenceSet
@@ -62,9 +64,16 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
         GenerateMeshLensCorrection._log.info(
             'project path: %s' % (project_path))
 
-        inp = Configuration.objects.get(
-            name='Generate Mesh Lens Correction Input',
-            configuration_type='strategy_config').json_object
+        if ref_set.microscope.uid == 'temca3':
+            configuration_name = \
+                GenerateMeshLensCorrection.TEMCA3_CONFIGURATION
+        else:
+            configuration_name = \
+                GenerateMeshLensCorrection.CONFIGURATION_NAME
+
+        inp = get_workflow_node_input_template(
+            task,
+            name=configuration_name)
 
         inp['render'] = {}
         inp['render']['host'] = settings.RENDER_SERVICE_URL
@@ -79,16 +88,24 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
 
         inp['metafile'] = ref_set.metafile
         inp['z_index'] = ref_set.id
-        inp['outfile'] = os.path.join(storage_directory,
+        inp['outfile'] = os.path.join(task_storage_directory,
                                       'lens_correction_out.json')
-        inp['output_dir'] = storage_directory
-        inp['out_html_dir'] = storage_directory
+        inp['output_dir'] = task_storage_directory
+        inp['out_html_dir'] = task_storage_directory
+        inp['mask_dir'] = ref_set.get_storage_directory()
 
         if ref_set.object_state == ReferenceSet.STATE.LENS_CORRECTION_REDO:
             additional_config = self.get_good_solve_from_configuration(ref_set)
             inp.update(additional_config)
 
-        return MeshLensCorrectionSchema().dump(inp).data
+        input_data_json = MeshLensCorrectionSchema().dump(inp).data
+
+        do_montage_qc = self.get_do_montage_qc(ref_set)
+
+        if do_montage_qc is not None:
+            input_data_json['do_montage_QC'] = do_montage_qc
+
+        return input_data_json
 
     def get_good_solve_from_configuration(
         self, ref_set):
@@ -102,7 +119,19 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
             defaults={
                 'name': 'ref set params for {}'.format(str(ref_set)),
                 'json_object': default_json_obj })
-        return config.json_object 
+        return config.json_object
+
+    def get_do_montage_qc(self, ref_set):
+        try:
+            config = ref_set.configurations.get(
+                configuration_type='ref_set_alternate_parameters').json_object
+            if 'do_montage_QC' in config:
+                return config['do_montage_QC']
+            else:
+                return None
+        except:
+            return None
+
 
     def on_running(self, task):
         ref_set = WorkflowController.get_enqueued_object(task)
@@ -121,12 +150,14 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
         '''
         if can_proceed(ref_set.finish_processing):
             self.check_key(results, 'output_json')
+            self.check_key(results, 'maskUrl')
 
             GenerateMeshLensCorrection._log.info(
                 'lens_correction_transform output %s' % (str(results)))
 
             transform_configuration_data = {
-                'output_json': results['output_json']
+                'output_json': results['output_json'],
+                'maskUrl': results['maskUrl']
             }
 
             lens_correction_configuration_name = \

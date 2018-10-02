@@ -83,7 +83,7 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
         inp['close_stack'] = False
 
         try:
-            inp['transform'] = self.read_transform_from_configuration(em_mset)
+            self.read_transform_from_configuration(em_mset, inp)
         except ObjectDoesNotExist:
             inp['transform'] = self.read_transform_from_well_known_file()
         except MultipleObjectsReturned as e:
@@ -93,17 +93,20 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
 
         return ApplyLensCorrectionParameters().dump(inp).data
 
-    def read_transform_from_configuration(self, em_mset):
+    def read_transform_from_configuration(self, em_mset, inp):
         conf = em_mset.reference_set.configurations.get(
             configuration_type=GenerateMeshLensCorrection.CONFIGURATION_TYPE)
 
         output_json = conf.json_object['output_json']
 
+        try:
+            inp['maskUrl'] = conf.json_object['maskUrl']
+        except:
+            pass
+
         with open(output_json) as j:
             json_data = json.loads(j.read())
-            transform = json_data
-
-        return transform
+            inp['transform'] = json_data
 
     def read_transform_from_well_known_file(self, em_mset):
         wkf = WellKnownFile.get(em_mset.reference_set, 'description')
