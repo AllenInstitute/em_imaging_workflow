@@ -24,6 +24,10 @@ class TwoDStackNameManager(object):
     RENDER_STACK_ROUGH_ALIGN = 'em_rough_align_zs{}_ze{}'
     RENDER_STACK_ROUGH_SOLVED = 'em_rough_align_zs{}_ze{}_solved'
 
+    RENDER_STACK_FUSION = 'FUSEDOUTSTACK'
+    RENDER_STACK_FUSION_A = 'em_fusion_a'
+    RENDER_STACK_FUSION_B = 'em_fusion_b'
+
     @classmethod
     def mesh_lens_correction_raw_stack(cls, ref_set):
         return cls.RENDER_STACK_MESH_LENS_RAW
@@ -80,8 +84,13 @@ class TwoDStackNameManager(object):
 
     @classmethod
     def downsampled_stack(cls, em_mset):
+        if em_mset:
+            suffix = cls.get_reimage_suffix(em_mset)
+        else:
+            suffix = ''
+
         return cls.RENDER_STACK_DOWNSAMPLED.format(
-            cls.get_reimage_suffix(em_mset))
+            suffix)
 
 
     @classmethod
@@ -94,6 +103,13 @@ class TwoDStackNameManager(object):
         return cls.RENDER_STACK_DOWNSAMPLED_UNMAPPED.format(
             suffix)
 
+    @classmethod
+    def render_adjacent_stack_a(cls, chnk):
+        return cls.RENDER_STACK_FUSION_A
+
+    @classmethod
+    def render_adjacent_stack_b(cls, chnk):
+        return cls.RENDER_STACK_FUSION_B
 
     @classmethod
     def generate_render_stack_stacks(cls, em_mset):
@@ -166,6 +182,13 @@ class TwoDStackNameManager(object):
     @classmethod
     def create_rough_pair_stacks(cls, chk_assn):
         return {
-            'baseStack': cls.downsampled_unmapped_stack(None),
-            'stack': cls.downsampled_unmapped_stack(None)
+            'baseStack': cls.downsampled_stack(None),
+            'stack': cls.downsampled_stack(None)
+        }
+
+    @classmethod
+    def register_adjacent_stacks(cls, chnk):
+        return {
+            'stack_a': cls.register_adjacent_stack_a(chnk),
+            'stack_b': cls.register_adjacent_stack_b(chnk)
         }

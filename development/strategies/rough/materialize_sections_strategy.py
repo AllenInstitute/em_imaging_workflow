@@ -4,9 +4,12 @@ from rendermodules.materialize.schemas import \
     MaterializeSectionsParameters
 import jinja2
 import os
-from development.strategies import RENDER_STACK_ROUGH_ALIGN, \
+from development.strategies import (
     get_workflow_node_input_template
-from development.models.chunk_assignment import ChunkAssignment
+)
+from at_em_imaging_workflow.two_d_stack_name_manager import (
+    TwoDStackNameManager
+)
 from development.strategies.rough.solve_rough_alignment_strategy \
     import SolveRoughAlignmentStrategy
 from django.conf import settings
@@ -66,8 +69,7 @@ class MaterializeSectionsStrategy(ExecutionStrategy):
             ':' + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
         inp['owner'] = settings.RENDER_SERVICE_USER
         inp['project'] = chnk.get_render_project_name()
-        inp['stack'] = RENDER_STACK_ROUGH_ALIGN % (
-            min_z, max_z)
+        inp['stack'] = TwoDStackNameManager.RENDER_STACK_FUSION
 
         inp['rootDirectory'] = chnk.get_storage_directory()
 
@@ -78,7 +80,7 @@ class MaterializeSectionsStrategy(ExecutionStrategy):
         inp['spark_files'] = [ log4j_properties_path ]
 
         mem = 128
-        inp['driverMemory'] = str(int(mem)) +  'g'  # TODO roughly memory * ppn
+        # inp['driverMemory'] = str(int(mem)) +  'g'  # TODO roughly memory * ppn
 
         mapped_z = clipped_z_mapping[str(em_mset.section.z_index)]
         inp['zValues'] = [ mapped_z ]

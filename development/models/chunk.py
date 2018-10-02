@@ -80,7 +80,7 @@ class Chunk(models.Model):
         object_id_field='attachable_id')
 
     def __str__(self):
-        return 'chunk ' + str(self.computed_index)
+        return 'chunk {} {}'.format(self.computed_index, self.id)
 
     def set_chunk_size(self):
         #TODO
@@ -199,11 +199,24 @@ class Chunk(models.Model):
 
         return chunk_list
 
+    def get_tile_pair_ranges(self):
+        tile_pair_config= self.configurations.get(
+            configuration_type='chunk_configuration').json_object
+
+        return tile_pair_config['tile_pair_ranges']
+
+    def calculate_z_min_max(self, tile_pair_ranges):
+        min_z = min([rng['minz'] for rng in tile_pair_ranges.values()])
+        max_z = max([rng['maxz'] for rng in tile_pair_ranges.values()])
+
+        return min_z,max_z
+
     def get_storage_directory(self, base_storage_directory=None):
         if base_storage_directory is None:
             base_storage_directory = settings.BASE_FILE_PATH
 
-        z_start,z_end = Chunk.calculate_z_range(self.computed_index)
+        tile_pair_ranges = self.get_tile_pair_ranges()
+        z_start,z_end = self.calculate_z_min_max(tile_pair_ranges)
 
         return os.path.join(base_storage_directory,
                             'chunk_' + \

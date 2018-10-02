@@ -17,18 +17,27 @@ from development.models.stain import Stain
 from development.models.specimen import Specimen
 from development.models.study import Study
 from development.models.tile_image_set import TileImageSet
-from at_em_imaging_workflow.admin.e_m_montage_set_admin \
-    import EMMontageSetAdmin
-from at_em_imaging_workflow.admin.reference_set_admin \
-    import ReferenceSetAdmin
-from at_em_imaging_workflow.admin.chunk_admin \
-    import ChunkAdmin
-from at_em_imaging_workflow.admin.section_admin \
-    import SectionAdmin
-from at_em_imaging_workflow.admin.sample_holder_admin \
-    import SampleHolderAdmin
-from at_em_imaging_workflow.admin.load_admin \
-    import LoadAdmin
+from at_em_imaging_workflow.admin.e_m_montage_set_admin import (
+    EMMontageSetAdmin,
+)
+from at_em_imaging_workflow.admin.reference_set_admin import (
+    ReferenceSetAdmin,
+)
+from at_em_imaging_workflow.admin.chunk_admin import (
+    ChunkAdmin,
+)
+from at_em_imaging_workflow.admin.rendered_volume_admin import (
+    RenderedVolumeAdmin,
+)
+from at_em_imaging_workflow.admin.section_admin import (
+    SectionAdmin,
+)
+from at_em_imaging_workflow.admin.sample_holder_admin import (
+    SampleHolderAdmin,
+)
+from at_em_imaging_workflow.admin.load_admin import (
+    LoadAdmin,
+)
 
 
 # Register your models here.
@@ -43,7 +52,7 @@ admin.site.register(MicroscopeType)
 admin.site.register(MontageSet)
 admin.site.register(RegistrationSeries)
 admin.site.register(ReferenceSet, ReferenceSetAdmin)
-admin.site.register(RenderedVolume)
+admin.site.register(RenderedVolume, RenderedVolumeAdmin)
 admin.site.register(SampleHolder, SampleHolderAdmin)
 admin.site.register(Section, SectionAdmin)
 admin.site.register(Stain)
