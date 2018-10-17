@@ -33,9 +33,11 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
+from django.conf import settings
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
 from django_fsm import FSMField
+from pytz import timezone, utc
 import re
 
 
@@ -62,7 +64,14 @@ class TileImageSet(models.Model):
 
     def __str__(self):
         return str(self.acquisition_date)
-    
+
+    def local_acquisition_date_str(self):
+        TZ = timezone(settings.TIME_ZONE)
+        local_acquisition_date = TZ.fromutc(
+            self.acquisition_date.replace(tzinfo=None))
+
+        return str(local_acquisition_date)
+
     def clean_acquisition_date(self):
         return re.sub(TileImageSet._ODD_FILE_CHARS,
                       '_',

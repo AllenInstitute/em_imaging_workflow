@@ -12,6 +12,7 @@ from django.conf import settings
 
 class SolveRoughAlignmentStrategy(ExecutionStrategy):
 
+    # deprecate for chunk.get_load
     @classmethod
     def get_load(cls, chnk):
         chunk_section = chnk.sections.first()
@@ -20,6 +21,7 @@ class SolveRoughAlignmentStrategy(ExecutionStrategy):
 
         return load_mset.sample_holder.load
 
+    # deprecate for load.get_z_mapping
     @classmethod
     def get_z_mapping(cls, load):
         return copy.deepcopy(
@@ -41,6 +43,7 @@ class SolveRoughAlignmentStrategy(ExecutionStrategy):
 
         return clipped_mapping
 
+    # deprecate for chunk.get_tile_pair_ranges
     @classmethod
     def get_tile_pair_ranges(cls, chnk):
         tile_pair_config= chnk.configurations.get(
