@@ -120,3 +120,9 @@ class RoughPointMatchStrategy(ExecutionStrategy):
 
         return chunk_assignments
 
+    def get_storage_directory(self, base_storage_directory, job):
+        chnk = job.get_enqueued_object()
+
+        return chnk.get_storage_directory(
+            base_storage_directory)
+

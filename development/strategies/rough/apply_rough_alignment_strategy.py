@@ -1,13 +1,13 @@
 from workflow_engine.strategies import execution_strategy
 from rendermodules.rough_align.schemas \
     import ApplyRoughAlignmentTransformParameters
-from development.strategies.rough.solve_rough_alignment_strategy \
-    import SolveRoughAlignmentStrategy
 from development.strategies import RENDER_STACK_SOLVED_PYTHON, \
     RENDER_STACK_ROUGH_ALIGN, RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE, \
     get_workflow_node_input_template
+from development.models import EMMontageSet
 from django.conf import settings
 import logging
+import copy
 
 
 class ApplyRoughAlignmentStrategy(execution_strategy.ExecutionStrategy):
@@ -25,22 +25,20 @@ class ApplyRoughAlignmentStrategy(execution_strategy.ExecutionStrategy):
         inp['render']['project'] = chnk.get_render_project_name()
         inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
-        chunk_load = \
-            SolveRoughAlignmentStrategy.get_load(chnk)
-        z_mapping = \
-            SolveRoughAlignmentStrategy.get_z_mapping(chunk_load)
-        tile_pair_ranges = \
-            SolveRoughAlignmentStrategy.get_tile_pair_ranges(chnk)
-        min_z, max_z = \
-            SolveRoughAlignmentStrategy.calculate_z_min_max(tile_pair_ranges)
-        clipped_z_mapping = \
-            SolveRoughAlignmentStrategy.clip_z_mapping_to_min_max(
-                z_mapping, min_z, max_z)
+        z_mapping = copy.deepcopy(chnk.get_z_mapping())
 
-        mapped_from = clipped_z_mapping.keys()
+        em_msets = EMMontageSet.objects.filter(
+            section__z_index__in=z_mapping
+        )
+
+        for em_mset in em_msets:
+            if em_mset.object_state in ['FAILED', 'GAP']:
+                del z_mapping[str(em_mset.section.z_index)] 
+
+        mapped_from = z_mapping.keys()
 
         old_zs = [int(z) for z in mapped_from]
-        new_zs = [clipped_z_mapping[z] for z in mapped_from]
+        new_zs = [z_mapping[z] for z in mapped_from]
         inp['map_z'] = True
 
         inp['consolidate_transforms'] = True
