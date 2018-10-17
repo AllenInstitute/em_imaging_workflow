@@ -25,8 +25,10 @@ class TwoDStackNameManager(object):
     RENDER_STACK_ROUGH_SOLVED = 'em_rough_align_zs{}_ze{}_solved'
 
     RENDER_STACK_FUSION = 'FUSEDOUTSTACK'
-    RENDER_STACK_FUSION_A = 'em_fusion_a'
-    RENDER_STACK_FUSION_B = 'em_fusion_b'
+
+    class TRANSFORM:
+        RIGID = 'rigid'
+        AFFINE = 'affine'
 
     @classmethod
     def mesh_lens_correction_raw_stack(cls, ref_set):
@@ -187,8 +189,55 @@ class TwoDStackNameManager(object):
         }
 
     @classmethod
+    def rigid_align_downsample_stack(cls, chnk):
+        zs = chnk.get_z_mapping().values()
+        min_z = min(zs)
+        max_z = max(zs)
+
+        return cls.RENDER_STACK_RIGID_ALIGN_DOWNSAMPLE.format(min_z, max_z)
+
+    @classmethod
+    def rough_align_downsample_stack(cls, chnk):
+        zs = chnk.get_z_mapping().values()
+        min_z = min(zs)
+        max_z = max(zs)
+
+        return cls.RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE.format(min_z, max_z)
+
+    @classmethod
+    def rough_align_stack(cls, chnk):
+        zs = chnk.get_z_mapping().values()
+        min_z = min(zs)
+        max_z = max(zs)
+
+        return cls.RENDER_STACK_ROUGH_ALIGN.format(min_z, max_z)
+
+    @classmethod
+    def solve_rough_align_python_stacks(cls, chnk, transformation):
+        if 'transformation' == TwoDStackNameManager.TRANSFORM.RIGID:
+            return {
+                'input_stack': cls.downsampled_stack(None),
+                'output_stack': cls.rigid_align_downsample_stack(chnk)
+            }
+        elif transformation == TwoDStackNameManager.TRANSFORM.AFFINE:
+            return {
+                'input_stack': cls.rigid_align_downsample_stack(chnk),
+                'output_stack': cls.rough_align_downsample_stack(chnk)
+            }
+        else:
+            raise Exception(
+                'transformation must be {} or {}'.format(
+                    TwoDStackNameManager.TRANSFORM.RIGID,
+                    TwoDStackNameManager.TRANSFORM.AFFINE
+                ))
+
+    @classmethod
     def register_adjacent_stacks(cls, chnk):
         return {
-            'stack_a': cls.register_adjacent_stack_a(chnk),
-            'stack_b': cls.register_adjacent_stack_b(chnk)
+            'stack_a': cls.rough_align_stack(
+                chnk.preceding_chunk
+            ),
+            'stack_b': cls.rough_align_stack(
+                chnk
+            )
         }
