@@ -96,7 +96,10 @@ class ReferenceSet(TileImageSet):
 
     @transition(
         field='object_state',
-        source=STATE.LENS_CORRECTION_FAILED,
+        source=[
+            STATE.LENS_CORRECTION_PENDING,
+            STATE.LENS_CORRECTION_FAILED
+        ],
         target=STATE.LENS_CORRECTION_REDO)
     def redo(self):
         pass

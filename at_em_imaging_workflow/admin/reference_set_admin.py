@@ -17,16 +17,16 @@ from development.strategies.generate_mesh_lens_correction \
 
 def redo_lens_correction(modeladmin, request, queryset):
     redo_lens_correction.short_description = \
-        "Redo point match"
+        "Redo lens correction"
 
     if queryset:
-        for em_mset in queryset.iterator():
-            em_mset.redo_lens_correction()
-            em_mset.save()
+        for refset in queryset.iterator():
+            refset.redo()
+            refset.save()
 
             WorkflowController.start_workflow_2(
                 'em_2d_montage',
-                em_mset,
+                refset,
                 start_node_name='Generate Lens Correction Transform',
                 reuse_job=True,
                 raise_priority=True)
@@ -91,6 +91,9 @@ class ReferenceSetAdmin(admin.ModelAdmin):
         'manifest_path',
         'acquisition_date',
     ]
+    search_fields = (
+        'id',
+    )
     list_select_related = [
         'microscope'
     ]

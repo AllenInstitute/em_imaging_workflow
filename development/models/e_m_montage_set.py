@@ -112,6 +112,9 @@ class EMMontageSet(MontageSet):
             STATE.EM_MONTAGE_SET_REDO_POINT_MATCH,
             STATE.EM_MONTAGE_SET_REDO_SOLVER,
             STATE.EM_MONTAGE_SET_QC_FAILED,
+            STATE.EM_MONTAGE_SET_PENDING,
+            STATE.EM_MONTAGE_SET_PROCESSING,
+            STATE.EM_MONTAGE_SET_QC_PASSED
         ],
         target=STATE.EM_MONTAGE_SET_QC_PASSED)
     def pass_qc(self):
@@ -121,6 +124,8 @@ class EMMontageSet(MontageSet):
         field='object_state',
         source=[
             STATE.EM_MONTAGE_SET_QC,
+            STATE.EM_MONTAGE_SET_QC_PASSED,
+            STATE.EM_MONTAGE_SET_QC_FAILED,
             STATE.EM_MONTAGE_SET_REDO_POINT_MATCH,
             STATE.EM_MONTAGE_SET_REDO_SOLVER,
             STATE.EM_MONTAGE_SET_PENDING,
@@ -208,10 +213,29 @@ class EMMontageSet(MontageSet):
         em_msets = [
             mset.emmontageset 
             for mset
-            in unique_section.montageset_set.all()
+            in unique_section.montageset_set.order_by('id')
         ]
 
         em_mset_ids = [em_mset.id for em_mset in em_msets]
         reimage_idx = em_mset_ids.index(self.id)
 
         return reimage_idx
+
+    def reimage_count(self):
+        return self.section.montageset_set.count()
+
+    def get_em_2d_solver_lambda(self, default_lbda):
+        cfg,_ = self.configurations.get_or_create(
+            configuration_type='point_match_parameters',
+            defaults= {
+                'name': 'point match params for montage set {}'.format(
+                    self.id),
+                'json_object': { 'default_lambda': default_lbda }
+            })
+
+        if 'default_lambda' not in cfg.json_object:
+            cfg.json_object['default_lambda'] = default_lbda
+            cfg.save()
+
+        return cfg.json_object['default_lambda']
+

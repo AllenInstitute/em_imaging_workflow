@@ -60,9 +60,7 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
 
         if em_mset.object_state == 'REDO_SOLVER':
             inp['regularization']['default_lambda'] = \
-                self.get_default_lambda(
-                    em_mset,
-                    inp['regularization']['default_lambda'])
+                em_mset.get_em_2d_solver_lambda(5.0)
 
         return EMA_Schema().dump(inp).data
 
@@ -72,6 +70,15 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
 
     def get_default_lambda(
         self, em_mset, initial_default_lambda):
+        default_lambda = 5.0
+
+        cfg, _ = em_mset.configurations.get_or_create(
+            configuration_type='point_match_parameters',
+            defaults = {
+                'name': 'point match params for {}'.format(
+                    str(em_mset.id)),
+            }
+        )
 
         try:
             config = em_mset.configurations.get(

@@ -56,7 +56,9 @@ class ManualQCStrategy(ExecutionStrategy):
         Args:
             em_mset : EMMontageSet
         '''
-        inp = get_workflow_node_input_template(task)
+        inp = get_workflow_node_input_template(
+            task,
+            name='Detect Montage Defects Input')
 
         stack_names = \
             TwoDStackNameManager.detect_defects_stacks(em_mset)
@@ -99,6 +101,8 @@ class ManualQCStrategy(ExecutionStrategy):
                 em_mset.fail_qc()
             elif em_mset.object_state == 'REDO_SOLVER':
                 em_mset.fail_qc()
+            elif em_mset.object_state == 'MONTAGE_QC_PASSED':
+                pass  # manually passed, don't override
             else:
                 em_mset.fail_qc()
         else:
