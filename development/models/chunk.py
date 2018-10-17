@@ -58,6 +58,7 @@ class Chunk(models.Model):
         CHUNK_FUSION_QC_FAILED = "FUSION_QC_FAILED"
         CHUNK_FUSION_QC_PASSED = "FUSION_QC_PASSED"
         CHUNK_PENDING_RENDER = "PENDING_RENDER"
+        CHUNK_NOT_VALID = "NOT_VALID"
 
     _log = logging.getLogger('at_em_imaging_workflow.models.chunk')
     size = models.IntegerField(null=True)
@@ -199,9 +200,37 @@ class Chunk(models.Model):
 
         return chunk_list
 
+    def get_z_mapping(self):
+        return self.configurations.get(
+            configuration_type='z_mapping'
+        ).json_object
+
+    @classmethod
+    def get_montage_set_for_rough_alignment(cls, section):
+        return section.montageset_set.get()
+
+    def missing_sections(self):
+        z_mapping = self.get_z_mapping()
+        sections = self.sections.all()
+    
+        section_zs = set(
+            s.z_index for s in sections 
+            if Chunk.get_montage_set_for_rough_alignment(
+                s
+            ).object_state in [
+                'REIMAGE',
+                'GAP',
+                'MONTAGE_QC_PASSED'
+            ]
+        )
+        mapping_zs = set(int(z) for z in z_mapping.keys())
+    
+        return mapping_zs - section_zs
+
     def get_tile_pair_ranges(self):
         tile_pair_config= self.configurations.get(
-            configuration_type='chunk_configuration').json_object
+            configuration_type='chunk_configuration'
+        ).json_object
 
         return tile_pair_config['tile_pair_ranges']
 
@@ -223,6 +252,16 @@ class Chunk(models.Model):
                             str(self.computed_index) + '_zs' + \
                             str(z_start) + '_ze' + \
                             str(z_end))
+
+    def get_load(self):
+        try:
+            load_object = self.sections.first(
+                ).montageset_set.first(
+                    ).sample_holder.load
+        except:
+            load_object = None
+
+        return load_object
 
     @transition(
         field='object_state',

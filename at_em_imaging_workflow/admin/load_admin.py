@@ -25,14 +25,14 @@ class LoadConfigurationForm(ModelForm):
     def clean_configuration_type(self):
         config_type = self.cleaned_data.get('configuration_type', 'z_mapping')
 
-        if 'z_mapping' != config_type:
-            raise ValidationError("Only z_mapping configurations allowed")
+        #if 'z_mapping' != config_type:
+        #    raise ValidationError("Only z_mapping configurations allowed")
 
         return config_type
 
     def clean_name(self):
-        name = self.cleaned_data.get('name',
-                                            'Z Mapping')
+        name = self.cleaned_data.get(
+            'name', 'Z Mapping')
 
         if name is None:
             raise ValidationError("Need a name")
@@ -43,7 +43,6 @@ class LoadConfigurationForm(ModelForm):
 class LoadConfigurationInline(GenericStackedInline):
     model=Configuration
     form=LoadConfigurationForm
-    max_num=1
     extra=0
 
 

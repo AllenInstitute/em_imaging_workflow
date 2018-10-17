@@ -34,11 +34,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
 
 
 class RenderedVolume(models.Model):
     mipmap_directory = models.CharField(max_length=255, null=True)
     specimen = models.ForeignKey('Specimen')
+    configurations = GenericRelation('workflow_engine.Configuration')
 
     def __str__(self):
         return "Rendered Volume for %s" % (str(self.specimen))

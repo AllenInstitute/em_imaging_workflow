@@ -32,7 +32,7 @@ class ChunkConfigurationForm(ModelForm):
 class ChunkConfigurationInline(GenericStackedInline):
     model=Configuration
     form=ChunkConfigurationForm
-    max_num=1
+    extra=0
 
 
 def remap_chunk(modeladmin, request, queryset):
@@ -40,9 +40,9 @@ def remap_chunk(modeladmin, request, queryset):
 
 
 def update_chunk_assignment(c):
-    chunk_load = SRAS.get_load(c)
-    z_mapping = SRAS.get_z_mapping(chunk_load)
-    tile_pair_ranges = SRAS.get_tile_pair_ranges(c)
+    chunk_load = c.get_load()
+    z_mapping = chunk_load.get_z_mapping()
+    tile_pair_ranges = c.get_tile_pair_ranges()
     min_z, max_z = SRAS.calculate_z_min_max(tile_pair_ranges)
     clipped_z_mapping = SRAS.clip_z_mapping_to_min_max(
         z_mapping, min_z, max_z) 
@@ -100,7 +100,7 @@ class ChunkAdmin(admin.ModelAdmin):
         return response
 
     def preceding_link(self, chunk_object):
-        c = chunk_object.chunk_preceding_chunk.first()
+        c = chunk_object.preceding_chunk
 
         if c:
             return mark_safe('<a href="{}">{}</a>'.format(
@@ -114,7 +114,7 @@ class ChunkAdmin(admin.ModelAdmin):
 
 
     def following_link(self, chunk_object):
-        c = chunk_object.chunk_following_chunk.first()
+        c = chunk_object.following_chunk
 
         if c:
             return mark_safe('<a href="{}">{}</a>'.format(

@@ -36,6 +36,7 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
 import pandas as pd
+import copy
 
 
 class Load(models.Model):
@@ -54,6 +55,11 @@ class Load(models.Model):
             mapping_xls_filename, sheet_name=self.uid)
 
         return xls_df
+
+    def get_z_mapping(self):
+        return copy.deepcopy(
+            self.configurations.get(
+                configuration_type='z_mapping').json_object)
 
     def update_z_mapping(self, tape_df):
         tape_df = tape_df[
