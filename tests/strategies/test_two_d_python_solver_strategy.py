@@ -16,6 +16,7 @@ import simplejson as json
 @pytest.mark.django_db
 def test_get_input_data(strategy_configurations):
     em_mset = Mock()
+    em_mset.get_redo_parameters = Mock(return_value={})
     task = Mock()
     storage_directory = '/example/storage/directory'
 
