@@ -35,7 +35,8 @@
 from django.db import models
 from django.conf import settings
 from django_fsm import transition
-from development.models.montage_set import MontageSet
+from django.core.exceptions import ObjectDoesNotExist
+from development.models import MontageSet
 import os
 
 
@@ -51,6 +52,7 @@ class EMMontageSet(MontageSet):
         EM_MONTAGE_SET_REDO_SOLVER = "REDO_SOLVER"
         EM_MONTAGE_SET_FAILED = "FAILED"
         EM_MONTAGE_SET_GAP = "GAP"
+        EM_MONTAGE_SET_REPAIR = "REPAIR"
 
     reference_set = models.ForeignKey('ReferenceSet',
                                       null=True, blank=True)
@@ -139,6 +141,13 @@ class EMMontageSet(MontageSet):
         source=STATE.EM_MONTAGE_SET_QC_FAILED,
         target=STATE.EM_MONTAGE_SET_REDO_POINT_MATCH)
     def redo_point_match(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source='*',
+        target=STATE.EM_MONTAGE_SET_PROCESSING)
+    def redo_processing(self):
         pass
 
     @transition(
@@ -239,3 +248,51 @@ class EMMontageSet(MontageSet):
 
         return cfg.json_object['default_lambda']
 
+    def get_redo_parameters(self):
+        cfg = {
+            'default_lambda': 1000.0,
+            'render_scale': 0.4,
+            'transformation': 'Polynomial2DTransform',
+            'poly_order': 2
+        }
+
+        if self.microscope.uid == 'temca3':
+            cfg['transformation'] = None
+            cfg['poly_order'] = None
+
+        reimage_index = self.reimage_index()
+        if reimage_index > 0:
+            suffix = ' reimage {}'.format(reimage_index)
+        else:
+            suffix = ''
+
+        params,_ = self.configurations.get_or_create(
+            name='point match params for {}{}'.format(
+                str(self),
+                suffix),
+            configuration_type='point_match_parameters',
+            defaults={
+                'json_object': cfg
+            })
+
+        return params.json_object
+
+    def update_point_match_state(self, point_match_state):
+        reimage_index = self.reimage_index()
+        if reimage_index > 0:
+            suffix = ' reimage {}'.format(reimage_index)
+        else:
+            suffix = ""
+
+        try:
+            config = self.configurations.get(
+                configuration_type='point_match_parameters')
+            config.json_object.update(point_match_state)
+            config.save()
+        except ObjectDoesNotExist:
+            self.configurations.create(
+                name='point match params for {}{}'.format(
+                    str(self),
+                    suffix),
+                configuration_type='point_match_parameters',
+                json_object=point_match_state)

@@ -10,13 +10,15 @@ import simplejson as json
 from development.models.chunk import Chunk
 
 
-def redo_point_match(modeladmin, request, queryset):
-    redo_point_match.short_description = \
-        "Redo point match"
+def redo_point_match_0_5(modeladmin, request, queryset):
+    redo_point_match_0_5.short_description = \
+        "Redo point match 0.5"
 
     if queryset:
-        
         for em_mset in queryset.iterator():
+            em_mset.update_point_match_state({
+                'render_scale': 0.5
+            })
             em_mset.redo_point_match()
             em_mset.save()
 
@@ -24,6 +26,48 @@ def redo_point_match(modeladmin, request, queryset):
                 'em_2d_montage',
                 em_mset,
                 start_node_name='2D Montage Point Match',
+                reuse_job=True,
+                raise_priority=True)
+
+def redo_point_match_0_6(modeladmin, request, queryset):
+    redo_point_match_0_6.short_description = \
+        "Redo point match 0.6"
+
+    if queryset:
+        
+        for em_mset in queryset.iterator():
+            em_mset.update_point_match_state({
+                'render_scale': 0.6
+            })
+            em_mset.redo_point_match()
+            em_mset.save()
+
+            WorkflowController.start_workflow_2(
+                'em_2d_montage',
+                em_mset,
+                start_node_name='2D Montage Point Match',
+                reuse_job=True,
+                raise_priority=True)
+
+def redo_point_match_filter(modeladmin, request, queryset):
+    redo_point_match_filter.short_description = \
+        "Redo point match filter"
+
+    if queryset:
+        for em_mset in queryset.iterator():
+            em_mset.update_point_match_state({
+                'default_lambda': 1000.0,
+                'transformation': 'Polynomial2DTransform',
+                'poly_order': 2,
+                'poly_factors': [1e-5, 1.0, 1e6]
+            })
+            em_mset.redo_processing()
+            em_mset.save()
+
+            WorkflowController.start_workflow_2(
+                'filter_point_matches',
+                em_mset,
+                start_node_name='Filter Point Matches',
                 reuse_job=True,
                 raise_priority=True)
 
@@ -62,13 +106,17 @@ def redo_solver_100(modeladmin, request, queryset):
                 raise_priority=True)
 
 def redo_solver_1000(modeladmin, request, queryset):
-    redo_solver_100.short_description = \
+    redo_solver_1000.short_description = \
         "Redo solver (Lambda=1000.0)"
 
     if queryset:
         for em_mset in queryset.iterator():
-            em_mset.get_em_2d_solver_lambda(1000.0)
-            em_mset.redo_solver()
+            em_mset.object_state = 'PROCESSING'
+            em_mset.update_point_match_state({
+                'default_lambda': 1000.0,
+                'transformation': None,
+                'poly_order': None
+            })
             em_mset.save()
 
             WorkflowController.start_workflow_2(
@@ -77,6 +125,17 @@ def redo_solver_1000(modeladmin, request, queryset):
                 start_node_name='2D Montage Python Solver',
                 reuse_job=True,
                 raise_priority=True)
+
+def swap_stacks(modeladmin, request, queryset):
+    swap_stacks.short_description = "Swap Stacks"
+
+    for em_mset in queryset.iterator():
+        WorkflowController.start_workflow_2(
+            'registration',
+            em_mset,
+            start_node_name='Swap Zs',
+            reuse_job=True
+        )
 
 def reimage(modeladmin, request, queryset):
     reimage.short_description = \
@@ -173,6 +232,7 @@ class EMMontageSetAdmin(admin.ModelAdmin):
         'id',
         'z_index',
         'qc_link',
+        'reimage_index',
         'reimage_count',
         'specimen_link',
         'microscope_link',
@@ -197,7 +257,9 @@ class EMMontageSetAdmin(admin.ModelAdmin):
     ]
     actions = [
         assign_chunk,
-        redo_point_match,
+        redo_point_match_0_5,
+        redo_point_match_0_6,
+        redo_point_match_filter,
         redo_solver_5,
         redo_solver_100,
         redo_solver_1000,
@@ -206,6 +268,7 @@ class EMMontageSetAdmin(admin.ModelAdmin):
         fail_em_montage_set,
         reimage,
         gap,
+        swap_stacks,
         reset_pending_em_montage_set
     ]
     inlines = (ConfigurationInline,WellKnownFileInline)
@@ -281,6 +344,8 @@ class EMMontageSetAdmin(admin.ModelAdmin):
 
         return mark_safe(urls)
 
+    def reimage_index(self, em_montage_set_object):
+        return em_montage_set_object.reimage_index()
 
     def reimage_count(self, em_montage_set_object):
         return em_montage_set_object.section.montageset_set.count()

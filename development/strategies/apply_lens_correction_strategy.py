@@ -53,7 +53,7 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
     _log = logging.getLogger(
         'development.strategies.apply_lens_correction_strategy')
 
-    def can_transition(self, em_mset):
+    def can_transition(self, em_mset, wn=None):
         if can_proceed(em_mset.start_processing):
             em_mset.start_processing()
             em_mset.save()

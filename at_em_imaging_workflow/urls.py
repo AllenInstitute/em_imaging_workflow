@@ -34,11 +34,11 @@ urlpatterns = (
         CreateChunkView.as_view(),
         name='create_chunk'
     ),
-    #url(
-    #    r'^at_em/create_gap_section$',
-    #    CreateGapSectionView.as_view(),
-    #    name='create_gap_section'
-    #)
+    url(
+        r'^at_em/create_gap_section$',
+        CreateGapSectionView.as_view(),
+        name='create_gap_section'
+    )
 )
 
 from rest_framework.urlpatterns import format_suffix_patterns

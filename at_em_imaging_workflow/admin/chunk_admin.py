@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.forms import generic_inlineformset_factory
 from workflow_engine.models.configuration \
     import Configuration
+from workflow_engine.workflow_controller import WorkflowController
 from development.strategies.rough.solve_rough_alignment_strategy \
     import SolveRoughAlignmentStrategy as SRAS
 from development.models.section import Section
@@ -11,6 +12,19 @@ from django.contrib.contenttypes.admin import GenericStackedInline
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
+def qc_pass_chunk(modeladmin, request, queryset):
+    qc_pass_chunk.short_description = \
+        "QC Pass selected chunks"
+
+    if queryset:
+        for chnk in queryset.iterator():
+            chnk.rough_qc_pass()
+            chnk.save()
+
+        WorkflowController.enqueue_next_queue_by_workflow_node(
+            'rough_align_em_2d',
+            chnk,
+            start_node_name='Rough Align Manual QC')
 
 class ChunkConfigurationForm(ModelForm):
     class Meta:
@@ -91,7 +105,11 @@ class ChunkAdmin(admin.ModelAdmin):
         'following_link']
     list_select_related = []
     list_filter = []
-    actions = [initialize_z_mapping, update_chunk_assignments]
+    actions = [
+        initialize_z_mapping,
+        update_chunk_assignments,
+        qc_pass_chunk
+    ]
     inlines = [ChunkConfigurationInline]
 
     def changelist_view(self, request, extra_context=None):

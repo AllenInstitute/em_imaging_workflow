@@ -1,19 +1,19 @@
 from workflow_engine.strategies import execution_strategy
+from development.models import EMMontageSet
 from workflow_engine.models.configuration import Configuration
-from django.core.exceptions import ObjectDoesNotExist
 from at_em_imaging_workflow.two_d_stack_name_manager \
     import TwoDStackNameManager
 from django.conf import settings
 import logging
 
 
-# TODO - do for rough alignment also
 class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
     _log = logging.getLogger(
         'development.strategies.two_d_python_solver_strategy')
 
-    #override if needed
-    #set the data for the input file
+    def can_transition(self, em_mset, node):
+        return True
+
     def get_input(self, em_mset, storage_directory, task):
         TwoDPythonSolverStrategy._log.info("get input")
 
@@ -58,46 +58,31 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
         task_dir = self.get_or_create_task_storage_directory(task)
         inp['hdf5_options']['output_dir'] = task_dir
 
-        if em_mset.object_state == 'REDO_SOLVER':
+        redo_cfg = em_mset.get_redo_parameters()
+
+        if ('transformation' in redo_cfg and
+            redo_cfg['transformation'] is not None):
+            inp['transformation'] = redo_cfg['transformation']
+
+        if ('poly_order' in redo_cfg and
+            redo_cfg['poly_order'] is not None):
+            inp['poly_order'] = redo_cfg['poly_order']
+
+        if ('poly_factors' in redo_cfg and
+            redo_cfg['poly_factors'] is not None):
+            inp['regularization']['poly_factors'] = redo_cfg['poly_factors']
+
+        if ('default_lambda' in redo_cfg and
+            redo_cfg['default_lambda'] is not None):
             inp['regularization']['default_lambda'] = \
-                em_mset.get_em_2d_solver_lambda(5.0)
+                redo_cfg['default_lambda']
 
         return EMA_Schema().dump(inp).data
 
     def on_finishing(self, em_mset, results, task):
-        em_mset.finish_processing()
-        em_mset.save()
-
-    def get_default_lambda(
-        self, em_mset, initial_default_lambda):
-        default_lambda = 5.0
-
-        cfg, _ = em_mset.configurations.get_or_create(
-            configuration_type='point_match_parameters',
-            defaults = {
-                'name': 'point match params for {}'.format(
-                    str(em_mset.id)),
-            }
-        )
-
-        try:
-            config = em_mset.configurations.get(
-                configuration_type='point_match_parameters')
-        except ObjectDoesNotExist:
-            updated_state = {
-                'default_lambda': initial_default_lambda
-            }
-            config = Configuration(
-                content_object=em_mset,
-                name='point match params for {}'.format(str(em_mset)),
-                configuration_type='point_match_parameters',
-                json_object=updated_state)
-
-        default_lambda = 5.0
-        config.json_object['default_lambda'] = default_lambda
-        config.save()
-
-        return default_lambda
+        if em_mset.object_state != EMMontageSet.STATE.EM_MONTAGE_SET_QC:
+            em_mset.finish_processing()
+            em_mset.save()
 
 
 try:

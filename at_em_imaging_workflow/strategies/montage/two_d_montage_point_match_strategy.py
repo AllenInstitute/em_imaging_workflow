@@ -1,8 +1,15 @@
-from workflow_engine.strategies.execution_strategy import \
+from workflow_engine.strategies.execution_strategy import (
     ExecutionStrategy
-from rendermodules.pointmatch.schemas import \
+)
+from rendermodules.pointmatch.schemas import (
     PointMatchClientParametersSpark
-from workflow_engine.models.configuration import Configuration
+)
+from at_em_imaging_workflow.two_d_stack_name_manager import (
+    TwoDStackNameManager
+)
+from development.strategies import (
+    get_workflow_node_input_template
+)
 from workflow_engine.models.well_known_file import WellKnownFile
 from django.core.exceptions import ObjectDoesNotExist
 import jinja2
@@ -10,26 +17,30 @@ import os
 from django.conf import settings
 import logging
 
+
 class TwoDMontagePointMatchStrategy(ExecutionStrategy):
-    _package = 'development.strategies.two_d_montage_point_match_strategy'
+    _package = (
+        'at_em_imaging_workflow.strategies.'
+        'montage.two_d_montage_point_match_strategy')
     _templates = 'templates'
     _log_configuration_template = 'spark_log4j_template.properties'
     _log = logging.getLogger(_package)
 
     def get_input(self, em_mset, storage_directory, task):
-        inp = Configuration.objects.get(
-            name='2D Montage Point Match Input',
-            configuration_type='strategy_config').json_object
+        inp = get_workflow_node_input_template(
+            task,
+            name='2D Montage Point Match Input')
+
+        inp['render'].update(
+            TwoDStackNameManager.em_montage_set_render_settings(
+                em_mset
+            )
+        )
 
         inp['sparkhome'] = settings.SPARK_HOME
         log_dir = self.get_or_create_task_storage_directory(task)
         inp['logdir'] = log_dir
 
-        inp['render']['host'] = settings.RENDER_SERVICE_URL
-        inp['render']['port'] = settings.RENDER_SERVICE_PORT
-        inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = em_mset.get_render_project_name()
-        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
 
         inp['owner'] = settings.RENDER_SERVICE_USER
 
@@ -67,10 +78,11 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
             'http://' + settings.RENDER_SERVICE_URL + \
             ':' + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
 
-        if em_mset.object_state == 'REDO_POINT_MATCH':
-            inp['renderScale'] = self.get_render_scale_from_configuration(
-                em_mset,
-                inp['renderScale'])
+        redo_cfg = em_mset.get_redo_parameters()
+        
+        if ('render_scale' in redo_cfg and
+            redo_cfg['render_scale'] is not None):
+            inp['renderScale'] = redo_cfg['render_scale']
 
         return PointMatchClientParametersSpark().dump(inp).data
 
@@ -79,25 +91,6 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
             em_mset,
             em_mset.tile_pairs_file_description())
 
-    def get_render_scale_from_configuration(self, em_mset, initial_render_scale):
-        try:
-            config = em_mset.configurations.get(
-                configuration_type='point_match_parameters')
-        except ObjectDoesNotExist:
-            point_match_state = {
-                'render_scale': initial_render_scale
-            }
-            config = Configuration(
-                content_object=em_mset,
-                name='point match params for {}'.format(str(em_mset)),
-                configuration_type='point_match_parameters',
-                json_object=point_match_state)
-
-        render_scale = 0.5
-        config.json_object['render_scale'] = 0.5
-        config.save()
-
-        return render_scale
 
     def on_finishing(self, em_mset, results, task):
         self.check_key(results, 'pairCount')
@@ -116,4 +109,3 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
             TwoDMontagePointMatchStrategy._log_configuration_template)
 
         return log4j_template.render(log_file_path=log_file_path)
-

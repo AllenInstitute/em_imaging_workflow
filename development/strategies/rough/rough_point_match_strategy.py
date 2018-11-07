@@ -14,7 +14,8 @@ from django.conf import settings
 import logging
 
 class RoughPointMatchStrategy(ExecutionStrategy):
-    _package = 'development.strategies.two_d_montage_point_match_strategy'
+    _package = ('at_em_imaging_workflow.strategies.'
+                'montage.two_d_montage_point_match_strategy')
     _templates = 'templates'
     _log_configuration_template = 'spark_log4j_template.properties'
     _log = logging.getLogger(_package)

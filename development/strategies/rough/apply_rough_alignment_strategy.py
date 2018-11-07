@@ -32,7 +32,13 @@ class ApplyRoughAlignmentStrategy(execution_strategy.ExecutionStrategy):
         )
 
         for em_mset in em_msets:
-            if em_mset.object_state in ['FAILED', 'GAP']:
+            if (em_mset.object_state in [
+                EMMontageSet.STATE.EM_MONTAGE_SET_FAILED,
+                EMMontageSet.STATE.EM_MONTAGE_SET_GAP,
+                EMMontageSet.STATE.EM_MONTAGE_SET_REPAIR
+                ]) and (
+                    em_mset.reimage_index() == 0
+                ):
                 del z_mapping[str(em_mset.section.z_index)] 
 
         mapped_from = z_mapping.keys()

@@ -1,3 +1,41 @@
+# Allen Institute Software License - This software license is the 2-clause BSD
+# license plus a third clause that prohibits redistribution for commercial
+# purposes without further permission.
+#
+# Copyright 2018. Allen Institute. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# 3. Redistributions for commercial purposes are not permitted without the
+# Allen Institute's written permission.
+# For purposes of this license, commercial purposes is the incorporation of the
+# Allen Institute's software into anything for which you will charge fees or
+# other compensation. Contact terms@alleninstitute.org for commercial licensing
+# opportunities.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+from django.conf import settings
+import os
+
 class TwoDStackNameManager(object):
     RENDER_STACK_INGEST = 'em_2d_montage_ingest{}'
     RENDER_STACK_LENS_CORRECTED = 'em_2d_montage_lc{}'
@@ -25,6 +63,9 @@ class TwoDStackNameManager(object):
     RENDER_STACK_ROUGH_SOLVED = 'em_rough_align_zs{}_ze{}_solved'
 
     RENDER_STACK_FUSION = 'FUSEDOUTSTACK'
+
+    POINT_MATCH_FILTER_JSON = 'point_match_filter{}_z_{}_to_{}.json'
+
 
     class TRANSFORM:
         RIGID = 'rigid'
@@ -71,6 +112,20 @@ class TwoDStackNameManager(object):
         return cls.RENDER_STACK_LENS_CORRECTED.format(
             cls.get_reimage_suffix(em_mset))
 
+    @classmethod
+    def point_match_collection(cls, em_mset):
+        return em_mset.get_point_collection_name()
+
+    @classmethod
+    def point_match_filter_json(cls, em_mset):
+        return os.path.join(
+            em_mset.get_storage_directory(),
+            cls.POINT_MATCH_FILTER_JSON.format(
+                cls.get_reimage_suffix(em_mset),
+                em_mset.section.z_index,
+                em_mset.section.z_index
+            )
+        )
 
     @classmethod
     def solved_stack(cls, em_mset):
@@ -240,4 +295,62 @@ class TwoDStackNameManager(object):
             'stack_b': cls.rough_align_stack(
                 chnk
             )
+        }
+
+    # stack is same input stack as point match
+    # input/output point match collection is default
+    # full path to filter output file, similar to tile pair json
+    # output file is also in output json, drop it on an mset config
+    @classmethod
+    def filter_point_match_stacks(cls, em_mset):
+        stacks = {
+            'input_stack': cls.lens_corrected_stack(em_mset),
+            'input_match_collection': cls.point_match_collection(em_mset),
+            'output_match_collection': cls.point_match_collection(em_mset),
+            'output_json': cls.point_match_filter_json(em_mset),
+            'filter_output_file': cls.point_match_filter_json(em_mset)
+        }
+
+        return stacks
+
+    @classmethod
+    def swap_zs_stacks(cls, em_mset, reimaged_mset):
+        stacks = {
+            'source_stack': [
+                cls.raw_stack(em_mset),
+                cls.lens_corrected_stack(em_mset),
+                cls.applied_mip_maps_stack(em_mset),
+                cls.solved_python_stack(em_mset),
+                cls.downsampled_stack(em_mset),
+                cls.downsampled_unmapped_stack(em_mset)
+            ],
+            'target_stack': [
+                cls.raw_stack(reimaged_mset),
+                cls.lens_corrected_stack(reimaged_mset),
+                cls.applied_mip_maps_stack(reimaged_mset),
+                cls.solved_python_stack(reimaged_mset),
+                cls.downsampled_stack(reimaged_mset),
+                cls.downsampled_unmapped_stack(reimaged_mset)
+            ]
+        }
+
+        return stacks
+
+    @classmethod
+    def swap_point_match_collections(cls, em_mset, reimaged_mset):
+        stacks = {
+            'source_collection': cls.point_match_collection(em_mset),
+            'target_collection': cls.point_match_collection(reimaged_mset)
+        }
+
+        return stacks
+
+    @classmethod
+    def em_montage_set_render_settings(cls, em_mset):
+        return {
+            'host': settings.RENDER_SERVICE_URL,
+            'port': settings.RENDER_SERVICE_PORT,
+            'owner': settings.RENDER_SERVICE_USER,
+            'project': em_mset.get_render_project_name(),
+            'client_scripts': settings.RENDER_CLIENT_SCRIPTS
         }

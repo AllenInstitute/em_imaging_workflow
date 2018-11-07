@@ -14,6 +14,14 @@ class MakeMontageScapesStackStrategy(execution_strategy.ExecutionStrategy):
         'at_em_imaging_workflow.models'
         '.make_montage_scapes_stack_strategy')
 
+    def get_objects_for_queue(self, job):
+        em_mset = job.enqueued_object
+
+        if em_mset.microscope.uid == 'temca3':
+            return [ em_mset ]
+        else:
+            return []
+
     def get_input(self, em_mset, storage_directory, task):
         inp = get_workflow_node_input_template(task)
 
