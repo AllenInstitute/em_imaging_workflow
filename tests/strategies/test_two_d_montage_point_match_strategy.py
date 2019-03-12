@@ -6,7 +6,7 @@ from django.test.utils import override_settings
 from workflow_engine.workflow_controller import WorkflowController
 from development.models import EMMontageSet
 from tests.strategies.at_em_fixtures import strategy_configurations
-from models.test_chunk_model \
+from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 from at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy \
     import TwoDMontagePointMatchStrategy

@@ -1,11 +1,16 @@
 *.pyc
 *.csv
 *.png
+*.log
 .cache
 .coverage
 .eggs
 .project
 .pydevproject
+celerybeat-*
+*.egg-info
+.pytest_cache
+.settings
 local_settings.py
 debug.log
 database.db

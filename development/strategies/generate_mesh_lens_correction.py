@@ -51,6 +51,8 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
     CONFIGURATION_TYPE='lens correction transform'
     CONFIGURATION_NAME='Generate Mesh Lens Correction Input'
     TEMCA3_CONFIGURATION='Generate Mesh Lens Correction TEMCA3 Input'
+    BAD_CORNER_50MP_CONFIGURATION=TEMCA3_CONFIGURATION
+    TEMCA2_50MP_CAMERA_ID='BJMAB1820029'
     TRANSFORM='transform'
     _log = logging.getLogger(
         'development.strategies.generate_mesh_correction')
@@ -64,9 +66,10 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
         GenerateMeshLensCorrection._log.info(
             'project path: %s' % (project_path))
 
-        if ref_set.microscope.uid == 'temca3':
+        if ((ref_set.microscope.uid == 'temca3') or
+            (ref_set.camera.uid == GenerateMeshLensCorrection.TEMCA2_50MP_CAMERA_ID)):
             configuration_name = \
-                GenerateMeshLensCorrection.TEMCA3_CONFIGURATION
+                GenerateMeshLensCorrection.BAD_CORNER_50MP_CONFIGURATION
         else:
             configuration_name = \
                 GenerateMeshLensCorrection.CONFIGURATION_NAME

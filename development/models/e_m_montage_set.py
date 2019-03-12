@@ -53,6 +53,7 @@ class EMMontageSet(MontageSet):
         EM_MONTAGE_SET_FAILED = "FAILED"
         EM_MONTAGE_SET_GAP = "GAP"
         EM_MONTAGE_SET_REPAIR = "REPAIR"
+        EM_MONTAGE_SET_NOT_SELECTED = "REIMAGED_NOT_SELECTED"
 
     reference_set = models.ForeignKey('ReferenceSet',
                                       null=True, blank=True)
@@ -174,6 +175,13 @@ class EMMontageSet(MontageSet):
     @transition(
         field='object_state',
         source=STATE.EM_MONTAGE_SET_QC_FAILED,
+        target=STATE.EM_MONTAGE_SET_NOT_SELECTED)
+    def reimage_not_select(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=STATE.EM_MONTAGE_SET_QC_FAILED,
         target=STATE.EM_MONTAGE_SET_GAP)
     def gap(self):
         pass
@@ -217,16 +225,22 @@ class EMMontageSet(MontageSet):
                             self.clean_acquisition_date())
 
     def reimage_index(self):
-        unique_section = self.section
-
-        em_msets = [
-            mset.emmontageset 
-            for mset
-            in unique_section.montageset_set.order_by('id')
-        ]
-
-        em_mset_ids = [em_mset.id for em_mset in em_msets]
-        reimage_idx = em_mset_ids.index(self.id)
+        try:
+            cfg = self.configurations.get(
+                configuration_type='rough_align_parameters'
+            )
+            reimage_idx = cfg.json_object['reimage_index']
+        except:
+            unique_section = self.section
+    
+            em_msets = [
+                mset.emmontageset 
+                for mset
+                in unique_section.montageset_set.order_by('id')
+            ]
+    
+            em_mset_ids = [em_mset.id for em_mset in em_msets]
+            reimage_idx = em_mset_ids.index(self.id)
 
         return reimage_idx
 
@@ -249,16 +263,22 @@ class EMMontageSet(MontageSet):
         return cfg.json_object['default_lambda']
 
     def get_redo_parameters(self):
+        #cfg = {
+        #    'default_lambda': 5.0,
+        #    'render_scale': 0.4,
+        #    'transformation': 'Polynomial2DTransform',
+        #    'poly_order': 2
+        #}
         cfg = {
-            'default_lambda': 1000.0,
-            'render_scale': 0.4,
-            'transformation': 'Polynomial2DTransform',
-            'poly_order': 2
+           'default_lambda': None,
+           'render_scale': None,
+           'transformation': None, 
+           'poly_order': None
         }
 
-        if self.microscope.uid == 'temca3':
-            cfg['transformation'] = None
-            cfg['poly_order'] = None
+        # if self.microscope.uid == 'temca3':
+        #     cfg['transformation'] = None
+        #     cfg['poly_order'] = None
 
         reimage_index = self.reimage_index()
         if reimage_index > 0:
@@ -266,16 +286,21 @@ class EMMontageSet(MontageSet):
         else:
             suffix = ''
 
-        params,_ = self.configurations.get_or_create(
-            name='point match params for {}{}'.format(
-                str(self),
-                suffix),
-            configuration_type='point_match_parameters',
-            defaults={
-                'json_object': cfg
-            })
+        # params,_ = self.configurations.get_or_create(
+        #     name='point match params for {}{}'.format(
+        #         str(self),
+        #         suffix),
+        #     configuration_type='point_match_parameters',
+        #     defaults={
+        #         'json_object': cfg
+        #     })
 
-        return params.json_object
+        try:
+          params = self.configurations.get(
+              configuration_type='point_match_parameters')
+          return params.json_object
+        except:
+            return cfg
 
     def update_point_match_state(self, point_match_state):
         reimage_index = self.reimage_index()

@@ -7,7 +7,7 @@ from workflow_engine.workflow_controller import WorkflowController
 from tests.strategies.at_em_fixtures import strategy_configurations
 from development.strategies.apply_mip_maps_strategy \
     import ApplyMipMapsStrategy
-from models.test_chunk_model \
+from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 
 

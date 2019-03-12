@@ -49,7 +49,7 @@ from workflow_engine.models.job import Job
 from workflow_engine.models.workflow_node import WorkflowNode
 from workflow_engine.models.run_state import RunState
 from workflow_engine.workflow_controller import WorkflowController
-from models.test_chunk_model \
+from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 from django.utils.six import BytesIO
 

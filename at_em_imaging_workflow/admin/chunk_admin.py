@@ -102,7 +102,8 @@ class ChunkAdmin(admin.ModelAdmin):
         'object_state',
         'rendered_volume',
         'preceding_link',
-        'following_link']
+        'following_link',
+        'zs']
     list_select_related = []
     list_filter = []
     actions = [
@@ -143,3 +144,15 @@ class ChunkAdmin(admin.ModelAdmin):
             return mark_safe('<div />')
 
     following_link.short_description = 'following chunk'
+
+    def zs(self, chunk_object):
+        mapping = chunk_object.get_z_mapping()
+        temp_zs = [int(z) for z in mapping.keys()]
+        real_zs = mapping.values()
+
+        return "{}-{} ({}-{})".format(
+            min(temp_zs),
+            max(temp_zs),
+            min(real_zs),
+            max(real_zs)
+        )

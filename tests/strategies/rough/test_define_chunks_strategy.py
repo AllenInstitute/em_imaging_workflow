@@ -7,7 +7,7 @@ from development.models.e_m_montage_set import EMMontageSet
 from development.strategies.rough.define_chunks_strategy \
     import DefineChunksStrategy
 from development.models.chunk import Chunk
-from models.test_chunk_model \
+from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 
 

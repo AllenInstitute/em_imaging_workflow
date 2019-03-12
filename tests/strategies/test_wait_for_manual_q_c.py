@@ -2,7 +2,7 @@ import pytest
 from development.models.e_m_montage_set import EMMontageSet
 from development.strategies.wait_for_manual_qc \
     import WaitForManualQc
-from models.test_chunk_model \
+from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 from development.models import EMMontageSet
 

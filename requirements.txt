@@ -5,3 +5,4 @@ amqp==2.1.4
 psycopg2>=2.7.3.1
 simplejson>=3.8.2
 django-jsonfield>=1.0.1
+argschema==1.17.3

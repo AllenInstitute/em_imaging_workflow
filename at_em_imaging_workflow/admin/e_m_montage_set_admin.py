@@ -19,10 +19,10 @@ def redo_point_match_0_5(modeladmin, request, queryset):
             em_mset.update_point_match_state({
                 'render_scale': 0.5
             })
-            em_mset.redo_point_match()
+            em_mset.object_state='PROCESSING'
             em_mset.save()
 
-            WorkflowController.start_workflow_2(
+            WorkflowController.start_workflow(
                 'em_2d_montage',
                 em_mset,
                 start_node_name='2D Montage Point Match',
@@ -34,15 +34,14 @@ def redo_point_match_0_6(modeladmin, request, queryset):
         "Redo point match 0.6"
 
     if queryset:
-        
         for em_mset in queryset.iterator():
             em_mset.update_point_match_state({
                 'render_scale': 0.6
             })
-            em_mset.redo_point_match()
+            em_mset.object_state='PROCESSING'
             em_mset.save()
 
-            WorkflowController.start_workflow_2(
+            WorkflowController.start_workflow(
                 'em_2d_montage',
                 em_mset,
                 start_node_name='2D Montage Point Match',
@@ -64,7 +63,7 @@ def redo_point_match_filter(modeladmin, request, queryset):
             em_mset.redo_processing()
             em_mset.save()
 
-            WorkflowController.start_workflow_2(
+            WorkflowController.start_workflow(
                 'filter_point_matches',
                 em_mset,
                 start_node_name='Filter Point Matches',
@@ -81,7 +80,7 @@ def redo_solver_5(modeladmin, request, queryset):
             em_mset.redo_solver()
             em_mset.save()
 
-            WorkflowController.start_workflow_2(
+            WorkflowController.start_workflow(
                 'em_2d_montage',
                 em_mset,
                 start_node_name='2D Montage Python Solver',
@@ -98,7 +97,7 @@ def redo_solver_100(modeladmin, request, queryset):
             em_mset.redo_solver()
             em_mset.save()
 
-            WorkflowController.start_workflow_2(
+            WorkflowController.start_workflow(
                 'em_2d_montage',
                 em_mset,
                 start_node_name='2D Montage Python Solver',
@@ -119,7 +118,7 @@ def redo_solver_1000(modeladmin, request, queryset):
             })
             em_mset.save()
 
-            WorkflowController.start_workflow_2(
+            WorkflowController.start_workflow(
                 'em_2d_montage',
                 em_mset,
                 start_node_name='2D Montage Python Solver',
@@ -130,7 +129,7 @@ def swap_stacks(modeladmin, request, queryset):
     swap_stacks.short_description = "Swap Stacks"
 
     for em_mset in queryset.iterator():
-        WorkflowController.start_workflow_2(
+        WorkflowController.start_workflow(
             'registration',
             em_mset,
             start_node_name='Swap Zs',
@@ -193,6 +192,16 @@ def fail_em_montage_set(modeladmin, request, queryset):
             em_mset.save()
 
             # TODO: Fail or kill job in QC job queue
+
+def reimage_not_select(modeladmin, request, queryset):
+    reimage_not_select.short_description = \
+        "Set state to REIMAGE_NOT_SELECTED"
+
+    if queryset:
+        for em_mset in queryset.iterator():
+            em_mset.reimage_not_select()
+            em_mset.save()
+
 
 def reset_pending_em_montage_set(modeladmin, request, queryset):
     reset_pending_em_montage_set.short_description = \
@@ -269,7 +278,8 @@ class EMMontageSetAdmin(admin.ModelAdmin):
         reimage,
         gap,
         swap_stacks,
-        reset_pending_em_montage_set
+        reset_pending_em_montage_set,
+        reimage_not_select
     ]
     inlines = (ConfigurationInline,WellKnownFileInline)
 
@@ -326,7 +336,8 @@ class EMMontageSetAdmin(admin.ModelAdmin):
     def qc_link(self, em_montage_set_object):
         if not em_montage_set_object.object_state in [
             EMMontageSet.STATE.EM_MONTAGE_SET_QC_PASSED,
-            EMMontageSet.STATE.EM_MONTAGE_SET_QC_FAILED]:
+            EMMontageSet.STATE.EM_MONTAGE_SET_QC_FAILED,
+            EMMontageSet.STATE.EM_MONTAGE_SET_NOT_SELECTED]:
             urls = '-'
         else:
             try:

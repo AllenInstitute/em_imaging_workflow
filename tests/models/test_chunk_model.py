@@ -6,7 +6,7 @@ from django.test.utils import override_settings
 from development.models.e_m_montage_set import EMMontageSet
 from django.utils import timezone
 from django.utils.timezone import datetime
-from models.test_montage_set import cameras_etc, section_factory
+from tests.models.test_montage_set import cameras_etc, section_factory
 from datetime import timedelta
 import pytz
 

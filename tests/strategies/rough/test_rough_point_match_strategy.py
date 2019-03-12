@@ -9,7 +9,7 @@ from workflow_engine.models.job import Job
 from django.test.utils import override_settings
 from workflow_engine.workflow_controller import WorkflowController
 from development.models.chunk import Chunk
-from models.test_chunk_model \
+from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 from development.strategies.rough.rough_point_match_strategy \
     import RoughPointMatchStrategy

@@ -6,6 +6,8 @@ pkill -9 -f "beat"
 pkill -9 -f "manage"
 pkill -9 -f "notebook"
 
+echo "THIS SCRIPT IS DEPRECATED, PLEASE USE blue_sky_workflow_engine blue_green restart_workers.sh"
+
 export MOAB_AUTH=''
 
 export BASE_DIR=/at_em_imaging_workflow
@@ -15,6 +17,7 @@ export PYTHONPATH=$PYTHONPATH:/EM_aligner_python
 rm ${BASE_DIR}/logs/worker.log
 rm ${BASE_DIR}/logs/ui.log
 rm ${BASE_DIR}/logs/moab.log
+rm ${BASE_DIR}/logs/moab_status.log
 rm ${BASE_DIR}/logs/monitor.log
 rm ${BASE_DIR}/logs/workflow.log
 rm ${BASE_DIR}/logs/result.log
@@ -27,11 +30,16 @@ export APP_PACKAGE=$(python -c "import ${DJANGO_SETTINGS_MODULE} as settings; pr
 export MESSAGE_QUEUE_HOST=$(python -c "import ${DJANGO_SETTINGS_MODULE} as settings; print(settings.MESSAGE_QUEUE_HOST)")
 export MESSAGE_QUEUE_PORT=$(python -c "import ${DJANGO_SETTINGS_MODULE} as settings; print(settings.MESSAGE_QUEUE_PORT)")
 
-python -m celery flower --url_prefix=flower --backend=rpc:// --broker=amqp://blue_sky_user:blue_sky_user@${MESSAGE_QUEUE_HOST}:${MESSAGE_QUEUE_PORT} -n flower@${APP_PACKAGE} &
+python -m celery flower --url_prefix=flower \
+  --backend=rpc:// \
+  --broker=amqp://blue_sky_user:blue_sky_user@${MESSAGE_QUEUE_HOST}:${MESSAGE_QUEUE_PORT} \
+  -n flower@${APP_PACKAGE} &
+
 DEBUG_LOG=${BASE_DIR}/logs/result.log python -m manage result_worker &
 DEBUG_LOG=${BASE_DIR}/logs/worker.log python -m manage server_worker &
 DEBUG_LOG=${BASE_DIR}/logs/workflow.log python -m manage workflow_worker &
 DEBUG_LOG=${BASE_DIR}/logs/moab.log python -m manage moab_worker &
+DEBUG_LOG=${BASE_DIR}/logs/moab_status.log python -m manage moab_status_worker &
 DEBUG_LOG=${BASE_DIR}/logs/monitor.log python -m manage monitor_worker &
 DEBUG_LOG=${BASE_DIR}/logs/ui.log python -m workflow_engine.ui_server &
 DEBUG_LOG=${BASE_DIR}/logs/nb.log python -m manage shell_plus --notebook &

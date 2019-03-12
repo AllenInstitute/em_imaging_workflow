@@ -8,7 +8,7 @@ from tests.strategies.at_em_fixtures import strategy_configurations
 from development.strategies.two_d_python_solver_strategy \
     import TwoDPythonSolverStrategy
 from django.test.utils import override_settings
-from models.test_chunk_model \
+from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 import simplejson as json
 

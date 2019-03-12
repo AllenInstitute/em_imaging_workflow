@@ -10,6 +10,7 @@ from development.strategies import (
 from at_em_imaging_workflow.two_d_stack_name_manager import (
     TwoDStackNameManager
 )
+from sklearn import __check_build
 from development.strategies.rough.solve_rough_alignment_strategy \
     import SolveRoughAlignmentStrategy
 from django.conf import settings
@@ -70,6 +71,10 @@ class MaterializeSectionsStrategy(ExecutionStrategy):
         inp['owner'] = settings.RENDER_SERVICE_USER
         inp['project'] = chnk.get_render_project_name()
         inp['stack'] = TwoDStackNameManager.RENDER_STACK_FUSION
+
+        # TODO: Generalize
+        if (chnk.computed_index == 35):
+            inp['stack'] = 'FUSEDOUTPUTSTACK_Chunk_30_31_33'
 
         inp['rootDirectory'] = chnk.get_storage_directory()
 

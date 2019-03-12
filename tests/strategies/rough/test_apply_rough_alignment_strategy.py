@@ -3,9 +3,9 @@ import pytest
 from tests.strategies.at_em_fixtures import strategy_configurations
 from development.strategies.rough.apply_rough_alignment_strategy \
     import ApplyRoughAlignmentStrategy
-from models.test_chunk_model \
+from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
-from strategies.rough.test_rough_point_match_strategy \
+from tests.strategies.rough.test_rough_point_match_strategy \
     import lots_of_chunks
 from django.test.utils import override_settings
 from mock import Mock, patch
