@@ -34,14 +34,18 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.conf import settings
+from workflow_engine.mixins import (
+    Configurable,
+    Enqueueable,
+    HasWellKnownFiles
+)
 from django.db import models
-from django.contrib.contenttypes.fields import GenericRelation
 from django_fsm import FSMField
 from pytz import timezone, utc
 import re
 
 
-class TileImageSet(models.Model):
+class TileImageSet(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
     storage_directory = models.CharField(max_length=255, null=True)
     workflow_state = models.CharField(max_length=255, null=True)
     object_state = FSMField(default='PENDING')
@@ -49,16 +53,6 @@ class TileImageSet(models.Model):
     microscope = models.ForeignKey('Microscope', null=True)
     metafile = models.CharField(max_length=255, null=True)
     acquisition_date = models.DateTimeField(null=True)
-    configurations = GenericRelation('workflow_engine.Configuration')
-    jobs=GenericRelation(
-        'workflow_engine.Job',
-        content_type_field='enqueued_object_type',
-        object_id_field='enqueued_object_id')
-    well_known_files = GenericRelation(
-        'workflow_engine.WellKnownFile',
-        content_type_field='attachable_type',
-        object_id_field='attachable_id')
-
 
     _ODD_FILE_CHARS = re.compile(r'[ :\.\-\+]')
 

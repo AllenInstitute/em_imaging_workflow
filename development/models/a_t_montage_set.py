@@ -34,7 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from development.models.montage_set import MontageSet
+from development.models import MontageSet
 
 
 class ATMontageSet(MontageSet):

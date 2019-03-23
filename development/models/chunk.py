@@ -35,13 +35,17 @@
 #
 from django.db import models
 from django.conf import settings
-from django.contrib.contenttypes.fields import GenericRelation
 from django_fsm import FSMField, transition
+from workflow_engine.mixins import (
+    Enqueueable,
+    Configurable,
+    HasWellKnownFiles
+)
 import logging
 import os
 
 
-class Chunk(models.Model):
+class Chunk(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
     class STATE:
         CHUNK_INCOMPLETE = "INCOMPLETE"
         CHUNK_PROCESSING = "PROCESSING"
@@ -74,11 +78,6 @@ class Chunk(models.Model):
         models.ForeignKey('self',
         related_name='%(class)s_following_chunk',
         null=True, blank=True)
-    configurations = GenericRelation('workflow_engine.Configuration')
-    well_known_files = GenericRelation(
-        'workflow_engine.WellKnownFile',
-        content_type_field='attachable_type',
-        object_id_field='attachable_id')
 
     def __str__(self):
         return 'chunk {} {}'.format(self.computed_index, self.id)
@@ -364,5 +363,3 @@ class Chunk(models.Model):
 # circular imports
 from development.models.rendered_volume import RenderedVolume
 from development.models.chunk_assignment import ChunkAssignment
-from workflow_engine.models.configuration import Configuration
-from workflow_engine.models.well_known_file import WellKnownFile

@@ -35,11 +35,9 @@
 #
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
 from workflow_engine.workflow_controller import WorkflowController
-from rendermodules.lens_correction.schemas \
-    import LensCorrectionParameters
+from rendermodules.lens_correction.schemas import LensCorrectionParameters
 from development.models.reference_set import ReferenceSet
 from workflow_engine.models.configuration import Configuration
-from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from django_fsm import can_proceed
 import logging
@@ -92,12 +90,12 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
         return config.json_object 
 
     def on_running(self, task):
-        ref_set = WorkflowController.get_enqueued_object(task)
+        ref_set = task.enqueued_task_object
         ref_set.start_processing()
         ref_set.save()
 
     def on_failure(self, task):
-        ref_set = WorkflowController.get_enqueued_object(task)
+        ref_set = task.enqueued_task_object
         if can_proceed(ref_set.fail):
             ref_set.fail()
             ref_set.save()

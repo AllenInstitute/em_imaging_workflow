@@ -35,11 +35,15 @@
 #
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
 from workflow_engine.workflow_controller import WorkflowController
-from development.strategies import RENDER_STACK_MESH_LENS_RAW,\
-    RENDER_STACK_MESH_LENS_CORRECTED, RENDER_LENS_COLLECTION, \
+from development.strategies import (
+    RENDER_STACK_MESH_LENS_RAW,
+    RENDER_STACK_MESH_LENS_CORRECTED,
+    RENDER_LENS_COLLECTION,
     get_workflow_node_input_template
-from rendermodules.mesh_lens_correction.schemas \
-    import MeshLensCorrectionSchema
+)
+from rendermodules.mesh_lens_correction.schemas import (
+    MeshLensCorrectionSchema
+)
 from development.models.reference_set import ReferenceSet
 from django.conf import settings
 from django_fsm import can_proceed
@@ -74,9 +78,7 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
             configuration_name = \
                 GenerateMeshLensCorrection.CONFIGURATION_NAME
 
-        inp = get_workflow_node_input_template(
-            task,
-            name=configuration_name)
+        inp = get_workflow_node_input_template(task, configuration_name)
 
         inp['render'] = {}
         inp['render']['host'] = settings.RENDER_SERVICE_URL
@@ -137,12 +139,12 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
 
 
     def on_running(self, task):
-        ref_set = WorkflowController.get_enqueued_object(task)
+        ref_set = task.get_enqueued_task_object
         ref_set.start_processing()
         ref_set.save()
 
     def on_failure(self, task):
-        ref_set = WorkflowController.get_enqueued_object(task)
+        ref_set = task.enqueued_task_object
         if can_proceed(ref_set.fail):
             ref_set.fail()
             ref_set.save()
@@ -170,14 +172,17 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
                 configuration_type=GenerateMeshLensCorrection.CONFIGURATION_TYPE,
                 defaults={
                     'name': lens_correction_configuration_name,
-                    'json_object': transform_configuration_data })
+                    'json_object': transform_configuration_data 
+                }
+            )
 
             ref_set.finish_processing()
             ref_set.save()
 
             # trigger waiting jobs
             WorkflowController.set_jobs_for_run(
-                'Wait for Lens Correction')
+                'Wait for Lens Correction'
+            )
 
     # TODO: this isn't used.  Ingest picks it directly
     def can_transition(self, ref_set):

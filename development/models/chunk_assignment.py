@@ -34,9 +34,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
+from workflow_engine.mixins import Enqueueable
 
-
-class ChunkAssignment(models.Model):
+class ChunkAssignment(Enqueueable, models.Model):
     section = models.ForeignKey('Section')
     chunk = models.ForeignKey('Chunk')
 

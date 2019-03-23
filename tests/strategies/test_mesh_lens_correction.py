@@ -1,10 +1,9 @@
 import pytest
 from mock import patch, Mock
 from development.models import ReferenceSet
-from workflow_engine.workflow_controller import WorkflowController
-from tests.strategies.at_em_fixtures import strategy_configurations
-from development.strategies.generate_mesh_lens_correction \
-    import GenerateMeshLensCorrection
+from development.strategies.generate_mesh_lens_correction import (
+    GenerateMeshLensCorrection
+)
 from datetime import datetime
 from .at_em_fixtures import mock_run_states
 from development.models import Microscope
@@ -100,16 +99,12 @@ def test_on_failure():
         project_path='/path/to/project',
         object_state=ReferenceSet.STATE.LENS_CORRECTION_PROCESSING)
     task = Mock()
+    task.enqueued_task_object = ref_set
 
-    with patch.object(WorkflowController,
-        'get_enqueued_object',
-        Mock(return_value=ref_set)) as mock_get_enqueued:
-        strategy = GenerateMeshLensCorrection()
-        strategy.on_failure(task)
+    strategy = GenerateMeshLensCorrection()
+    strategy.on_failure(task)
 
     assert ref_set.object_state == ReferenceSet.STATE.LENS_CORRECTION_FAILED
-    mock_get_enqueued.assert_called_once()
-    
 
 @pytest.mark.django_db
 def test_on_finishing(mock_run_states):
@@ -120,15 +115,16 @@ def test_on_finishing(mock_run_states):
         acquisition_date=datetime.now(),
         object_state=ReferenceSet.STATE.LENS_CORRECTION_PROCESSING)
     task = Mock()
+    task.enqueued_task_object = ref_set
 
     strategy = GenerateMeshLensCorrection()
 
-    with patch.object(strategy, 'set_well_known_file') as swkf_mock:
-        results = {
-            'output_json': 'mock_out',
-            'maskUrl': 'http://example.org/mask/url.html'
-        }
-        strategy.on_finishing(ref_set, results, task)
+#     with patch.object(strategy, 'set_well_known_file') as swkf_mock:
+    results = {
+        'output_json': 'mock_out',
+        'maskUrl': 'http://example.org/mask/url.html'
+    }
+    strategy.on_finishing(ref_set, results, task)
 
     assert ref_set.object_state == ReferenceSet.STATE.LENS_CORRECTION_DONE
-    swkf_mock.assert_not_called()
+#     swkf_mock.assert_not_called()

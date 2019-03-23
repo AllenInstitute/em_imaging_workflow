@@ -49,15 +49,12 @@ def test_on_failure():
         project_path='/path/to/project',
         object_state=ReferenceSet.STATE.LENS_CORRECTION_PROCESSING)
     task = Mock()
+    task.enqueued_task_object = ref_set
 
-    with patch.object(WorkflowController,
-        'get_enqueued_object',
-        Mock(return_value=ref_set)) as mock_get_enqueued:
-        strategy = GenerateLensCorrectionTransformStrategy()
-        strategy.on_failure(task)
+    strategy = GenerateLensCorrectionTransformStrategy()
+    strategy.on_failure(task)
 
     assert ref_set.object_state == 'FAILED'
-    mock_get_enqueued.assert_called_once()
 
 
 @pytest.mark.django_db
