@@ -36,9 +36,76 @@
 from django.db import models
 from workflow_engine.mixins import Enqueueable
 
+
 class ChunkAssignment(Enqueueable, models.Model):
     section = models.ForeignKey('Section')
     chunk = models.ForeignKey('Chunk')
 
+    ROUGH_TILE_PAIR_FILE = 'rough_tile_pair_file'
+    TILE_PAIR_FILE_KEY = 'tile_pair_file'
+    PAIR_COUNT_KEY = 'pairCount'
+    POINT_MATCH_OUTPUT = 'point_match_output'
+
     def __str__(self):
         return "%s in %s" % (str(self.section), str(self.chunk))
+
+    def storage_basename(self):
+        return '{}_z{}_{}'.format(
+            self.chunk.computed_index,
+            self.section.z_index
+        )
+
+    def create_rough_tile_pair_file(self, tile_pair_file):
+        z_index = str(self.section.z_index)
+
+        cfg, created = self.chunk.configurations.get_or_create(
+            configuration_type=ChunkAssignment.ROUGH_TILE_PAIR_FILE
+        )
+
+        if created:
+            cfg.json_object = {
+                z_index: {
+                    ChunkAssignment.TILE_PAIR_FILE_KEY: tile_pair_file
+                }
+            }
+        else:
+            cfg.json_object[z_index] = {
+                ChunkAssignment.TILE_PAIR_FILE_KEY: tile_pair_file
+            }
+
+        cfg.name='Rough Tile Pair File for Chunk {}'.format(
+            self.chunk.computed_index
+        )
+
+        cfg.save()
+
+    def update_tile_pair_file(self,
+                              pair_count=None,
+                              point_match_output=None):
+        chnk = self.chunk
+        z_index = str(self.section.z_index)
+
+        tile_pair_cfg = chnk.configurations.get(
+            configuration_type=ChunkAssignment.ROUGH_TILE_PAIR_FILE)
+        tile_pair_json = tile_pair_cfg.json_object
+
+        if pair_count:
+            tile_pair_json[z_index][
+                ChunkAssignment.PAIR_COUNT_KEY
+            ] = pair_count
+        if point_match_output:
+            tile_pair_json[z_index][
+                ChunkAssignment.POINT_MATCH_OUTPUT
+            ] = point_match_output
+        #tile_pair_cfg.json_object = tile_pair_json
+        tile_pair_cfg.save()
+
+    def get_rough_tile_pair_file_name(self):
+        tile_pair_cfg = self.chunk.configurations.get(
+            configuration_type=ChunkAssignment.ROUGH_TILE_PAIR_FILE
+        ).json_object
+        tile_pair_file_name = tile_pair_cfg[
+            str(self.section.z_index)
+        ][ChunkAssignment.TILE_PAIR_FILE_KEY]
+
+        return tile_pair_file_name

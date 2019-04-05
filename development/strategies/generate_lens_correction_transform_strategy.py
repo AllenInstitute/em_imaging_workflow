@@ -129,5 +129,5 @@ class GenerateLensCorrectionTransformStrategy(ExecutionStrategy):
     #override if needed
     #set the storage directory for an enqueued object
     def get_storage_directory(self, base_storage_directory, job):
-        ref_set = job.get_enqueued_object()
+        ref_set = job.enqueued_object
         return ref_set.get_storage_directory(base_storage_directory)

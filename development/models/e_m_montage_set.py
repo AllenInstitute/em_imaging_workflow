@@ -33,11 +33,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from django.conf import settings
 from django_fsm import transition
 from django.core.exceptions import ObjectDoesNotExist
 from development.models import MontageSet
-import os
 
 
 class EMMontageSet(MontageSet):
@@ -78,7 +76,10 @@ class EMMontageSet(MontageSet):
 
     @transition(
         field='object_state',
-        source=STATE.EM_MONTAGE_SET_PENDING,
+        source=[
+            STATE.EM_MONTAGE_SET_PENDING,
+            STATE.EM_MONTAGE_SET_PROCESSING
+        ],
         target=STATE.EM_MONTAGE_SET_PROCESSING)
     def start_processing(self):
         pass
@@ -211,18 +212,12 @@ class EMMontageSet(MontageSet):
     def get_render_project_name(self):
         return self.section.specimen.uid
 
-    def get_storage_directory(self, base_storage_directory=None):
-        if base_storage_directory is None:
-            base_storage_directory = settings.BASE_FILE_PATH
-
-        section = self.section
-        specimen = section.specimen
-
-        return os.path.join(base_storage_directory,
-                            'em_montage_' + \
-                            specimen.uid + '_z' + \
-                            str(section.z_index) + '_' + \
-                            self.clean_acquisition_date())
+    def storage_basename(self):
+        return '{}_z{}_{}'.format(
+            self.specimen().uid,
+            self.section.z_index,
+            self.clean_acquisition_date()
+        )
 
     def reimage_index(self):
         try:

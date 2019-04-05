@@ -10,7 +10,6 @@ from development.strategies import (
 from at_em_imaging_workflow.two_d_stack_name_manager import (
     TwoDStackNameManager
 )
-from sklearn import __check_build
 from development.strategies.rough.solve_rough_alignment_strategy \
     import SolveRoughAlignmentStrategy
 from django.conf import settings
@@ -25,7 +24,7 @@ class MaterializeSectionsStrategy(ExecutionStrategy):
     _log = logging.getLogger(_package)
 
     def get_objects_for_queue(self, prev_queue_job):
-        chnk = prev_queue_job.get_enqueued_object()
+        chnk = prev_queue_job.enqueued_object
 
         return list(chnk.chunkassignment_set.all())
 

@@ -47,7 +47,6 @@ import re
 
 class TileImageSet(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
     storage_directory = models.CharField(max_length=255, null=True)
-    workflow_state = models.CharField(max_length=255, null=True)
     object_state = FSMField(default='PENDING')
     camera = models.ForeignKey('Camera', null=True)
     microscope = models.ForeignKey('Microscope', null=True)

@@ -42,7 +42,6 @@ from workflow_engine.mixins import (
     HasWellKnownFiles
 )
 import logging
-import os
 
 
 class Chunk(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
@@ -239,18 +238,15 @@ class Chunk(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
 
         return min_z,max_z
 
-    def get_storage_directory(self, base_storage_directory=None):
-        if base_storage_directory is None:
-            base_storage_directory = settings.BASE_FILE_PATH
-
+    def storage_basename(self):
         tile_pair_ranges = self.get_tile_pair_ranges()
         z_start,z_end = self.calculate_z_min_max(tile_pair_ranges)
 
-        return os.path.join(base_storage_directory,
-                            'chunk_' + \
-                            str(self.computed_index) + '_zs' + \
-                            str(z_start) + '_ze' + \
-                            str(z_end))
+        return '{}_zs{}_ze{}'.format(
+            self.computed_index,
+            str(z_start),
+            str(z_end)
+        )
 
     def get_load(self):
         try:

@@ -43,10 +43,12 @@ from django.conf import settings
 from django_fsm import can_proceed
 import simplejson as json
 import logging
-from development.strategies.generate_mesh_lens_correction \
-    import GenerateMeshLensCorrection
-from at_em_imaging_workflow.two_d_stack_name_manager \
-    import TwoDStackNameManager
+from development.strategies.generate_mesh_lens_correction import (
+    GenerateMeshLensCorrection
+)
+from at_em_imaging_workflow.two_d_stack_name_manager import (
+    TwoDStackNameManager
+)
 
 
 class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
@@ -54,13 +56,10 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
         'development.strategies.apply_lens_correction_strategy')
 
     def can_transition(self, em_mset, wn=None):
-        if can_proceed(em_mset.start_processing):
-            em_mset.start_processing()
-            em_mset.save()
+        em_mset.start_processing()
+        em_mset.save()
 
-            return True
-        else:
-            return False
+        return True
 
     #override if needed
     #set the data for the input file

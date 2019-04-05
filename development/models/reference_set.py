@@ -58,13 +58,8 @@ class ReferenceSet(TileImageSet):
     def get_render_project_name(self):
         return "em_2d_montage_staging"
 
-    def get_storage_directory(self, base_storage_directory=None):
-        if base_storage_directory is None:
-            base_storage_directory = settings.BASE_FILE_PATH
-
-        return os.path.join(base_storage_directory,
-                            'reference_' + \
-                            self.clean_acquisition_date())
+    def storage_basename(self):
+        return self.clean_acquisition_date()
 
     @transition(
         field='object_state',

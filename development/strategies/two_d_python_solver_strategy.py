@@ -1,9 +1,11 @@
 from workflow_engine.strategies import execution_strategy
-from development.models import EMMontageSet
 from workflow_engine.models.configuration import Configuration
-from at_em_imaging_workflow.two_d_stack_name_manager \
-    import TwoDStackNameManager
+from development.models import EMMontageSet
+from at_em_imaging_workflow.two_d_stack_name_manager import (
+    TwoDStackNameManager
+)
 from django.conf import settings
+from django_fsm import can_proceed
 import logging
 
 
@@ -80,10 +82,16 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
         return EMA_Schema().dump(inp).data
 
     def on_finishing(self, em_mset, results, task):
-        if em_mset.object_state != EMMontageSet.STATE.EM_MONTAGE_SET_QC:
+        if can_proceed(em_mset.finish_processing):
             em_mset.finish_processing()
             em_mset.save()
-
+        elif em_mset.object_state == EMMontageSet.STATE.EM_MONTAGE_SET_QC_PASSED:
+            TwoDPythonSolverStrategy._log.warn(
+                'Unexpected state transition - remaining in QC Passed'
+            )
+        else:
+            em_mset.finish_processing()  # expected to throw an exception
+            em_mset.save()
 
 try:
     from EMaligner.schemas import EMA_Schema

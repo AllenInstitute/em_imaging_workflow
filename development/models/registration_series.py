@@ -38,7 +38,6 @@ from django.db import models
 
 class RegistrationSeries(models.Model):
     size = models.IntegerField(null=True)
-    workflow_state = models.CharField(max_length=255, null=True)
 
     def __str__(self):
         return "RegistrationSeries Lorem Ipsum"  # TODO: better string

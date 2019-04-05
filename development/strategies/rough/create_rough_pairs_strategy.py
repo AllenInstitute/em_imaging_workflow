@@ -1,27 +1,60 @@
+# Allen Institute Software License - This software license is the 2-clause BSD
+# license plus a third clause that prohibits redistribution for commercial
+# purposes without further permission.
+#
+# Copyright 2018. Allen Institute. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# 3. Redistributions for commercial purposes are not permitted without the
+# Allen Institute's written permission.
+# For purposes of this license, commercial purposes is the incorporation of the
+# Allen Institute's software into anything for which you will charge fees or
+# other compensation. Contact terms@alleninstitute.org for commercial licensing
+# opportunities.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
 from workflow_engine.strategies.execution_strategy import ExecutionStrategy
 from development.models.chunk_assignment import ChunkAssignment
-from development.strategies.rough.solve_rough_alignment_strategy \
-    import SolveRoughAlignmentStrategy
-from rendermodules.pointmatch.schemas import \
-    TilePairClientParameters
+from development.strategies.rough.solve_rough_alignment_strategy import (
+    SolveRoughAlignmentStrategy as SRAS
+)
+from rendermodules.pointmatch.schemas import TilePairClientParameters
 from django.conf import settings
 import logging
 from development.strategies import get_workflow_node_input_template
-from at_em_imaging_workflow.two_d_stack_name_manager \
-    import TwoDStackNameManager
+from at_em_imaging_workflow.two_d_stack_name_manager import (
+    TwoDStackNameManager
+)
 
 
 class CreateRoughPairsStrategy(ExecutionStrategy):
     _log = logging.getLogger(
         'development.strategies.create_rough_pairs_strategy')
 
-    #
-    # Don't get anything for now.  Stop processing.
-    # Todo: check if all sections are in a good state
-    # then return the chunk object
     def get_objects_for_queue(self, prev_queue_job):
         objects = []
-        # objects.append(prev_queue_job.get_enqueued_object())
+        objects.append(prev_queue_job.enqueued_object)
+
         return objects
 
     def get_input(self, chk_assgn, storage_directory, task):
@@ -42,7 +75,7 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
         inp['output_dir'] = chnk.get_storage_directory()
 
         tile_pair_ranges = \
-            SolveRoughAlignmentStrategy.get_tile_pair_ranges(chnk)
+            SRAS.get_tile_pair_ranges(chnk)
 
         section_z_index = chk_assgn.section.z_index
 
@@ -62,29 +95,13 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
         return TilePairClientParameters().dump(inp).data
 
     def on_finishing(self, chk_assgn, results, task):
-        chnk = chk_assgn.chunk
-        z_index = str(chk_assgn.section.z_index)
-
-        self.check_key(results, 'tile_pair_file')
-
-        cfg, created = chnk.configurations.get_or_create(
-            configuration_type='rough_tile_pair_file')
-
-        if created:
-            cfg.json_object = {
-                z_index: {
-                    'tile_pair_file': results['tile_pair_file']
-                }
-            }
-        else:
-            cfg.json_object[z_index] = {
-                'tile_pair_file': results['tile_pair_file']
-            }
-        cfg.save()
+        self.check_key(results, ChunkAssignment.TILE_PAIR_FILE_KEY)
+        chk_assgn.create_rough_tile_pair_file(
+            results[ChunkAssignment.TILE_PAIR_FILE_KEY]
+        )
 
     def get_task_objects_for_queue(self, chnk):
-        tile_pair_ranges = \
-            SolveRoughAlignmentStrategy.get_tile_pair_ranges(chnk)
+        tile_pair_ranges = SRAS.get_tile_pair_ranges(chnk)
 
         chunk_assignments = [
             ChunkAssignment.objects.get(
@@ -95,8 +112,7 @@ class CreateRoughPairsStrategy(ExecutionStrategy):
         return chunk_assignments
 
     def get_storage_directory(self, base_storage_directory, job):
-        chnk = job.get_enqueued_object()
+        chnk = job.enqueued_object
 
-        return chnk.get_storage_directory(
-            base_storage_directory)
+        return chnk.get_storage_directory(base_storage_directory)
 

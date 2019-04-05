@@ -1,12 +1,15 @@
-from workflow_engine.strategies.execution_strategy \
-    import ExecutionStrategy
-from development.strategies \
-    import RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE, \
-    RENDER_STACK_RIGID_ALIGN_DOWNSAMPLE, \
-    RENDER_STACK_DOWNSAMPLED, \
+from workflow_engine.strategies.execution_strategy import (
+    ExecutionStrategy
+)
+from development.strategies import (
+    RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE,
+    RENDER_STACK_RIGID_ALIGN_DOWNSAMPLE,
+    RENDER_STACK_DOWNSAMPLED,
     get_workflow_node_input_template
-from development.strategies.rough.solve_rough_alignment_strategy \
-    import SolveRoughAlignmentStrategy as SRAS
+)
+from development.strategies.rough.solve_rough_alignment_strategy import ()
+    SolveRoughAlignmentStrategy as SRAS
+)
 from django.conf import settings
 import logging
 

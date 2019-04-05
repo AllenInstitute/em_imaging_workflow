@@ -1,18 +1,11 @@
 from django.contrib import admin
 from django.forms import ModelForm
-from django.core.exceptions import ValidationError
-from django.contrib.contenttypes.forms import generic_inlineformset_factory
 from django.contrib.contenttypes.admin import GenericStackedInline
 from workflow_engine.workflow_controller import WorkflowController
 from workflow_engine.models.configuration import Configuration
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from workflow_engine.models.well_known_file import WellKnownFile
 from development.models.e_m_montage_set import EMMontageSet
-import simplejson as json
-from development.models.chunk import Chunk
-from development.strategies.generate_mesh_lens_correction \
-    import GenerateMeshLensCorrection
 
 
 def redo_lens_correction(modeladmin, request, queryset):
@@ -24,7 +17,7 @@ def redo_lens_correction(modeladmin, request, queryset):
             refset.redo()
             refset.save()
 
-            WorkflowController.start_workflow_2(
+            WorkflowController.start_workflow(
                 'em_2d_montage',
                 refset,
                 start_node_name='Generate Lens Correction Transform',
@@ -59,7 +52,7 @@ class ConfigurationInline(GenericStackedInline):
 
 class EMMontageInline(admin.StackedInline):
     model = EMMontageSet
-    fk_name = "reference_set"
+    #fk_name = "reference_set"
     extra = 0
 
 
@@ -106,7 +99,7 @@ class ReferenceSetAdmin(admin.ModelAdmin):
         set_refset_to_done,
         redo_lens_correction
     ]
-    inlines = (ConfigurationInline, EMMontageInline)
+    inlines = (ConfigurationInline, )#EMMontageInline)
 
     def microscope_link(self, em_montage_set_object):
         return mark_safe('<a href="{}">{}</a>'.format(

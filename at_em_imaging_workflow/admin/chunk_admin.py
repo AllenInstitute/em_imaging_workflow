@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
-from django.contrib.contenttypes.forms import generic_inlineformset_factory
-from workflow_engine.models.configuration \
-    import Configuration
+#from django.contrib.contenttypes.forms import generic_inlineformset_factory
+from workflow_engine.models.configuration  import Configuration
 from workflow_engine.workflow_controller import WorkflowController
-from development.strategies.rough.solve_rough_alignment_strategy \
-    import SolveRoughAlignmentStrategy as SRAS
+from development.strategies.rough.solve_rough_alignment_strategy import (
+    SolveRoughAlignmentStrategy as SRAS
+)
 from development.models.section import Section
 from django.contrib.contenttypes.admin import GenericStackedInline
 from django.urls import reverse

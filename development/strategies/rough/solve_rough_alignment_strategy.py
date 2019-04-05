@@ -1,12 +1,16 @@
-from workflow_engine.strategies.execution_strategy \
-    import ExecutionStrategy
-from rendermodules.rough_align.schemas \
-    import SolveRoughAlignmentParameters
+from workflow_engine.strategies.execution_strategy import (
+    ExecutionStrategy
+)
+from rendermodules.rough_align.schemas import (
+    SolveRoughAlignmentParameters
+)
 import copy
 from development.models.e_m_montage_set import EMMontageSet
-from development.strategies \
-    import RENDER_STACK_DOWNSAMPLED, RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE, \
+from development.strategies import (
+    RENDER_STACK_DOWNSAMPLED,
+    RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE,
     get_workflow_node_input_template
+)
 from django.conf import settings
 
 
@@ -43,25 +47,14 @@ class SolveRoughAlignmentStrategy(ExecutionStrategy):
 
         return clipped_mapping
 
-    # deprecate for chunk.get_tile_pair_ranges
-    @classmethod
-    def get_tile_pair_ranges(cls, chnk):
-        tile_pair_config= chnk.configurations.get(
-            configuration_type='chunk_configuration').json_object
-
-        return tile_pair_config['tile_pair_ranges']
-
     def get_input(self, chnk, storage_directory, task):
         inp = get_workflow_node_input_template(
             task,
             name='Rough Alignment Solver Input')
 
-        chunk_load = \
-            SolveRoughAlignmentStrategy.get_load(chnk)
-        z_mapping = \
-            SolveRoughAlignmentStrategy.get_z_mapping(chunk_load)
-        tile_pair_ranges = \
-            SolveRoughAlignmentStrategy.get_tile_pair_ranges(chnk)
+        # TODO: replace with chunk methods
+        z_mapping = chnk.get_z_mapping()
+        tile_pair_ranges = chnk.get_tile_pair_ranges()
         min_z, max_z = \
             SolveRoughAlignmentStrategy.calculate_z_min_max(tile_pair_ranges)
         clipped_z_mapping = \

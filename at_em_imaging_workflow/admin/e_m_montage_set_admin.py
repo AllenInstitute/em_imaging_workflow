@@ -381,6 +381,7 @@ class EMMontageSetAdmin(admin.ModelAdmin):
     def lookup_allowed(self, key, value):
         if key in (
             'id__in',
+            'reference_set__id__in',
             'section__z_index',
             'section__z_index__in',
             'section__z_index__gt',

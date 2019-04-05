@@ -70,15 +70,7 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
         GenerateMeshLensCorrection._log.info(
             'project path: %s' % (project_path))
 
-        if ((ref_set.microscope.uid == 'temca3') or
-            (ref_set.camera.uid == GenerateMeshLensCorrection.TEMCA2_50MP_CAMERA_ID)):
-            configuration_name = \
-                GenerateMeshLensCorrection.BAD_CORNER_50MP_CONFIGURATION
-        else:
-            configuration_name = \
-                GenerateMeshLensCorrection.CONFIGURATION_NAME
-
-        inp = get_workflow_node_input_template(task, configuration_name)
+        inp = get_workflow_node_input_template(task)
 
         inp['render'] = {}
         inp['render']['host'] = settings.RENDER_SERVICE_URL
@@ -139,7 +131,7 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
 
 
     def on_running(self, task):
-        ref_set = task.get_enqueued_task_object
+        ref_set = task.enqueued_task_object
         ref_set.start_processing()
         ref_set.save()
 
@@ -193,5 +185,6 @@ class GenerateMeshLensCorrection(ExecutionStrategy):
     #override if needed
     #set the storage directory for an enqueued object
     def get_storage_directory(self, base_storage_directory, job):
-        ref_set = job.get_enqueued_object()
+        ref_set = job.enqueued_object
+
         return ref_set.get_storage_directory(base_storage_directory)

@@ -109,6 +109,11 @@ class ManualQCStrategy(ExecutionStrategy):
             em_mset.fail_qc()
         em_mset.save()
 
+        try:
+            os.makedirs(em_mset.get_storage_directory())
+        except:
+            pass
+
         well_known_file_path = \
             os.path.join(
                 em_mset.get_storage_directory(),
