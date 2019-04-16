@@ -34,11 +34,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
+from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
 from rendermodules.stack.schemas import RemapZsParameters
-from at_em_imaging_workflow.two_d_stack_name_manager import (
-    TwoDStackNameManager
-)
-from django.conf import settings
+from at_em_imaging_workflow.two_d_stack_name_manager import TwoDStackNameManager
 import logging
 
 
@@ -50,15 +48,7 @@ class RemapZStrategy(InputConfigMixin, ExecutionStrategy):
     def get_input(self, em_mset, storage_directory, task):
         inp = self.get_workflow_node_input_template(task)
 
-        stack_names = TwoDStackNameManager.remap_z_stacks(em_mset)
-
-        inp['render'] = {
-            'host': settings.RENDER_SERVICE_URL,
-            'port': settings.RENDER_SERVICE_PORT,
-            'owner': settings.RENDER_SERVICE_USER,
-            'project': em_mset.get_render_project_name(),
-            'client_scripts': settings.RENDER_CLIENT_SCRIPTS
-        }
+        inp['render'] = RenderStrategyUtils.render_input_dict(em_mset)
 
         inp['overwrite_zlayer'] = True
         inp['close_stack'] = False
@@ -68,6 +58,7 @@ class RemapZStrategy(InputConfigMixin, ExecutionStrategy):
         inp['zValues'] = z_mapping[str(z_index)]
         inp['new_zValues'] = [ z_index ]
 
+        stack_names = TwoDStackNameManager.remap_z_stacks(em_mset)
         inp['input_stack'] = stack_names['input_stack']
         inp['output_stack'] = stack_names['output_stack']
 

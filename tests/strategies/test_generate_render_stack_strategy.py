@@ -1,15 +1,20 @@
 import pytest
-from mock import Mock
+from mock import Mock, patch
 import django
 from django.conf import settings
-from tests.strategies.at_em_fixtures import strategy_configurations
 django.setup()
 from at_em_imaging_workflow.strategies.montage.generate_render_stack_strategy \
     import GenerateRenderStackStrategy
 
 
 @pytest.mark.django_db
-def test_get_input_data(strategy_configurations):
+@patch(
+    'at_em_imaging_workflow.strategies.montage.'
+    'generate_render_stack_strategy.GenerateRenderStackStrategy.'
+    'get_workflow_node_input_template',
+    Mock(return_value={})
+)
+def test_get_input_data():
     em_set = Mock()
     em_set.get_render_project_name = Mock(
         return_value='MOCKSPECIMEN')

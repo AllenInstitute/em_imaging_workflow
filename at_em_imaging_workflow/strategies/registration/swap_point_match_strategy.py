@@ -1,19 +1,13 @@
-from workflow_engine.strategies import execution_strategy
+from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
+from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
 from at_em_imaging_workflow.models import EMMontageSet
-from rendermodules.pointmatch.schemas import (
-    SwapPointMatches
-)
-from at_em_imaging_workflow.two_d_stack_name_manager import (
-    TwoDStackNameManager
-)
-from at_em_imaging_workflow.strategies import (
-    get_workflow_node_input_template
-)
+from rendermodules.pointmatch.schemas import SwapPointMatches
+from at_em_imaging_workflow.two_d_stack_name_manager import TwoDStackNameManager
 from django.conf import settings
 import logging
 
 
-class SwapPointMatchStrategy(execution_strategy.ExecutionStrategy):
+class SwapPointMatchStrategy(InputConfigMixin, ExecutionStrategy):
     _log = logging.getLogger(
         'at_em_imaging_workflow.strategies.'
         'registration.swap_point_match_strategy')
@@ -37,15 +31,12 @@ class SwapPointMatchStrategy(execution_strategy.ExecutionStrategy):
             cfg_json['swap_point_match_index'] = 0
             cfg.save()
 
-        inp = get_workflow_node_input_template(
+        inp = self.get_workflow_node_input_template(
             task,
             name='Swap Point Matches Input')
 
-        inp['render'].update(
-            TwoDStackNameManager.em_montage_set_render_settings(
-                reimaged_mset
-            )
-        )
+        inp['render'] = RenderStrategyUtils.render_input_dict(
+            reimaged_mset)
 
         if (reimaged_mset.object_state != 
             EMMontageSet.STATE.EM_MONTAGE_SET_QC_PASSED):

@@ -33,7 +33,6 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from django.conf import settings
 import os
 
 class TwoDStackNameManager(object):
@@ -350,13 +349,3 @@ class TwoDStackNameManager(object):
         }
 
         return stacks
-
-    @classmethod
-    def em_montage_set_render_settings(cls, em_mset):
-        return {
-            'host': settings.RENDER_SERVICE_URL,
-            'port': settings.RENDER_SERVICE_PORT,
-            'owner': settings.RENDER_SERVICE_USER,
-            'project': em_mset.get_render_project_name(),
-            'client_scripts': settings.RENDER_CLIENT_SCRIPTS
-        }

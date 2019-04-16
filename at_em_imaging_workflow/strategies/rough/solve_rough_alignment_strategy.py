@@ -1,4 +1,7 @@
 from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
+from at_em_imaging_workflow.render_strategy_utils import (
+    RenderStrategyUtils as RSU
+)
 from rendermodules.rough_align.schemas import (
     SolveRoughAlignmentParameters
 )
@@ -49,6 +52,7 @@ class SolveRoughAlignmentStrategy(InputConfigMixin, ExecutionStrategy):
             task,
             name='Rough Alignment Solver Input')
 
+        # TODO: consolidate
         z_mapping = chnk.get_z_mapping()
         tile_pair_ranges = chnk.get_tile_pair_ranges()
         min_z, max_z = \
@@ -61,48 +65,20 @@ class SolveRoughAlignmentStrategy(InputConfigMixin, ExecutionStrategy):
         z_start = min(zs)
         z_end = max(zs)
 
-        inp['render']['host'] = settings.RENDER_SERVICE_URL
-        inp['render']['port'] = settings.RENDER_SERVICE_PORT
-        inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = chnk.get_render_project_name()
-        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
+        inp['render'] = RSU.render_input_dict(chnk)
 
-        inp['source_collection']['service_host'] = \
-            settings.RENDER_SERVICE_URL + ":" + str(settings.RENDER_SERVICE_PORT)
-        inp['source_collection']['baseURL'] = \
-            'http://' + settings.RENDER_SERVICE_URL + \
-            ":" + str(settings.RENDER_SERVICE_PORT) + '/render-ws/v1'
-        inp['source_collection']['owner'] = settings.RENDER_SERVICE_USER
-        inp['source_collection']['project'] = chnk.get_render_project_name()
-        inp['source_collection']['renderbinPath'] = \
-            settings.RENDER_CLIENT_SCRIPTS
+        inp['source_collection'] = RSU.collection_dict(chnk)
+        inp['source_collection']['stack'] = RENDER_STACK_DOWNSAMPLED
 
-        if inp['source_collection']['stack'] == '':
-            inp['source_collection']['stack'] = \
-                RENDER_STACK_DOWNSAMPLED
+        inp['target_collection'] = RSU.collection_dict(chnk)
+        inp['target_collection'][
+            'stack'
+        ] = RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE % (z_start, z_end)
 
-        inp['target_collection']['service_host'] = \
-            settings.RENDER_SERVICE_URL + ":" + str(settings.RENDER_SERVICE_PORT)
-        inp['target_collection']['baseURL'] = \
-            'http://' + settings.RENDER_SERVICE_URL + \
-            ":" + str(settings.RENDER_SERVICE_PORT) + '/render-ws/v1'
-        inp['target_collection']['owner'] = settings.RENDER_SERVICE_USER
-        inp['target_collection']['project'] = chnk.get_render_project_name()
-        inp['target_collection']['renderbinPath'] = \
-            settings.RENDER_CLIENT_SCRIPTS
-
-        if inp['target_collection']['stack'] == '':
-            inp['target_collection']['stack'] = \
-                RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE % (z_start, z_end)
-
-        inp['source_point_match_collection']['server'] = \
-            'http://' + settings.RENDER_SERVICE_URL + \
-            ":" + str(settings.RENDER_SERVICE_PORT) + '/render-ws/v1'
-        inp['source_point_match_collection']['owner'] = \
-            settings.RENDER_SERVICE_USER
-        if inp['source_point_match_collection']['match_collection'] == '':
-            inp['source_point_match_collection']['match_collection'] = \
-                chnk.get_point_collection_name()
+        inp['source_point_match_collection'] =RSU.collection_dict(chnk)
+        inp['source_point_match_collection'][
+            'match_collection'
+        ] = chnk.get_point_collection_name()
 
         inp['first_section'] = z_start
         inp['last_section'] = z_end

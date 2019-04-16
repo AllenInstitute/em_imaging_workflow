@@ -33,18 +33,15 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from workflow_engine.strategies import execution_strategy
-from workflow_engine.models.configuration import Configuration
-from rendermodules.dataimport.schemas import \
-    GenerateEMTileSpecsParameters
+from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
+from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
+from rendermodules.dataimport.schemas import GenerateEMTileSpecsParameters
 from at_em_imaging_workflow.models.e_m_montage_set import EMMontageSet
-from at_em_imaging_workflow.two_d_stack_name_manager \
-    import TwoDStackNameManager
-from django.conf import settings
+from at_em_imaging_workflow.two_d_stack_name_manager import TwoDStackNameManager
 import logging
 
 
-class GenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
+class GenerateRenderStackStrategy(InputConfigMixin, ExecutionStrategy):
     _log = logging.getLogger(
         'at_em_imaging_workflow.strategies'
         '.ingest_generate_render_stack_strategy')
@@ -59,19 +56,16 @@ class GenerateRenderStackStrategy(execution_strategy.ExecutionStrategy):
         GenerateRenderStackStrategy._log.info(
             'ingest/generate render stack')
 
-        inp = Configuration.objects.get(
-            name='Generate Render Stack Input',
-            configuration_type='strategy_config').json_object
+        inp = self.get_workflow_node_input_template(
+            task,
+            name='Generate Render Stack Input')
 
         stack_names = \
             TwoDStackNameManager.generate_render_stack_stacks(em_mset)
 
-        inp['render']['host'] = settings.RENDER_SERVICE_URL
-        inp['render']['port'] = settings.RENDER_SERVICE_PORT
-        inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = em_mset.get_render_project_name()
+        inp['render'] = RenderStrategyUtils.render_input_dict(em_mset)
+
         inp['output_stack'] = stack_names['output_stack']
-        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
         inp['metafile'] = em_mset.metafile
         inp['close_stack'] = False
         inp['zValues'] = [ self.get_z_index(em_mset) ]

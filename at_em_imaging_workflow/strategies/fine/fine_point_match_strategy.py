@@ -1,5 +1,5 @@
-from workflow_engine.strategies.execution_strategy import \
-    ExecutionStrategy
+from workflow_engine.strategies import  ExecutionStrategy
+from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
 from rendermodules.pointmatch.schemas import (
     PointMatchClientParametersSpark
 )
@@ -27,14 +27,9 @@ class FinePointMatchStrategy(ExecutionStrategy):
         log_dir = self.get_or_create_task_storage_directory(task)
         inp['logdir'] = log_dir
 
-        inp['render']['host'] = settings.RENDER_SERVICE_URL
-        inp['render']['port'] = settings.RENDER_SERVICE_PORT
-        inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = em_mset.get_render_project_name()
-        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
+        inp['render'] = RenderStrategyUtils.render_input_dict(em_mset)
 
         inp['owner'] = settings.RENDER_SERVICE_USER
-
         inp['jarfile'] = settings.RENDER_SPARK_JARFILE
 
         log4j_properties_path = os.path.join(log_dir, 'log4j.properties')

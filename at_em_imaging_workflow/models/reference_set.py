@@ -56,6 +56,7 @@ class ReferenceSet(TileImageSet):
     def __str__(self):
         return str(self.acquisition_date)
 
+    # TODO: move this to render params manager
     def get_render_project_name(self):
         return "em_2d_montage_staging"
 

@@ -1,10 +1,6 @@
 from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
-from rendermodules.pointmatch.schemas import (
-    PointMatchClientParametersSpark
-)
-from at_em_imaging_workflow.two_d_stack_name_manager import (
-    TwoDStackNameManager
-)
+from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
+from rendermodules.pointmatch.schemas import PointMatchClientParametersSpark
 from workflow_engine.models import WellKnownFile
 import jinja2
 import os
@@ -25,11 +21,7 @@ class TwoDMontagePointMatchStrategy(InputConfigMixin, ExecutionStrategy):
             task,
             name='2D Montage Point Match Input')
 
-        inp['render'].update(
-            TwoDStackNameManager.em_montage_set_render_settings(
-                em_mset
-            )
-        )
+        inp['render'] = RenderStrategyUtils.render_input_dict(em_mset)
 
         inp['sparkhome'] = settings.SPARK_HOME
         log_dir = self.get_or_create_task_storage_directory(task)

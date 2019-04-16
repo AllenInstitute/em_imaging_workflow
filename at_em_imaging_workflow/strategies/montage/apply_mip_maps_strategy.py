@@ -33,16 +33,17 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from workflow_engine.strategies import execution_strategy
-from django.conf import settings
+from workflow_engine.strategies import ExecutionStrategy
+from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
 from workflow_engine.models.configuration import Configuration
 from rendermodules.dataimport.schemas import AddMipMapsToStackParameters
-from at_em_imaging_workflow.two_d_stack_name_manager \
-    import TwoDStackNameManager
+from at_em_imaging_workflow.two_d_stack_name_manager import (
+    TwoDStackNameManager
+)
 import logging
 
 
-class ApplyMipMapsStrategy(execution_strategy.ExecutionStrategy):
+class ApplyMipMapsStrategy(ExecutionStrategy):
     _log = logging.getLogger(
         'at_em_imaging_workflow.strategies.montage.apply_mip_maps_strategy')
 
@@ -51,14 +52,9 @@ class ApplyMipMapsStrategy(execution_strategy.ExecutionStrategy):
             name='Apply MIPmaps Input',
             configuration_type='strategy_config').json_object
 
-        stack_names = \
-            TwoDStackNameManager.apply_mip_maps_stacks(em_mset)
+        stack_names = TwoDStackNameManager.apply_mip_maps_stacks(em_mset)
 
-        inp['render']['host'] = settings.RENDER_SERVICE_URL
-        inp['render']['port'] = settings.RENDER_SERVICE_PORT
-        inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = em_mset.get_render_project_name()
-        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
+        inp['render'] = RenderStrategyUtils.render_input_dict(em_mset)
 
         inp['input_stack'] = stack_names['input_stack']
         inp['output_stack'] = stack_names['output_stack']

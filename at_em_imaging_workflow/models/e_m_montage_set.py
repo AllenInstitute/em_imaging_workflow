@@ -221,6 +221,7 @@ class EMMontageSet(MontageSet):
 
         return 'default_point_matches{}'.format(reimage_suffix)
 
+    # TODO: move this to render params manager
     def get_render_project_name(self):
         return self.section.specimen.uid
 

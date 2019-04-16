@@ -1,4 +1,5 @@
 from workflow_engine.strategies import ExecutionStrategy, InputConfigMixin
+from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
 from rendermodules.rough_align.schemas import (
     ApplyRoughAlignmentTransformParameters
 )
@@ -23,11 +24,7 @@ class ApplyRoughAlignmentStrategy(InputConfigMixin, ExecutionStrategy):
             task,
             name='Apply Rough Alignment Input')
 
-        inp['render']['host'] = settings.RENDER_SERVICE_URL
-        inp['render']['port'] = settings.RENDER_SERVICE_PORT
-        inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = chnk.get_render_project_name()
-        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
+        inp['render'] = RenderStrategyUtils.render_input_dict(chnk)
 
         z_mapping = copy.deepcopy(chnk.get_z_mapping())
 

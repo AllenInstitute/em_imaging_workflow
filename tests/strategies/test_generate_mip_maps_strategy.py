@@ -4,7 +4,6 @@ from mock import Mock, patch
 from workflow_engine.models.job import Job
 from workflow_engine.models.task import Task
 from workflow_engine.workflow_controller import WorkflowController
-from tests.strategies.at_em_fixtures import strategy_configurations
 from at_em_imaging_workflow.strategies.montage.generate_mip_maps_strategy \
     import GenerateMipMapsStrategy
 from tests.models.test_chunk_model \
@@ -12,6 +11,12 @@ from tests.models.test_chunk_model \
 
 
 @pytest.mark.django_db
+@patch(
+    'at_em_imaging_workflow.strategies.montage.'
+    'generate_mip_maps_strategy.GenerateMipMapsStrategy.'
+    'get_workflow_node_input_template',
+    Mock(return_value={})
+)
 @override_settings(
     RENDER_SERVICE_URL='MOCK_URL',
     RENDER_SERVICE_PORT=9999,
@@ -19,8 +24,7 @@ from tests.models.test_chunk_model \
     RENDER_CLIENT_SCRIPTS='/path/to/mock/client/scripts',
     MIPMAP_FILE_PATH='/path/to/mipmaps',
 )
-def test_get_input_data(lots_of_montage_sets,
-                        strategy_configurations):
+def test_get_input_data(lots_of_montage_sets):
     em_mset = lots_of_montage_sets[0]
     task = Mock()
     task.job = Mock()

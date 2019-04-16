@@ -34,6 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
+from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
 from rendermodules.pointmatch_filter.schemas import (
     FilterSchema
 )
@@ -55,11 +56,7 @@ class FilterPointMatchStrategy(InputConfigMixin, ExecutionStrategy):
     def get_input(self, em_mset, storage_directory, task):
         inp = self.get_workflow_node_input_template(task)
 
-        inp['render'].update(
-            TwoDStackNameManager.em_montage_set_render_settings(
-                em_mset
-            )
-        )
+        inp['render'] = RenderStrategyUtils.render_input_dict(em_mset)
 
         inp.update(
             TwoDStackNameManager.filter_point_match_stacks(em_mset)

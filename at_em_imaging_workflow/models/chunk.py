@@ -93,6 +93,7 @@ class Chunk(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
         # raise Exception('unimplimented')
         return True
 
+    # TODO: move this to render project manager
     def get_render_project_name(self):
         # return '247488_8R'
         return self.sections.first().specimen.uid

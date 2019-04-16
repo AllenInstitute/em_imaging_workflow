@@ -1,11 +1,9 @@
-from workflow_engine.strategies.execution_strategy import ExecutionStrategy
+from workflow_engine.strategies import ExecutionStrategy
+from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
 from workflow_engine.models.configuration import Configuration
-from rendermodules.pointmatch.schemas import \
-    TilePairClientParameters
-from django.conf import settings
+from rendermodules.pointmatch.schemas import TilePairClientParameters
+from at_em_imaging_workflow.two_d_stack_name_manager import TwoDStackNameManager
 import logging
-from at_em_imaging_workflow.two_d_stack_name_manager \
-    import TwoDStackNameManager
 
 
 class CreateTilePairsStrategy(ExecutionStrategy):
@@ -21,11 +19,7 @@ class CreateTilePairsStrategy(ExecutionStrategy):
         stack_names = \
             TwoDStackNameManager.create_tile_pairs_stacks(em_mset)
 
-        inp['render']['host'] = settings.RENDER_SERVICE_URL
-        inp['render']['port'] = settings.RENDER_SERVICE_PORT
-        inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = em_mset.get_render_project_name()
-        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
+        inp['render'] = RenderStrategyUtils.render_input_dict(em_mset)
 
         inp['output_dir'] = em_mset.get_storage_directory()
         inp['baseStack'] = stack_names['baseStack']

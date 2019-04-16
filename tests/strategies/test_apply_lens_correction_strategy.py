@@ -34,14 +34,21 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 import pytest
-from mock import patch, mock_open, MagicMock
-from tests.strategies.at_em_fixtures import strategy_configurations
+from mock import patch, mock_open, MagicMock, Mock
 from at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy \
     import ApplyLensCorrectionStrategy
 
 
 @pytest.mark.django_db
-def test_get_input_data(strategy_configurations):
+@patch(
+    'at_em_imaging_workflow.strategies.montage.'
+    'apply_lens_correction_strategy.ApplyLensCorrectionStrategy.'
+    'get_workflow_node_input_template',
+    Mock(return_value={
+        'overwrite_zlayer': True
+    })
+)
+def test_get_input_data():
     em_mset = MagicMock()
     em_mset.section = MagicMock()
     test_z_index = 543

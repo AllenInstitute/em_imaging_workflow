@@ -1,4 +1,7 @@
 from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
+from at_em_imaging_workflow.render_strategy_utils import (
+    RenderStrategyUtils as RSU
+)
 from rendermodules.montage.schemas import SolveMontageSectionParameters
 from django.conf import settings
 from at_em_imaging_workflow.two_d_stack_name_manager import (
@@ -17,48 +20,18 @@ class TwoDMontageSolverStrategy(InputConfigMixin, ExecutionStrategy):
 
         inp = self.get_workflow_node_input_template(task)
 
-        stack_names = \
-            TwoDStackNameManager.two_d_solver_stacks(em_mset)
+        inp['render'] = RSU.render_input_dict(em_mset)
 
-        inp['render'] = {
-            'host': settings.RENDER_SERVICE_URL,
-            'port': settings.RENDER_SERVICE_PORT,
-            'owner': settings.RENDER_SERVICE_USER,
-            'project': em_mset.get_render_project_name(),
-            'client_scripts': settings.RENDER_CLIENT_SCRIPTS
-        }
+        stack_names = TwoDStackNameManager.two_d_solver_stacks(em_mset)
 
-        inp['source_collection']['service_host'] = \
-            settings.RENDER_SERVICE_URL + ":" + settings.RENDER_SERVICE_PORT
-        inp['source_collection']['baseURL'] = \
-            'http://' + settings.RENDER_SERVICE_URL + \
-            ":" + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
-        inp['source_collection']['owner'] = settings.RENDER_SERVICE_USER
-        inp['source_collection']['project'] = em_mset.get_render_project_name()
-        inp['source_collection']['renderbinPath'] = \
-            settings.RENDER_CLIENT_SCRIPTS
+        # TODO: verify carefully against expected
+        inp['source_collection'] = RSU.collection_dict(em_mset)
         inp['source_collection']['stack'] = stack_names['source_collection']
-
-        inp['target_collection']['service_host'] = \
-            settings.RENDER_SERVICE_URL + ":" + settings.RENDER_SERVICE_PORT
-        inp['target_collection']['baseURL'] = \
-            'http://' + settings.RENDER_SERVICE_URL + \
-            ":" + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
-        inp['target_collection']['owner'] = settings.RENDER_SERVICE_USER
-        inp['target_collection']['project'] = em_mset.get_render_project_name()
-        inp['target_collection']['renderbinPath'] = \
-            settings.RENDER_CLIENT_SCRIPTS
-
-        if inp['target_collection']['stack'] == '':
-            inp['target_collection']['stack'] = stack_names['target_collection']
-
-        inp['source_point_match_collection']['server'] = \
-            'http://' + settings.RENDER_SERVICE_URL + \
-            ":" + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
-        inp['source_point_match_collection']['owner'] = \
-            settings.RENDER_SERVICE_USER
-        inp['source_point_match_collection']['match_collection'] = \
-            em_mset.get_point_collection_name()
+        inp['target_collection']['stack'] = stack_names['target_collection']
+        inp['source_point_match_collection'] = RSU.collection_dict(em_mset)
+        inp['source_point_match_collection'][
+            'match_collection'
+        ] = em_mset.get_point_collection_name()
 
         inp['first_section'] = em_mset.section.z_index
         inp['last_section'] = em_mset.section.z_index

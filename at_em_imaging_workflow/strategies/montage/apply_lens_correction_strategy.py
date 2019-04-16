@@ -33,23 +33,18 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from workflow_engine.strategies import execution_strategy
+from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
+from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from rendermodules.lens_correction.schemas import \
-  ApplyLensCorrectionParameters
-from workflow_engine.models.configuration import Configuration
+from rendermodules.lens_correction.schemas import ApplyLensCorrectionParameters
 from workflow_engine.models.well_known_file import WellKnownFile
-from django.conf import settings
-from django_fsm import can_proceed
+from .generate_mesh_lens_correction import GenerateMeshLensCorrection
+from at_em_imaging_workflow.two_d_stack_name_manager import TwoDStackNameManager
 import simplejson as json
 import logging
-from .generate_mesh_lens_correction import GenerateMeshLensCorrection
-from at_em_imaging_workflow.two_d_stack_name_manager import (
-    TwoDStackNameManager
-)
 
 
-class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
+class ApplyLensCorrectionStrategy(InputConfigMixin, ExecutionStrategy):
     _log = logging.getLogger(
         'at_em_imaging_workflow.strategies.'
         'montage.apply_lens_correction_strategy')
@@ -63,18 +58,16 @@ class ApplyLensCorrectionStrategy(execution_strategy.ExecutionStrategy):
     #override if needed
     #set the data for the input file
     def get_input(self, em_mset, storage_directory, task):
-        inp = Configuration.objects.get(
-            name='Apply Lens Correction Input',
-            configuration_type='strategy_config').json_object
+        inp = self.get_workflow_node_input_template(
+            task,
+            name='Apply Lens Correction Input'
+        )
 
         stack_names = \
             TwoDStackNameManager.apply_lens_correction_stacks(em_mset)
 
-        inp['render']['host'] = settings.RENDER_SERVICE_URL
-        inp['render']['port'] = settings.RENDER_SERVICE_PORT
-        inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = em_mset.get_render_project_name()
-        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
+        inp['render'] = RenderStrategyUtils.render_input_dict(em_mset)
+
         inp['zValues'] = [ em_mset.section.z_index ]
         inp['input_stack'] = stack_names['input_stack']
         inp['output_stack'] = stack_names['output_stack']

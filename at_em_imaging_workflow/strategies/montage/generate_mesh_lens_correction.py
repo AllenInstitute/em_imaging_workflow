@@ -34,6 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
+from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
 from workflow_engine.workflow_controller import WorkflowController
 from at_em_imaging_workflow.strategies import (
     RENDER_STACK_MESH_LENS_RAW,
@@ -44,7 +45,6 @@ from rendermodules.mesh_lens_correction.schemas import (
     MeshLensCorrectionSchema
 )
 from at_em_imaging_workflow.models.reference_set import ReferenceSet
-from django.conf import settings
 from django_fsm import can_proceed
 import logging
 import os
@@ -72,12 +72,7 @@ class GenerateMeshLensCorrection(InputConfigMixin, ExecutionStrategy):
 
         inp = self.get_workflow_node_input_template(task)
 
-        inp['render'] = {}
-        inp['render']['host'] = settings.RENDER_SERVICE_URL
-        inp['render']['port'] = settings.RENDER_SERVICE_PORT
-        inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = "em_2d_montage_staging" # ref_set.get_render_project_name()
-        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
+        inp['render'] = RenderStrategyUtils.render_input_dict(ref_set)
 
         inp['input_stack'] = RENDER_STACK_MESH_LENS_RAW
         inp['output_stack'] = RENDER_STACK_MESH_LENS_CORRECTED

@@ -33,18 +33,14 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
+from workflow_engine.strategies import  InputConfigMixin, ExecutionStrategy
+from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
 from at_em_imaging_workflow.models import ChunkAssignment
 from rendermodules.pointmatch.schemas import TilePairClientParameters
+from at_em_imaging_workflow.two_d_stack_name_manager import TwoDStackNameManager
+from at_em_imaging_workflow.models import Chunk
 from django.conf import settings
 import logging
-from at_em_imaging_workflow.models import Chunk
-from workflow_engine.strategies import (
-    ExecutionStrategy,
-    InputConfigMixin
-)
-from at_em_imaging_workflow.two_d_stack_name_manager import (
-    TwoDStackNameManager
-)
 
 
 class CreateRoughPairsStrategy(InputConfigMixin, ExecutionStrategy):
@@ -69,15 +65,7 @@ class CreateRoughPairsStrategy(InputConfigMixin, ExecutionStrategy):
 
         chnk = chk_assgn.chunk
 
-        stack_names = \
-            TwoDStackNameManager.create_rough_pair_stacks(
-                chk_assgn)
-
-        inp['render']['host'] = settings.RENDER_SERVICE_URL
-        inp['render']['port'] = settings.RENDER_SERVICE_PORT
-        inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = chnk.get_render_project_name()
-        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
+        inp['render'] = RenderStrategyUtils.render_input_dict(chnk)
 
         inp['output_dir'] = chnk.get_storage_directory()
 
@@ -95,6 +83,7 @@ class CreateRoughPairsStrategy(InputConfigMixin, ExecutionStrategy):
                 inp["maxZ"] = max_z
                 inp["zNeighborDistance"] = tile_pair_range["zNeighborDistance"]
 
+        stack_names = TwoDStackNameManager.create_rough_pair_stacks(chk_assgn)
         inp['baseStack'] = stack_names['baseStack']
         inp['stack'] = stack_names['stack']
 

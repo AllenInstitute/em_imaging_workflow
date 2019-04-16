@@ -33,14 +33,13 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from at_em_imaging_workflow.two_d_stack_name_manager import (
-    TwoDStackNameManager
-)
+from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
+from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
 from rendermodules.em_montage_qc.schemas import (
     DetectMontageDefectsParameters,
     DetectMontageDefectsParametersOutput
 )
-from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
+from at_em_imaging_workflow.two_d_stack_name_manager import TwoDStackNameManager
 from django.conf import settings
 import logging
 import shutil
@@ -64,11 +63,7 @@ class ManualQCStrategy(InputConfigMixin, ExecutionStrategy):
         stack_names = \
             TwoDStackNameManager.detect_defects_stacks(em_mset)
 
-        inp['render']['host'] = settings.RENDER_SERVICE_URL
-        inp['render']['port'] = settings.RENDER_SERVICE_PORT
-        inp['render']['owner'] = settings.RENDER_SERVICE_USER
-        inp['render']['project'] = em_mset.get_render_project_name()
-        inp['render']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
+        inp['render'] = RenderStrategyUtils.render_input_dict(em_mset)
 
         inp['prestitched_stack'] = stack_names['prestitched_stack']
         inp['poststitched_stack'] = stack_names['poststitched_stack']
@@ -84,9 +79,6 @@ class ManualQCStrategy(InputConfigMixin, ExecutionStrategy):
         data = DetectMontageDefectsParameters().dump(inp).data
 
         return data
-
-    def get_post_stitched_stack_name(self, em_mset):
-        return RENDER_STACK_SOLVED_PYTHON
 
     def on_finishing(self, em_mset, results, task):
         self.check_key(results, 'qc_passed_sections')

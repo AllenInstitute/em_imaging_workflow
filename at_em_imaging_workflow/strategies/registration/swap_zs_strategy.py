@@ -1,20 +1,12 @@
-from workflow_engine.strategies import execution_strategy
-from rendermodules.stack.schemas import (
-    SwapZsParameters
-)
-from at_em_imaging_workflow.two_d_stack_name_manager import (
-    TwoDStackNameManager
-)
-from at_em_imaging_workflow.strategies import (
-    get_workflow_node_input_template
-)
-from at_em_imaging_workflow.models import (
-    EMMontageSet
-)
+from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
+from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
+from rendermodules.stack.schemas import SwapZsParameters
+from at_em_imaging_workflow.two_d_stack_name_manager import TwoDStackNameManager
+from at_em_imaging_workflow.models import EMMontageSet
 import logging
 
 
-class SwapZsStrategy(execution_strategy.ExecutionStrategy):
+class SwapZsStrategy(InputConfigMixin, ExecutionStrategy):
     _log = logging.getLogger(
         'at_em_imaging_workflow.strategies.'
         'registration.swap_zs_strategy')
@@ -33,15 +25,11 @@ class SwapZsStrategy(execution_strategy.ExecutionStrategy):
                 'Montage set may have already been swapped'
             )
 
-        inp = get_workflow_node_input_template(
+        inp = self.get_workflow_node_input_template(
             task,
             name='Swap Zs Input')
 
-        inp['render'].update(
-            TwoDStackNameManager.em_montage_set_render_settings(
-                reimaged_mset
-            )
-        )
+        inp['render'] = RenderStrategyUtils.render_input_dict(reimaged_mset)
 
         if (reimaged_mset.object_state != 
             EMMontageSet.STATE.EM_MONTAGE_SET_QC_PASSED):
