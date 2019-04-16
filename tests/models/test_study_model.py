@@ -1,7 +1,7 @@
 import django
 django.setup()
 from django.test import TestCase
-from development.models import Study
+from at_em_imaging_workflow.models import Study
 
 
 class TestStudyModel(TestCase):

@@ -1,7 +1,7 @@
-from development.strategies.rough.make_montage_scapes_stack_strategy \
+from at_em_imaging_workflow.strategies.montage.make_montage_scapes_stack_strategy \
     import MakeMontageScapesStackStrategy
-from development.models.chunk_assignment import ChunkAssignment
-from development.models.e_m_montage_set import EMMontageSet
+from at_em_imaging_workflow.models.chunk_assignment import ChunkAssignment
+from at_em_imaging_workflow.models.e_m_montage_set import EMMontageSet
 from workflow_engine.models.configuration import Configuration
 from tests.strategies.at_em_fixtures import strategy_configurations
 import pytest
@@ -17,9 +17,9 @@ from tests.strategies.rough.test_rough_point_match_strategy \
 
 
 @pytest.mark.django_db
-@patch('development.strategies.rough'
-       '.make_montage_scapes_stack_strategy'
-       '.get_workflow_node_input_template',
+@patch('at_em_imaging_workflow.strategies.montage.'
+       'make_montage_scapes_stack_strategy.MakeMontageScapesStackStrategy.'
+       'get_workflow_node_input_template',
        Mock(return_value={
            'montage_stack': "",
            'output_stack': "",
@@ -56,7 +56,7 @@ def test_get_input_data(lots_of_chunks,
     assert inp['new_z_start'] == 2
 
     assert inp['image_directory'] == \
-        '/long/term/em_montage_MOCK SPECIMEN_z1_2345_06_07_16_09_10_00_00'
+        '/long/term/em_montage_set/MOCK SPECIMEN_z1_2345_06_07_16_09_10_00_00'
 
     assert inp['montage_stack'] == 'em_2d_montage_solved_py'
     assert inp['output_stack'] == 'em_2d_montage_solved_py_0_01_mapped'

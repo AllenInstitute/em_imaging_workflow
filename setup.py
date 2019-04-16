@@ -52,7 +52,7 @@ class PyTest(TestCommand):
 setup(
     name='at_em_imaging_workflow',
     version='%s%s' % (VERSION, RELEASE),
-    packages=prepend_find_packages('at_em_imaging_workflow', 'development'),
+    packages=prepend_find_packages('at_em_imaging_workflow'),
     package_data={'': [
         '*.conf', '*.cfg', '*.json', '*.env', '*.sh', '*.txt', 'Makefile',
         '*.properties' ] },

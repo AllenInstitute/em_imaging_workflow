@@ -36,7 +36,7 @@
 import pytest
 from mock import patch, mock_open, MagicMock
 from tests.strategies.at_em_fixtures import strategy_configurations
-from development.strategies.apply_lens_correction_strategy \
+from at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy \
     import ApplyLensCorrectionStrategy
 
 

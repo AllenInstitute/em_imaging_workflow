@@ -1,12 +1,12 @@
 from workflow_engine.strategies import execution_strategy
-from development.models import EMMontageSet
+from at_em_imaging_workflow.models import EMMontageSet
 from rendermodules.pointmatch.schemas import (
     SwapPointMatches
 )
 from at_em_imaging_workflow.two_d_stack_name_manager import (
     TwoDStackNameManager
 )
-from development.strategies import (
+from at_em_imaging_workflow.strategies import (
     get_workflow_node_input_template
 )
 from django.conf import settings

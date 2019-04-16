@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 APP_PACKAGE='at_em_imaging_workflow'
-DEVELOPMENT_PACKAGE='development'
 
 JOB_GRID_CLASS="at_em_imaging_workflow.views.e_m_montage_set_job_grid.EMMontageSetJobGrid"
 MONITOR_TASK_MODULES=[]
@@ -33,7 +32,7 @@ DRY_RUN=True
 
 MESSAGE_QUEUE_NAME = APP_PACKAGE
 INGEST_MESSAGE_QUEUE_NAME = 'ingest_'+ MESSAGE_QUEUE_NAME
-INGEST_STRATEGY='development.strategies.ingest_callbacks.IngestCallbacks'
+INGEST_STRATEGY='at_em_imaging_workflow.strategies.ingest_callbacks.IngestCallbacks'
 WORKFLOW_MESSAGE_QUEUE_NAME = 'workflow_' + MESSAGE_QUEUE_NAME
 CELERY_MESSAGE_QUEUE_NAME = 'celery_' + MESSAGE_QUEUE_NAME
 MOAB_MESSAGE_QUEUE_NAME = 'moab_' + MESSAGE_QUEUE_NAME
@@ -66,7 +65,7 @@ MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
 MESSAGE_QUEUE_PORT = 5672
 MESSAGE_QUEUE_MONITOR_PORT = 15672
 UI_HOST = 'ibs-timf-ux1.corp.alleninstitute.org'
-UI_PORT = 9002
+UI_PORT = 9001
 FLOWER_MONITOR_URL='http://' + UI_HOST + ":" + str(UI_PORT) + '/flower/'
 RABBIT_MONITOR_URL='http://' + UI_HOST + ":" + str(UI_PORT) + '/rabbitmq/'
 ADMIN_URL='http://' + UI_HOST + ':' + str(UI_PORT) + '/admin'
@@ -79,9 +78,9 @@ NOTEBOOK_ARGUMENTS = [
     '/at_em_imaging_workflow/nb'
 ]
 
-RENDER_SERVICE_URL = 'ibs-timf-ux1.corp.alleninstitute.org'
-RENDER_SERVICE_PORT = '9006'
-RENDER_SERVICE_USER = 'timf'
+RENDER_SERVICE_URL = 'http://em-131db2.corp.alleninstitute.org'
+RENDER_SERVICE_PORT = '8080'
+RENDER_SERVICE_USER = 'gayathrim'
 RENDER_SERVICE_PROJECT = 'DEV'
 RENDER_STACK_NAME = 'default_stack'
 RENDER_POINT_MATCH_COLLECTION_NAME = 'default_point_matches'
@@ -148,6 +147,8 @@ WORKFLOW_VERSION = 0.1
 
 MILLISECONDS_BETWEEN_REFRESH = 10000
 # MILLISECONDS_BETWEEN_REFRESH = 1000
+MOAB_CHECK_SECONDS = 45.0
+DASHBOARD_UPDATE_SECONDS = 60.0
 
 # Application definition
 
@@ -160,9 +161,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'django_fsm',
-
     'workflow_engine',
-    'development',
     'at_em_imaging_workflow'
 ]
 
@@ -203,9 +202,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'at_em_imaging_dev',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'devdb2.corp.alleninstitute.org',
+        'USER': 'timf',
+        'PASSWORD': '6 Need a safe house',
+        'HOST': 'aibsdc-dev-db1',
         'PORT': '5432',
     },
     'devdb2': {
@@ -276,7 +275,7 @@ LOGGING = {
     'formatters': {
         'detailed': {
             'class': 'logging.Formatter',
-            'format': '%(asctime)s %(name)-15s %(levelname)-8s %(processName)-10s %(message)s'
+            'format': '%(asctime)s %(name)-15s %(levelname)-8s %(processName)-10s %(lineno)-5d %(message)s'
         }
     },    
     'handlers': {
@@ -301,12 +300,7 @@ LOGGING = {
         },
         'at_em_imaging_workflow': {
             'handlers': ['console', 'file'],
-            'level': 'WARN',
-            'propagate': True,
-        },
-        'development': {
-            'handlers': ['console', 'file'],
-            'level': 'WARN',
+            'level': 'INFO',
             'propagate': True,
         },
         'test_output': {
@@ -316,12 +310,12 @@ LOGGING = {
         },
         'workflow_client': {
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
         'workflow_engine': {
             'handlers': ['file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
         'celery': {

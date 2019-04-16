@@ -1,8 +1,7 @@
-from development.strategies.rough.remap_z_strategy import RemapZStrategy
-from development.models.chunk_assignment import ChunkAssignment
-from development.models.e_m_montage_set import EMMontageSet
+from at_em_imaging_workflow.strategies.montage.remap_z_strategy import RemapZStrategy
+from at_em_imaging_workflow.models.chunk_assignment import ChunkAssignment
+from at_em_imaging_workflow.models.e_m_montage_set import EMMontageSet
 from workflow_engine.models.configuration import Configuration
-from tests.strategies.at_em_fixtures import strategy_configurations
 import pytest
 from mock import Mock, patch, mock_open
 from workflow_engine.models.task import Task
@@ -16,24 +15,14 @@ from tests.strategies.rough.test_rough_point_match_strategy \
 
 
 @pytest.mark.django_db
-@patch('development.strategies.rough'
-       '.remap_z_strategy'
-       '.get_workflow_node_input_template',
-       Mock(return_value={
-           'montage_stack': "",
-           'output_stack': "",
-           'render': { } } ))
-def test_get_input_data(lots_of_chunks,
-                        strategy_configurations):
+def test_get_input_data(lots_of_chunks):
     chnk_assigns = ChunkAssignment.objects.filter(
         chunk=lots_of_chunks[0])
     chnk_assign = chnk_assigns[0]
-    strategy = RemapZStrategy()
     storage_directory = '/example/storage/directory'
-    task = Task(id=345)
-
     em_mset = EMMontageSet.objects.filter(
         section=chnk_assign.section).first()
+    task = Mock()#Task(id=345, enqueued_task_object=em_mset)
 
     downsample_config = Configuration(
         content_object=em_mset,
@@ -44,10 +33,18 @@ def test_get_input_data(lots_of_chunks,
         })
     downsample_config.save()
 
-    inp = strategy.get_input(
-        em_mset,
-        storage_directory,
-        task)
+    with patch('at_em_imaging_workflow.strategies.montage.'
+               'remap_z_strategy.RemapZStrategy.'
+               'get_workflow_node_input_template',
+               Mock(return_value={
+                   'montage_stack': "",
+                   'output_stack': "",
+                   'render': { } } )):
+        strategy = RemapZStrategy()
+        inp = strategy.get_input(
+            em_mset,
+            storage_directory,
+            task)
 
     assert inp['zValues'] == [2]
     assert inp['new_zValues'] == [1]

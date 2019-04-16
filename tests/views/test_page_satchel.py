@@ -41,8 +41,8 @@ from workflow_engine.workflow_config import WorkflowConfig
 from tests.workflow_configurations import TEST_CONFIG_YAML_TWO_NODES
 import simplejson as json
 import os
-from development.models.chunk import Chunk
-from development.strategies.rough.define_chunks_strategy import DefineChunksStrategy
+from at_em_imaging_workflow.models.chunk import Chunk
+from at_em_imaging_workflow.strategies.rough.define_chunks_strategy import DefineChunksStrategy
 from django.test.utils import override_settings
 from at_em_imaging_workflow.views.page_satchel import page_satchel
 from workflow_engine.models.job import Job

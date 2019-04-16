@@ -1,15 +1,15 @@
 import pytest
 import django; django.setup()
-from development.models import Chunk, RenderedVolume, Study, Specimen
+from at_em_imaging_workflow.models import Chunk, RenderedVolume, Study, Specimen
 from django.test.utils import override_settings
-from development.models.montage_set import MontageSet
+from at_em_imaging_workflow.models.montage_set import MontageSet
 from django.utils.timezone import now
-from development.models.camera import Camera
-from development.models.microscope_type import MicroscopeType
-from development.models.microscope import Microscope
-from development.models.section import Section
-from development.models.load import Load
-from development.models.sample_holder import SampleHolder
+from at_em_imaging_workflow.models.camera import Camera
+from at_em_imaging_workflow.models.microscope_type import MicroscopeType
+from at_em_imaging_workflow.models.microscope import Microscope
+from at_em_imaging_workflow.models.section import Section
+from at_em_imaging_workflow.models.load import Load
+from at_em_imaging_workflow.models.sample_holder import SampleHolder
 from workflow_engine.models.configuration import Configuration
 
 

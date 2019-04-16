@@ -4,7 +4,7 @@ from workflow_engine.models.task import Task
 from workflow_engine.models.job import Job
 from django.test.utils import override_settings
 from workflow_engine.workflow_controller import WorkflowController
-from development.models import EMMontageSet
+from at_em_imaging_workflow.models import EMMontageSet
 from tests.strategies.at_em_fixtures import strategy_configurations
 from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets

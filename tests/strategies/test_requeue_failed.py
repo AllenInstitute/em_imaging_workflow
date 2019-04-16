@@ -1,6 +1,6 @@
 import pytest
 from mock import Mock
-from development.strategies.wait_for_manual_qc \
+from at_em_imaging_workflow.strategies.montage.wait_for_manual_qc \
     import WaitForManualQc
 
 reprocess_instructions = \

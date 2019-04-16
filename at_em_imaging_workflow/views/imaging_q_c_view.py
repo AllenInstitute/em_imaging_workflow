@@ -1,9 +1,12 @@
 from rest_pandas import PandasView
-from development.models.e_m_montage_set import EMMontageSet
-from development.models.sample_holder import SampleHolder
-from development.models.section import Section
-from at_em_imaging_workflow.serializers.imaging_q_c_serializer \
-    import ImagingQCSerializer
+from at_em_imaging_workflow.models import (
+    EMMontageSet,
+    SampleHolder,
+    Section
+)
+from at_em_imaging_workflow.serializers.imaging_q_c_serializer import (
+    ImagingQCSerializer
+)
 
 
 class ImagingQCView(PandasView):

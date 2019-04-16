@@ -15,16 +15,18 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from workflow_engine.views import home_view
-from at_em_imaging_workflow.views import page_satchel
-from at_em_imaging_workflow.views.imaging_q_c_view import ImagingQCView
-from at_em_imaging_workflow.views.create_chunk_view import CreateChunkView
-from at_em_imaging_workflow.views.create_gap_section_view import CreateGapSectionView
+from .views import page_satchel
+from .views.imaging_q_c_view import ImagingQCView
+from .views.create_chunk_view import CreateChunkView
+from .views.create_gap_section_view import CreateGapSectionView
+
 admin.autodiscover()
+
+app_name = 'at_em_imaging_workflow'
 
 urlpatterns = (
     url(r'^$', home_view.index, name='index'),
     url(r'^workflow_engine/', include('workflow_engine.urls')),
-    url(r'^development/', include('development.urls')),
     url(r'^admin/', admin.site.urls),
 
     url(r'^at_em/page_satchel', page_satchel.page_satchel, name='page_satchel'),

@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework.serializers import PrimaryKeyRelatedField
 from rest_framework.fields import DateTimeField
-from development.models.e_m_montage_set import EMMontageSet
+from at_em_imaging_workflow.models import EMMontageSet
 
 
 class ImagingQCSerializer(ModelSerializer):

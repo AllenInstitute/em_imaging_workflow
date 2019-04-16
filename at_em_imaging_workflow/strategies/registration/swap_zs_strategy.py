@@ -5,10 +5,10 @@ from rendermodules.stack.schemas import (
 from at_em_imaging_workflow.two_d_stack_name_manager import (
     TwoDStackNameManager
 )
-from development.strategies import (
+from at_em_imaging_workflow.strategies import (
     get_workflow_node_input_template
 )
-from development.models import (
+from at_em_imaging_workflow.models import (
     EMMontageSet
 )
 import logging

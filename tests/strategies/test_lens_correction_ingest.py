@@ -1,8 +1,8 @@
 import pytest
 from mock import patch, Mock
-from development.strategies.lens_correction_ingest import LensCorrectionIngest
-from development.models.reference_set import ReferenceSet
-from development.models.e_m_montage_set import EMMontageSet
+from at_em_imaging_workflow.strategies.montage.lens_correction_ingest import LensCorrectionIngest
+from at_em_imaging_workflow.models.reference_set import ReferenceSet
+from at_em_imaging_workflow.models.e_m_montage_set import EMMontageSet
 
 message_body_data = {
     "reference_set_id": "DEADBEEF",

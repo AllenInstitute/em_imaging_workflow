@@ -1,12 +1,12 @@
 import pytest
 from mock import patch, Mock
-from development.models import ReferenceSet
-from development.strategies.generate_mesh_lens_correction import (
+from at_em_imaging_workflow.models import ReferenceSet
+from at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction import (
     GenerateMeshLensCorrection
 )
 from datetime import datetime
 from .at_em_fixtures import mock_run_states
-from development.models import Microscope
+from at_em_imaging_workflow.models import Microscope
 from django.test.utils import override_settings
 
 mock_temca3_template = {
@@ -55,13 +55,12 @@ mock_temca3_template = {
 }
 
 @pytest.mark.django_db
-@pytest.mark.skipif(True, reason="need better mocking")
 @override_settings(
     RENDER_SERVICE_URL='http://render.example.org',
     RENDER_SERVICE_PORT=1234
     #FIJI_PATH='/path/to/fiji'
 )
-def test_get_input_data(strategy_configurations):
+def test_get_input_data():
     enqueued_object = ReferenceSet(
         uid='deadbeef',
         manifest_path='manifest.json',
@@ -72,8 +71,8 @@ def test_get_input_data(strategy_configurations):
     mock_task = Mock()
 
     strategy = GenerateMeshLensCorrection()
-    with patch('development.strategies.'
-               'generate_mesh_lens_correction.'
+    with patch('at_em_imaging_workflow.strategies.montage.'
+               'generate_mesh_lens_correction.GenerateMeshLensCorrection.'
                'get_workflow_node_input_template',
                Mock(return_value=mock_temca3_template)):
         inp = strategy.get_input(enqueued_object,
@@ -89,8 +88,6 @@ def test_get_input_data(strategy_configurations):
     assert inp['render']['project'] == 'em_2d_montage_staging'
 
 
-
-
 @pytest.mark.django_db
 def test_on_failure():
     ref_set = ReferenceSet(
@@ -104,7 +101,7 @@ def test_on_failure():
     strategy = GenerateMeshLensCorrection()
     strategy.on_failure(task)
 
-    assert ref_set.object_state == ReferenceSet.STATE.LENS_CORRECTION_FAILED
+    assert ref_set.object_state == ReferenceSet.STATE.LENS_CORRECTION_PENDING
 
 @pytest.mark.django_db
 def test_on_finishing(mock_run_states):

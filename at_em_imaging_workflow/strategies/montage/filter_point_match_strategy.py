@@ -33,23 +33,18 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from workflow_engine.strategies import execution_strategy
+from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
 from rendermodules.pointmatch_filter.schemas import (
     FilterSchema
 )
 from at_em_imaging_workflow.two_d_stack_name_manager import (
     TwoDStackNameManager
 )
-from workflow_engine.workflow_controller import (
-    WorkflowController
-)
-from development.strategies import (
-    get_workflow_node_input_template
-)
+from workflow_engine.workflow_controller import WorkflowController
 import logging
 
 
-class FilterPointMatchStrategy(execution_strategy.ExecutionStrategy):
+class FilterPointMatchStrategy(InputConfigMixin, ExecutionStrategy):
     _log = logging.getLogger(
         'at_em_imaging_workflow.strategies.'
         'montage.filter_point_match_strategy')
@@ -58,7 +53,7 @@ class FilterPointMatchStrategy(execution_strategy.ExecutionStrategy):
         return em_mset.microscope.uid == 'temca4'
 
     def get_input(self, em_mset, storage_directory, task):
-        inp = get_workflow_node_input_template(task)
+        inp = self.get_workflow_node_input_template(task)
 
         inp['render'].update(
             TwoDStackNameManager.em_montage_set_render_settings(
@@ -92,7 +87,7 @@ class FilterPointMatchStrategy(execution_strategy.ExecutionStrategy):
         config.json_object.update(filter_output)
         config.save()
 
-        WorkflowController.start_workflow_2(
+        WorkflowController.start_workflow(
             'em_2d_montage',
             em_mset,
             start_node_name='2D Montage Python Solver',

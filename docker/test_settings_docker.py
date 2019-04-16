@@ -138,7 +138,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'workflow_engine',
-    'development',
     'at_em_imaging_workflow'
 ]
 

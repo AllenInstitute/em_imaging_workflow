@@ -1,4 +1,4 @@
-from development.models import ReferenceSet
+from at_em_imaging_workflow.models import ReferenceSet
 import datetime
 
 def test_str():

@@ -1,6 +1,6 @@
 import pytest
 from django_fsm import TransitionNotAllowed
-from development.models import EMMontageSet
+from at_em_imaging_workflow.models import EMMontageSet
 
 
 @pytest.fixture

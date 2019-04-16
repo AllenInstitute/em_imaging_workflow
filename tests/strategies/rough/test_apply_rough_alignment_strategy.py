@@ -1,7 +1,7 @@
 from workflow_engine.models.task import Task
 import pytest
 from tests.strategies.at_em_fixtures import strategy_configurations
-from development.strategies.rough.apply_rough_alignment_strategy \
+from at_em_imaging_workflow.strategies.rough.apply_rough_alignment_strategy \
     import ApplyRoughAlignmentStrategy
 from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets

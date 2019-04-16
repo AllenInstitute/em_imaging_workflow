@@ -5,7 +5,7 @@ from workflow_engine.models.job import Job
 from workflow_engine.models.task import Task
 from workflow_engine.workflow_controller import WorkflowController
 from tests.strategies.at_em_fixtures import strategy_configurations
-from development.strategies.create_tile_pairs_strategy \
+from at_em_imaging_workflow.strategies.montage.create_tile_pairs_strategy \
     import CreateTilePairsStrategy
 from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets

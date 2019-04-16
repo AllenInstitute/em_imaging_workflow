@@ -66,6 +66,8 @@ class TwoDStackNameManager(object):
 
     POINT_MATCH_FILTER_JSON = 'point_match_filter{}_z_{}_to_{}.json'
 
+    ROUGH_POINT_MATCH_COLLECTION = 'chunk_rough_align_point_matches'
+
 
     class TRANSFORM:
         RIGID = 'rigid'
@@ -115,6 +117,10 @@ class TwoDStackNameManager(object):
     @classmethod
     def point_match_collection(cls, em_mset):
         return em_mset.get_point_collection_name()
+
+    @classmethod
+    def rough_point_match_collection(cls, chnk):
+        return cls.ROUGH_POINT_MATCH_COLLECTION
 
     @classmethod
     def point_match_filter_json(cls, em_mset):

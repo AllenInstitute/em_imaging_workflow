@@ -1,6 +1,6 @@
 import pytest
 from django_fsm import TransitionNotAllowed
-from development.models import Chunk
+from at_em_imaging_workflow.models import Chunk
 
 
 @pytest.fixture

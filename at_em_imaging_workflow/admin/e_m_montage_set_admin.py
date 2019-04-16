@@ -5,9 +5,11 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from workflow_engine.models.well_known_file import WellKnownFile
 from workflow_engine.workflow_controller import WorkflowController
-from development.models.e_m_montage_set import EMMontageSet
+from at_em_imaging_workflow.models import (
+    EMMontageSet,
+    Chunk
+)
 import simplejson as json
-from development.models.chunk import Chunk
 
 
 def redo_point_match_0_5(modeladmin, request, queryset):
@@ -291,19 +293,19 @@ class EMMontageSetAdmin(admin.ModelAdmin):
 
         if l:
             return mark_safe('<a href="{}">{}</a>'.format(
-                reverse("admin:development_load_change",
+                reverse("admin:at_em_imaging_workflow_load_change",
                         args=(l.pk,)),
                 str(l.uid)))
 
     def microscope_link(self, em_montage_set_object):
         return mark_safe('<a href="{}">{}</a>'.format(
-            reverse("admin:development_microscope_change",
+            reverse("admin:at_em_imaging_workflow_microscope_change",
                     args=(em_montage_set_object.microscope.pk,)),
             str(em_montage_set_object.microscope)))
 
     def specimen_link(self, em_montage_set_object):
         return mark_safe('<a href="{}">{}</a>'.format(
-            reverse("admin:development_specimen_change",
+            reverse("admin:at_em_imaging_workflow_specimen_change",
                     args=(em_montage_set_object.section.specimen.pk,)),
             str(em_montage_set_object.section.specimen)))
 
@@ -366,7 +368,7 @@ class EMMontageSetAdmin(admin.ModelAdmin):
         try:
             pk = em_montage_set_object.reference_set.pk
             return mark_safe('<a href="{}">{}</a>'.format(
-                reverse("admin:development_referenceset_change",
+                reverse("admin:at_em_imaging_workflow_referenceset_change",
                         args=(pk,)),
                 str(em_montage_set_object.reference_set)))
         except:

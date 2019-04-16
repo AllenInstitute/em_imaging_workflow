@@ -5,7 +5,7 @@ from workflow_engine.workflow_controller import WorkflowController
 from workflow_engine.models.configuration import Configuration
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from development.models.e_m_montage_set import EMMontageSet
+from at_em_imaging_workflow.models import EMMontageSet
 
 
 def redo_lens_correction(modeladmin, request, queryset):
@@ -103,7 +103,7 @@ class ReferenceSetAdmin(admin.ModelAdmin):
 
     def microscope_link(self, em_montage_set_object):
         return mark_safe('<a href="{}">{}</a>'.format(
-            reverse("admin:development_microscope_change",
+            reverse("admin:at_em_imaging_workflow_microscope_change",
                     args=(em_montage_set_object.microscope.pk,)),
             str(em_montage_set_object.microscope)))
 

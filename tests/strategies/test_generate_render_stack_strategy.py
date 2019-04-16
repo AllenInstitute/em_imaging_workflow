@@ -4,7 +4,7 @@ import django
 from django.conf import settings
 from tests.strategies.at_em_fixtures import strategy_configurations
 django.setup()
-from development.strategies.generate_render_stack_strategy \
+from at_em_imaging_workflow.strategies.montage.generate_render_stack_strategy \
     import GenerateRenderStackStrategy
 
 

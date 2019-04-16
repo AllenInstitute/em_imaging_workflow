@@ -1,9 +1,9 @@
 import pytest
 import django; django.setup()
 from django.conf import settings
-from development.models import Chunk, RenderedVolume, Study, Specimen
+from at_em_imaging_workflow.models import Chunk, RenderedVolume, Study, Specimen
 from django.test.utils import override_settings
-from development.models.e_m_montage_set import EMMontageSet
+from at_em_imaging_workflow.models.e_m_montage_set import EMMontageSet
 from django.utils import timezone
 from django.utils.timezone import datetime
 from tests.models.test_montage_set import cameras_etc, section_factory

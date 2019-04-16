@@ -3,10 +3,10 @@ import pytest
 from django.test.utils import override_settings
 from workflow_engine.models.job import Job
 from workflow_engine.models.task import Task
-from development.models.e_m_montage_set import EMMontageSet
-from development.strategies.rough.define_chunks_strategy \
+from at_em_imaging_workflow.models.e_m_montage_set import EMMontageSet
+from at_em_imaging_workflow.strategies.rough.define_chunks_strategy \
     import DefineChunksStrategy
-from development.models.chunk import Chunk
+from at_em_imaging_workflow.models.chunk import Chunk
 from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
 

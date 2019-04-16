@@ -5,7 +5,7 @@ from django.forms import (
     IntegerField,
     CharField
 )
-from development.models import (
+from at_em_imaging_workflow.models import (
     EMMontageSet,
     Section,
     SampleHolder
@@ -79,7 +79,7 @@ class CreateGapSectionView(FormView):
     template_name = 'create_gap_section.html'
     form_class = CreateGapSectionForm
     success_url = reverse_lazy(
-        'admin:development_emmontageset_changelist')
+        'admin:at_em_imaging_workflow_emmontageset_changelist')
 
     def form_valid(self, form):
         form.do_create()

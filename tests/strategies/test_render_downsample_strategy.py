@@ -5,7 +5,7 @@ from workflow_engine.models.task import Task
 import pytest
 from workflow_engine.workflow_controller import WorkflowController
 from tests.strategies.at_em_fixtures import strategy_configurations
-from development.strategies.render_downsample_strategy \
+from at_em_imaging_workflow.strategies.montage.render_downsample_strategy \
     import RenderDownsampleStrategy
 from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets

@@ -1,27 +1,24 @@
-from workflow_engine.strategies import execution_strategy
+from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
 from rendermodules.fusion.schemas import (
     FuseStacksParameters
 )
-from development.strategies.rough.solve_rough_alignment_strategy import (
+from at_em_imaging_workflow.strategies.rough.solve_rough_alignment_strategy import (
     SolveRoughAlignmentStrategy
 )
 from at_em_imaging_workflow.two_d_stack_name_manager import (
     TwoDStackNameManager
 )
-from development.strategies import (
-    get_workflow_node_input_template
-)
 from django.conf import settings
 import logging
 
 
-class FuseStacksStrategy(execution_strategy.ExecutionStrategy):
+class FuseStacksStrategy(InputConfigMixin, ExecutionStrategy):
     _log = logging.getLogger(
         'at_em_imaging_workflow.strategies.'
         'fusion.fuse_stacks_strategy')
 
     def get_input(self, chnk, storage_directory, task):
-        inp = get_workflow_node_input_template(
+        inp = self.get_workflow_node_input_template(
             task,
             name='Fuse Stacks Input')
 

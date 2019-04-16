@@ -82,7 +82,7 @@ def test_job_queues_show_data(rf):
     assert set(payload.keys()) == set([
         'name', 'executable name', 'job strategy class',
         'executable path', 'id', 'updated at', 'created at',
-        'description', 'enqueued object class'])
+        'description', 'enqueued object type'])
 
 
 @pytest.mark.django_db

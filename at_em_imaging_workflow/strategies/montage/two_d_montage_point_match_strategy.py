@@ -1,24 +1,18 @@
-from workflow_engine.strategies.execution_strategy import (
-    ExecutionStrategy
-)
+from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
 from rendermodules.pointmatch.schemas import (
     PointMatchClientParametersSpark
 )
 from at_em_imaging_workflow.two_d_stack_name_manager import (
     TwoDStackNameManager
 )
-from development.strategies import (
-    get_workflow_node_input_template
-)
-from workflow_engine.models.well_known_file import WellKnownFile
-from django.core.exceptions import ObjectDoesNotExist
+from workflow_engine.models import WellKnownFile
 import jinja2
 import os
 from django.conf import settings
 import logging
 
 
-class TwoDMontagePointMatchStrategy(ExecutionStrategy):
+class TwoDMontagePointMatchStrategy(InputConfigMixin, ExecutionStrategy):
     _package = (
         'at_em_imaging_workflow.strategies.'
         'montage.two_d_montage_point_match_strategy')
@@ -27,7 +21,7 @@ class TwoDMontagePointMatchStrategy(ExecutionStrategy):
     _log = logging.getLogger(_package)
 
     def get_input(self, em_mset, storage_directory, task):
-        inp = get_workflow_node_input_template(
+        inp = self.get_workflow_node_input_template(
             task,
             name='2D Montage Point Match Input')
 

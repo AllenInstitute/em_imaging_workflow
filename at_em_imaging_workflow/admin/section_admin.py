@@ -1,5 +1,5 @@
 from django.contrib import admin
-from development.models.section import Section
+from at_em_imaging_workflow.models import Section
 
 
 class ChunkInline(admin.StackedInline):

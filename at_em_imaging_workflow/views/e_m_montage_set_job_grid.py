@@ -1,5 +1,5 @@
 from workflow_engine.views.job_grid import JobGrid
-from development.models import (
+from at_em_imaging_workflow.models import (
     EMMontageSet,
     ChunkAssignment
 )

@@ -3,9 +3,9 @@ from mock import Mock, patch
 from workflow_engine.models.job import Job
 from workflow_engine.models.task import Task
 from workflow_engine.workflow_controller import WorkflowController
-from development.models import EMMontageSet
+from at_em_imaging_workflow.models import EMMontageSet
 from tests.strategies.at_em_fixtures import strategy_configurations
-from development.strategies.two_d_python_solver_strategy \
+from at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy \
     import TwoDPythonSolverStrategy
 from django.test.utils import override_settings
 from tests.models.test_chunk_model \
@@ -14,6 +14,10 @@ import simplejson as json
 
 
 @pytest.mark.django_db
+@patch('workflow_engine.strategies.'
+       'execution_strategy.ExecutionStrategy.'
+       'get_task_storage_directory',
+       Mock(return_value="/path/to/task/storage/directory"))
 def test_get_input_data(strategy_configurations):
     em_mset = Mock()
     em_mset.get_redo_parameters = Mock(return_value={})
@@ -39,7 +43,7 @@ def test_get_input_data(strategy_configurations):
 
     with patch('os.makedirs'):
         with patch('os.path.exists', Mock(return_value=True)):
-            with patch('development.strategies.two_d_python_solver_strategy.EMA_Schema',
+            with patch('at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy.EMA_Schema',
                        ema_schema,
                        create=True):
                 strategy = TwoDPythonSolverStrategy()

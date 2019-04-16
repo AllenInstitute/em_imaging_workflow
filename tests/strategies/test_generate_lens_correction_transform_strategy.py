@@ -1,10 +1,10 @@
 import pytest
 from mock import patch, Mock
-from development.models import ReferenceSet
+from at_em_imaging_workflow.models import ReferenceSet
 from workflow_engine.workflow_controller import WorkflowController
 from workflow_engine.models.configuration import Configuration
 from tests.strategies.at_em_fixtures import strategy_configurations
-from development.strategies.generate_lens_correction_transform_strategy \
+from at_em_imaging_workflow.strategies.montage.generate_lens_correction_transform_strategy \
     import GenerateLensCorrectionTransformStrategy
 from .at_em_fixtures import mock_run_states
 from django.test.utils import override_settings

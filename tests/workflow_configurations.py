@@ -23,7 +23,7 @@ workflows:
             - key: "start"
               label: "Start"
               class: "blue_sky.strategies.mock_analyze.MockAnalyze"
-              enqueued_class: "development.models.EMMontageSet"
+              enqueued_class: "at_em_imaging_workflow.models.EMMontageSet"
               executable: "mock"
         graph:
             - [ "start", [ ] ]
@@ -48,18 +48,18 @@ run_states:
     - "PROCESS_KILLED"
 workflows:
     test_workflow:
-        ingest: "development.strategies.lens_correction_ingest.LensCorrectionIngest"
+        ingest: "at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest"
 
         states:
             - key: "start"
               label: "Start"
-              class: "development.strategies.start.Start"
-              enqueued_class: "development.models.EMMontageSet"
+              class: "at_em_imaging_workflow.strategies.montage.start.Start"
+              enqueued_class: "at_em_imaging_workflow.models.EMMontageSet"
               executable: "mock"
             - key: "continue"
               label: "Continue"
-              class: "development.strategies.continue.Continue"
-              enqueued_class: "development.models.EMMontageSet"
+              class: "at_em_imaging_workflow.strategies.montage.continue.Continue"
+              enqueued_class: "at_em_imaging_workflow.models.EMMontageSet"
               executable: "mock"
         graph:
             - [ "start", [ "continue" ] ]

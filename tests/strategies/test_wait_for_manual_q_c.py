@@ -1,10 +1,11 @@
 import pytest
-from development.models.e_m_montage_set import EMMontageSet
-from development.strategies.wait_for_manual_qc \
-    import WaitForManualQc
-from tests.models.test_chunk_model \
-    import cameras_etc, section_factory, lots_of_montage_sets
-from development.models import EMMontageSet
+from at_em_imaging_workflow.models import EMMontageSet
+from at_em_imaging_workflow.strategies.montage.wait_for_manual_qc import (
+    WaitForManualQc
+)
+from tests.models.test_chunk_model import (
+    cameras_etc, section_factory, lots_of_montage_sets
+)
 
 
 @pytest.mark.django_db

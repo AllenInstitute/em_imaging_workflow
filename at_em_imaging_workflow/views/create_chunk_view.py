@@ -1,6 +1,6 @@
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse_lazy
-from development.models import (
+from at_em_imaging_workflow.models import (
     Chunk,
     ChunkAssignment,
     Section,
@@ -112,7 +112,7 @@ class CreateChunkForm(Form):
 class CreateChunkView(FormView):
     template_name = 'create_chunk.html'
     form_class = CreateChunkForm
-    success_url = reverse_lazy('admin:development_chunk_changelist')
+    success_url = reverse_lazy('admin:at_em_imaging_workflow_chunk_changelist')
 
     def form_valid(self, form):
         form.do_create()

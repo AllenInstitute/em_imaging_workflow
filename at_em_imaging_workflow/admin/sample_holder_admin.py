@@ -1,6 +1,5 @@
 from django.contrib import admin
-from development.models.sample_holder import SampleHolder
-from development.models.load import Load
+from at_em_imaging_workflow.models import SampleHolder, Load
 
 
 class LoadInline(admin.StackedInline):

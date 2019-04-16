@@ -4,10 +4,10 @@ from django.core.exceptions import ValidationError
 #from django.contrib.contenttypes.forms import generic_inlineformset_factory
 from workflow_engine.models.configuration  import Configuration
 from workflow_engine.workflow_controller import WorkflowController
-from development.strategies.rough.solve_rough_alignment_strategy import (
+from at_em_imaging_workflow.strategies.rough.solve_rough_alignment_strategy import (
     SolveRoughAlignmentStrategy as SRAS
 )
-from development.models.section import Section
+from at_em_imaging_workflow.models import Section
 from django.contrib.contenttypes.admin import GenericStackedInline
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -29,7 +29,7 @@ def qc_pass_chunk(modeladmin, request, queryset):
 class ChunkConfigurationForm(ModelForm):
     class Meta:
         model=Configuration
-        fields=('name', 'configuration_type', 'json_object',)
+        fields=('name', 'content_type', 'configuration_type', 'json_object',)
         extra=0
 
     def clean_json_object(self):
@@ -113,17 +113,17 @@ class ChunkAdmin(admin.ModelAdmin):
     ]
     inlines = [ChunkConfigurationInline]
 
-    def changelist_view(self, request, extra_context=None):
-        response = super().changelist_view(request, extra_context)
-
-        return response
+#     def changelist_view(self, request, extra_context=None):
+#         response = super().changelist_view(request, extra_context)
+# 
+#         return response
 
     def preceding_link(self, chunk_object):
         c = chunk_object.preceding_chunk
 
         if c:
             return mark_safe('<a href="{}">{}</a>'.format(
-                reverse("admin:development_chunk_change",
+                reverse("admin:at_em_imaging_workflow_chunk_change",
                         args=(c.pk,)),
                 str(c)))
         else:
@@ -137,7 +137,7 @@ class ChunkAdmin(admin.ModelAdmin):
 
         if c:
             return mark_safe('<a href="{}">{}</a>'.format(
-                reverse("admin:development_chunk_change",
+                reverse("admin:at_em_imaging_workflow_chunk_change",
                         args=(c.pk,)),
                 str(c)))
         else:

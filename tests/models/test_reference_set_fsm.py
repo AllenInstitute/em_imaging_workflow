@@ -1,6 +1,6 @@
 import pytest
 from django_fsm import TransitionNotAllowed
-from development.models import ReferenceSet
+from at_em_imaging_workflow.models import ReferenceSet
 
 
 @pytest.fixture

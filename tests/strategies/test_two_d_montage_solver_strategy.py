@@ -4,7 +4,7 @@ from workflow_engine.models.job import Job
 from workflow_engine.models.task import Task
 from workflow_engine.workflow_controller import WorkflowController
 from tests.strategies.at_em_fixtures import strategy_configurations
-from development.strategies.two_d_montage_solver_strategy \
+from at_em_imaging_workflow.strategies.montage.two_d_montage_solver_strategy \
     import TwoDMontageSolverStrategy
 from django.test.utils import override_settings
 from tests.models.test_chunk_model \
@@ -12,14 +12,19 @@ from tests.models.test_chunk_model \
 
 
 @pytest.mark.django_db
-@patch('development.strategies.two_d_montage_solver_strategy'
-       '.get_workflow_node_input_template',
+@patch('at_em_imaging_workflow.strategies.montage.'
+       'two_d_montage_solver_strategy.TwoDMontageSolverStrategy.'
+       'get_workflow_node_input_template',
        Mock(return_value={
            'render': {},
            'source_collection': {},
            'source_point_match_collection': {},
            'target_collection': { 'stack': '' },
            'solver_options': {} }))
+@patch('workflow_engine.strategies.'
+       'execution_strategy.ExecutionStrategy.'
+       'get_task_storage_directory',
+       Mock(return_value="/path/to/task/storage/directory"))
 def test_get_input_data(strategy_configurations):
     em_mset = Mock()
     em_mset.reimage_index = Mock(return_value=0)

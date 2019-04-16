@@ -1,6 +1,6 @@
 import pytest
-from development.strategies.lens_correction_ingest import LensCorrectionIngest
-from development.models.e_m_montage_set import EMMontageSet
+from at_em_imaging_workflow.strategies.montage.lens_correction_ingest import LensCorrectionIngest
+from at_em_imaging_workflow.models.e_m_montage_set import EMMontageSet
 import copy
 
 body_data = {

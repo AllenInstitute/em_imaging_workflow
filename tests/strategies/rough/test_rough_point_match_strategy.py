@@ -8,12 +8,12 @@ from workflow_engine.models.task import Task
 from workflow_engine.models.job import Job
 from django.test.utils import override_settings
 from workflow_engine.workflow_controller import WorkflowController
-from development.models.chunk import Chunk
+from at_em_imaging_workflow.models.chunk import Chunk
 from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
-from development.strategies.rough.rough_point_match_strategy \
+from at_em_imaging_workflow.strategies.rough.rough_point_match_strategy \
     import RoughPointMatchStrategy
-from development.models.chunk_assignment import ChunkAssignment
+from at_em_imaging_workflow.models.chunk_assignment import ChunkAssignment
 
 @pytest.fixture
 def lots_of_chunks(lots_of_montage_sets):
@@ -27,9 +27,9 @@ def lots_of_chunks(lots_of_montage_sets):
 
 
 @pytest.mark.django_db
-@patch('development.strategies.rough'
-       '.rough_point_match_strategy'
-       '.get_workflow_node_input_template',
+@patch('at_em_imaging_workflow.strategies.rough.'
+       'rough_point_match_strategy.RoughPointMatchStrategy.'
+       'get_workflow_node_input_template',
        Mock(return_value={
             'SIFTsteps': 5,
             'render': { }
@@ -99,8 +99,9 @@ def test_on_finishing(lots_of_chunks):
     cfg = chnk_assign.chunk.configurations.get(
         configuration_type='rough_tile_pair_file')
 
-    assert cfg.json_object["1"]["tile_pair_file"] == \
-        '/path/to/file'
+    assert (cfg.json_object["1"]["tile_pair_file"] ==
+        '/path/to/file')
     assert cfg.json_object["1"]["pairCount"] == 5
-    assert cfg.json_object["1"]["point_match_output"] == \
-        '/path/to/task/storage/directory/output_333.json'
+    # TODO: multinode spark doesn't write this file.
+    #assert (cfg.json_object["1"]["point_match_output"] ==
+    #    '/path/to/task/storage/directory/output_333.json')
