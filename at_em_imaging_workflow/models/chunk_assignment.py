@@ -100,7 +100,7 @@ class ChunkAssignment(Enqueueable, models.Model):
             tile_pair_json[z_index][
                 ChunkAssignment.POINT_MATCH_OUTPUT
             ] = point_match_output
-        #tile_pair_cfg.json_object = tile_pair_json
+
         tile_pair_cfg.save()
 
     def get_rough_tile_pair_file_name(self):

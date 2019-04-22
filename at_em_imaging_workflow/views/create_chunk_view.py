@@ -1,9 +1,7 @@
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse_lazy
 from at_em_imaging_workflow.models import (
-    Chunk,
-    ChunkAssignment,
-    Section,
+    ChunkCalculator,
     RenderedVolume,
     Load
 )
@@ -16,80 +14,9 @@ from django.forms import (
 
 def create_chunk_handler(
     load_object, computed_index, z_min, z_max, volume=None):
-    if volume is None:
-        volume = RenderedVolume.objects.first()
 
-    chnk,_ = Chunk.objects.get_or_create(
-        computed_index=computed_index,
-        defaults = {
-            'size': 0,
-            'chunk_state': Chunk.STATE.CHUNK_INCOMPLETE,
-            'rendered_volume': volume,
-            'preceding_chunk': None,
-            'following_chunk': None
-        }
-    )
-
-    load_z_mapping = load_object.get_z_mapping()
-    chunk_z_mapping = {}
-    for z in range(z_min, z_max+1):
-        try:
-            chunk_z_mapping[str(z)] = load_z_mapping[str(z)]
-        except:
-            pass
-
-    mapped_min = load_z_mapping[str(z_min)]
-    mapped_max = load_z_mapping[str(z_max)]
-    
-    chnk_cfg,_ = chnk.configurations.update_or_create(
-        configuration_type='chunk_configuration',
-        defaults={
-            'name': 'Chunk {} {} configuration'.format(
-                chnk.computed_index,
-                chnk.id
-            ),
-        }
-    )
-    chnk_cfg.json_object = {
-        "tile_pair_ranges": {
-            "0": {
-                "maxz": mapped_max,
-                "minz": mapped_min,
-                "tempz": z_min,
-                "zNeighborDistance": 3
-            }
-        }
-    }
-
-    chnk_cfg.save()
-
-    z_mapping,_ = chnk.configurations.update_or_create(
-        configuration_type='z_mapping',
-        defaults={
-            'name': 'Chunk {} {} z_mapping'.format(
-                chnk.computed_index,
-                chnk.id
-            ),
-            'json_object': chunk_z_mapping
-        }
-    )
-
-    sections = Section.objects.filter(
-        z_index__gte=z_min,
-        z_index__lte=z_max)
-
-    cas = []
-    
-    for s in sections:
-        chnk_assn,_ = ChunkAssignment.objects.get_or_create(
-            section=s,
-            chunk=chnk
-        )
-
-        cas.append(chnk_assn)
-
-    return chnk
-
+    return ChunkCalculator.create_chunk(
+        load_object, computed_index, z_min, z_max, volume)
 
 class CreateChunkForm(Form):
     load_name = CharField(max_length=255)

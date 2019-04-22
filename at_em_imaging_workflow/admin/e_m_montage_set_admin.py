@@ -214,9 +214,11 @@ def reset_pending_em_montage_set(modeladmin, request, queryset):
             em_mset.object_state = 'PENDING'
             em_mset.save()
 
+# TODO:  Get the load from the montage set, then get candidate chunks from that.
 def assign_chunk(modeladmin, request, queryset):
-    for em_mset in queryset:
-        Chunk.assign_montage_set_to_chunks(em_mset)
+    raise Exception('unimplemented')
+#     for em_mset in queryset:
+#         Chunk.assign_montage_set_to_chunks(em_mset)
 
 
 class ConfigurationInline(GenericStackedInline):
@@ -287,7 +289,7 @@ class EMMontageSetAdmin(admin.ModelAdmin):
 
     def load_uid(self, em_montage_set_object):
         try:
-            l = em_montage_set_object.sample_holder.load
+            l = em_montage_set_object.get_load()
         except:
             return ''
 

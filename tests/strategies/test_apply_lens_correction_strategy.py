@@ -72,5 +72,3 @@ def test_get_input_data():
     assert set(input_ret['zValues']) == set([543])
     assert input_ret['input_stack'] == 'em_2d_montage_apply_mipmaps'
     assert input_ret['output_stack'] == 'em_2d_montage_lc'
-
-

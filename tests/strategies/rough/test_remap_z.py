@@ -16,9 +16,12 @@ from tests.strategies.rough.test_rough_point_match_strategy \
 
 @pytest.mark.django_db
 def test_get_input_data(lots_of_chunks):
-    chnk_assigns = ChunkAssignment.objects.filter(
-        chunk=lots_of_chunks[0])
-    chnk_assign = chnk_assigns[0]
+    chnk = lots_of_chunks[0]
+    min_z = min(int(i) for i in chnk.get_z_mapping().keys())
+    chnk_assign = chnk.chunkassignment_set.get(
+        section__z_index=min_z
+    )
+
     storage_directory = '/example/storage/directory'
     em_mset = EMMontageSet.objects.filter(
         section=chnk_assign.section).first()
@@ -46,8 +49,8 @@ def test_get_input_data(lots_of_chunks):
             storage_directory,
             task)
 
-    assert inp['zValues'] == [2]
-    assert inp['new_zValues'] == [1]
+    assert inp['zValues'] == [0]
+    assert inp['new_zValues'] == [10000]
 
     assert inp['input_stack'] == 'em_2d_montage_solved_py_0_01_mapped'
     assert inp['output_stack'] == 'em_2d_montage_downsampled_no_mapping'
@@ -63,11 +66,12 @@ def test_get_input_data(lots_of_chunks):
 
 @pytest.mark.django_db
 def test_get_one_task_objects_for_queue(lots_of_chunks):
-    chnk_assigns = ChunkAssignment.objects.filter(
-        section__z_index=1)
-    chnk_assign = chnk_assigns[0]
-    em_mset = EMMontageSet.objects.filter(
-        section=chnk_assign.section)[0]
+    chnk = lots_of_chunks[0]
+    min_z = min(int(i) for i in chnk.get_z_mapping().keys())
+    chnk_assign = chnk.chunkassignment_set.get(
+        section__z_index=min_z
+    )
+    em_mset = chnk_assign.section.montageset_set.get().emmontageset
     strategy = RemapZStrategy()
 
     tsks = strategy.get_task_objects_for_queue(em_mset)
@@ -78,11 +82,12 @@ def test_get_one_task_objects_for_queue(lots_of_chunks):
 
 @pytest.mark.django_db
 def test_get_two_task_objects_for_queue(lots_of_chunks):
-    chnk_assigns = ChunkAssignment.objects.filter(
-        section__z_index=10)
-    chnk_assign = chnk_assigns[0]
-    em_mset = EMMontageSet.objects.filter(
-        section=chnk_assign.section)[0]
+    chnk = lots_of_chunks[0]
+    max_z = max(int(i) for i in chnk.get_z_mapping().keys())
+    chnk_assign = chnk.chunkassignment_set.get(
+        section__z_index=max_z
+    )
+    em_mset = chnk_assign.section.montageset_set.get().emmontageset
     strategy = RemapZStrategy()
 
     tsks = strategy.get_task_objects_for_queue(em_mset)

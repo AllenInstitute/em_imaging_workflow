@@ -34,13 +34,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from django.conf import settings
 from django_fsm import FSMField, transition
 from workflow_engine.mixins import (
     Enqueueable,
     Configurable,
     HasWellKnownFiles
 )
+import itertools as it
 import logging
 
 
@@ -90,24 +90,12 @@ class Chunk(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
         self.size = 0
 
     def is_complete(self):
-        # raise Exception('unimplimented')
-        return True
+        return len(self.missing_sections()) == 0
 
     # TODO: move this to render project manager
     def get_render_project_name(self):
         # return '247488_8R'
         return self.sections.first().specimen.uid
-
-    def z_list(self):
-        secs = self.sections.all()
-        zs = [sec.z_index for sec in secs]
-
-        return zs
-
-    def z_range(self):
-        zs = self.z_list()
-
-        return (min(zs), max(zs))
 
     def dimensions(self):
         camera = self.sections.first().montageset_set.first().camera
@@ -122,85 +110,30 @@ class Chunk(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
         return 'rough tile pairs file'
 
     @classmethod
-    def get_z_range(cls, em_mset):
-        z_index = em_mset.z_index()
+    def assign_to_chunks(cls, em_mset, remove_others=False):
+        if remove_others:
+            raise Exception('unimplemented')
 
-    @classmethod
-    def chunks_for_z_index(cls, load_offset, z):
-        ''' returns one or more chunks that would contain a z-index
-        '''
-        chunk_defaults = settings.CHUNK_DEFAULTS
-        size = chunk_defaults['chunk_size']
-        overlap = chunk_defaults['overlap']
-        size_minus_overlap = size - overlap 
-        offset = load_offset
-        z_no_offset = z - offset
-        chunk_id = z_no_offset // size_minus_overlap
-        z_within_chunk = z_no_offset % size_minus_overlap
+        z_index = em_mset.get_section_z_index()
 
-        if z_within_chunk < overlap:
-            if chunk_id > 0:
-                return [ chunk_id - 1, chunk_id ]
-            else:
-                return [ chunk_id ]
-        else:
-            return [ chunk_id ]
+        load_object = em_mset.get_load()
+        load_chunks = load_object.chunk_set.all()
 
-    @classmethod
-    def calculate_z_range(cls, c):
-        # TODO: this does not take offset into account
-        chunk_defaults = settings.CHUNK_DEFAULTS
+        chunks_to_assign = []
 
-        z_start = (
-            c * chunk_defaults['chunk_size']
-            + chunk_defaults['start_z']
-            - c * chunk_defaults['overlap'])
+        for c in load_chunks:
+            z_mapping = c.get_z_mapping()
 
-        z_end = z_start + chunk_defaults['chunk_size']
+            if str(z_index) in z_mapping:
+                chunks_to_assign.append(c)
 
-        return (z_start, z_end)
-
-    @classmethod
-    def z_indices_for_chunk(cls, c):
-        (z_start, z_end) = Chunk.calculate_z_range(c)
-
-        return list(range(z_start, z_end))
-
-    @classmethod
-    def assign_montage_set_to_chunks(cls, mset):
-        mipmap_directory = '/path/to/mock/mipmaps'
-        default_state = 'PENDING'
-
-        volume, _ = RenderedVolume.objects.update_or_create(
-            specimen=mset.section.specimen,
-            defaults={
-                'mipmap_directory': mipmap_directory,
-            })
-
-        chunk_index_list = Chunk.chunks_for_z_index(
-            mset.sample_holder.load.offset,
-            mset.get_section_z_index())
-        chunk_list = []
-
-        for c_idx in chunk_index_list:
-            c, _ = Chunk.objects.update_or_create(
-                computed_index=c_idx,
-                defaults={
-                    'size': settings.CHUNK_DEFAULTS['chunk_size'],
-                    'rendered_volume': volume,
-                    'object_state': Chunk.STATE.CHUNK_INCOMPLETE,
-                    'following_chunk_id': None,
-                    'preceding_chunk_id': None})
-            chunk_list.append(c)
-
-        mset_section = mset.section
-
-        for c in chunk_list:
+        for c in chunks_to_assign:
             ChunkAssignment.objects.update_or_create(
-                section=mset_section,
-                chunk=c)
+                chunk=c,
+                section=em_mset.section
+            )
 
-        return chunk_list
+        return chunks_to_assign
 
     def get_z_mapping(self):
         return self.configurations.get(
@@ -213,20 +146,23 @@ class Chunk(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
 
     def missing_sections(self):
         z_mapping = self.get_z_mapping()
-        sections = self.sections.all()
-    
-        section_zs = set(
-            s.z_index for s in sections 
-            if Chunk.get_montage_set_for_rough_alignment(
-                s
-            ).object_state in [
-                'REIMAGE',
-                'GAP',
-                'MONTAGE_QC_PASSED'
-            ]
-        )
         mapping_zs = set(int(z) for z in z_mapping.keys())
-    
+
+        section_zs = set(
+            m.section.z_index for m in it.chain.from_iterable(
+                s.montageset_set.filter(
+                    object_state__in=[
+                        'GAP',
+                        'REIMAGE',
+                        'MONTAGE_QC_PASSED'
+                       # EMMontageSet.STATE.EM_MONTAGE_SET_GAP,
+                        #EMMontageSet.STATE.EM_MONTAGE_SET_REIMAGE,
+                        #EMMontageSet.STATE.EM_MONTAGE_SET_QC_PASSED
+                    ]
+                ) for s in self.sections.all()
+            )
+        )
+
         return mapping_zs - section_zs
 
     def get_tile_pair_ranges(self):
@@ -236,6 +172,13 @@ class Chunk(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
 
         return tile_pair_config['tile_pair_ranges']
 
+    def z_info(self):
+        z_mapping = self.get_z_mapping()
+        tile_pair_ranges = self.get_tile_pair_ranges()
+        min_z, max_z = self.calculate_z_min_max(tile_pair_ranges)
+
+        return z_mapping, min_z, max_z
+
     def calculate_z_min_max(self, tile_pair_ranges):
         min_z = min([rng['minz'] for rng in tile_pair_ranges.values()])
         max_z = max([rng['maxz'] for rng in tile_pair_ranges.values()])
@@ -243,24 +186,13 @@ class Chunk(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
         return min_z,max_z
 
     def storage_basename(self):
-        tile_pair_ranges = self.get_tile_pair_ranges()
-        z_start,z_end = self.calculate_z_min_max(tile_pair_ranges)
+        _, z_start,z_end = self.z_info()
 
         return '{}_zs{}_ze{}'.format(
             self.computed_index,
             str(z_start),
             str(z_end)
         )
-
-    def get_load(self):
-        try:
-            load_object = self.sections.first(
-                ).montageset_set.first(
-                    ).sample_holder.load
-        except:
-            load_object = None
-
-        return load_object
 
     @transition(
         field='object_state',
@@ -361,4 +293,6 @@ class Chunk(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
         pass
 
 # circular imports
-from at_em_imaging_workflow.models import RenderedVolume, ChunkAssignment
+from at_em_imaging_workflow.models import (
+    ChunkAssignment
+)

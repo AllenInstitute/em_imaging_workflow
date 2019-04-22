@@ -99,12 +99,15 @@ class TwoDStackNameManager(object):
 
     @classmethod
     def get_reimage_suffix(cls, em_mset):
-        reimage_level = em_mset.reimage_index()
-
-        if reimage_level:
-            reimage_suffix = '_reimage_{}'.format(reimage_level)
-        else:
+        if em_mset is None:
             reimage_suffix = ''
+        else:
+            reimage_level = em_mset.reimage_index()
+
+            if reimage_level:
+                reimage_suffix = '_reimage_{}'.format(reimage_level)
+            else:
+                reimage_suffix = ''
 
         return reimage_suffix
 
@@ -273,6 +276,13 @@ class TwoDStackNameManager(object):
         return cls.RENDER_STACK_ROUGH_ALIGN.format(min_z, max_z)
 
     @classmethod
+    def solve_rough_align_stacks(cls, chnk):
+        return {
+            'source': cls.downsampled_stack(None),
+            'target': cls.rough_align_downsample_stack(chnk)
+        }
+
+    @classmethod
     def solve_rough_align_python_stacks(cls, chnk, transformation):
         if 'transformation' == TwoDStackNameManager.TRANSFORM.RIGID:
             return {
@@ -290,6 +300,15 @@ class TwoDStackNameManager(object):
                     TwoDStackNameManager.TRANSFORM.RIGID,
                     TwoDStackNameManager.TRANSFORM.AFFINE
                 ))
+
+    @classmethod
+    def apply_rough_alignment_stacks(cls, chnk):
+        return {
+            'montage_stack': cls.solved_python_stack(None),
+            'prealigned_stack': cls.solved_python_stack(None),
+            'lowres_stack': cls.rough_align_downsample_stack(chnk),
+            'output_stack': cls.rough_align_stack(chnk)
+        }
 
     @classmethod
     def register_adjacent_stacks(cls, chnk):

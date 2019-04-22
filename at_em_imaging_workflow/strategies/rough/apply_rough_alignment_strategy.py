@@ -1,15 +1,10 @@
 from workflow_engine.strategies import ExecutionStrategy, InputConfigMixin
 from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
+from at_em_imaging_workflow.two_d_stack_name_manager import TwoDStackNameManager
 from rendermodules.rough_align.schemas import (
     ApplyRoughAlignmentTransformParameters
 )
-from at_em_imaging_workflow.strategies import (
-    RENDER_STACK_SOLVED_PYTHON,
-    RENDER_STACK_ROUGH_ALIGN,
-    RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE
-)
 from at_em_imaging_workflow.models import EMMontageSet
-from django.conf import settings
 import logging
 import copy
 
@@ -44,24 +39,14 @@ class ApplyRoughAlignmentStrategy(InputConfigMixin, ExecutionStrategy):
 
         mapped_from = z_mapping.keys()
 
-        old_zs = [int(z) for z in mapped_from]
-        new_zs = [z_mapping[z] for z in mapped_from]
+        inp['old_z'] = [int(z) for z in mapped_from]
+        inp['new_z'] = [z_mapping[z] for z in mapped_from]
         inp['map_z'] = True
-
         inp['consolidate_transforms'] = True
-        inp['old_z'] = old_zs
-        inp['new_z'] = new_zs
-        z_start = min(new_zs)
-        z_end = max(new_zs)
-
         inp['tilespec_directory'] = storage_directory
 
-        inp['montage_stack'] = RENDER_STACK_SOLVED_PYTHON
-        inp['prealigned_stack'] = RENDER_STACK_SOLVED_PYTHON # RENDER_STACK_LENS_CORRECTED
-        inp['lowres_stack'] = RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE % (
-            z_start, z_end)
-        #inp['lowres_stack'] = 'rough_aligned_downsample_0_01_affine_z_mapped'
-        inp['output_stack'] = RENDER_STACK_ROUGH_ALIGN % (
-            z_start, z_end)
+        inp.update(
+            TwoDStackNameManager.apply_rough_alignment_stacks(chnk)
+        )
 
         return ApplyRoughAlignmentTransformParameters().dump(inp).data

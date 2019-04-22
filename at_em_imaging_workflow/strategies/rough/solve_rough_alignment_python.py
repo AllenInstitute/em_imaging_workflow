@@ -1,10 +1,8 @@
 from workflow_engine.strategies import InputConfigMixin, ExecutionStrategy
-from at_em_imaging_workflow.strategies import (
-    RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE,
-    RENDER_STACK_RIGID_ALIGN_DOWNSAMPLE,
-    RENDER_STACK_DOWNSAMPLED
+from at_em_imaging_workflow.two_d_stack_name_manager import TwoDStackNameManager
+from at_em_imaging_workflow.render_strategy_utils import (
+    RenderStrategyUtils as RSU
 )
-from django.conf import settings
 import logging
 
 
@@ -16,46 +14,24 @@ class SolveRoughAlignmentPython(InputConfigMixin, ExecutionStrategy):
     def get_input(self, chnk, storage_directory, task):
         inp = self.get_workflow_node_input_template(task)
 
-        tile_pair_ranges = chnk.get_tile_pair_ranges()
-        min_z, max_z = chnk.calculate_z_min_max(tile_pair_ranges)
+        stacks = TwoDStackNameManager.solve_rough_align_python_stacks(
+            chnk,
+            inp['transformation']
+        )
 
-        input_stack_template = RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE
-        output_stack_template = None
-
-        if inp['transformation'] == 'rigid':
-            input_stack = RENDER_STACK_DOWNSAMPLED
-            output_stack = RENDER_STACK_RIGID_ALIGN_DOWNSAMPLE % (min_z, max_z)
-        elif inp['transformation'] == 'affine':
-            input_stack = RENDER_STACK_RIGID_ALIGN_DOWNSAMPLE % (min_z, max_z)
-            output_stack = RENDER_STACK_ROUGH_ALIGN_DOWNSAMPLE % (min_z, max_z)
-        else:
-            raise Exception(
-                'transformation must be rigid or affine')
-
-        inp['pointmatch']['host'] = settings.RENDER_SERVICE_URL
-        inp['pointmatch']['port'] = settings.RENDER_SERVICE_PORT
-        inp['pointmatch']['owner'] = settings.RENDER_SERVICE_USER
-        inp['pointmatch']['project'] = chnk.get_render_project_name()
-        inp['pointmatch']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
+        inp['pointmatch'] = RSU.render_input_dict(chnk)
         inp['pointmatch']['name'] = chnk.get_point_collection_name()
         inp['pointmatch']['db_interface'] = 'render'
 
-        inp['input_stack']['host'] = settings.RENDER_SERVICE_URL
-        inp['input_stack']['port'] = settings.RENDER_SERVICE_PORT
-        inp['input_stack']['owner'] = settings.RENDER_SERVICE_USER
-        inp['input_stack']['project'] = chnk.get_render_project_name()
-        inp['input_stack']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
-        inp['input_stack']['name'] = input_stack
+        inp['input_stack'] = RSU.render_input_dict(chnk)
+        inp['input_stack']['name'] = stacks['input_stack']
         inp['input_stack']['db_interface'] = 'render'
 
-        inp['output_stack']['host'] = settings.RENDER_SERVICE_URL
-        inp['output_stack']['port'] = settings.RENDER_SERVICE_PORT
-        inp['output_stack']['owner'] = settings.RENDER_SERVICE_USER
-        inp['output_stack']['project'] = chnk.get_render_project_name()
-        inp['output_stack']['client_scripts'] = settings.RENDER_CLIENT_SCRIPTS
-        inp['output_stack']['name'] = output_stack
+        inp['output_stack'] = RSU.render_input_dict(chnk)
+        inp['output_stack']['name'] = stacks['output_stack']
         inp['output_stack']['db_interface'] = 'render'
 
+        _, min_z, max_z = chnk.z_info()
         inp['first_section'] = min_z
         inp['last_section'] = max_z
 

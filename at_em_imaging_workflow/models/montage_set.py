@@ -52,3 +52,6 @@ class MontageSet(TileImageSet):
 
     def get_section_z_index(self):
         return self.section.z_index
+
+    def get_load(self):
+        return self.sample_holder.load

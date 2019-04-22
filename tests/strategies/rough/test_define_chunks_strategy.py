@@ -1,14 +1,17 @@
-from mock import Mock, patch
+import itertools as it
 import pytest
 from django.test.utils import override_settings
-from workflow_engine.models.job import Job
-from workflow_engine.models.task import Task
-from at_em_imaging_workflow.models.e_m_montage_set import EMMontageSet
-from at_em_imaging_workflow.strategies.rough.define_chunks_strategy \
-    import DefineChunksStrategy
-from at_em_imaging_workflow.models.chunk import Chunk
-from tests.models.test_chunk_model \
-    import cameras_etc, section_factory, lots_of_montage_sets
+from workflow_engine.models import Job
+from at_em_imaging_workflow.models import (
+    ChunkAssignment,
+    EMMontageSet
+)
+from at_em_imaging_workflow.strategies.rough.define_chunks_strategy import (
+    DefineChunksStrategy
+)
+from tests.fixtures.model_fixtures import (
+    cameras_etc, section_factory, lots_of_montage_sets, lots_of_chunks
+)
 
 
 @pytest.mark.django_db
@@ -22,12 +25,36 @@ from tests.models.test_chunk_model \
     RENDER_SERVICE_PORT='1234',
     RENDER_CLIENT_SCRIPTS='/path/to/test/client/scripts'
     )
-def test_must_wait(lots_of_montage_sets):
-    assert Chunk.objects.count() == 0
+def test_must_wait(lots_of_chunks):
+    strat = DefineChunksStrategy()
+    chnk = lots_of_chunks[0]
+    computed_index = chnk.computed_index
 
-    for em_mset in lots_of_montage_sets:
-        strat = DefineChunksStrategy()
-        strat.must_wait(em_mset)
+    montage_sets = [
+        s.montageset_set.get().emmontageset
+        for s in chnk.sections.all()
+    ]
+    ChunkAssignment.objects.filter(chunk=chnk).delete()
+    n = len(montage_sets)
 
-    assert Chunk.objects.count() == 125
-    assert EMMontageSet.objects.count() == 999
+    for i in range(0, n):
+        em_mset = montage_sets[i]
+        em_mset.object_state = EMMontageSet.STATE.EM_MONTAGE_SET_QC_PASSED
+        em_mset.save()
+        j = Job(enqueued_object=em_mset)
+        cs = strat.get_objects_for_queue(j)
+
+        cs = [c for c in cs if c.computed_index == computed_index]
+        assert len(cs) == 1
+
+        c = cs[0]
+        waiting = strat.must_wait(c)
+
+        if i == n - 1:
+            assert c.is_complete()
+            assert len(c.missing_sections()) == 0
+            assert not waiting
+        else:
+            assert not c.is_complete()
+            assert len(c.missing_sections()) > 0
+            assert waiting

@@ -31,18 +31,7 @@ class MaterializeSectionsStrategy(InputConfigMixin, ExecutionStrategy):
         chnk = chnk_assign.chunk
         em_mset = chnk_assign.section.montageset_set.first()
 
-        # TODO: test and consolidate
-        chunk_load = chnk.get_load()
-        z_mapping = chnk.get_z_mapping(chunk_load)
-        tile_pair_ranges = chnk.get_tile_pair_ranges()
-        min_z, max_z = chnk.calculate_z_min_max(tile_pair_ranges)
-        clipped_z_mapping = chnk.clip_z_mapping_to_min_max(
-                z_mapping, min_z, max_z)
-
-        #mapped_from = clipped_z_mapping.keys()
-
-        #old_zs = [int(z) for z in mapped_from]
-        #new_zs = [clipped_z_mapping[z] for z in mapped_from]
+        z_mapping = chnk.get_z_mapping(chnk.load)
 
         inp['sparkhome'] = settings.SPARK_HOME
         log_dir = self.get_or_create_task_storage_directory(task)
@@ -60,11 +49,9 @@ class MaterializeSectionsStrategy(InputConfigMixin, ExecutionStrategy):
             ':' + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
         inp['owner'] = settings.RENDER_SERVICE_USER
         inp['project'] = chnk.get_render_project_name()
-        inp['stack'] = TwoDStackNameManager.RENDER_STACK_FUSION
 
-        # TODO: Generalize
-        if (chnk.computed_index == 35):
-            inp['stack'] = 'FUSEDOUTPUTSTACK_Chunk_30_31_33'
+        # TODO use a method here
+        inp['stack'] = TwoDStackNameManager.RENDER_STACK_FUSION
 
         inp['rootDirectory'] = chnk.get_storage_directory()
 
@@ -77,7 +64,7 @@ class MaterializeSectionsStrategy(InputConfigMixin, ExecutionStrategy):
         mem = 128
         # inp['driverMemory'] = str(int(mem)) +  'g'  # TODO roughly memory * ppn
 
-        mapped_z = clipped_z_mapping[str(em_mset.section.z_index)]
+        mapped_z = z_mapping[str(em_mset.get_section_z_index())]
         inp['zValues'] = [ mapped_z ]
 
         return MaterializeSectionsParameters().dump(inp).data

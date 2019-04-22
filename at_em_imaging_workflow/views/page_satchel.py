@@ -119,7 +119,7 @@ def all_chunks(result, get_params):
     for chnk in chunk_start_indices:
         complete_state = []
         found_sections = [s.z_index for s in chnk.sections.all()]
-        z_start, z_end = Chunk.calculate_z_range(chnk.computed_index)
+        z_mapping, z_start, z_end = chnk.z_info()
 
         for z in range(z_start, z_end):
             if z in found_sections:
@@ -171,38 +171,3 @@ def page_satchel(request, url=None):
         result['message'] = str(e) + ' - ' + str(traceback.format_exc())
 
     return JsonResponse(result)
-
-
-def page_satchel_old(request, url=None):
-    if url is None:
-        url = request.get_full_path()
-
-    chunks = Chunk.objects.all()
-    chunk_start_indices = sorted(chunks, key=lambda c: c.computed_index)
-
-    #context['chunks'] = chunk_start_indices
-    #context['chunk_indices'] = range(settings.CHUNK_DEFAULTS['chunk_size'])
-
-    completed_sections = []
-
-    for chnk in chunk_start_indices:
-        complete_state = []
-        found_sections = [s.z_index for s in chnk.sections.all()]
-        z_start, z_end = Chunk.calculate_z_range(chnk.computed_index)
-
-        for z in range(z_start, z_end):
-            if z in found_sections:
-                complete_state.append({'z': z, 'complete': 'T'})
-            else:
-                complete_state.append({'z': z, 'complete': 'F' })
-
-        completed_sections.append((
-            chnk.computed_index,
-            complete_state))
-
-    context['chunk_size'] = settings.CHUNK_DEFAULTS['chunk_size']
-    context['chunk_sections'] = completed_sections
-
-    template = loader.get_template('chunks.html')
-
-    return HttpResponse(template.render(context, request))

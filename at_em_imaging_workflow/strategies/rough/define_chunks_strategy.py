@@ -3,15 +3,12 @@ from workflow_engine.strategies import WaitStrategy
 
 
 class DefineChunksStrategy(WaitStrategy):
+    def get_objects_for_queue(self, source_job):
+        em_mset = source_job.enqueued_object
 
-    def must_wait(self, em_mset):
-        chnks = Chunk.assign_montage_set_to_chunks(em_mset)
+        assigned_chunks = Chunk.assign_to_chunks(em_mset)
 
-        trigger_next_queue = False
+        return assigned_chunks
 
-        # TODO: need to enqueue the complete objects
-        for c in chnks:
-            if c.is_complete():
-                trigger_next_queue = True
-
-        return trigger_next_queue
+    def must_wait(self, chnk):
+        return not chnk.is_complete()

@@ -51,5 +51,5 @@ from .reference_set import ReferenceSet
 from .e_m_montage_set import EMMontageSet
 from .registration_series import RegistrationSeries
 
-from workflow_engine.blue_sky_state_machine import BlueSkyStateMachine
-from workflow_engine.state_machine_yaml import StateMachineYaml
+# helper logic
+from .chunk_calculator import ChunkCalculator

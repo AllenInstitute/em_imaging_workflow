@@ -2,13 +2,14 @@ import pytest
 from mock import patch, Mock, mock_open
 from workflow_engine.models.task import Task
 from django.test.utils import override_settings
-from tests.strategies.at_em_fixtures import strategy_configurations
 from at_em_imaging_workflow.strategies.rough.solve_rough_alignment_strategy \
     import SolveRoughAlignmentStrategy
-from tests.models.test_chunk_model \
-    import cameras_etc, section_factory, lots_of_montage_sets
-from tests.strategies.rough.test_rough_point_match_strategy \
-    import lots_of_chunks
+from tests.fixtures.model_fixtures import (
+    cameras_etc,
+    section_factory,
+    lots_of_montage_sets,
+    lots_of_chunks
+)
 
 
 @pytest.mark.django_db
@@ -36,18 +37,7 @@ from tests.strategies.rough.test_rough_point_match_strategy \
            'render': { 'source_collection': '' } } ))
 def test_get_input_data(lots_of_chunks):
     chnk = lots_of_chunks[2]
-    chnk.configurations.update_or_create(
-        name='chunk 2 configuration',
-        configuration_type='chunk_configuration',
-        defaults={
-            'json_object': { 'tile_pair_ranges': {
-                "1": { "minz": 2,
-                      "maxz": 2
-                    }
-                } } })
-    chnk.get_z_mapping = Mock(return_value={
-        17: 2
-    })
+
     task = Task(id=345)
     storage_directory = '/example/storage/directory'
     strategy = SolveRoughAlignmentStrategy()
@@ -66,8 +56,8 @@ def test_get_input_data(lots_of_chunks):
                     storage_directory,
                     task)
 
-    assert inp['first_section'] == 2
-    assert inp['last_section'] == 2
+    assert inp['first_section'] == 180
+    assert inp['last_section'] == 280
     assert set(inp.keys()) == {
         'render',
         'log_level',

@@ -26,9 +26,12 @@ from tests.strategies.rough.test_rough_point_match_strategy \
            'render': { } } ))
 def test_get_input_data(lots_of_chunks,
                         strategy_configurations):
-    chnk_assigns = ChunkAssignment.objects.filter(
-        chunk=lots_of_chunks[0])
-    chnk_assign = chnk_assigns[0]
+    chnk = lots_of_chunks[0]
+    min_z = min(int(i) for i in chnk.get_z_mapping().keys())
+    chnk_assign = chnk.chunkassignment_set.get(
+        section__z_index=min_z
+    )
+
     strategy = MakeMontageScapesStackStrategy()
     storage_directory = '/example/storage/directory'
     task = Task(id=345)
@@ -51,12 +54,12 @@ def test_get_input_data(lots_of_chunks,
         task)
 
     assert inp['set_new_z'] == True
-    assert inp['minZ'] == 1
-    assert inp['maxZ'] == 1
-    assert inp['new_z_start'] == 2
+    assert inp['minZ'] == 10000
+    assert inp['maxZ'] == 10000
+    assert inp['new_z_start'] == 0
 
     assert inp['image_directory'] == \
-        '/long/term/em_montage_set/MOCK SPECIMEN_z1_2345_06_07_16_09_10_00_00'
+        '/long/term/em_montage_set/MOCK SPECIMEN_z10000_2345_06_07_16_09_09_00_00'
 
     assert inp['montage_stack'] == 'em_2d_montage_solved_py'
     assert inp['output_stack'] == 'em_2d_montage_solved_py_0_01_mapped'
@@ -72,13 +75,14 @@ def test_get_input_data(lots_of_chunks,
 
 @pytest.mark.django_db
 def test_get_one_task_objects_for_queue(lots_of_chunks):
-    chnk_assigns = ChunkAssignment.objects.filter(
-        section__z_index=1)
-    chnk_assign = chnk_assigns[0]
-    em_mset = EMMontageSet.objects.filter(
-        section=chnk_assign.section)[0]
-    strategy = MakeMontageScapesStackStrategy()
+    chnk = lots_of_chunks[0]
+    min_z = min(int(i) for i in chnk.get_z_mapping().keys())
+    chnk_assign = chnk.chunkassignment_set.get(
+        section__z_index=min_z
+    )
+    em_mset = chnk_assign.section.montageset_set.get().emmontageset
 
+    strategy = MakeMontageScapesStackStrategy()
     tsks = strategy.get_task_objects_for_queue(em_mset)
 
     assert tsks is not None
@@ -87,9 +91,13 @@ def test_get_one_task_objects_for_queue(lots_of_chunks):
 
 @pytest.mark.django_db
 def test_get_two_task_objects_for_queue(lots_of_chunks):
-    chnk_assigns = ChunkAssignment.objects.filter(
-        section__z_index=10)
-    chnk_assign = chnk_assigns[0]
+    chnk = lots_of_chunks[0]
+    max_z = max(int(i) for i in chnk.get_z_mapping().keys())
+    chnk_assign = chnk.chunkassignment_set.get(
+        section__z_index=max_z
+    )
+    em_mset = chnk_assign.section.montageset_set.get().emmontageset
+
     em_mset = EMMontageSet.objects.filter(
         section=chnk_assign.section)[0]
     strategy = MakeMontageScapesStackStrategy()

@@ -60,30 +60,6 @@ def rf():
 
 
 @pytest.mark.django_db
-@override_settings(
-    CHUNK_DEFAULTS = {
-        'overlap': 100,
-        'start_z': 1,
-        'chunk_size': 200 })
-def test_temca_query(rf,
-                    lots_of_montage_sets):
-    for em_mset in lots_of_montage_sets:
-        strat = DefineChunksStrategy()
-        strat.must_wait(em_mset)
-
-    #assert Chunk.objects.count() == 125
-
-    request = rf.get(
-        '/at_em/page_satchel?q=temca_query&scope=MOCK MICROSCOPE')
-    response = page_satchel(request)
-    assert response.status_code == 200
-
-    result_data = json.load(BytesIO(response.content))
-    assert result_data['success'][0] == True
-    assert len(result_data['message']['MOCK MICROSCOPE']) == 999
-    #assert json.dumps(result_data, indent=2) == '' 
-
-@pytest.mark.django_db
 @pytest.mark.skipif(True, reason='deprecated')
 def test_find_sections(rf,
                     lots_of_montage_sets):

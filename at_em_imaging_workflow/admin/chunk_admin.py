@@ -50,18 +50,13 @@ class ChunkConfigurationInline(GenericStackedInline):
 
 
 def remap_chunk(modeladmin, request, queryset):
-    pass
+    raise Exception('unimplemented')
 
 
 def update_chunk_assignment(c):
-    chunk_load = c.get_load()
-    z_mapping = chunk_load.get_z_mapping()
-    tile_pair_ranges = c.get_tile_pair_ranges()
-    min_z, max_z = SRAS.calculate_z_min_max(tile_pair_ranges)
-    clipped_z_mapping = SRAS.clip_z_mapping_to_min_max(
-        z_mapping, min_z, max_z) 
+    z_mapping, min_z, max_z = c.z_info()
     cas = c.chunkassignment_set.all()
-    temp_zs = [int(k) for k in clipped_z_mapping.keys()]
+    temp_zs = [int(k) for k in z_mapping.keys()]
     bad_cas = c.chunkassignment_set.all().exclude(
         section__z_index__in=temp_zs)
     # TODO: delete bad cas

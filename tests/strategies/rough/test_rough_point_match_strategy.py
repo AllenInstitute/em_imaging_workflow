@@ -1,30 +1,19 @@
-import os
-from tests.strategies.at_em_fixtures import strategy_configurations
-os.environ['BLUE_SKY_SETTINGS'] = '/local1/git/at_em_imaging_workflow/at_em_imaging_workflow/blue_sky_settings.yml'
-
 import pytest
+from tests.strategies.at_em_fixtures import strategy_configurations
 from mock import Mock, patch, mock_open
 from workflow_engine.models.task import Task
 from workflow_engine.models.job import Job
 from django.test.utils import override_settings
 from workflow_engine.workflow_controller import WorkflowController
-from at_em_imaging_workflow.models.chunk import Chunk
-from tests.models.test_chunk_model \
-    import cameras_etc, section_factory, lots_of_montage_sets
+from tests.fixtures.model_fixtures import (
+    cameras_etc,
+    section_factory,
+    lots_of_montage_sets,
+    lots_of_chunks
+)
 from at_em_imaging_workflow.strategies.rough.rough_point_match_strategy \
     import RoughPointMatchStrategy
 from at_em_imaging_workflow.models.chunk_assignment import ChunkAssignment
-
-@pytest.fixture
-def lots_of_chunks(lots_of_montage_sets):
-    chnks = set()
-
-    for em_mset in lots_of_montage_sets:
-        chnks.update(
-            Chunk.assign_montage_set_to_chunks(em_mset))
-
-    return list(chnks)
-
 
 @pytest.mark.django_db
 @patch('at_em_imaging_workflow.strategies.rough.'
@@ -37,10 +26,7 @@ def lots_of_chunks(lots_of_montage_sets):
 def test_get_input_data(lots_of_chunks,
                         strategy_configurations):
     chnk_assign = ChunkAssignment.objects.first()
-    tpj = { "1": { "tile_pair_file": "/path/to/file" }}
-    chnk_assign.chunk.configurations.update_or_create(
-        configuration_type='rough_tile_pair_file',
-        json_object=tpj)
+
     task = Task(id=345)
     storage_directory = '/example/storage/directory'
     strategy = RoughPointMatchStrategy()
@@ -60,7 +46,7 @@ def test_get_input_data(lots_of_chunks,
     assert inp['SIFTsteps'] == 5
 
     assert inp['collection'] == 'chunk_rough_align_point_matches'
-    assert inp['pairJson'] == '/path/to/file'
+    assert inp['pairJson'] == '/rough/tile/pair/file'
 
 
 @pytest.mark.django_db
@@ -74,11 +60,12 @@ def test_get_input_data(lots_of_chunks,
     RENDER_CLIENT_SCRIPTS='/path/to/test/client/scripts'
     )
 def test_on_finishing(lots_of_chunks):
-    chnk_assign = ChunkAssignment.objects.first()
-    tpj = { "1": { "tile_pair_file": "/path/to/file" }}
-    cfg, _ = chnk_assign.chunk.configurations.update_or_create(
-        configuration_type='rough_tile_pair_file',
-        json_object=tpj)
+    chnk = lots_of_chunks[0]
+    min_z = min(int(i) for i in chnk.get_z_mapping().keys())
+    chnk_assign = lots_of_chunks[0].chunkassignment_set.get(
+        section__z_index=min_z
+    )
+
     results = { 'pairCount': 5 }
     job = Job(
         id=444,
@@ -99,9 +86,9 @@ def test_on_finishing(lots_of_chunks):
     cfg = chnk_assign.chunk.configurations.get(
         configuration_type='rough_tile_pair_file')
 
-    assert (cfg.json_object["1"]["tile_pair_file"] ==
-        '/path/to/file')
-    assert cfg.json_object["1"]["pairCount"] == 5
+    assert (cfg.json_object[str(min_z)]["tile_pair_file"] ==
+        '/rough/tile/pair/file')
+    assert cfg.json_object[str(min_z)]["pairCount"] == 5
     # TODO: multinode spark doesn't write this file.
     #assert (cfg.json_object["1"]["point_match_output"] ==
     #    '/path/to/task/storage/directory/output_333.json')
