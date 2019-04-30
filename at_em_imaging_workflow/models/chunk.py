@@ -34,17 +34,24 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from django_fsm import FSMField, transition
+from django_fsm import transition
 from workflow_engine.mixins import (
     Enqueueable,
     Configurable,
-    HasWellKnownFiles
+    HasWellKnownFiles,
+    Stateful
 )
 import itertools as it
 import logging
 
 
-class Chunk(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
+class Chunk(
+    Configurable,
+    Enqueueable,
+    HasWellKnownFiles,
+    Stateful,
+    models.Model
+):
     class Meta:
         db_table = 'development_chunk'
 
@@ -70,17 +77,20 @@ class Chunk(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
     size = models.IntegerField(null=True)
     computed_index = models.IntegerField(null=True)
     chunk_state = models.CharField(max_length=255, null=True)
-    object_state = FSMField(default=STATE.CHUNK_INCOMPLETE)
     rendered_volume = models.ForeignKey('RenderedVolume')
     load = models.ForeignKey('Load',null=True, blank=True)
-    preceding_chunk = \
-        models.ForeignKey('self',
+    preceding_chunk = models.ForeignKey(
+        'self',
         related_name='%(class)s_preceding_chunk',
-        null=True, blank=True)
-    following_chunk = \
-        models.ForeignKey('self',
+        null=True,
+        blank=True
+    )
+    following_chunk = models.ForeignKey(
+        'self',
         related_name='%(class)s_following_chunk',
-        null=True, blank=True)
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return 'chunk {} {}'.format(self.computed_index, self.id)

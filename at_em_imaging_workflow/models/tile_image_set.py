@@ -37,17 +37,22 @@ from django.conf import settings
 from workflow_engine.mixins import (
     Configurable,
     Enqueueable,
-    HasWellKnownFiles
+    HasWellKnownFiles,
+    Stateful
 )
 from django.db import models
-from django_fsm import FSMField
-from pytz import timezone, utc
+from pytz import timezone
 import re
 
 
-class TileImageSet(Configurable, Enqueueable, HasWellKnownFiles, models.Model):
+class TileImageSet(
+    Configurable,
+    Enqueueable,
+    HasWellKnownFiles,
+    Stateful,
+    models.Model
+):
     storage_directory = models.CharField(max_length=255, null=True)
-    object_state = FSMField(default='PENDING')
     camera = models.ForeignKey('Camera', null=True)
     microscope = models.ForeignKey('Microscope', null=True)
     metafile = models.CharField(max_length=255, null=True)

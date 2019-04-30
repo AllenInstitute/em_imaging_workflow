@@ -31,6 +31,7 @@ class MakeMontageScapesStackStrategy(InputConfigMixin, ExecutionStrategy):
             configuration_type='z_mapping').json_object
         inp['new_z_start'] = z_mapping[str(z_index)]
 
+        # TODO: move to stack manager
         inp['image_directory'] = em_mset.get_storage_directory(
             settings.LONG_TERM_BASE_FILE_PATH)
 

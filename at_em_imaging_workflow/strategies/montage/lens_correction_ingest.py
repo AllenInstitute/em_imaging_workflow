@@ -36,16 +36,19 @@
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from workflow_engine.strategies.ingest_strategy import IngestStrategy
-from at_em_imaging_workflow.models.camera import Camera
-from at_em_imaging_workflow.models.microscope_type import MicroscopeType 
-from at_em_imaging_workflow.models.microscope import Microscope
-from at_em_imaging_workflow.models.reference_set import ReferenceSet
-from at_em_imaging_workflow.models.study import Study
-from at_em_imaging_workflow.models.specimen import Specimen
-from at_em_imaging_workflow.models.section import Section
-from at_em_imaging_workflow.models.sample_holder import SampleHolder
-from at_em_imaging_workflow.models.load import Load
-from at_em_imaging_workflow.models.e_m_montage_set import EMMontageSet
+from at_em_imaging_workflow.models import (
+    Camera,
+    EMMontageSet,
+    Load,
+    Microscope,
+    MicroscopeType, 
+    ReferenceSet,
+    SampleHolder,
+    Section,
+    Specimen,
+    Study
+)
+
 import logging
 import uuid
 
@@ -73,13 +76,13 @@ class LensCorrectionIngest(IngestStrategy):
         Camera
             the database object
         '''
-        camera, _ = \
-            Camera.objects.update_or_create(
-                uid=message_camera['camera_id'],
-                defaults={
-                    'height': message_camera['height'],
-                    'width': message_camera['width'],
-                    'model': message_camera['model']})
+        camera, _ = Camera.objects.update_or_create(
+            uid=message_camera['camera_id'],
+            defaults={
+                'height': message_camera['height'],
+                'width': message_camera['width'],
+                'model': message_camera['model']}
+            )
 
         return camera
 
@@ -99,16 +102,16 @@ class LensCorrectionIngest(IngestStrategy):
         Microscope
             the database object
         '''
-        scope_type, _ = \
-            MicroscopeType.objects.update_or_create(
-                name=message_microscope_type)
+        scope_type, _ = MicroscopeType.objects.update_or_create(
+            name=message_microscope_type
+        )
 
-        microscope, _ = \
-            Microscope.objects.update_or_create(
-                uid=message_microscope,
-                defaults={
-                    'microscope_type': scope_type
-                })
+        microscope, _ = Microscope.objects.update_or_create(
+            uid=message_microscope,
+            defaults={
+                'microscope_type': scope_type
+            }
+        )
 
         return microscope
 
@@ -168,7 +171,8 @@ class LensCorrectionIngest(IngestStrategy):
                 'render_project': settings.RENDER_SERVICE_PROJECT,
                 'render_owner': settings.RENDER_SERVICE_USER,
                 'study': study
-            })
+            }
+        )
 
         return specimen
 
@@ -180,7 +184,8 @@ class LensCorrectionIngest(IngestStrategy):
             specimen=specimen,
             defaults={
                 'metadata': None
-            })
+            }
+        )
 
         return section
 
@@ -191,13 +196,15 @@ class LensCorrectionIngest(IngestStrategy):
             load, _ = Load.objects.update_or_create(
                 uid=load_message['uid'],
                 defaults={
-                    'offset': load_message['offset']})
+                    'offset': load_message['offset']}
+            )
         else:
             load, _ = Load.objects.update_or_create(
                 uid='Load',
                 defaults = {
                     'offset': 0
-                })
+                }
+            )
 
         return load
 
@@ -209,7 +216,8 @@ class LensCorrectionIngest(IngestStrategy):
             load=load,
             defaults={
                 'imaged_sections_count': 0
-            })
+            }
+        )
 
         return sample_holder
 

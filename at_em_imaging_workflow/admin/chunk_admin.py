@@ -4,9 +4,6 @@ from django.core.exceptions import ValidationError
 #from django.contrib.contenttypes.forms import generic_inlineformset_factory
 from workflow_engine.models.configuration  import Configuration
 from workflow_engine.workflow_controller import WorkflowController
-from at_em_imaging_workflow.strategies.rough.solve_rough_alignment_strategy import (
-    SolveRoughAlignmentStrategy as SRAS
-)
 from at_em_imaging_workflow.models import Section
 from django.contrib.contenttypes.admin import GenericStackedInline
 from django.urls import reverse

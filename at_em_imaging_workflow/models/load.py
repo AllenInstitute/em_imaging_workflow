@@ -34,20 +34,23 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from django_fsm import FSMField, transition
-from workflow_engine.mixins import Configurable, Enqueueable
+from django_fsm import transition
+from workflow_engine.mixins import Configurable, Enqueueable, Stateful
 import pandas as pd
 import copy
 
 
-class Load(Configurable, Enqueueable, models.Model):
+class Load(
+    Configurable,
+    Enqueueable,
+    Stateful,
+    models.Model):
     class STATE:
         LOAD_PENDING = "PENDING"
         LOAD_Z_MAPPED = "Z_MAPPED"
 
     uid = models.CharField(max_length=255, null=True)
     offset = models.IntegerField(null=True)
-    object_state = FSMField(default=STATE.LOAD_PENDING)
 
     class Meta:
         db_table = 'development_load'
@@ -72,7 +75,7 @@ class Load(Configurable, Enqueueable, models.Model):
     def update_z_mapping(self, tape_df):
         tape_df = tape_df[
             tape_df['Barcode'].notnull() &
-            tape_df['Z'].notnull() &
+            tape_df['Z'].notnull()
             (tape_df['Z and TAO agree?'] == True)]
 
         self.configurations.update_or_create(

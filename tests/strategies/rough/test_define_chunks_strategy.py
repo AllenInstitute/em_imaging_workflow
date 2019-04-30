@@ -16,7 +16,6 @@ from tests.fixtures.model_fixtures import (
 
 @pytest.mark.django_db
 @override_settings(
-    DRY_RUN=False,
     BASE_FILE_PATH='/base',
     LONG_TERM_BASE_FILE_PATH='/long/term',
     RENDER_STACK_NAME='test_stack',

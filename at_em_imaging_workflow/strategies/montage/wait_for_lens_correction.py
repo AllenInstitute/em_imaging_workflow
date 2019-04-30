@@ -1,13 +1,16 @@
-import itertools as it
 from at_em_imaging_workflow.models import (
     ReferenceSet,
     EMMontageSet
 )
-
 from workflow_engine.strategies.wait_strategy import WaitStrategy
+import itertools as it
+import logging
 
 
 class WaitForLensCorrection(WaitStrategy):
+    _log = logging.getLogger(
+        'at_em_imaging_workflow.strategies'
+        '.montage.wait_for_lens_correction')
     QUEUE_NAME='Wait for Lens Correction'
 
     def get_objects_for_queue(self, source_job):
