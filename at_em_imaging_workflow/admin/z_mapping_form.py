@@ -58,11 +58,11 @@ class ZMappingForm(ModelForm):
         if commit:
             config_object.save()
 
-        WorkflowController.start_workflow(
+        WorkflowController.enqueue_from_admin_form(
             'em_2d_montage',
-            load_object,
-            start_node_name='Load Z Mapping',
-            reuse_job=True)
+            'Load Z Mapping',
+            load_object
+        )
 
         # TODO: enqueue the load object in wait for z mapping
         return config_object

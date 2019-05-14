@@ -38,8 +38,6 @@ from at_em_imaging_workflow.render_strategy_utils import RenderStrategyUtils
 from at_em_imaging_workflow.models import ChunkAssignment
 from rendermodules.pointmatch.schemas import TilePairClientParameters
 from at_em_imaging_workflow.two_d_stack_name_manager import TwoDStackNameManager
-from at_em_imaging_workflow.models import Chunk
-from django.conf import settings
 import logging
 
 
@@ -48,17 +46,17 @@ class CreateRoughPairsStrategy(InputConfigMixin, ExecutionStrategy):
         'at_em_imaging_workflow.strategies.rough.'
         'create_rough_pairs_strategy')
 
-    def can_transition(self, enqueued_object, source_node=None):
-        if type(enqueued_object) is Chunk:
-            return True
+    def transform_objects_for_queue(self, source_object):
+        chnk = source_object
+        tile_pair_ranges = chnk.get_tile_pair_ranges()
 
-        return False
+        chunk_assignments = [
+            ChunkAssignment.objects.get(
+                chunk=chnk,
+                section__z_index=tile_pair_ranges[x]['tempz']
+            ) for x in tile_pair_ranges.keys()]
 
-    def get_objects_for_queue(self, prev_queue_job):
-        objects = []
-        objects.append(prev_queue_job.enqueued_object)
-
-        return objects
+        return chunk_assignments
 
     def get_input(self, chk_assgn, storage_directory, task):
         inp = self.get_workflow_node_input_template(task)
@@ -94,17 +92,6 @@ class CreateRoughPairsStrategy(InputConfigMixin, ExecutionStrategy):
         chk_assgn.create_rough_tile_pair_file(
             results[ChunkAssignment.TILE_PAIR_FILE_KEY]
         )
-
-    def get_task_objects_for_queue(self, chnk):
-        tile_pair_ranges = chnk.get_tile_pair_ranges()
-
-        chunk_assignments = [
-            ChunkAssignment.objects.get(
-                chunk=chnk,
-                section__z_index=tile_pair_ranges[x]['tempz']
-            ) for x in tile_pair_ranges.keys()]
-
-        return chunk_assignments
 
     def get_storage_directory(self, base_storage_directory, job):
         chnk = job.enqueued_object

@@ -20,7 +20,6 @@ PROJECT_ROOT = BASE_DIR
 #    '/allen/programs/celltypes/workgroups/array_tomography/blue_sky/files/'
 BASE_FILE_PATH = '/example_data'
 LONG_TERM_BASE_FILE_PATH='/long/term'
-DRY_RUN=True
 PBS_FINISH_PATH = \
     '/allen/programs/celltypes/workgroups/array_tomography/blue_sky' + \
     '/at_em_imaging_workflow/pbs_execution_finish.py'
@@ -54,8 +53,6 @@ RENDER_SERVICE_PROJECT = 'MM2'
 RENDER_STACK_NAME = 'test_stack'
 RENDER_CLIENT_SCRIPTS = '/path/to/render/scripts'
 RENDER_POINT_MATCH_COLLECTION_NAME = 'default_point_matches'
-MATLAB_SOLVER_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/EMAligner/dev/allen_templates'
-MONTAGE_SOLVER_BIN=os.path.join(MATLAB_SOLVER_PATH, 'solve_montage_SL')
 RENDER_CLIENT_BASE_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/dev'
 RENDER_CLIENT_SCRIPTS = os.path.join(RENDER_CLIENT_BASE_PATH, 'scripts')
 RENDER_SPARK_JARFILE = os.path.join(RENDER_CLIENT_BASE_PATH, 'render-ws-spark-client-standalone.jar')

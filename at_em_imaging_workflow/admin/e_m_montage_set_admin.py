@@ -5,10 +5,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from workflow_engine.models.well_known_file import WellKnownFile
 from workflow_engine.workflow_controller import WorkflowController
-from at_em_imaging_workflow.models import (
-    EMMontageSet,
-    Chunk
-)
+from at_em_imaging_workflow.models import EMMontageSet  # , Chunk
 import simplejson as json
 
 
@@ -170,10 +167,11 @@ def qc_pass_em_montage_set(modeladmin, request, queryset):
             em_mset.pass_qc()
             em_mset.save()
 
-        WorkflowController.enqueue_next_queue_by_workflow_node(
+        WorkflowController.enqueue_from_admin_form(
             'em_2d_montage',
-            em_mset,
-            start_node_name='Manual QC / High Degree Polynomial or Point Match Regeneration')
+            'Manual QC / High Degree Polynomial or Point Match Regeneration',
+            em_mset
+        )
 
 def qc_fail_em_montage_set(modeladmin, request, queryset):
     qc_fail_em_montage_set.short_description = \

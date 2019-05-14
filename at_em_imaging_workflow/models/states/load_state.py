@@ -33,25 +33,18 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from django.db import models
-from at_em_imaging_workflow.models import TileImageSet
-from .states import ReferenceSetState
+from django_fsm import transition
 
 
-class ReferenceSet(ReferenceSetState, TileImageSet):
-    class Meta:
-        db_table = 'development_referenceset'
+class LoadState(object):
 
-    uid = models.CharField(max_length=255, null=True)
-    project_path = models.CharField(max_length=255) # deprecate for storage_dir
-    manifest_path = models.CharField(max_length=255, null=True) # well_known_file?
+    class STATE:
+        LOAD_PENDING = "PENDING"
+        LOAD_Z_MAPPED = "Z_MAPPED"
 
-    def __str__(self):
-        return str(self.acquisition_date)
-
-    # TODO: move this to render params manager
-    def get_render_project_name(self):
-        return "em_2d_montage_staging"
-
-    def storage_basename(self):
-        return self.clean_acquisition_date()
+    @transition(
+        field='object_state',
+        source=STATE.LOAD_PENDING,
+        target=STATE.LOAD_Z_MAPPED)
+    def z_mapped(self):
+        pass

@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from django import forms
 from django.core.exceptions import ValidationError
 from at_em_imaging_workflow.models import Chunk, Section, ChunkAssignment
+from workflow_engine.workflow_controller import WorkflowController
 
 
 class CreateChunkForm(ModelForm):
@@ -18,7 +19,7 @@ class CreateChunkForm(ModelForm):
         model=Chunk
         fields=(
             'computed_index',
-            'chunk_state',
+            'object_state',
             'z_min',
             'z_max',
             'rendered_volume'
@@ -107,6 +108,7 @@ class CreateChunkForm(ModelForm):
         sections = Section.objects.filter(
             z_index__gte=z_min,
             z_index__lte=z_max)
+        
 
         cas = []
 
@@ -122,16 +124,21 @@ class CreateChunkForm(ModelForm):
 
     def save(self, commit=True):
         chnk = super(CreateChunkForm, self).save()
-
         chnk = self.create_chunk_handler(
             chnk,
             self.z_min,
             self.z_max
         )
- 
+
+        chnk.object_state = Chunk.STATE.CHUNK_INCOMPLETE
+
         if commit:
             chnk.save()
 
-        # TODO: enqueue the chunk in wait for chunk assignment
+        WorkflowController.enqueue_from_admin_form(
+            'rough_align_em_2d',
+            'Wait for Chunk Assignment',
+            chnk
+        )
 
         return chnk

@@ -28,7 +28,6 @@ STATE_MACHINE_YML = os.path.join(
 BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/timf/example_data/dev'
 LONG_TERM_BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/timf/long_term/dev'
 MIPMAP_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/timf/mipmap/dev'
-DRY_RUN=True
 
 MESSAGE_QUEUE_NAME = APP_PACKAGE
 INGEST_MESSAGE_QUEUE_NAME = 'ingest_'+ MESSAGE_QUEUE_NAME
@@ -84,8 +83,6 @@ RENDER_SERVICE_USER = 'gayathrim'
 RENDER_SERVICE_PROJECT = 'DEV'
 RENDER_STACK_NAME = 'default_stack'
 RENDER_POINT_MATCH_COLLECTION_NAME = 'default_point_matches'
-MATLAB_SOLVER_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/EMAligner/dev/allen_templates'
-MONTAGE_SOLVER_BIN=os.path.join(MATLAB_SOLVER_PATH, 'run_em_solver.sh')
 RENDER_CLIENT_BASE_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/dev'
 RENDER_CLIENT_SCRIPTS = os.path.join(RENDER_CLIENT_BASE_PATH, 'scripts')
 RENDER_SPARK_JARFILE = os.path.join(RENDER_CLIENT_BASE_PATH, 'render-ws-spark-client-standalone.jar')

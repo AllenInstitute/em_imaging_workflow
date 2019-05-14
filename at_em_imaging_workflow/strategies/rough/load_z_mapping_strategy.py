@@ -15,16 +15,14 @@ class LoadZMappingStrategy(WaitStrategy):
 
         return False
 
-    def get_objects_for_queue(self, source_job):
-        enqueued_object = source_job.enqueued_object
-
-        if type(enqueued_object) is EMMontageSet:
-            em_mset = source_job.enqueued_object
+    def transform_objects_for_queue(self, source_object):
+        if type(source_object) is EMMontageSet:
+            em_mset = source_object
             load = em_mset.sample_holder.load
 
             return [load]
-        elif type(enqueued_object) is Load:
-            load = source_job.enqueued_object
+        elif type(source_object) is Load:
+            load = source_object
 
             return [load]
         else:

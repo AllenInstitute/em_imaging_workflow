@@ -18,8 +18,8 @@ class MaterializeSectionsStrategy(InputConfigMixin, ExecutionStrategy):
     _log_configuration_template = 'spark_log4j_template.properties'
     _log = logging.getLogger(_package)
 
-    def get_objects_for_queue(self, prev_queue_job):
-        chnk = prev_queue_job.enqueued_object
+    def transform_objects_for_queue(self, source_object):
+        chnk = source_object
 
         return list(chnk.chunkassignment_set.all())
 

@@ -21,7 +21,6 @@ PROJECT_ROOT = BASE_DIR
 BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/blue_sky_working/staging'
 LONG_TERM_BASE_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/blue_sky_working/staging/long_term'
 MIPMAP_FILE_PATH='/allen/programs/celltypes/workgroups/em-connectomics/blue_sky_working/staging/mipmap'
-DRY_RUN=True
 
 MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
 INGEST_MESSAGE_QUEUE_NAME = 'ingest_at_em_imaging_workflow'
@@ -54,8 +53,6 @@ RENDER_SERVICE_USER = 'timf'
 RENDER_SERVICE_PROJECT = 'STAGE'
 RENDER_STACK_NAME = 'default_stack'
 RENDER_POINT_MATCH_COLLECTION_NAME = 'default_point_matches'
-MATLAB_SOLVER_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/EMAligner/staging/allen_templates'
-MONTAGE_SOLVER_BIN=os.path.join(MATLAB_SOLVER_PATH, 'run_em_solver.sh')
 RENDER_CLIENT_BASE_PATH='/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/staging'
 RENDER_CLIENT_SCRIPTS = os.path.join(RENDER_CLIENT_BASE_PATH, 'scripts')
 RENDER_SPARK_JARFILE = os.path.join(RENDER_CLIENT_BASE_PATH, 'render-ws-spark-client-standalone.jar')

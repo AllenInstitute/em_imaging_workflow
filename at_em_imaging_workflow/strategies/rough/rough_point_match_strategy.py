@@ -73,7 +73,7 @@ class RoughPointMatchStrategy(InputConfigMixin, ExecutionStrategy):
  
         #retries = 20
         # inp['masterUrl'] = 'local[*,%d]' % (retries)
-        inp['baseDataUrl'] = "{}:{}/render-ws/v1".format(
+        inp['baseDataUrl'] = "http://{}:{}/render-ws/v1".format(
             settings.RENDER_SERVICE_URL,
             settings.RENDER_SERVICE_PORT
         )

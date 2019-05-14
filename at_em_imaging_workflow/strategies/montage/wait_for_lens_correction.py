@@ -13,37 +13,32 @@ class WaitForLensCorrection(WaitStrategy):
         '.montage.wait_for_lens_correction')
     QUEUE_NAME='Wait for Lens Correction'
 
-    def get_objects_for_queue(self, source_job):
-        enqueued_object = source_job.enqueued_object
-        enqueued_object_type = type(enqueued_object)
+    def transform_objects_for_queue(self, source_object):
+        source_object_type = type(source_object)
         em_mset = None
+        reference_set = None 
 
-        if enqueued_object_type == ReferenceSet:
-            reference_set = enqueued_object
+        if source_object_type == ReferenceSet:
+            reference_set = source_object
 
             WaitForLensCorrection._log.info(
                 'got Reference Set: {}'.format(reference_set)
             )
-        elif enqueued_object_type == EMMontageSet:
-            em_mset = enqueued_object
+        elif source_object_type == EMMontageSet:
+            em_mset = source_object
             reference_set = em_mset.reference_set
-
-            if reference_set is None:
-                WaitForLensCorrection._log.info(
-                    'got Montage Set with no Reference: {}'.format(em_mset)
-                )
-
-                return [em_mset]
         else:
             WaitForLensCorrection._log.warn(
                 'Unexpected enqueued object type: {}'.format(
-                    enqueued_object_type
+                    source_object_type
                 )
             )
             return []
 
-        shared_reference_montage_sets = \
-            reference_set.emmontageset_set.all()
+        if em_mset and reference_set is None:
+            return [em_mset]
+
+        shared_montage_sets = reference_set.emmontageset_set.all()
 
         queued_montage_set_jobs = set(it.chain.from_iterable(
             m.jobs.filter(
@@ -55,7 +50,7 @@ class WaitForLensCorrection(WaitStrategy):
                     'SUCCESS'
                 ]
             )
-            for m in shared_reference_montage_sets
+            for m in shared_montage_sets
         ))
 
         queued_montage_sets = set(
@@ -69,7 +64,7 @@ class WaitForLensCorrection(WaitStrategy):
             'Montage Sets to Wait on: {}'.format(queued_montage_sets)
         )
 
-        return queued_montage_sets
+        return list(queued_montage_sets)
 
 
     def must_wait(self, em_mset):

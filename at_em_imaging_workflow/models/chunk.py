@@ -34,13 +34,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from django_fsm import transition
 from workflow_engine.mixins import (
     Enqueueable,
     Configurable,
     HasWellKnownFiles,
     Stateful
 )
+from .states import ChunkState
 import itertools as it
 import logging
 
@@ -50,33 +50,15 @@ class Chunk(
     Enqueueable,
     HasWellKnownFiles,
     Stateful,
+    ChunkState,
     models.Model
 ):
     class Meta:
         db_table = 'development_chunk'
 
-    class STATE:
-        CHUNK_INCOMPLETE = "INCOMPLETE"
-        CHUNK_PROCESSING = "PROCESSING"
-        CHUNK_ROUGH_QC = "ROUGH_QC"
-        CHUNK_ROUGH_QC_FAILED = "ROUGH_QC_FAILED"
-        CHUNK_ROUGH_QC_PASSED = "ROUGH_QC_PASSED"
-        CHUNK_POINT_MATCH_QC_FAILED = "POINT_MATCH_QC_FAILED"
-        CHUNK_POINT_MATCH_QC_PASSED = "POINT_MATCH_QC_PASSED"
-        CHUNK_FINE_QC_FAILED = "FINE_QC_FAILED"
-        CHUNK_FINE_QC_PASSED = "FINE_QC_PASSED"
-        CHUNK_PENDING_FUSION = "PENDING_FUSION"
-        CHUNK_FUSING = "FUSING"
-        CHUNK_FUSION_QC = "FUSION_QC"
-        CHUNK_FUSION_QC_FAILED = "FUSION_QC_FAILED"
-        CHUNK_FUSION_QC_PASSED = "FUSION_QC_PASSED"
-        CHUNK_PENDING_RENDER = "PENDING_RENDER"
-        CHUNK_NOT_VALID = "NOT_VALID"
-
     _log = logging.getLogger('at_em_imaging_workflow.models.chunk')
     size = models.IntegerField(null=True)
     computed_index = models.IntegerField(null=True)
-    chunk_state = models.CharField(max_length=255, null=True)
     rendered_volume = models.ForeignKey('RenderedVolume')
     load = models.ForeignKey('Load',null=True, blank=True)
     preceding_chunk = models.ForeignKey(
@@ -154,6 +136,13 @@ class Chunk(
     def get_montage_set_for_rough_alignment(cls, section):
         return section.montageset_set.get()
 
+    def em_montage_sets(self):
+        return [
+            m.emmontageset for m in it.chain.from_iterable(
+                s.montageset_set.all() for s in self.sections.all()
+            )
+        ]
+
     def missing_sections(self):
         z_mapping = self.get_z_mapping()
         mapping_zs = set(int(z) for z in z_mapping.keys())
@@ -204,103 +193,6 @@ class Chunk(
             str(z_end)
         )
 
-    @transition(
-        field='object_state',
-        source=STATE.CHUNK_INCOMPLETE,
-        target=STATE.CHUNK_PROCESSING)
-    def start_processing(self):
-        pass
-
-    @transition(
-        field='object_state',
-        source=STATE.CHUNK_PROCESSING,
-        target=STATE.CHUNK_INCOMPLETE)
-    def reset_incomplete(self):
-        pass
-
-    @transition(
-        field='object_state',
-        source=STATE.CHUNK_PROCESSING,
-        target=STATE.CHUNK_ROUGH_QC)
-    def finish_processing(self):
-        pass
-
-    @transition(
-        field='object_state',
-        source=STATE.CHUNK_ROUGH_QC,
-        target=STATE.CHUNK_PROCESSING)
-    def redo_processing(self):
-        pass
-
-    @transition(
-        field='object_state',
-        source=STATE.CHUNK_ROUGH_QC,
-        target=STATE.CHUNK_ROUGH_QC_FAILED)
-    def rough_qc_fail(self):
-        pass
-
-    @transition(
-        field='object_state',
-        source=STATE.CHUNK_ROUGH_QC,
-        target=STATE.CHUNK_ROUGH_QC_PASSED)
-    def rough_qc_pass(self):
-        pass
-
-    @transition(
-        field='object_state',
-        source=STATE.CHUNK_ROUGH_QC_PASSED,
-        target=STATE.CHUNK_POINT_MATCH_QC_FAILED)
-    def point_match_fail(self):
-        pass
-
-    @transition(
-        field='object_state',
-        source=STATE.CHUNK_ROUGH_QC_PASSED,
-        target=STATE.CHUNK_POINT_MATCH_QC_PASSED)
-    def point_match_pass(self):
-        pass
-
-    @transition(
-        field='object_state',
-        source=STATE.CHUNK_POINT_MATCH_QC_PASSED,
-        target=STATE.CHUNK_PENDING_FUSION)
-    def pending_fusion(self):
-        pass
-
-    @transition(
-        field='object_state',
-        source=STATE.CHUNK_PENDING_FUSION,
-        target=STATE.CHUNK_FUSING)
-    def start_fusion(self):
-        pass
-
-    @transition(
-        field='object_state',
-        source=STATE.CHUNK_FUSING,
-        target=STATE.CHUNK_FUSION_QC)
-    def stop_fusion(self):
-        pass
-
-    @transition(
-        field='object_state',
-        source=STATE.CHUNK_FUSION_QC,
-        target=STATE.CHUNK_FUSION_QC_FAILED)
-    def fusion_qc_fail(self):
-        pass
-
-    @transition(
-        field='object_state',
-        source=STATE.CHUNK_FUSION_QC,
-        target=STATE.CHUNK_FUSION_QC_PASSED)
-    def fusion_qc_pass(self):
-        pass
-
-    @transition(
-        field='object_state',
-        source=STATE.CHUNK_FUSION_QC_PASSED,
-        target=STATE.CHUNK_PENDING_RENDER)
-    def pending_render(self):
-        pass
 
 # circular imports
 from at_em_imaging_workflow.models import (

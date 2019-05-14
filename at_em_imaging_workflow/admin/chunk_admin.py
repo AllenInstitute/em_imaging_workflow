@@ -1,13 +1,15 @@
 from django.contrib import admin
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
-#from django.contrib.contenttypes.forms import generic_inlineformset_factory
-from workflow_engine.models.configuration  import Configuration
+from at_em_imaging_workflow.models import Chunk
+from workflow_engine.models import Configuration
 from workflow_engine.workflow_controller import WorkflowController
 from at_em_imaging_workflow.models import Section
 from django.contrib.contenttypes.admin import GenericStackedInline
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django_fsm import can_proceed
+
 
 def qc_pass_chunk(modeladmin, request, queryset):
     qc_pass_chunk.short_description = \
@@ -15,13 +17,17 @@ def qc_pass_chunk(modeladmin, request, queryset):
 
     if queryset:
         for chnk in queryset.iterator():
-            chnk.rough_qc_pass()
-            chnk.save()
+            if can_proceed(chnk.rough_qc_pass):
+                chnk.rough_qc_pass()
+                chnk.save()
+            else:
+                chnk.object_state = Chunk.STATE.CHUNK_ROUGH_QC_PASSED
+                chnk.save()
 
-        WorkflowController.enqueue_next_queue_by_workflow_node(
+        WorkflowController.enqueue_from_admin_form(
             'rough_align_em_2d',
-            chnk,
-            start_node_name='Rough Align Manual QC')
+            'Rough Align Manual QC',
+            chnk)
 
 class ChunkConfigurationForm(ModelForm):
     class Meta:

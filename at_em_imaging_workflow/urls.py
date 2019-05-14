@@ -19,6 +19,7 @@ from .views import page_satchel
 from .views.imaging_q_c_view import ImagingQCView
 from .views.create_chunk_view import CreateChunkView
 from .views.create_gap_section_view import CreateGapSectionView
+from .views.faster_job_grid_view import faster_job_grid
 
 admin.autodiscover()
 
@@ -35,11 +36,16 @@ urlpatterns = (
         r'^at_em/create_chunk$',
         CreateChunkView.as_view(),
         name='create_chunk'
-    ),
+    ),  
     url(
         r'^at_em/create_gap_section$',
         CreateGapSectionView.as_view(),
         name='create_gap_section'
+    ),
+    url(
+        r'^at_em/faster_job_grid$',
+        faster_job_grid,
+        name='faster_job_grid'
     )
 )
 

@@ -33,25 +33,52 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from django.db import models
-from at_em_imaging_workflow.models import TileImageSet
-from .states import ReferenceSetState
+from django_fsm import transition
 
 
-class ReferenceSet(ReferenceSetState, TileImageSet):
-    class Meta:
-        db_table = 'development_referenceset'
+class ReferenceSetState(object):
 
-    uid = models.CharField(max_length=255, null=True)
-    project_path = models.CharField(max_length=255) # deprecate for storage_dir
-    manifest_path = models.CharField(max_length=255, null=True) # well_known_file?
+    class STATE:
+        LENS_CORRECTION_PENDING = "PENDING"
+        LENS_CORRECTION_PROCESSING = "PROCESSING"
+        LENS_CORRECTION_DONE = "DONE"
+        LENS_CORRECTION_REDO = "REDO_LENS_CORRECTION"
+        LENS_CORRECTION_FAILED = "FAILED"
 
-    def __str__(self):
-        return str(self.acquisition_date)
+    @transition(
+        field='object_state',
+        source='*',
+        target=STATE.LENS_CORRECTION_PENDING)
+    def reset_pending(self):
+        pass
 
-    # TODO: move this to render params manager
-    def get_render_project_name(self):
-        return "em_2d_montage_staging"
+    @transition(
+        field='object_state',
+        source=STATE.LENS_CORRECTION_PENDING,
+        target=STATE.LENS_CORRECTION_PROCESSING)
+    def start_processing(self):
+        pass
 
-    def storage_basename(self):
-        return self.clean_acquisition_date()
+    @transition(
+        field='object_state',
+        source=STATE.LENS_CORRECTION_PROCESSING,
+        target=STATE.LENS_CORRECTION_DONE)
+    def finish_processing(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source='*',
+        target=STATE.LENS_CORRECTION_FAILED)
+    def fail(self):
+        pass
+
+    @transition(
+        field='object_state',
+        source=[
+            STATE.LENS_CORRECTION_PENDING,
+            STATE.LENS_CORRECTION_FAILED
+        ],
+        target=STATE.LENS_CORRECTION_REDO)
+    def redo(self):
+        pass

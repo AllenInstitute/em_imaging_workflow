@@ -46,7 +46,8 @@ class TwoDMontageSolverStrategy(InputConfigMixin, ExecutionStrategy):
         inp['solver_options']['Height'] = em_mset.camera.height
         inp['solver_options']['Width'] = em_mset.camera.height
 
-        return  SolveMontageSectionParameters().dump(inp).data
+        #return  SolveMontageSectionParameters().dump(inp).data
+        return inp
 
     def get_solver_executable_path(self):
         return settings.MONTAGE_SOLVER_BIN

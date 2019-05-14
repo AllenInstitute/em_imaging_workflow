@@ -13,8 +13,8 @@ class MakeMontageScapesStackStrategy(InputConfigMixin, ExecutionStrategy):
         'at_em_imaging_workflow.strategies.montage'
         '.make_montage_scapes_stack_strategy')
 
-    def get_objects_for_queue(self, job):
-        em_mset = job.enqueued_object
+    def transform_objects_for_queue(self, source_object):
+        em_mset = source_object
 
         return [ em_mset ]
 

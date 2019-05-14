@@ -1,27 +1,52 @@
 from workflow_engine.strategies import WaitStrategy
 from at_em_imaging_workflow.models import (
     Chunk,
-    ChunkAssignment,
     EMMontageSet
 )
 import itertools as it
+import logging
 
 
 class WaitForChunkAssignment(WaitStrategy):
-    QUEUE_NAME='Wait for Chunk Assignment'
+    _log = logging.getLogger(
+        'at_em_imaging_workflow.strategies.rough.'
+        'wait_for_chunk_assignment'
+    )
+    QUEUE_NAME="Wait for Chunk Assignment"
 
-    def can_transition(self, em_mset, source_node=None):
-        if em_mset.section.chunks.count() > 0:
-            return True
+    def transform_objects_for_queue(self, source_object):
+        if type(source_object) == EMMontageSet:
+            em_mset = source_object
 
-        return False
+            return [em_mset]
+        elif type(source_object) == Chunk:
+            chnk = source_object
 
-    def get_objects_for_queue(self, source_job):
-        em_mset = source_job.enqueued_object
+            queued_montage_set_jobs = set(it.chain.from_iterable(
+                m.jobs.filter(
+                    workflow_node__job_queue__name=WaitForChunkAssignment.QUEUE_NAME,
+                    run_state__name__in=[
+                        'QUEUED',
+                        'FAILED',
+                        'FAILED_EXECUTION',
+                        'SUCCESS'
+                    ]
+                )
+                for m in chnk.em_montage_sets()
+            ))
 
-        return [em_mset]
+            queued_montage_sets = [
+                j.enqueued_object for j in queued_montage_set_jobs
+            ]
+
+            return queued_montage_sets
+        else:
+            WaitForChunkAssignment._log.info(
+                'unexpected object type'
+            )
 
     def must_wait(self, em_mset):
-        # Use this to check if the reference set is available
-        # return true if the state is correct
+        if em_mset.section.chunks.count() > 0:
+            return False
+
         return True

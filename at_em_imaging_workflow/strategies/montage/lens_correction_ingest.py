@@ -193,8 +193,13 @@ class LensCorrectionIngest(IngestStrategy):
         LensCorrectionIngest._log.warn('creating load')
 
         if load_message is not None:
+            if load_message['uid'] is None:
+                uid = "None"
+            else:
+                uid = load_message['uid']
+
             load, _ = Load.objects.update_or_create(
-                uid=load_message['uid'],
+                uid=uid,
                 defaults={
                     'offset': load_message['offset']}
             )

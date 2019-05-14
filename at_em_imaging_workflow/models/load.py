@@ -34,8 +34,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from django.db import models
-from django_fsm import transition
 from workflow_engine.mixins import Configurable, Enqueueable, Stateful
+from .states import LoadState
 import pandas as pd
 import copy
 
@@ -44,10 +44,8 @@ class Load(
     Configurable,
     Enqueueable,
     Stateful,
+    LoadState,
     models.Model):
-    class STATE:
-        LOAD_PENDING = "PENDING"
-        LOAD_Z_MAPPED = "Z_MAPPED"
 
     uid = models.CharField(max_length=255, null=True)
     offset = models.IntegerField(null=True)
@@ -89,10 +87,3 @@ class Load(
                 }
             }
         )
-
-    @transition(
-        field='object_state',
-        source=STATE.LOAD_PENDING,
-        target=STATE.LOAD_Z_MAPPED)
-    def z_mapped(self):
-        pass

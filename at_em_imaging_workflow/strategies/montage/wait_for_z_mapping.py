@@ -13,19 +13,18 @@ class WaitForZMapping(WaitStrategy):
         '.montage.wait_for_z_mapping')
     QUEUE_NAME = "Wait for Z Mapping"
 
-    def get_objects_for_queue(self, source_job):
-        enqueued_object = source_job.enqueued_object
-        enqueued_object_type = type(enqueued_object)
+    def transform_objects_for_queue(self, source_object):
+        enqueued_object_type = type(source_object)
         em_mset = None
 
         if enqueued_object_type == Load:
-            load_object = enqueued_object
+            load_object = source_object
 
             WaitForZMapping._log.info(
                 'got load: {}'.format(load_object)
             )
         elif enqueued_object_type == EMMontageSet:
-            em_mset = enqueued_object
+            em_mset = source_object
             load_object = em_mset.sample_holder.load
 
             if load_object.object_state != Load.STATE.LOAD_Z_MAPPED:
