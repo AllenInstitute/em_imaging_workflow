@@ -32,7 +32,7 @@ class ChunkCalculator(object):
             computed_index=computed_index,
             defaults = {
                 'size': 0,
-                'chunk_state': Chunk.STATE.CHUNK_INCOMPLETE,
+                'object_state': Chunk.STATE.CHUNK_INCOMPLETE,
                 'rendered_volume': volume,
                 'preceding_chunk': None,
                 'following_chunk': None

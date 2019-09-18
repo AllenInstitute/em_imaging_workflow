@@ -36,20 +36,49 @@ from django_fsm import transition
 
 
 class EMMontageSetState(object):
+    ''' Mixin for tracking major changes in the life cycle of an
+    :class:`EMMontageSet<at_em_imaging_workflow.models.e_m_montage_set.EMMontageSet>`
+
+    .. figure:: _static/e_m_montage_set_states.png
+        :height: 300px
+    '''
 
     class STATE:
         EM_MONTAGE_SET_PENDING = "PENDING"
+        '''Initial created state.'''
+
         EM_MONTAGE_SET_PROCESSING = "PROCESSING"
+        '''Indicates the data is progressing through the workflow'''
+
         EM_MONTAGE_SET_QC = "MONTAGE_QC"
+        '''The data is undergoing automated and manual quality control'''
+
         EM_MONTAGE_SET_REIMAGE = "REIMAGE"
+        '''Used to mark data to be reimaged.'''
+
         EM_MONTAGE_SET_QC_FAILED = "MONTAGE_QC_FAILED"
+        '''Used to mark failed automatic or manual quality control'''
+
         EM_MONTAGE_SET_QC_PASSED = "MONTAGE_QC_PASSED"
+        '''Used to mark passed automatic or manual quality control'''
+
         EM_MONTAGE_SET_REDO_POINT_MATCH = "REDO_POINT_MATCH"
+        '''Used to trigger a new point match with alternate parameters'''
+
         EM_MONTAGE_SET_REDO_SOLVER = "REDO_SOLVER"
+        '''Used to trigger a new point match solve with alternate parameters'''
+
         EM_MONTAGE_SET_FAILED = "FAILED"
+        '''Used to indicate a temporary or permanent failure condition.'''
+
         EM_MONTAGE_SET_GAP = "GAP"
+        '''Used to exclude the montage set from rough alignment.'''
+
         EM_MONTAGE_SET_REPAIR = "REPAIR"
+        '''Indicate an exceptional state that may be salvaged offline.'''
+
         EM_MONTAGE_SET_NOT_SELECTED = "REIMAGED_NOT_SELECTED"
+        '''Indicate a reimaged montage set that did not improved quality.'''
 
     @transition(
         field='object_state',
@@ -59,6 +88,7 @@ class EMMontageSetState(object):
         ],
         target=STATE.EM_MONTAGE_SET_PROCESSING)
     def start_processing(self):
+        '''Processing may begin from the pending state, allow setting twice.'''
         pass
 
     @transition(
@@ -68,6 +98,7 @@ class EMMontageSetState(object):
         ],
         target=STATE.EM_MONTAGE_SET_PENDING)
     def reset_pending(self):
+        '''The processing state may be reset to pending.'''
         pass
 
     @transition(
@@ -79,12 +110,14 @@ class EMMontageSetState(object):
         ],
         target=STATE.EM_MONTAGE_SET_QC)
     def finish_processing(self):
+        '''Quality control comes after processing or redoing point match or solver.'''
         pass
 
     @transition(
         field='object_state',
         source=STATE.EM_MONTAGE_SET_REDO_POINT_MATCH,
         target=STATE.EM_MONTAGE_SET_QC)
+    
     def finish_redo_point_match(self):
         pass
 

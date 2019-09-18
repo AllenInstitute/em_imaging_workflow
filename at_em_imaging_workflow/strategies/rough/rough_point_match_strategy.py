@@ -147,7 +147,7 @@ class RoughPointMatchStrategy(InputConfigMixin, ExecutionStrategy):
             )
         else:
             # TODO: check if this is still needed
-            RoughPointMatchStrategy._log.warn(
+            RoughPointMatchStrategy._log.warning(
                 'Pair count not found')
 
     def create_log_configuration(self, log_file_path):

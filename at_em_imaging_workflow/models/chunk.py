@@ -40,7 +40,7 @@ from workflow_engine.mixins import (
     HasWellKnownFiles,
     Stateful
 )
-from .states import ChunkState
+from .states import ChunkFsm
 import itertools as it
 import logging
 
@@ -50,7 +50,7 @@ class Chunk(
     Enqueueable,
     HasWellKnownFiles,
     Stateful,
-    ChunkState,
+    ChunkFsm,
     models.Model
 ):
     class Meta:
@@ -59,19 +59,29 @@ class Chunk(
     _log = logging.getLogger('at_em_imaging_workflow.models.chunk')
     size = models.IntegerField(null=True)
     computed_index = models.IntegerField(null=True)
-    rendered_volume = models.ForeignKey('RenderedVolume')
-    load = models.ForeignKey('Load',null=True, blank=True)
+    rendered_volume = models.ForeignKey(
+        'RenderedVolume',
+        on_delete=models.CASCADE
+    )
+    load = models.ForeignKey(
+        'Load',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE
+    )
     preceding_chunk = models.ForeignKey(
         'self',
         related_name='%(class)s_preceding_chunk',
         null=True,
-        blank=True
+        blank=True,
+        on_delete=models.CASCADE
     )
     following_chunk = models.ForeignKey(
         'self',
         related_name='%(class)s_following_chunk',
         null=True,
-        blank=True
+        blank=True,
+        on_delete=models.CASCADE
     )
 
     def __str__(self):

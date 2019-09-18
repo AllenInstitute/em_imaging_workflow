@@ -37,19 +37,41 @@ from django_fsm import transition
 
 
 class ReferenceSetState(object):
+    ''' Mixin for tracking major changes in the life cycle of a
+    :class:`ReferenceSet<at_em_imaging_workflow.models.reference_set.ReferenceSet>`
+    (representing a :term:`lens correction`).
+
+    .. figure:: _static/reference_set_states.png
+        :height: 300px
+    '''
 
     class STATE:
         LENS_CORRECTION_PENDING = "PENDING"
+        '''Initial created state.'''
+
         LENS_CORRECTION_PROCESSING = "PROCESSING"
+        '''Indicates the data is progressing through the workflow'''
+
         LENS_CORRECTION_DONE = "DONE"
+        '''Assigned montage sets may be processed'''
+
         LENS_CORRECTION_REDO = "REDO_LENS_CORRECTION"
+        '''Request reprocessing with alternate parameters
+        stored in a configuration object
+        '''
+
         LENS_CORRECTION_FAILED = "FAILED"
+        '''Processing could not be completed successfully.
+        It may be redone with an alternate configuration
+        or associated montage sets should be reassigned.
+        '''
 
     @transition(
         field='object_state',
         source='*',
         target=STATE.LENS_CORRECTION_PENDING)
     def reset_pending(self):
+        '''Any state may be reset to pending. Should only be used for manual operations.'''
         pass
 
     @transition(
@@ -57,6 +79,7 @@ class ReferenceSetState(object):
         source=STATE.LENS_CORRECTION_PENDING,
         target=STATE.LENS_CORRECTION_PROCESSING)
     def start_processing(self):
+        '''Processing may only begin from the pending state.'''
         pass
 
     @transition(
@@ -64,6 +87,7 @@ class ReferenceSetState(object):
         source=STATE.LENS_CORRECTION_PROCESSING,
         target=STATE.LENS_CORRECTION_DONE)
     def finish_processing(self):
+        '''The done state must be reached through processing.'''
         pass
 
     @transition(
@@ -71,6 +95,7 @@ class ReferenceSetState(object):
         source='*',
         target=STATE.LENS_CORRECTION_FAILED)
     def fail(self):
+        '''The failed state can be set from any other state.'''
         pass
 
     @transition(
@@ -81,4 +106,6 @@ class ReferenceSetState(object):
         ],
         target=STATE.LENS_CORRECTION_REDO)
     def redo(self):
+        '''Processing with alternate parameters may be triggered from a failed state,
+        or from pending (i.e. for a series of reference sets expected to need similar treatment)'''
         pass

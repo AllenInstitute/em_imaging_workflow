@@ -42,8 +42,12 @@ class EMMontageSet(EMMontageSetState, MontageSet):
     class Meta:
         db_table = 'development_emmontageset'
 
-    reference_set = models.ForeignKey('ReferenceSet',
-                                      null=True, blank=True)
+    reference_set = models.ForeignKey(
+        'ReferenceSet',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE
+    )
     reference_set_uid = models.CharField(max_length=255,
                                          null=True, blank=True)
 

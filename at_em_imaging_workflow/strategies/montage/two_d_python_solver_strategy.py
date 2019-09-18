@@ -87,7 +87,7 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
             em_mset.finish_processing()
             em_mset.save()
         elif em_mset.object_state == EMMontageSet.STATE.EM_MONTAGE_SET_QC_PASSED:
-            TwoDPythonSolverStrategy._log.warn(
+            TwoDPythonSolverStrategy._log.warning(
                 'Unexpected state transition - remaining in QC Passed'
             )
         else:
@@ -97,4 +97,4 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
 try:
     from EMaligner.schemas import EMA_Schema
 except:
-    TwoDPythonSolverStrategy._log.warn('Could not import EMA_Schema')
+    TwoDPythonSolverStrategy._log.warning('Could not import EMA_Schema')

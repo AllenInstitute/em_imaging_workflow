@@ -129,6 +129,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
+    'django_fsm',
     'workflow_engine',
     'at_em_imaging_workflow'
 ]

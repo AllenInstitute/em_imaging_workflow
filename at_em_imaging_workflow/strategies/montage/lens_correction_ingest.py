@@ -2,7 +2,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017. Allen Institute. All rights reserved.
+# Copyright 2017-2019. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -155,7 +155,7 @@ class LensCorrectionIngest(IngestStrategy):
         return reference_set
 
     def create_study(self, study_message):
-        LensCorrectionIngest._log.warn('creating study - UNIMPLEMENTED')
+        LensCorrectionIngest._log.warning('creating study - UNIMPLEMENTED')
 
         study, _ = Study.objects.update_or_create(
             name='IARPA Phase 2' # TODO: from settings or ingest
@@ -190,7 +190,7 @@ class LensCorrectionIngest(IngestStrategy):
         return section
 
     def create_load(self, load_message):
-        LensCorrectionIngest._log.warn('creating load')
+        LensCorrectionIngest._log.warning('creating load')
 
         if load_message is not None:
             if load_message['uid'] is None:
@@ -237,7 +237,7 @@ class LensCorrectionIngest(IngestStrategy):
             enqueued_object = self.create_em_montage_set(message)
             start_node = 'Generate Render Stack'
         else:
-            LensCorrectionIngest._log.warn("No enqueued object type tag")
+            LensCorrectionIngest._log.warning("No enqueued object type tag")
             enqueued_object = None
             start_node = 'Generate Render Stack'
 

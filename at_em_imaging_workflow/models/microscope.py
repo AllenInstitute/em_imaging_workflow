@@ -38,7 +38,10 @@ from django.db import models
 
 class Microscope(models.Model):
     uid = models.CharField(max_length=255, null=True)
-    microscope_type = models.ForeignKey('MicroscopeType')
+    microscope_type = models.ForeignKey(
+        'MicroscopeType',
+        on_delete=models.CASCADE
+    )
 
     class Meta:
         db_table = 'development_microscope'

@@ -12,42 +12,34 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
 """
-from django.conf.urls import include, url
-from django.contrib import admin
+from django.urls import include, re_path
 from workflow_engine.views import home_view
-from .views import page_satchel
 from .views.imaging_q_c_view import ImagingQCView
 from .views.create_chunk_view import CreateChunkView
 from .views.create_gap_section_view import CreateGapSectionView
 from .views.faster_job_grid_view import faster_job_grid
+from rest_framework.urlpatterns import format_suffix_patterns
 
-admin.autodiscover()
 
 app_name = 'at_em_imaging_workflow'
 
-urlpatterns = (
-    url(r'^$', home_view.index, name='index'),
-    url(r'^workflow_engine/', include('workflow_engine.urls')),
-    url(r'^admin/', admin.site.urls),
-
-    url(r'^at_em/page_satchel', page_satchel.page_satchel, name='page_satchel'),
-    url(r'^at_em/reimage$', ImagingQCView.as_view()),
-    url(
+urlpatterns = format_suffix_patterns((
+    re_path(r'^$', home_view.index, name='index'),
+    re_path(r'^workflow_engine/', include('workflow_engine.urls')),
+    re_path(r'^at_em/reimage$', ImagingQCView.as_view()),
+    re_path(
         r'^at_em/create_chunk$',
         CreateChunkView.as_view(),
         name='create_chunk'
     ),  
-    url(
+    re_path(
         r'^at_em/create_gap_section$',
         CreateGapSectionView.as_view(),
         name='create_gap_section'
     ),
-    url(
+    re_path(
         r'^at_em/faster_job_grid$',
         faster_job_grid,
         name='faster_job_grid'
     )
-)
-
-from rest_framework.urlpatterns import format_suffix_patterns
-urlpatterns = format_suffix_patterns(urlpatterns)
+), allowed=['json', 'html'])

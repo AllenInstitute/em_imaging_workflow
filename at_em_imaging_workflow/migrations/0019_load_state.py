@@ -7,6 +7,7 @@ import django_fsm
 
 
 class Migration(migrations.Migration):
+    atomic = False
 
     dependencies = [
         ('at_em_imaging_workflow', '0018_load_chunk'),

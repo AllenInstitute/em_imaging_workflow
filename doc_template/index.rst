@@ -9,22 +9,19 @@ Welcome to the AT EM Imaging Workflow
 =====================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :titlesonly:
    :hidden:
 
    install
-   data_resources
-   models
-   examples
    authors
    Source Documentation <at_em_imaging_workflow>
-   Development <development>
    Stash <http://stash.corp.alleninstitute.org/projects/TECH/repos/at_em_imaging_workflow/browse>
-   
+   glossary
 
 The AT EM Imaging Workflow houses source code for processing Allen Institute data.
+`Coverage <./_static/htmlcov/index.html>`_ data.
+
 
 .. image:: /_static/sdk_cam.png
    :align: right
-

@@ -46,5 +46,5 @@ class SolveRoughAlignmentPython(InputConfigMixin, ExecutionStrategy):
 try:
     from EMaligner.schemas import EMA_Schema
 except:
-    SolveRoughAlignmentPython._log.warn('Could not import EMA_Schema')
+    SolveRoughAlignmentPython._log.warning('Could not import EMA_Schema')
 

@@ -32,8 +32,9 @@ class WaitForCompleteChunk(WaitStrategy):
 
             return [ chnk ]
         else:
-            WaitForCompleteChunk._log.warn(
-                "unexpected enqueued object {}".format(str(source_object))
+            WaitForCompleteChunk._log.warning(
+                "unexpected enqueued object %s",
+                str(source_object)
             )
 
             return []

@@ -26,6 +26,7 @@ def copy_state(apps, schema_editor):
         m.save()
 
 class Migration(migrations.Migration):
+    atomic = False
 
     dependencies = [
         ('at_em_imaging_workflow', '0015_load_offset'),

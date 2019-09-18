@@ -62,6 +62,7 @@ MESSAGE_QUEUE_HOST = 'message_queue'
 MESSAGE_QUEUE_USER = 'blue_sky_user'
 MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
 MESSAGE_QUEUE_PORT = 5672
+MESSAGE_QUEUE_VHOST = ''
 MESSAGE_QUEUE_MONITOR_PORT = 15672
 UI_HOST = 'ibs-timf-ux1.corp.alleninstitute.org'
 UI_PORT = 9001

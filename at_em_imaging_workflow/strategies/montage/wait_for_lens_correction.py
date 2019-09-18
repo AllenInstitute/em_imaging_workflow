@@ -28,10 +28,9 @@ class WaitForLensCorrection(WaitStrategy):
             em_mset = source_object
             reference_set = em_mset.reference_set
         else:
-            WaitForLensCorrection._log.warn(
-                'Unexpected enqueued object type: {}'.format(
-                    source_object_type
-                )
+            WaitForLensCorrection._log.warning(
+                'Unexpected enqueued object type: %s',
+                str(source_object_type)
             )
             return []
 

@@ -40,8 +40,14 @@ from at_em_imaging_workflow.models import TileImageSet
 class MontageSet(TileImageSet):
     uid = models.CharField(max_length=255, null=True)
     mipmap_directory = models.CharField(max_length=255, null=True)
-    section = models.ForeignKey('Section')
-    sample_holder = models.ForeignKey('SampleHolder')
+    section = models.ForeignKey(
+        'Section',
+        on_delete=models.CASCADE
+    )
+    sample_holder = models.ForeignKey(
+        'SampleHolder',
+        on_delete=models.CASCADE
+    )
     overlap = models.FloatField(null=True)
 
     class Meta:

@@ -75,7 +75,7 @@ class GenerateMipMapsStrategy(InputConfigMixin, ExecutionStrategy):
             em_mset.start_processing()
             em_mset.save()
         else:
-            GenerateMipMapsStrategy._log.warn('Bad state transition')
+            GenerateMipMapsStrategy._log.warning('Bad state transition')
 
     def on_finishing(self, em_mset, results, task):
         self.check_key(results, 'output_dir')

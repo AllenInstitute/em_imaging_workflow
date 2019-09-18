@@ -39,7 +39,10 @@ from workflow_engine.mixins import Configurable
 
 class RenderedVolume(Configurable, models.Model):
     mipmap_directory = models.CharField(max_length=255, null=True)
-    specimen = models.ForeignKey('Specimen')
+    specimen = models.ForeignKey(
+        'Specimen',
+        on_delete=models.CASCADE
+    )
 
     class Meta:
         db_table = 'development_renderedvolume'

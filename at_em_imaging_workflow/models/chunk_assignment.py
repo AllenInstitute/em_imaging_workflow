@@ -38,8 +38,14 @@ from workflow_engine.mixins import Enqueueable, Stateful
 
 
 class ChunkAssignment(Enqueueable, Stateful, models.Model):
-    section = models.ForeignKey('Section')
-    chunk = models.ForeignKey('Chunk')
+    section = models.ForeignKey(
+        'Section',
+        on_delete=models.CASCADE
+    )
+    chunk = models.ForeignKey(
+        'Chunk',
+        on_delete=models.CASCADE
+    )
 
     class Meta:
         db_table = 'development_chunkassignment'

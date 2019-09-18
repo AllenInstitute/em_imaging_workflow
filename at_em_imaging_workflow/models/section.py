@@ -41,10 +41,15 @@ class Section(models.Model):
     section_id = models.CharField(max_length=255, null=True)
     z_index = models.IntegerField(null=True)
     metadata = JSONField(null=True)
-    specimen = models.ForeignKey('Specimen')
+    specimen = models.ForeignKey(
+        'Specimen',
+        on_delete=models.CASCADE
+    )
     chunks = models.ManyToManyField(
-        'Chunk', related_name='sections',
-        through='ChunkAssignment')
+        'Chunk',
+        related_name='sections',
+        through='ChunkAssignment'
+    )
     sample_holders = models.ManyToManyField(
         'SampleHolder', related_name='sample_holders')
 

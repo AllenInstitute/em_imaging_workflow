@@ -53,8 +53,16 @@ class TileImageSet(
     models.Model
 ):
     storage_directory = models.CharField(max_length=255, null=True)
-    camera = models.ForeignKey('Camera', null=True)
-    microscope = models.ForeignKey('Microscope', null=True)
+    camera = models.ForeignKey(
+        'Camera',
+        null=True,
+        on_delete=models.CASCADE
+    )
+    microscope = models.ForeignKey(
+        'Microscope',
+        null=True,
+        on_delete=models.CASCADE
+    )
     metafile = models.CharField(max_length=255, null=True)
     acquisition_date = models.DateTimeField(null=True)
 

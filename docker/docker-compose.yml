@@ -1,5 +1,16 @@
 version: "3"
 services:
+  nginx:
+    restart: on-failure:3
+    image: nginx:1.15.3
+    volumes:
+    - "./nginx.conf:/etc/nginx/nginx.conf:ro"
+    - "/local1/bswe_working/at_em/static:/var/www/static"
+    ports:
+    - "9001:80"
+    - "9002:81"
+    depends_on:
+    - at_em_test
   message_queue:
     restart: on-failure:3
     image: rabbitmq:3-management
@@ -10,21 +21,31 @@ services:
     - "9008:5672"
     - "9000:15672"
   at_em_test:
-    image: alleninstitute/at_em_imaging_workflow:timf
+    image: alleninstitute/blue_sky_base
+    user: blue_sky_user
     environment:
-    - PYTHONPATH=/at_em_imaging_workflow:/blue_sky_workflow_engine:/at_em_imaging_workflow/docker
+    - PYTHONPATH=/source/at_em_imaging_workflow:/app_dir:/render_modules
     - DJANGO_SETTINGS_MODULE=at_em_imaging_workflow.settings
-    - BASE_DIR=/at_em_imaging_workflow
-    - BLUE_SKY_SETTINGS=/at_em_imaging_workflow/docker/blue_sky_settings_docker.yml
-    command: bash -c "cd /at_em_imaging_workflow; /bin/bash test_entry.sh"
-    ports:
-    - "9009:8888"
-    - "9002:8000"
-    - "9003:5555"
+    - BASE_DIR=/source/at_em_imaging_workflow
+    - BLUE_SKY_SETTINGS=/source/at_em_imaging_workflow/docker/blue_sky_settings_docker.yml
+    command: bash -c "while :; do sleep 3600; done"
+    expose:
+    - "8000"
+    - "5557"
+    - "8888"
+    #ports:
+    #- "9009:8888"
+    #- "9002:8000"
+    #- "9003:5555"
     depends_on:
     - message_queue
     volumes:
     - "/data:/data:shared"
     - "/allen:/allen:shared"
-    - "/local1/git/blue_sky_workflow_engine:/blue_sky_workflow_engine"
-    - "/local1/git/at_em_imaging_workflow:/at_em_imaging_workflow"
+    - "/local1/bswe_working/at_em/static:/var/www/static"
+    - "/local1/bswe_working/at_em/logs:/logs"
+    - "/local1/conda_envs/0.121.0:/conda_envs"
+    - "/local1/app_dirs:/app_dir"
+    - "/local1/git/blue_sky_workflow_engine:/source/blue_sky_workflow_engine"
+    - "/local1/git/at_em_imaging_workflow:/source/at_em_imaging_workflow"
+    - "/local1/git/render-modules:/render_modules"

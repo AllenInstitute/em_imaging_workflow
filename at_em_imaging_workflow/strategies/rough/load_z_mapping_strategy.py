@@ -39,7 +39,7 @@ class LoadZMappingStrategy(WaitStrategy):
                     'changing state'
                 )
             else:
-                LoadZMappingStrategy._log.warn(
+                LoadZMappingStrategy._log.warning(
                     'Load was not in pending.'
                 )
                 load.object_state = Load.STATE.LOAD_Z_MAPPED

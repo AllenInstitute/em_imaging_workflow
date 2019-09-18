@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django.db import migrations, models
 
 class Migration(migrations.Migration):
-    initial=True
+    atomic = False
 
     dependencies = [
         ('at_em_imaging_workflow', '0017_remove_workflow_state'),
@@ -15,6 +15,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='chunk',
             name='load',
-            field=models.ForeignKey('Load',null=True, blank=True)
+            field=models.ForeignKey(
+                'Load',
+                null=True,
+                blank=True,
+                on_delete=models.CASCADE
+            )
         ),
     ]

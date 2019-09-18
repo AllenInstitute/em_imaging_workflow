@@ -39,7 +39,10 @@ from at_em_imaging_workflow.models.montage_set import MontageSet
 
 class ATMontageSet(MontageSet):
     image_session_number = models.CharField(max_length=255, null=True)
-    registration_series = models.ForeignKey('RegistrationSeries')
+    registration_series = models.ForeignKey(
+        'RegistrationSeries',
+        on_delete=models.CASCADE
+    )
 
     class Meta:
         db_table = 'development_atmontageset'

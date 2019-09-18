@@ -39,7 +39,10 @@ from django.db import models
 class SampleHolder(models.Model):
     uid = models.CharField(max_length=255, null=True)
     imaged_sections_count = models.IntegerField(null=True)
-    load = models.ForeignKey('Load')
+    load = models.ForeignKey(
+        'Load',
+        on_delete=models.CASCADE
+    )
 
     class Meta:
         db_table = 'development_sampleholder'

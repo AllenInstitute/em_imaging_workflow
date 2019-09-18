@@ -26,7 +26,20 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.autosummary', 'numpydoc']
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.intersphinx',
+    'numpydoc'
+]
+
+intersphinx_mapping = {
+    'workflow_engine': (
+        'file:///local1/git/blue_sky_workflow_engine/doc/_build/html/',
+        'file:///local1/git/at_em_imaging_workflow/blue_sky_workflow_engine.inv'
+    )
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -94,7 +107,7 @@ modindex_common_prefix = ['workflow_engine.']
 # a list of builtin themes.
 html_theme = 'aibs_sphinx'
 html_theme_options = {
-    "sidebarwidth": "300"
+    "sidebarwidth": "500"
 }
 
 # Theme options are theme-specific and customize the look and feel of a theme

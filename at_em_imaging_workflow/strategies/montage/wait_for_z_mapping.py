@@ -34,10 +34,9 @@ class WaitForZMapping(WaitStrategy):
 
             return [em_mset]
         else:
-            WaitForZMapping._log.warn(
-                'Unexpected enqueued object type: {}'.format(
-                    enqueued_object_type
-                )
+            WaitForZMapping._log.warning(
+                'Unexpected enqueued object type: %s',
+                str(enqueued_object_type)
             )
             return []
 

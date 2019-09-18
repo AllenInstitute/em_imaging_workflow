@@ -37,10 +37,22 @@ from django_fsm import transition
 
 
 class LoadState(object):
+    ''' Mixin for tracking major changes in the life cycle of a
+    :class:`Load<at_em_imaging_workflow.models.load.Load>`
+    (representing a :term:`tape`).
+    Generally this is related to the :term:`z mapping<z_mapping>` and division of the tape's
+    :term:`z indices<z_index>` into overlapping :class:`Chunk<at_em_imaging_workflow.models.chunk.Chunk>` objects.
+
+    .. figure:: _static/load_states.png
+        :height: 300px
+    '''
 
     class STATE:
         LOAD_PENDING = "PENDING"
+        '''Initial created state.'''
+
         LOAD_Z_MAPPED = "Z_MAPPED"
+        '''Indicates z-index mapping has been assigned to this load.'''
 
     @transition(
         field='object_state',

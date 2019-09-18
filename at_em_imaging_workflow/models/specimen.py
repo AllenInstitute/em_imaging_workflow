@@ -40,7 +40,10 @@ class Specimen(models.Model):
     uid = models.CharField(max_length=255, null=True)
     render_project = models.CharField(max_length=255, null=True)
     render_owner = models.CharField(max_length=255, null=True)
-    study = models.ForeignKey('Study')
+    study = models.ForeignKey(
+        'Study',
+        on_delete=models.CASCADE
+    )
 
     class Meta:
         db_table = 'development_specimen'

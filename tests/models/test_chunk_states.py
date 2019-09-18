@@ -95,8 +95,7 @@ def pending_render_chunk(fusion_qc_passed_chunk):
     return chnk
 
 def test_pending_default(incomplete_chunk):
-    assert incomplete_chunk.object_state == \
-        Chunk.STATE.CHUNK_INCOMPLETE
+    assert incomplete_chunk.object_state == 'PENDING'
 
 
 def test_start_processing(processing_chunk):
