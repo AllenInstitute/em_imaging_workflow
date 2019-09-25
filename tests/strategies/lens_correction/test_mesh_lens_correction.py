@@ -5,7 +5,6 @@ from at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction imp
     GenerateMeshLensCorrection
 )
 from datetime import datetime
-from .at_em_fixtures import mock_run_states
 from at_em_imaging_workflow.models import Microscope
 from django.test.utils import override_settings
 
@@ -104,7 +103,7 @@ def test_on_failure():
     assert ref_set.object_state == ReferenceSet.STATE.LENS_CORRECTION_PENDING
 
 @pytest.mark.django_db
-def test_on_finishing(mock_run_states):
+def test_on_finishing():
     ref_set = ReferenceSet(
         uid='deadbeef',
         manifest_path='manifest.json',

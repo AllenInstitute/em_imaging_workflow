@@ -6,7 +6,7 @@ class RenderStrategyUtils(object):
     def render_input_dict(cls, enqueued_object):
         return {
             'host': settings.RENDER_SERVICE_URL,
-            'port': settings.RENDER_SERVICE_PORT,
+            'port': int(settings.RENDER_SERVICE_PORT),
             'owner': settings.RENDER_SERVICE_USER,
             'project': enqueued_object.get_render_project_name(),
             'client_scripts': settings.RENDER_CLIENT_SCRIPTS

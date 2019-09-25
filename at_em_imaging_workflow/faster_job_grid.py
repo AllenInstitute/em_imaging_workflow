@@ -1,3 +1,5 @@
+from workflow_engine.views.enqueueable_job_grid import EnqueueableJobGrid
+from django.contrib.contenttypes.models import ContentType
 from at_em_imaging_workflow.models import (
     Chunk,
     ChunkAssignment,
@@ -6,26 +8,13 @@ from at_em_imaging_workflow.models import (
     ReferenceSet
 )
 from workflow_engine.models import (
-    Job,
-    RunState,
     WorkflowNode
 )
 import pandas as pd
 from django_pandas.io import read_frame
-import itertools as it
 
 
-class FasterJobGrid(object):
-    RUN_STATE_LETTERS = {
-        "PENDING": "p",
-        "QUEUED": 'q',
-        "RUNNING": 'r',
-        "FINISHED_EXECUTION": 'n',
-        "SUCCESS": 's',
-        "FAILED": 'f',
-        "FAILED_EXECUTION": 'x',
-        "PROCESS_KILLED": 'k',
-    }
+class FasterJobGrid(EnqueueableJobGrid):
     SERIALIZE_COLUMNS = [
         'z_index',
         'true_z',
@@ -38,114 +27,144 @@ class FasterJobGrid(object):
         'start',
         'end'
     ]
+    '''ordered list of columns from the annotated job dataframe to send.
+    '''
 
-    def __init__(self, tape_uid, z_range, order):
+    def __init__(self, tape_uid, z_range, order=None):
+        '''Set up data members to hold partial job grid calculation results.
+
+        Parameters
+        ----------
+        order: list of strings
+            Ordered list of job queue names
+        '''
         self.tape_uid = tape_uid
+        self.load_object = Load.objects.get(uid=self.tape_uid)
         self.z_range = z_range
-        self.order = order
-        self.job_df = None
-        self.node_id_order = None
-        self.run_state_df = None
         self.z_mapping_df = None
-        self.montage_section_z_df = None
-        self.reference_section_z_df = None
-        self.load_section_z_df = None
-        self.chunk_section_z_df = None
-        self.grid_df = None
-        self.workflow_node_df = None
-        self.model_classes = [
+        super(FasterJobGrid, self).__init__(
+            self.calculate_offset_z_range(self.load_object, self.z_range)
+        )
+#         if order is None:
+#             self.order = self.get_node_order()
+#         else:
+#             self.order = order  # TODO: put this in a config object on workflow
+#         self.job_df = None
+#         self.node_id_order = None
+#         self.run_state_df = None
+#         self.z_mapping_df = None
+#         self.enqueued_object_row_df = None
+#         self.grid_df = None
+#         self.workflow_node_df = None
+#         self.model_classes = self.get_model_classes() 
+#         self.model_types = [
+#             "chunk",
+#             "chunkassignment",
+#             "emmontageset",
+#             "load",
+#             "referenceset"
+#         ]
+
+    # TODO: get this from a workflow configuration object or request.
+    def get_node_order(self):
+        '''Override with a specific list of job queue names.
+        These will be used in order as the columns of the job grid.
+
+        Returns
+        -------
+        list of string
+        '''
+        return [
+            "Ingest Tile Sets",
+            "Generate Lens Correction Transform",
+            "Generate Render Stack",
+            "Generate MIPMaps",
+            "Apply MIPMaps",
+            "Wait for Lens Correction",
+            "Apply Lens Correction",
+            "Create Tile Pairs",
+            "2D Montage Point Match",
+            "2D Montage Python Solver",
+            "Detect Defects",
+            "Manual QC / High Degree Polynomial or Point Match Regeneration",
+            "Load Z Mapping",
+            "Chunk Assignment",
+            "Wait for Z Mapping",
+            "Make Montage Scapes",
+            "Remap Zs",
+            "Wait for Chunk Assignment",
+            "Wait for Complete Chunk",
+            "Create Rough Tile Pairs",
+            "EM Rough Point Match",
+            "Rough Align Python Solver",
+            "Rough Align Python Solver 2",
+            "Rough Align Manual QC",
+            "Apply Rough Alignment",
+            "Register Adjacent Stack",
+            "Fuse Stacks",
+            "Rough Alignment Materialize"
+        ]
+
+    # TODO: maybe limit this based on request
+    def get_model_classes(self):
+        '''Models to be queried for display in the grid.
+        Override to provide a specific list of model classes.
+        They must implement :class:`workflow_engine.mixins.enqueueable.Enqueueable`
+ 
+        Returns
+        -------
+        list of Model
+            model classes that implement Enqueueable
+
+        Notes
+        -----
+        By default, immediate subclasses of Enqueueable 
+        will be included, but not leaf descendant classes.
+        '''
+        return [
             EMMontageSet,
             Chunk,
             ChunkAssignment,
             Load,
             ReferenceSet
         ]
-        self.model_types = [
-            "chunk",
-            "chunkassignment",
-            "emmontageset",
-            "load",
-            "referenceset"
-        ]
 
-    def query_node_id_order(self):
-        self.node_id_order = [
-            n.id for n in it.chain.from_iterable(WorkflowNode.objects.filter(
-                workflow__name__in=['em_2d_montage', 'rough_align_em_2d'],
-                job_queue__name=job_queue_name
-            ) for job_queue_name in self.order)
-        ]
+    def get_workflow_names(self):
+        return ['em_2d_montage', 'rough_align_em_2d']
 
-        return self.node_id_order
-        
-    def query_job_df(self):
-        self.job_df = read_frame(
-            Job.objects.filter(
-                enqueued_object_type__model__in=self.model_types,
-            ).values(
-                'id',
-                'enqueued_object_type__model',
-                'enqueued_object_id',
-                'workflow_node__id',
-                'run_state__id',
-                'start_run_time',
-                'end_run_time'
-            ).order_by(# don't have to sort in the database if we do it in pandas
-                'enqueued_object_id',
-                'workflow_node_id',  # sort by order later
-                'run_state_id'
-            )
-        )
-        self.job_df.columns = [
-            'job_id', 'enqueued_object_type', 'enqueued_object_id', 'workflow_node', 'run_state_id', 'start', 'end'
-        ]
+    def calculate_offset_z_range(self, load_object, z_range):
+        '''Apply the microscope Load (tapes) fixed integer offset to the min and max z's.
 
-        return self.job_df
+        Returns
+        -------
+        tuple of two integers
+            min temp z, max temp z
 
-    def build_run_state_df(self):
-        run_state_letters_df = pd.DataFrame.from_dict(
-            FasterJobGrid.RUN_STATE_LETTERS,
-            orient='index'
-        )
-        run_state_letters_df.reset_index(level=0, inplace=True)
-        run_state_letters_df.columns = ['run_state', 'letter_code']
-
-        run_state_names_df = read_frame(
-            RunState.objects.values(
-                'id',
-                'name'
-            )
-        )
-        run_state_names_df.columns = ['run_state_id', "run_state"]
-
-        self.run_state_df = run_state_names_df.merge(
-            run_state_letters_df,
-            on='run_state'
+        Notes
+        -----
+        This should be refactored into the Load object
+        '''
+        return (
+            z_range[0] + load_object.offset,
+            z_range[1] + load_object.offset
         )
 
-        return self.run_state_df
-
-    def query_offset_z_range(self):
-        load_object = Load.objects.get(uid=self.tape_uid)
-        
-        z_range = (
-            self.z_range[0] + load_object.offset,
-            self.z_range[1] + load_object.offset
-        )
-
-        return z_range
-
-    def query_z_mapping_df(self):
-        load_object = Load.objects.get(uid=self.tape_uid)
-        z_range = self.query_offset_z_range()
-
+    def query_row_mapping_df(self):
+        '''Get a dataframe relating rows in different coordinates
+        Notes
+        -----
+        z_index column is the temporary z index with generous offsets.
+        true_z column is the contiguous z index used for rough alignment.
+        If a tape z mapping is not available from an uploaded spreadsheet,
+        the relation is calculated using an offset.
+        '''
         try:
             z_mapping_json = {
-                int(z): true_z for z, true_z in load_object.get_z_mapping().items()
+                int(z): true_z for z, true_z in self.load_object.get_z_mapping().items()
             }
         except:
             z_mapping_json = {
-                z: z for z in range(z_range[0], z_range[1] + 1)
+                z: z for z in range(self.row_range[0], self.row_range[1] + 1)
             }
 
         self.z_mapping_df = pd.DataFrame.from_dict(
@@ -158,85 +177,97 @@ class FasterJobGrid(object):
 
         return self.z_mapping_df
 
-    def query_montage_section_z_df(self):
-        z_range = self.query_offset_z_range()
+    def query_enqueued_object_row_df(self):
+        '''Combine row dataframes across
+        EMMontageSet, ReferenceSet, Chunk and Load.
+        The sub dataframes all share the montage set z index
+        as the row coordinate
+        '''
+        self.enqueued_object_row_df = pd.concat(
+            [
+                self.query_montage_section_z_df(),
+                self.query_reference_section_z_df(),
+                self.query_load_section_z_df(),
+                self.query_chunk_section_z_df()
+            ]
+        ).sort_values('z_index')
 
-        self.montage_section_z_df = read_frame(
+        return self.enqueued_object_row_df
+
+    def query_montage_section_z_df(self):
+        montage_section_z_df = read_frame(
             EMMontageSet.objects.values(
                 'id',
                 'section__z_index',
                 'object_state'
             ).filter(
-                section__z_index__gte=z_range[0],
-                section__z_index__lte=z_range[1] 
-            ).order_by(
-                'section__z_index'
+                section__z_index__gte=self.row_range[0],
+                section__z_index__lte=self.row_range[1] 
             )
         )
-        self.montage_section_z_df.columns = ['enqueued_object_id', 'z_index', "object_state"]
-        self.montage_section_z_df['enqueued_object_type'] = 'emmontageset'
+        montage_section_z_df.columns = [
+            'enqueued_object_id',
+            'z_index',              # TODO: change to row
+            "object_state"
+        ]
+        montage_section_z_df['enqueued_object_type'] = 'emmontageset'
 
-        return self.montage_section_z_df
+        return montage_section_z_df
 
     def query_reference_section_z_df(self):
-        z_range = self.query_offset_z_range()
+        '''Query all load object that are associated with the range of rows
 
-        self.reference_section_z_df = read_frame(
+        Notes
+        -----
+        This filter does not look right, it should be calculated
+        through one of the corresponding montage set z_index.
+        '''
+        reference_section_z_df = read_frame(
             EMMontageSet.objects.values(
                 'reference_set__id',
                 'section__z_index',
                 'object_state'
             ).filter(
-                section__z_index__gte=z_range[0],
-                section__z_index__lte=z_range[1] 
-            ).order_by(
-                'section__z_index'
+                section__z_index__gte=self.row_range[0],
+                section__z_index__lte=self.row_range[1] 
             )
         )
-        self.reference_section_z_df.columns = ['enqueued_object_id', 'z_index', "object_state"]
-        self.reference_section_z_df['enqueued_object_type'] = 'referenceset'
+        reference_section_z_df.columns = ['enqueued_object_id', 'z_index', "object_state"]
+        reference_section_z_df['enqueued_object_type'] = 'referenceset'
 
-        return self.reference_section_z_df
+        return reference_section_z_df
 
     def query_load_section_z_df(self):
-        z_range = self.query_offset_z_range()
-
-        self.load_section_z_df = read_frame(
+        load_section_z_df = read_frame(
             EMMontageSet.objects.values(
                 'sample_holder__load__id',
                 'section__z_index',
                 'sample_holder__load__object_state'
             ).filter(
-                section__z_index__gte=z_range[0],
-                section__z_index__lte=z_range[1] 
-            ).order_by(
-                'section__z_index'
+                section__z_index__gte=self.row_range[0],
+                section__z_index__lte=self.row_range[1] 
             )
         )
-        self.load_section_z_df.columns = ['enqueued_object_id', 'z_index', "object_state"]
-        self.load_section_z_df['enqueued_object_type'] = 'load'
+        load_section_z_df.columns = ['enqueued_object_id', 'z_index', "object_state"]
+        load_section_z_df['enqueued_object_type'] = 'load'
 
-        return self.load_section_z_df
+        return load_section_z_df
 
     def query_chunk_section_z_df(self):
-        z_range = self.query_offset_z_range()
-
-        self.chunk_section_z_df = read_frame(
+        chunk_section_z_df = read_frame(
             EMMontageSet.objects.values(
                 'section__chunks__id',
                 'section__z_index',
                 'section__chunks__object_state'
             ).filter(
-                section__z_index__gte=z_range[0],
-                section__z_index__lte=z_range[1] 
-            ).order_by(
-                'section__z_index'
+                section__z_index__gte=self.row_range[0],
+                section__z_index__lte=self.row_range[1] 
             )
         )
-        self.chunk_section_z_df.columns = ['enqueued_object_id', 'z_index', "object_state"]
-        self.chunk_section_z_df['enqueued_object_type'] = 'chunk'
+        chunk_section_z_df.columns = ['enqueued_object_id', 'z_index', "object_state"]
+        chunk_section_z_df['enqueued_object_type'] = 'chunk'
 
-        return self.chunk_section_z_df
+        return chunk_section_z_df
 
     def query_object_state_df(self):
         self.object_state_df = pd.concat(
@@ -254,34 +285,36 @@ class FasterJobGrid(object):
 
         return self.object_state_df
 
-    def generate_grid_df(self):
-        self.grid_df = self.z_mapping_df.merge(
-            pd.concat(
-                [
-                    self.reference_section_z_df,
-                    self.montage_section_z_df,
-                    self.load_section_z_df,
-                    self.chunk_section_z_df
-                ]
-            ),
-            on='z_index',
-            how='left'
-        ).merge(
-            self.job_df,
-            on=['enqueued_object_type', 'enqueued_object_id'],
-            how='left'
-        ).merge(
-            self.object_state_df,
-            on='object_state',
+    def annotate_enqueued_object_row_df(self):
+        '''Merge in z_mapping
+        '''
+        self.annotated_enqueued_object_row_df = self.z_mapping_df.merge(
+            self.enqueued_object_row_df,
+            on='z_index',    # TODO: change to row_coordinate
             how='left'
         )
+        return self.annotated_enqueued_object_row_df
 
-        return self.grid_df
+#         self.grid_df = self.z_mapping_df.merge(
+#             self.enqueued_object_row_df,
+#             on='z_index',    # TODO: change to row_coordinate
+#             how='left'
+#         ).merge(
+#             self.job_df,
+#             on=['enqueued_object_type', 'enqueued_object_id'],
+#             how='left'
+#         ).merge(
+#             self.object_state_df,
+#             on='object_state',
+#             how='left'
+#         )
+# 
+#         return self.grid_df
 
     def annotate_job_df(self):
         self.annotated_job_df = self.grid_df.merge(
            self.run_state_df,
-           on='run_state_id',
+           on='run_state',
            how='left'
         )
 
@@ -304,14 +337,14 @@ class FasterJobGrid(object):
 
     def get_dict(self):
         node_id_order = self.query_node_id_order()
-        self.query_job_df()
         run_state_df = self.build_run_state_df()
-        self.query_z_mapping_df()
-        self.query_montage_section_z_df()
-        self.query_reference_section_z_df()
-        self.query_load_section_z_df()
-        self.query_chunk_section_z_df()
+
+        self.query_job_df()
+        self.query_row_mapping_df()
+        self.query_enqueued_object_row_df()
         object_state_df = self.query_object_state_df()
+        self.annotate_enqueued_object_row_df()
+
         self.generate_grid_df()
         annotated_job_df = self.annotate_job_df()
         workflow_node_df = self.query_workflow_node_df()
@@ -319,10 +352,9 @@ class FasterJobGrid(object):
         serial_df = annotated_job_df[
             FasterJobGrid.SERIALIZE_COLUMNS
         ].fillna(value=-1)
-        z_range = self.query_offset_z_range()
         serial_df = serial_df[
-            (serial_df.z_index >= z_range[0]) & 
-            (serial_df.z_index <= z_range[1])
+            (serial_df.z_index >= self.row_range[0]) & 
+            (serial_df.z_index <= self.row_range[1])
         ]
         serial_json = serial_df.to_dict(orient='split')
         del serial_json['index']

@@ -1,21 +1,35 @@
 import pytest
-from mock import Mock, patch, call
+from mock import Mock, patch
 from django.test.utils import override_settings
 from workflow_engine.models.job import Job
 from workflow_engine.models.task import Task
 from workflow_engine.workflow_controller import WorkflowController
-from tests.strategies.at_em_fixtures import strategy_configurations
 from at_em_imaging_workflow.strategies.montage.create_tile_pairs_strategy \
     import CreateTilePairsStrategy
-from tests.models.test_chunk_model \
-    import cameras_etc, section_factory, lots_of_montage_sets
+from tests.models.test_chunk_model import (
+    cameras_etc,           # noqa # pylint: disable=unused-import
+    section_factory,       # noqa # pylint: disable=unused-import
+    lots_of_montage_sets   # noqa # pylint: disable=unused-import
+)
+from tests.strategies.at_em_fixtures import (
+    strategy_configurations  # noqa # pylint: disable=unused-import
+)
 
 
 @pytest.mark.django_db
 def test_get_input_data(strategy_configurations):
     em_mset = Mock()
+    em_mset.section = Mock()
+    em_mset.get_render_project_name = Mock(
+        return_value="TEST_PROJECT"
+    )
+    em_mset.section.z_index = 12345
+    em_mset.reimage_index = Mock(return_value=0)
     task = Mock()
     storage_directory = '/example/storage/directory'
+    em_mset.get_storage_directory = Mock(
+        return_value = storage_directory
+    )
 
     strategy = CreateTilePairsStrategy()
 
@@ -25,6 +39,31 @@ def test_get_input_data(strategy_configurations):
                 em_mset, storage_directory, task)
 
     assert inp is not None
+
+    expected = {
+        'maxZ': 12345,
+        'minZ': 12345,
+        'stack': 'em_2d_montage_lc',
+        'baseStack': 'em_2d_montage_lc',
+        'render': {
+            'host': 'renderservice',
+            'port': 8080,
+            'owner': 'test_user',
+            'project': 'TEST_PROJECT',
+            'client_scripts': '/allen/aibs/pipeline/image_processing/volume_assembly/render-jars/dev/scripts',
+            'memGB': '5G'
+        },
+        'output_dir': storage_directory,
+        'xyNeighborFactor': 0.9,
+        'zNeighborDistance': 0,
+        'excludeCornerNeighbors': True,
+        'excludeSameLayerNeighbors': False,
+        'excludeCompletelyObscuredTiles': True,
+        'log_level': 'ERROR',
+        'memGB': '6G'
+    }
+
+    assert inp == expected
 
 
 @pytest.mark.django_db

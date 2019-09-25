@@ -6,18 +6,16 @@ from workflow_engine.models import (
     JobQueue,
     WorkflowNode
 )
-from at_em_imaging_workflow.strategies.rough.apply_rough_alignment_strategy \
-    import ApplyRoughAlignmentStrategy
 from tests.fixtures.model_fixtures import (
-    cameras_etc,
-    section_factory,
-    lots_of_montage_sets,
-    lots_of_chunks
+    cameras_etc,           # noqa # pylint: disable=unused-import
+    section_factory,       # noqa # pylint: disable=unused-import
+    lots_of_montage_sets,  # noqa # pylint: disable=unused-import
+    lots_of_chunks         # noqa # pylint: disable=unused-import
 )
 from django.test.utils import override_settings
-from mock import Mock, patch
 
 
+@pytest.mark.render_schema_failure
 @pytest.mark.django_db
 @override_settings(
     RENDER_SERVICE_URL='MOCK_URL',
@@ -29,14 +27,10 @@ from mock import Mock, patch
         'start_z': 1,
         'chunk_size': 5 })
 def test_get_input_data(lots_of_chunks):
-    chnk = lots_of_chunks[2]
-#     z_map = Configuration(
-#         name='Z',
-#         configuration_type="z_mapping",
-#         json_object={ str(k+1000): k for k in range(17,27) }
-#     )
-#     chnk.configurations.add(z_map, bulk=False)
+    from at_em_imaging_workflow.strategies.rough.apply_rough_alignment_strategy \
+        import ApplyRoughAlignmentStrategy
 
+    chnk = lots_of_chunks[2]
     jq = JobQueue(name="Apply Rough Alignment")
     input_con = Configuration(
         name="Apply Rough Alignment Input",
@@ -68,4 +62,3 @@ def test_get_input_data(lots_of_chunks):
     assert inp['prealigned_stack'] == 'em_2d_montage_solved_py'
     assert inp['lowres_stack'] == 'em_rough_align_solved_downsample_zs180_ze280'
     assert inp['output_stack'] == 'em_rough_align_zs180_ze280'
-

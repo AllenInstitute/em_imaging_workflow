@@ -1,4 +1,3 @@
-import itertools as it
 import pytest
 from django.test.utils import override_settings
 from workflow_engine.models import Job
@@ -10,10 +9,14 @@ from at_em_imaging_workflow.strategies.rough.define_chunks_strategy import (
     DefineChunksStrategy
 )
 from tests.fixtures.model_fixtures import (
-    cameras_etc, section_factory, lots_of_montage_sets, lots_of_chunks
+    cameras_etc,           # noqa # pylint: disable=unused-import
+    section_factory,       # noqa # pylint: disable=unused-import
+    lots_of_montage_sets,  # noqa # pylint: disable=unused-import
+    lots_of_chunks         # noqa # pylint: disable=unused-import
 )
 
 
+@pytest.mark.unimplemented
 @pytest.mark.django_db
 @override_settings(
     BASE_FILE_PATH='/base',
@@ -40,6 +43,7 @@ def test_must_wait(lots_of_chunks):
         em_mset = montage_sets[i]
         em_mset.object_state = EMMontageSet.STATE.EM_MONTAGE_SET_QC_PASSED
         em_mset.save()
+
         j = Job(enqueued_object=em_mset)
         cs = strat.get_objects_for_queue(j)
 

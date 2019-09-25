@@ -10,7 +10,6 @@ from at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy \
 from django.test.utils import override_settings
 from tests.models.test_chunk_model \
     import cameras_etc, section_factory, lots_of_montage_sets
-import simplejson as json
 
 
 @pytest.mark.django_db

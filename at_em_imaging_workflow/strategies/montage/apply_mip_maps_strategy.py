@@ -63,4 +63,4 @@ class ApplyMipMapsStrategy(ExecutionStrategy):
 
         inp['zValues'] = [ em_mset.section.z_index ]
 
-        return AddMipMapsToStackParameters().dump(inp).data
+        return AddMipMapsToStackParameters().dump(inp) #.data

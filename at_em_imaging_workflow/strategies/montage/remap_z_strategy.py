@@ -55,11 +55,11 @@ class RemapZStrategy(InputConfigMixin, ExecutionStrategy):
         z_index = em_mset.section.z_index
         z_mapping = em_mset.sample_holder.load.configurations.get(
             configuration_type='z_mapping').json_object
-        inp['zValues'] = z_mapping[str(z_index)]
+        inp['zValues'] = [ z_mapping[str(z_index)] ]
         inp['new_zValues'] = [ z_index ]
 
         stack_names = TwoDStackNameManager.remap_z_stacks(em_mset)
         inp['input_stack'] = stack_names['input_stack']
         inp['output_stack'] = stack_names['output_stack']
 
-        return RemapZsParameters().dump(inp).data
+        return RemapZsParameters().dump(inp)

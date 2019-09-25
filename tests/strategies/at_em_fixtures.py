@@ -3,22 +3,6 @@ import simplejson as json
 
 
 @pytest.fixture
-def mock_run_states():
-    rs = {}
-    for s in [
-        'PENDING',
-        'QUEUED',
-        'RUNNING',
-        'FINISHED_EXECUTION',
-        'FAILED_EXECUTION',
-        'SUCCESS',
-        'FAILED']:
-        rs[s], _ = RunState.objects.update_or_create(
-            name=s)
-    return rs
-
-
-@pytest.fixture
 def strategy_configurations():
     strategy_configurations.configs = """{
  "Render Downsample Montage Input": {
@@ -612,7 +596,6 @@ def strategy_configurations():
     }"""
     
     input_dicts = json.loads(strategy_configurations.configs)
-    p, _ = RunState.objects.update_or_create(name='PENDING')
 
     for k in input_dicts.keys():
         Configuration.objects.update_or_create(
@@ -620,10 +603,8 @@ def strategy_configurations():
             defaults={
                 'configuration_type': 'strategy_config',
                 'json_object': input_dicts[k],
-                'content_object': p
-                })
+            })
 
     return input_dicts
 
-from workflow_engine.models.run_state import RunState
 from workflow_engine.models.configuration import Configuration

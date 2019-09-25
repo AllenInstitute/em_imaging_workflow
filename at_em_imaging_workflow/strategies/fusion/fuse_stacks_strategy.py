@@ -12,6 +12,7 @@ class FuseStacksStrategy(InputConfigMixin, ExecutionStrategy):
         'fusion.fuse_stacks_strategy')
 
     def get_input(self, chnk, storage_directory, task):
+        pass
 #         inp = self.get_workflow_node_input_template(
 #             task,
 #             name='Fuse Stacks Input')

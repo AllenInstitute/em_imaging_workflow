@@ -1,19 +1,20 @@
 from at_em_imaging_workflow.strategies.montage.make_montage_scapes_stack_strategy \
     import MakeMontageScapesStackStrategy
-from at_em_imaging_workflow.models.chunk_assignment import ChunkAssignment
-from at_em_imaging_workflow.models.e_m_montage_set import EMMontageSet
-from workflow_engine.models.configuration import Configuration
-from tests.strategies.at_em_fixtures import strategy_configurations
+from at_em_imaging_workflow.models import EMMontageSet
+from tests.strategies.at_em_fixtures import (
+    strategy_configurations  # noqa # pylint: disable=unused-import
+)
 import pytest
-from mock import Mock, patch, mock_open
-from workflow_engine.models.task import Task
-from workflow_engine.models.job import Job
-from django.test.utils import override_settings
-from tests.models.test_chunk_model \
-    import cameras_etc, section_factory, lots_of_montage_sets
-from tests.strategies.rough.test_rough_point_match_strategy \
-    import lots_of_chunks
-# import simplejson as json
+from mock import Mock, patch
+from workflow_engine.models import Configuration, Task
+from tests.models.test_chunk_model import (
+    cameras_etc,          # noqa # pylint: disable=unused-import
+    section_factory,      # noqa # pylint: disable=unused-import
+    lots_of_montage_sets  # noqa # pylint: disable=unused-import
+)
+from tests.strategies.rough.test_rough_point_match_strategy import (
+    lots_of_chunks  # noqa # pylint: disable=unused-import
+)
 
 
 @pytest.mark.django_db
@@ -24,8 +25,10 @@ from tests.strategies.rough.test_rough_point_match_strategy \
            'montage_stack': "",
            'output_stack': "",
            'render': { } } ))
-def test_get_input_data(lots_of_chunks,
-                        strategy_configurations):
+def test_get_input_data(
+    lots_of_chunks,
+    strategy_configurations
+):
     chnk = lots_of_chunks[0]
     min_z = min(int(i) for i in chnk.get_z_mapping().keys())
     chnk_assign = chnk.chunkassignment_set.get(
@@ -70,8 +73,6 @@ def test_get_input_data(lots_of_chunks,
     assert inp['render']['project'] == 'MOCK SPECIMEN'
     assert inp['render']['client_scripts'].startswith('/allen/aibs')
 
-    # assert json.dumps(inp, indent=2) == ''
-
 
 @pytest.mark.django_db
 def test_get_one_task_objects_for_queue(lots_of_chunks):
@@ -96,8 +97,6 @@ def test_get_two_task_objects_for_queue(lots_of_chunks):
     chnk_assign = chnk.chunkassignment_set.get(
         section__z_index=max_z
     )
-    em_mset = chnk_assign.section.montageset_set.get().emmontageset
-
     em_mset = EMMontageSet.objects.filter(
         section=chnk_assign.section)[0]
     strategy = MakeMontageScapesStackStrategy()

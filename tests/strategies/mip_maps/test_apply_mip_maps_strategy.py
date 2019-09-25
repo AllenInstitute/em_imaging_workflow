@@ -1,14 +1,18 @@
 from mock import Mock, patch
 import pytest
 from django.test.utils import override_settings
-from workflow_engine.models.job import Job
-from workflow_engine.models.task import Task
+from workflow_engine.models import Job, Task
 from workflow_engine.workflow_controller import WorkflowController
-from tests.strategies.at_em_fixtures import strategy_configurations
 from at_em_imaging_workflow.strategies.montage.apply_mip_maps_strategy \
     import ApplyMipMapsStrategy
-from tests.models.test_chunk_model \
-    import cameras_etc, section_factory, lots_of_montage_sets
+from tests.models.test_chunk_model import (
+    cameras_etc,          # noqa # pylint: disable=unused-import
+    section_factory,      # noqa # pylint: disable=unused-import
+    lots_of_montage_sets  # noqa # pylint: disable=unused-import
+)
+from tests.strategies.at_em_fixtures import (
+    strategy_configurations  # noqa # pylint: disable=unused-import
+)
 
 
 @pytest.mark.django_db

@@ -70,7 +70,7 @@ class GenerateRenderStackStrategy(InputConfigMixin, ExecutionStrategy):
         inp['close_stack'] = False
         inp['zValues'] = [ self.get_z_index(em_mset) ]
 
-        return GenerateEMTileSpecsParameters().dump(inp).data
+        return GenerateEMTileSpecsParameters().dump(inp)
 
     def get_z_index(self, em_set):
         return em_set.section.z_index

@@ -2,16 +2,15 @@ import pytest
 from mock import patch, Mock, mock_open
 from workflow_engine.models.task import Task
 from django.test.utils import override_settings
-from at_em_imaging_workflow.strategies.rough.solve_rough_alignment_strategy \
-    import SolveRoughAlignmentStrategy
 from tests.fixtures.model_fixtures import (
-    cameras_etc,
-    section_factory,
-    lots_of_montage_sets,
-    lots_of_chunks
+    cameras_etc,           # noqa # pylint: disable=unused-import
+    section_factory,       # noqa # pylint: disable=unused-import
+    lots_of_montage_sets,  # noqa # pylint: disable=unused-import
+    lots_of_chunks         # noqa # pylint: disable=unused-import
 )
 
 
+@pytest.mark.render_schema_failure
 @pytest.mark.django_db
 @override_settings(
     RENDER_SERVICE_URL='MOCK_URL',
@@ -36,6 +35,9 @@ from tests.fixtures.model_fixtures import (
            'output_stack': "",
            'render': { 'source_collection': '' } } ))
 def test_get_input_data(lots_of_chunks):
+    from at_em_imaging_workflow.strategies.rough.solve_rough_alignment_strategy \
+        import SolveRoughAlignmentStrategy
+
     chnk = lots_of_chunks[2]
 
     task = Task(id=345)

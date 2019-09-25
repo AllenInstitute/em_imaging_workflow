@@ -65,7 +65,7 @@ class GenerateMipMapsStrategy(InputConfigMixin, ExecutionStrategy):
         inp['output_dir'] = em_mset.mipmap_directory
         inp['zValues'] = [ em_mset.section.z_index ]
 
-        return GenerateMipMapsParameters().dump(inp).data
+        return GenerateMipMapsParameters().dump(inp)
 
     def on_running(self, task):
         em_mset = task.enqueued_task_object

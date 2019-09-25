@@ -70,6 +70,21 @@ class Load(
             self.configurations.get(
                 configuration_type='z_mapping').json_object)
 
+    def calculate_offset_z_range(self, z_range):
+        '''Apply the microscope Load (tapes) fixed integer offset to the min and max z's.
+
+        Parameters
+        ----------
+        z_range : tuple of two ints
+            min z, max z in tape coordinates
+        
+        Returns
+        -------
+        tuple of two integers
+            min z, max z in temp coordinates
+        '''
+        return (z_range[0] + self.offset, z_range[1] + self.offset)
+
     def update_z_mapping(self, tape_df):
         tape_df = tape_df[
             tape_df['Barcode'].notnull() &

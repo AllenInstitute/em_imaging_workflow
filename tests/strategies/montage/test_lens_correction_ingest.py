@@ -104,7 +104,6 @@ def test_reference_set_ingest(ref_set_ingest_message):
     #     ref_set.acquisition_date
 
 
-@pytest.mark.skipif(True, reason="need to redo")
 @pytest.mark.django_db
 def test_em_montage_set_ingest(em_montage_set_ingest_message):
     em_montage_set_ingest_message['reference_set_id'] = "MOCK_REF_UUID"

@@ -12,6 +12,9 @@ class CreateTilePairsStrategy(ExecutionStrategy):
         'montage.create_tile_pairs_strategy')
 
     def get_input(self, em_mset, storage_directory, task):
+        del storage_directory  # unused
+        del task  # unused
+
         inp = Configuration.objects.get(
             name='Create Tile Pairs Input',
             configuration_type='strategy_config').json_object
@@ -28,7 +31,7 @@ class CreateTilePairsStrategy(ExecutionStrategy):
         inp["minZ"] = em_mset.section.z_index
         inp["maxZ"] = em_mset.section.z_index
 
-        return TilePairClientParameters().dump(inp).data 
+        return TilePairClientParameters().dump(inp)
 
     def on_finishing(self, em_mset, results, task):
         self.check_key(results, 'tile_pair_file')

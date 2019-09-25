@@ -64,7 +64,7 @@ class FinePointMatchStrategy(ExecutionStrategy):
             'http://' + settings.RENDER_SERVICE_URL + \
             ':' + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
 
-        return PointMatchClientParametersSpark().dump(inp).data
+        return PointMatchClientParametersSpark().dump(inp)
 
     def get_tile_pairs_file_name(self, em_mset):
         return WellKnownFile.get(
@@ -73,11 +73,11 @@ class FinePointMatchStrategy(ExecutionStrategy):
 
     def on_finishing(self, em_mset, results, task):
         self.check_key(results, 'pairCount')
-        self.set_well_known_file(
-            self.get_output_file(task),
-            em_mset,
-            'point_match_output',
-            task)
+#         self.set_well_known_file(
+#             self.get_output_file(task),
+#             em_mset,
+#             'point_match_output',
+#             task)
 
     def create_log_configuration(self, log_file_path):
         env = jinja2.Environment(

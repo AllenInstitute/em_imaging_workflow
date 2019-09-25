@@ -35,18 +35,18 @@ def test_get_input_data():
                                     storage_directory,
                                     task)
 
-    assert input_json['render']['host'] == \
-        settings.RENDER_SERVICE_URL
-    assert input_json['render']['port'] == \
-        int(settings.RENDER_SERVICE_PORT)
-    assert input_json['render']['owner'] == \
-        settings.RENDER_SERVICE_USER
-    assert input_json['render']['project'] == \
-        'MOCKSPECIMEN'
-    assert input_json['output_stack'] == \
-        'em_2d_montage_ingest'
-    assert input_json['render']['client_scripts'] == \
-        settings.RENDER_CLIENT_SCRIPTS
+    assert (input_json['render']['host'] ==
+        settings.RENDER_SERVICE_URL)
+    assert (input_json['render']['port'] ==
+        int(settings.RENDER_SERVICE_PORT))
+    assert (input_json['render']['owner'] ==
+        settings.RENDER_SERVICE_USER)
+    assert (input_json['render']['project'] ==
+        'MOCKSPECIMEN')
+    assert (input_json['output_stack'] ==
+        'em_2d_montage_ingest')
+    assert (input_json['render']['client_scripts'] ==
+        settings.RENDER_CLIENT_SCRIPTS)
     assert input_json['metafile'] == em_set.metafile
     assert input_json['close_stack'] == False
     assert set(input_json['zValues']) == set([test_z_index])

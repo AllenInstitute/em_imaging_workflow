@@ -26,10 +26,10 @@ pypi_deploy:
 
 # see pytest.ini for additional configuration
 pytest_lax:
-	rm database.db || exit 0
-	python manage.py makemigrations --noinput
-	python manage.py migrate --noinput
-	python setup.py test 
+	#rm database.db || exit 0
+	#python manage.py makemigrations --noinput
+	#python manage.py migrate --noinput
+	pytest -s --cov=workflow_engine,workflow_client --cov-report html --cov-append --junitxml=test-reports/test.xml
 
 pytest: pytest_lax
 

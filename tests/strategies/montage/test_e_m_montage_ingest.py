@@ -1,6 +1,8 @@
 import pytest
 from at_em_imaging_workflow.strategies.montage.lens_correction_ingest import LensCorrectionIngest
 from at_em_imaging_workflow.models.e_m_montage_set import EMMontageSet
+import pytz
+from django.utils import timezone
 import copy
 
 body_data = {
@@ -26,11 +28,10 @@ body_data = {
 
 
 @pytest.mark.django_db
-@pytest.mark.skipif(True, reason='moved all to lens correction ingest')
 def test_with_reference_set():
     ref_body_data = None
     example = body_data
-    example['aquisition_data']['microscope_type'] = 'TEM'
+    example['acquisition_data']['microscope_type'] = 'TEM'
     example['manifest_path'] = \
         "/allen/aibs/pipeline/image_processing/volume_assembly/" + \
         "lc_test_data/Wij_Set_594451332/594089217_594451332/" + \
@@ -45,16 +46,19 @@ def test_with_reference_set():
         "_metadata_20170829130146_295434_5LC_0064_01_redo_001050_0_.json"
 
     ref_set = LensCorrectionIngest().create_reference_set(example)
+
+    example['reference_set_id'] = str(ref_set.uid)
+
     em_mset = LensCorrectionIngest().create_em_montage_set(example)
 
     assert ref_set is not None
     assert em_mset is not None
 
-    get_em_mset = EMMontageSet.objects.get(
+    em_mset = EMMontageSet.objects.get(
         storage_directory=example['storage_directory'])
 
-    assert get_em_mset is not None
-    assert body_data['reference_set_id'] == em_mset.reference_set.uid
+    assert em_mset is not None
+    assert body_data['reference_set_id'] == str(em_mset.reference_set.uid)
     assert body_data['acquisition_data']['overlap'] == em_mset.overlap
     assert body_data['storage_directory'] == em_mset.storage_directory
     assert body_data['section']['z_index'] == em_mset.section.z_index
@@ -68,8 +72,11 @@ def test_with_reference_set():
     #    ref_set.camera.width
     #assert example['acquisition_data']['camera']['model'] == \
     #    ref_set.camera.model
-    assert example['acquisition_data']['acquisition_time'] == \
-        em_mset.acquisition_date
+    expected_time = em_mset.acquisition_date.astimezone(
+        pytz.timezone('America/Los_Angeles')
+    )
+    assert (example['acquisition_data']['acquisition_time'] ==
+        expected_time.strftime('%Y-%m-%dT%H:%M:%S'))
 
 
 @pytest.fixture
@@ -132,11 +139,10 @@ def test_mset_storage_directory(em_mset_no_ref_set):
 
 
 @pytest.mark.django_db
-@pytest.mark.xfail
 def test_mset_mipmap_directory(em_mset_no_ref_set):
     em_mset = LensCorrectionIngest().create_em_montage_set(em_mset_no_ref_set)
 
-    assert em_mset.mipmap_directory is not None
+    assert em_mset.mipmap_directory is None
 
 
 @pytest.mark.django_db

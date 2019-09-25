@@ -127,7 +127,7 @@ class RoughPointMatchStrategy(InputConfigMixin, ExecutionStrategy):
         inp['render'] = self.get_render_dict(chnk)
         inp.update(self.get_logging_dict(task, write_files=False))
  
-        return PointMatchClientParametersSpark().dump(inp).data
+        return PointMatchClientParametersSpark().dump(inp)
 
     def get_task_arguments(self, task, write_files=False):
         chnk_assn = task.enqueued_task_object

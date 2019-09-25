@@ -4,8 +4,11 @@ from workflow_engine.models.task import Task
 from workflow_engine.models.job import Job
 from django.test.utils import override_settings
 from workflow_engine.workflow_controller import WorkflowController
-from tests.models.test_chunk_model \
-    import cameras_etc, section_factory, lots_of_montage_sets
+from tests.models.test_chunk_model import (
+    cameras_etc,          # noqa # pylint: disable=unused-import
+    section_factory,      # noqa # pylint: disable=unused-import
+    lots_of_montage_sets  # noqa # pylint: disable=unused-import
+)
 from at_em_imaging_workflow.strategies.fine.fine_point_match_strategy \
     import FinePointMatchStrategy
 
