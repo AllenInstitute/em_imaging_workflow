@@ -1,0 +1,451 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>at_em_imaging_workflow.strategies.montage.lens_correction_ingest &#8212; Blue Sky Workflow Engine  documentation</title>
+    <link rel="stylesheet" href="../../../../_static/aibs_sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+  <body>
+<link href="http://www.brain-map.org/assets/stylesheets/portal.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="http://www.brain-map.org/assets/javascripts/portal.js" type="text/javascript"></script>
+<script src="http://www.brain-map.org/assets/javascripts/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var _pSupressBrowserFlashWarning = true;
+    var _pTabId = "pHome";
+    var _pMoreProjectsId = "pMoreProjects";
+    var _pImagePath = "http://www.brain-map.org/assets/images/";
+    var _pSiteWarnings = function() {
+        this.show_warning() = {};
+    }
+</script>
+<script type="text/javascript">
+    function initialize() {
+        /*** do your stuff, then initialize the portal plugin ***/
+        _pPortalOnLoad();
+    }
+</script>
+<style>
+  #header_content > a {
+  display: inline-block;
+  width: 250px;
+  height: 75px;
+  background-image:url("/_static/external_assets/images/Brain_Atlas_Logotype_SDK.png") !important;
+  background-size: 235px 37px;
+  background-position: 0px 20px;
+  background-repeat: no-repeat;
+  }
+</style>
+
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalHeader.js"></script>
+<link rel="stylesheet" type="text/css" href="/_static/external_assets/stylesheets/common_layout.css" />
+
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for at_em_imaging_workflow.strategies.montage.lens_correction_ingest</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Allen Institute Software License - This software license is the 2-clause BSD</span>
+<span class="c1"># license plus a third clause that prohibits redistribution for commercial</span>
+<span class="c1"># purposes without further permission.</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright 2017-2019. Allen Institute. All rights reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Redistribution and use in source and binary forms, with or without</span>
+<span class="c1"># modification, are permitted provided that the following conditions are met:</span>
+<span class="c1">#</span>
+<span class="c1"># 1. Redistributions of source code must retain the above copyright notice,</span>
+<span class="c1"># this list of conditions and the following disclaimer.</span>
+<span class="c1">#</span>
+<span class="c1"># 2. Redistributions in binary form must reproduce the above copyright notice,</span>
+<span class="c1"># this list of conditions and the following disclaimer in the documentation</span>
+<span class="c1"># and/or other materials provided with the distribution.</span>
+<span class="c1">#</span>
+<span class="c1"># 3. Redistributions for commercial purposes are not permitted without the</span>
+<span class="c1"># Allen Institute&#39;s written permission.</span>
+<span class="c1"># For purposes of this license, commercial purposes is the incorporation of the</span>
+<span class="c1"># Allen Institute&#39;s software into anything for which you will charge fees or</span>
+<span class="c1"># other compensation. Contact terms@alleninstitute.org for commercial licensing</span>
+<span class="c1"># opportunities.</span>
+<span class="c1">#</span>
+<span class="c1"># THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;</span>
+<span class="c1"># AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</span>
+<span class="c1"># IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</span>
+<span class="c1"># ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE</span>
+<span class="c1"># LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</span>
+<span class="c1"># CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</span>
+<span class="c1"># SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</span>
+<span class="c1"># INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</span>
+<span class="c1"># CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</span>
+<span class="c1"># ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE</span>
+<span class="c1"># POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="c1">#</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="k">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="k">import</span> <span class="n">ObjectDoesNotExist</span>
+<span class="kn">from</span> <span class="nn">workflow_engine.strategies.ingest_strategy</span> <span class="k">import</span> <span class="n">IngestStrategy</span>
+<span class="kn">from</span> <span class="nn">at_em_imaging_workflow.models</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Camera</span><span class="p">,</span>
+    <span class="n">EMMontageSet</span><span class="p">,</span>
+    <span class="n">Load</span><span class="p">,</span>
+    <span class="n">Microscope</span><span class="p">,</span>
+    <span class="n">MicroscopeType</span><span class="p">,</span> 
+    <span class="n">ReferenceSet</span><span class="p">,</span>
+    <span class="n">SampleHolder</span><span class="p">,</span>
+    <span class="n">Section</span><span class="p">,</span>
+    <span class="n">Specimen</span><span class="p">,</span>
+    <span class="n">Study</span>
+<span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+
+<div class="viewcode-block" id="LensCorrectionIngest"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.montage.html#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest">[docs]</a><span class="k">class</span> <span class="nc">LensCorrectionIngest</span><span class="p">(</span><span class="n">IngestStrategy</span><span class="p">):</span>
+    <span class="n">_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span>
+        <span class="s1">&#39;at_em_imaging_workflow.strategies&#39;</span>
+        <span class="s1">&#39;.montage.lens_correction_ingest&#39;</span><span class="p">)</span>
+
+    <span class="c1"># TODO, query from datbase using class name</span>
+<div class="viewcode-block" id="LensCorrectionIngest.get_workflow_name"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.montage.html#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.get_workflow_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_workflow_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">LensCorrectionIngest</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;get_workflow_name&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s1">&#39;em_2d_montage&#39;</span></div>
+
+<div class="viewcode-block" id="LensCorrectionIngest.create_camera"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.montage.html#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_camera">[docs]</a>    <span class="k">def</span> <span class="nf">create_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message_camera</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Add or retrieve and optionally modify a Camera in the database.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        message_camera : dict</span>
+<span class="sd">            height, width, model keys</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Camera</span>
+<span class="sd">            the database object</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">camera</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Camera</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span>
+            <span class="n">uid</span><span class="o">=</span><span class="n">message_camera</span><span class="p">[</span><span class="s1">&#39;camera_id&#39;</span><span class="p">],</span>
+            <span class="n">defaults</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">message_camera</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">message_camera</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">message_camera</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]}</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">camera</span></div>
+
+<div class="viewcode-block" id="LensCorrectionIngest.create_microscope"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.montage.html#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_microscope">[docs]</a>    <span class="k">def</span> <span class="nf">create_microscope</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                          <span class="n">message_microscope</span><span class="p">,</span>
+                          <span class="n">message_microscope_type</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Add or retrieve and optionally modify a Microscope</span>
+<span class="sd">        in the database.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        message_microscope : dict</span>
+<span class="sd">            the sub-message to be unpacked</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Microscope</span>
+<span class="sd">            the database object</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">scope_type</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">MicroscopeType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">message_microscope_type</span>
+        <span class="p">)</span>
+
+        <span class="n">microscope</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Microscope</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span>
+            <span class="n">uid</span><span class="o">=</span><span class="n">message_microscope</span><span class="p">,</span>
+            <span class="n">defaults</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;microscope_type&#39;</span><span class="p">:</span> <span class="n">scope_type</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">microscope</span></div>
+
+<div class="viewcode-block" id="LensCorrectionIngest.create_reference_set"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.montage.html#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_reference_set">[docs]</a>    <span class="k">def</span> <span class="nf">create_reference_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Add or retrieve and optionally modify a Microscope</span>
+<span class="sd">        in the database. Camera and Microscope are created if needed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        message_microscope : dict</span>
+<span class="sd">            the sub-message to be unpacked</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ReferenceSet</span>
+<span class="sd">            the database object</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">LensCorrectionIngest</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;create_enqueued_object&#39;</span><span class="p">)</span>
+
+        <span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_camera</span><span class="p">(</span>
+            <span class="n">message</span><span class="p">[</span><span class="s1">&#39;acquisition_data&#39;</span><span class="p">][</span><span class="s1">&#39;camera&#39;</span><span class="p">])</span>
+        <span class="n">microscope</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_microscope</span><span class="p">(</span>
+            <span class="n">message</span><span class="p">[</span><span class="s1">&#39;acquisition_data&#39;</span><span class="p">][</span><span class="s1">&#39;microscope&#39;</span><span class="p">],</span>
+            <span class="n">message</span><span class="p">[</span><span class="s1">&#39;acquisition_data&#39;</span><span class="p">][</span><span class="s1">&#39;microscope_type&#39;</span><span class="p">])</span>
+
+        <span class="n">metafile</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;metafile&#39;</span><span class="p">]</span>
+        <span class="n">manifest_path</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;manifest_path&#39;</span><span class="p">]</span>
+
+        <span class="n">reference_set</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ReferenceSet</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span>
+                <span class="n">camera</span><span class="o">=</span><span class="n">camera</span><span class="p">,</span>
+                <span class="n">microscope</span><span class="o">=</span><span class="n">microscope</span><span class="p">,</span>
+                <span class="n">storage_directory</span><span class="o">=</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;storage_directory&#39;</span><span class="p">],</span>
+                <span class="n">acquisition_date</span><span class="o">=</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;acquisition_data&#39;</span><span class="p">][</span><span class="s1">&#39;acquisition_time&#39;</span><span class="p">],</span>
+                <span class="n">manifest_path</span><span class="o">=</span><span class="n">manifest_path</span><span class="p">,</span>
+                <span class="n">metafile</span><span class="o">=</span> <span class="n">metafile</span><span class="p">,</span>
+                <span class="n">defaults</span><span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">(),</span>
+                    <span class="s1">&#39;object_state&#39;</span><span class="p">:</span> <span class="n">ReferenceSet</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">LENS_CORRECTION_PENDING</span>
+                <span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">reference_set</span></div>
+
+<div class="viewcode-block" id="LensCorrectionIngest.create_study"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.montage.html#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_study">[docs]</a>    <span class="k">def</span> <span class="nf">create_study</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">study_message</span><span class="p">):</span>
+        <span class="n">LensCorrectionIngest</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;creating study - UNIMPLEMENTED&#39;</span><span class="p">)</span>
+
+        <span class="n">study</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Study</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;IARPA Phase 2&#39;</span> <span class="c1"># TODO: from settings or ingest</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">study</span></div>
+
+<div class="viewcode-block" id="LensCorrectionIngest.create_specimen"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.montage.html#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_specimen">[docs]</a>    <span class="k">def</span> <span class="nf">create_specimen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">specimen_message</span><span class="p">,</span> <span class="n">study</span><span class="p">):</span>
+        <span class="n">LensCorrectionIngest</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;creating specimen&#39;</span><span class="p">)</span>
+        <span class="n">specimen</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Specimen</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span>
+            <span class="n">uid</span><span class="o">=</span><span class="n">specimen_message</span><span class="p">,</span>
+            <span class="n">defaults</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;render_project&#39;</span><span class="p">:</span> <span class="n">settings</span><span class="o">.</span><span class="n">RENDER_SERVICE_PROJECT</span><span class="p">,</span>
+                <span class="s1">&#39;render_owner&#39;</span><span class="p">:</span> <span class="n">settings</span><span class="o">.</span><span class="n">RENDER_SERVICE_USER</span><span class="p">,</span>
+                <span class="s1">&#39;study&#39;</span><span class="p">:</span> <span class="n">study</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">specimen</span></div>
+
+<div class="viewcode-block" id="LensCorrectionIngest.create_section"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.montage.html#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_section">[docs]</a>    <span class="k">def</span> <span class="nf">create_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section_message</span><span class="p">,</span> <span class="n">metafile</span><span class="p">,</span> <span class="n">specimen</span><span class="p">):</span>
+        <span class="n">LensCorrectionIngest</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;creating section&#39;</span><span class="p">)</span>
+
+        <span class="n">section</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Section</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span>
+            <span class="n">z_index</span><span class="o">=</span><span class="n">section_message</span><span class="p">[</span><span class="s1">&#39;z_index&#39;</span><span class="p">],</span>
+            <span class="n">specimen</span><span class="o">=</span><span class="n">specimen</span><span class="p">,</span>
+            <span class="n">defaults</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="kc">None</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">section</span></div>
+
+<div class="viewcode-block" id="LensCorrectionIngest.create_load"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.montage.html#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_load">[docs]</a>    <span class="k">def</span> <span class="nf">create_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">load_message</span><span class="p">):</span>
+        <span class="n">LensCorrectionIngest</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;creating load&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">load_message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">load_message</span><span class="p">[</span><span class="s1">&#39;uid&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">uid</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">uid</span> <span class="o">=</span> <span class="n">load_message</span><span class="p">[</span><span class="s1">&#39;uid&#39;</span><span class="p">]</span>
+
+            <span class="n">load</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Load</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span>
+                <span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span>
+                <span class="n">defaults</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s1">&#39;offset&#39;</span><span class="p">:</span> <span class="n">load_message</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]}</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">load</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Load</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span>
+                <span class="n">uid</span><span class="o">=</span><span class="s1">&#39;Load&#39;</span><span class="p">,</span>
+                <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;offset&#39;</span><span class="p">:</span> <span class="mi">0</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">load</span></div>
+
+<div class="viewcode-block" id="LensCorrectionIngest.create_sample_holder"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.montage.html#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_sample_holder">[docs]</a>    <span class="k">def</span> <span class="nf">create_sample_holder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_holder_message</span><span class="p">,</span> <span class="n">load</span><span class="p">):</span>
+        <span class="n">LensCorrectionIngest</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;creating sample holder&#39;</span><span class="p">)</span>
+
+        <span class="n">sample_holder</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">SampleHolder</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span>
+            <span class="n">uid</span><span class="o">=</span><span class="n">sample_holder_message</span><span class="p">,</span>
+            <span class="n">load</span><span class="o">=</span><span class="n">load</span><span class="p">,</span>
+            <span class="n">defaults</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;imaged_sections_count&#39;</span><span class="p">:</span> <span class="mi">0</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sample_holder</span></div>
+
+<div class="viewcode-block" id="LensCorrectionIngest.create_enqueued_object"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.montage.html#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_enqueued_object">[docs]</a>    <span class="k">def</span> <span class="nf">create_enqueued_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tags</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;EMMontageSet&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s1">&#39;ReferenceSet&#39;</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
+            <span class="n">enqueued_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_reference_set</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="n">start_node</span> <span class="o">=</span> <span class="s1">&#39;Generate Lens Correction Transform&#39;</span>
+        <span class="k">elif</span> <span class="s1">&#39;EMMontageSet&#39;</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
+            <span class="n">enqueued_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_em_montage_set</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="n">start_node</span> <span class="o">=</span> <span class="s1">&#39;Generate Render Stack&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">LensCorrectionIngest</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No enqueued object type tag&quot;</span><span class="p">)</span>
+            <span class="n">enqueued_object</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">start_node</span> <span class="o">=</span> <span class="s1">&#39;Generate Render Stack&#39;</span>
+
+        <span class="k">return</span> <span class="n">enqueued_object</span><span class="p">,</span> <span class="n">start_node</span></div>
+
+<div class="viewcode-block" id="LensCorrectionIngest.create_em_montage_set"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.montage.html#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_em_montage_set">[docs]</a>    <span class="k">def</span> <span class="nf">create_em_montage_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="n">LensCorrectionIngest</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;create_em_montage_set&#39;</span><span class="p">)</span>
+
+        <span class="n">study</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_study</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="n">specimen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_specimen</span><span class="p">(</span>
+            <span class="n">message</span><span class="p">[</span><span class="s1">&#39;section&#39;</span><span class="p">][</span><span class="s1">&#39;specimen&#39;</span><span class="p">],</span>
+            <span class="n">study</span><span class="p">)</span>
+        <span class="n">section</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_section</span><span class="p">(</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;section&#39;</span><span class="p">],</span>
+                                      <span class="n">message</span><span class="p">[</span><span class="s1">&#39;metafile&#39;</span><span class="p">],</span>
+                                      <span class="n">specimen</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;load&#39;</span> <span class="ow">in</span> <span class="n">message</span><span class="p">:</span>
+            <span class="n">load</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_load</span><span class="p">(</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;load&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">load</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_load</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            
+        <span class="n">sample_holder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_sample_holder</span><span class="p">(</span>
+            <span class="n">message</span><span class="p">[</span><span class="s1">&#39;section&#39;</span><span class="p">][</span><span class="s1">&#39;sample_holder&#39;</span><span class="p">],</span>
+            <span class="n">load</span><span class="p">)</span>
+
+        <span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_camera</span><span class="p">(</span>
+            <span class="n">message</span><span class="p">[</span><span class="s1">&#39;acquisition_data&#39;</span><span class="p">][</span><span class="s1">&#39;camera&#39;</span><span class="p">])</span>
+        <span class="n">microscope</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_microscope</span><span class="p">(</span>
+            <span class="n">message</span><span class="p">[</span><span class="s1">&#39;acquisition_data&#39;</span><span class="p">][</span><span class="s1">&#39;microscope&#39;</span><span class="p">],</span>
+            <span class="n">message</span><span class="p">[</span><span class="s1">&#39;acquisition_data&#39;</span><span class="p">][</span><span class="s1">&#39;microscope_type&#39;</span><span class="p">])</span>
+
+        <span class="n">LensCorrectionIngest</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;creating em montage set&#39;</span><span class="p">)</span>
+
+        <span class="c1"># if reference set id isn&#39;t specified,</span>
+        <span class="c1"># montage set should still be created</span>
+        <span class="n">reference_set</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">reference_set_uid</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># TODO fix this logic and raise real exception</span>
+        <span class="k">if</span> <span class="s1">&#39;reference_set_id&#39;</span> <span class="ow">in</span> <span class="n">message</span><span class="p">:</span>
+            <span class="n">reference_set_uid</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;reference_set_id&#39;</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">reference_set</span> <span class="o">=</span> <span class="n">ReferenceSet</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="n">uid</span><span class="o">=</span><span class="n">reference_set_uid</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">ObjectDoesNotExist</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="n">em_montage_set</span> <span class="o">=</span> <span class="n">EMMontageSet</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">uid</span><span class="o">=</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">(),</span>
+            <span class="n">acquisition_date</span><span class="o">=</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;acquisition_data&#39;</span><span class="p">][</span><span class="s1">&#39;acquisition_time&#39;</span><span class="p">],</span>
+            <span class="n">overlap</span><span class="o">=</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;acquisition_data&#39;</span><span class="p">][</span><span class="s1">&#39;overlap&#39;</span><span class="p">],</span>
+            <span class="n">object_state</span><span class="o">=</span><span class="n">EMMontageSet</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">EM_MONTAGE_SET_PENDING</span><span class="p">,</span>
+            <span class="n">mipmap_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">section</span><span class="o">=</span><span class="n">section</span><span class="p">,</span>
+            <span class="n">sample_holder</span><span class="o">=</span><span class="n">sample_holder</span><span class="p">,</span>
+            <span class="n">reference_set</span><span class="o">=</span><span class="n">reference_set</span><span class="p">,</span>
+            <span class="n">reference_set_uid</span><span class="o">=</span><span class="n">reference_set_uid</span><span class="p">,</span>
+            <span class="n">storage_directory</span><span class="o">=</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;storage_directory&#39;</span><span class="p">],</span>
+            <span class="n">metafile</span><span class="o">=</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;metafile&#39;</span><span class="p">],</span>
+            <span class="n">camera</span><span class="o">=</span><span class="n">camera</span><span class="p">,</span>
+            <span class="n">microscope</span><span class="o">=</span><span class="n">microscope</span><span class="p">)</span>
+        <span class="n">LensCorrectionIngest</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">em_montage_set</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">em_montage_set</span></div>
+
+<div class="viewcode-block" id="LensCorrectionIngest.generate_response"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.montage.html#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.generate_response">[docs]</a>    <span class="k">def</span> <span class="nf">generate_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enqueued_object</span><span class="p">):</span>
+        <span class="n">LensCorrectionIngest</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;generate_response&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;enqueued_object_uid&#39;</span><span class="p">:</span> <span class="n">enqueued_object</span><span class="o">.</span><span class="n">uid</span>
+        <span class="p">}</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../../index.html">Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../at_em_imaging_workflow.html">Source Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../at_em_imaging_workflow.admin.html">at_em_imaging_workflow.admin package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../at_em_imaging_workflow.celery.html">at_em_imaging_workflow.celery package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../at_em_imaging_workflow.migrations.html">at_em_imaging_workflow.migrations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../at_em_imaging_workflow.models.html">at_em_imaging_workflow.models package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../at_em_imaging_workflow.models.states.html">at_em_imaging_workflow.models.states package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../at_em_imaging_workflow.serializers.html">at_em_imaging_workflow.serializers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.html">at_em_imaging_workflow.strategies package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.fine.html">at_em_imaging_workflow.strategies.fine package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.fusion.html">at_em_imaging_workflow.strategies.fusion package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.montage.html">at_em_imaging_workflow.strategies.montage package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.registration.html">at_em_imaging_workflow.strategies.registration package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.rough.html">at_em_imaging_workflow.strategies.rough package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.schemas.html">at_em_imaging_workflow.strategies.schemas package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.schemas.fine.html">at_em_imaging_workflow.strategies.schemas.fine package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../at_em_imaging_workflow.views.html">at_em_imaging_workflow.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="http://stash.corp.alleninstitute.org/projects/TECH/repos/at_em_imaging_workflow/browse">Stash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../glossary.html">Glossary</a></li>
+</ul>
+
+<h3> Questions </h3>
+<p class="questions">
+  Send any questions using the <a href="http://alleninstitute.org/contact_us/index.html">Send Us a Message</a> link below, 
+  or submit your question to <a href="http://stackoverflow.com/">StackOverflow</a> using with the 'allen-sdk' tag.
+</p>
+
+<p class="questions">
+  If you encounter any problems using the AllenSDK, please create an issue on <a href="http://github.com/alleninstitute/allensdk/issues/">Github's issue tracker</a>.
+</p>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+
+    <div class="footer" role="contentinfo">
+    </div>
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalFooter.js"></script>
+
+
+  </body>
+</html>

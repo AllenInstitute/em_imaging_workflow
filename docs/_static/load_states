@@ -1,0 +1,10 @@
+digraph {
+	subgraph cluster_at_em_imaging_workflow_Load_object_state {
+		graph [label="at_em_imaging_workflow.Load.object_state"]
+		"at_em_imaging_workflow.load.object_state.Z_MAPPED" [label=Z_MAPPED shape=doublecircle]
+		"at_em_imaging_workflow.load.object_state.PENDING" [label=PENDING shape=circle]
+		"at_em_imaging_workflow.load.object_state._initial" [label="" shape=point]
+		"at_em_imaging_workflow.load.object_state._initial" -> "at_em_imaging_workflow.load.object_state.PENDING"
+		"at_em_imaging_workflow.load.object_state.PENDING" -> "at_em_imaging_workflow.load.object_state.Z_MAPPED" [label=z_mapped]
+	}
+}

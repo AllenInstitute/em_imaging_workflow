@@ -1,0 +1,264 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>at_em_imaging_workflow.admin.load_admin &#8212; Blue Sky Workflow Engine  documentation</title>
+    <link rel="stylesheet" href="../../../_static/aibs_sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body>
+<link href="http://www.brain-map.org/assets/stylesheets/portal.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="http://www.brain-map.org/assets/javascripts/portal.js" type="text/javascript"></script>
+<script src="http://www.brain-map.org/assets/javascripts/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var _pSupressBrowserFlashWarning = true;
+    var _pTabId = "pHome";
+    var _pMoreProjectsId = "pMoreProjects";
+    var _pImagePath = "http://www.brain-map.org/assets/images/";
+    var _pSiteWarnings = function() {
+        this.show_warning() = {};
+    }
+</script>
+<script type="text/javascript">
+    function initialize() {
+        /*** do your stuff, then initialize the portal plugin ***/
+        _pPortalOnLoad();
+    }
+</script>
+<style>
+  #header_content > a {
+  display: inline-block;
+  width: 250px;
+  height: 75px;
+  background-image:url("/_static/external_assets/images/Brain_Atlas_Logotype_SDK.png") !important;
+  background-size: 235px 37px;
+  background-position: 0px 20px;
+  background-repeat: no-repeat;
+  }
+</style>
+
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalHeader.js"></script>
+<link rel="stylesheet" type="text/css" href="/_static/external_assets/stylesheets/common_layout.css" />
+
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for at_em_imaging_workflow.admin.load_admin</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="k">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">django.forms</span> <span class="k">import</span> <span class="n">ModelForm</span>
+<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="k">import</span> <span class="n">ValidationError</span>
+<span class="kn">from</span> <span class="nn">workflow_engine.models</span> <span class="k">import</span> <span class="n">Configuration</span>
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.admin</span> <span class="k">import</span> <span class="n">GenericStackedInline</span>
+<span class="kn">from</span> <span class="nn">at_em_imaging_workflow.models</span> <span class="k">import</span> <span class="n">Chunk</span><span class="p">,</span> <span class="n">Load</span>
+<span class="kn">from</span> <span class="nn">.create_chunk_form</span> <span class="k">import</span> <span class="n">CreateChunkForm</span>
+<span class="kn">from</span> <span class="nn">.z_mapping_form</span> <span class="k">import</span> <span class="n">ZMappingForm</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<div class="viewcode-block" id="LoadConfigurationForm"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm">[docs]</a><span class="k">class</span> <span class="nc">LoadConfigurationForm</span><span class="p">(</span><span class="n">ModelForm</span><span class="p">):</span>
+<div class="viewcode-block" id="LoadConfigurationForm.Meta"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">Configuration</span>
+        <span class="n">fields</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="s1">&#39;configuration_type&#39;</span><span class="p">,</span> <span class="s1">&#39;json_object&#39;</span><span class="p">)</span>
+        <span class="n">extra</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;at_em_imaging_workflow.admin.load_admin&#39;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">LoadConfigurationForm</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;LoadConfigurationForm&#39;</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">LoadConfigurationForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="LoadConfigurationForm.clean_json_object"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.clean_json_object">[docs]</a>    <span class="k">def</span> <span class="nf">clean_json_object</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">jo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;json_object&#39;</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="k">if</span> <span class="n">jo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s2">&quot;Invalid JSON object&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">jo</span></div>
+
+<div class="viewcode-block" id="LoadConfigurationForm.clean_configuration_type"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.clean_configuration_type">[docs]</a>    <span class="k">def</span> <span class="nf">clean_configuration_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">config_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;configuration_type&#39;</span><span class="p">,</span> <span class="s1">&#39;z_mapping&#39;</span><span class="p">)</span>
+
+        <span class="c1">#if &#39;z_mapping&#39; != config_type:</span>
+        <span class="c1">#    raise ValidationError(&quot;Only z_mapping configurations allowed&quot;)</span>
+
+        <span class="k">return</span> <span class="n">config_type</span></div>
+
+<div class="viewcode-block" id="LoadConfigurationForm.clean_name"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.clean_name">[docs]</a>    <span class="k">def</span> <span class="nf">clean_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;Z Mapping&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="s2">&quot;Need a name&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">name</span></div></div>
+
+
+<div class="viewcode-block" id="LoadConfigurationInline"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.LoadConfigurationInline">[docs]</a><span class="k">class</span> <span class="nc">LoadConfigurationInline</span><span class="p">(</span><span class="n">GenericStackedInline</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">Configuration</span>
+    <span class="n">form</span><span class="o">=</span><span class="n">LoadConfigurationForm</span>
+    <span class="n">extra</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;at_em_imaging_workflow.admin.load_admin&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">LoadConfigurationInline</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;LoadConfigurationInline&#39;</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">LoadConfigurationInline</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ChunkInline"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.ChunkInline">[docs]</a><span class="k">class</span> <span class="nc">ChunkInline</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">StackedInline</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Chunk</span>
+    <span class="n">form</span><span class="o">=</span><span class="n">CreateChunkForm</span>
+    <span class="n">extra</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;at_em_imaging_workflow.admin.load_admin&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ZMappingInline"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.ZMappingInline">[docs]</a><span class="k">class</span> <span class="nc">ZMappingInline</span><span class="p">(</span><span class="n">GenericStackedInline</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Configuration</span>
+    <span class="n">form</span><span class="o">=</span><span class="n">ZMappingForm</span>
+    <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;Z Mapping&quot;</span>
+    <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Z Mappings&quot;</span>
+    <span class="n">extra</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">max_num</span> <span class="o">=</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="ZMappingInline.get_fields"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.ZMappingInline.get_fields">[docs]</a>    <span class="k">def</span> <span class="nf">get_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">load_obj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">load_obj</span> <span class="ow">and</span> <span class="n">load_obj</span><span class="o">.</span><span class="n">object_state</span> <span class="o">==</span> <span class="s2">&quot;PENDING&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;xls_path&#39;</span><span class="p">,)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;json_object&#39;</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="LoadForm"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.LoadForm">[docs]</a><span class="k">class</span> <span class="nc">LoadForm</span><span class="p">(</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="n">_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;at_em_imaging_workflow.admin.load_admin&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LoadForm.Meta"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.LoadForm.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Load</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;__all__&quot;</span></div>
+
+<div class="viewcode-block" id="LoadForm.save"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.LoadForm.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">LoadForm</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Save Load Form: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">commit</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">LoadForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="LoadAdmin"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.LoadAdmin">[docs]</a><span class="k">class</span> <span class="nc">LoadAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">LoadForm</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;uid&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;offset&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;rendered_volume&#39;</span>
+    <span class="p">]</span>
+    <span class="n">list_select_related</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">list_filter</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">inlines</span> <span class="o">=</span> <span class="p">(</span><span class="n">ZMappingInline</span><span class="p">,</span> <span class="n">ChunkInline</span><span class="p">,)</span>
+    <span class="n">_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;at_em_imaging_workflow.admin.load_admin&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LoadAdmin.save_form"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.LoadAdmin.save_form">[docs]</a>    <span class="k">def</span> <span class="nf">save_form</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+        <span class="n">LoadAdmin</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;SAVE FORM </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">change</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">LoadAdmin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save_form</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">change</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LoadAdmin.save_formset"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.load_admin.LoadAdmin.save_formset">[docs]</a>    <span class="k">def</span> <span class="nf">save_formset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">formset</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+        <span class="n">LoadAdmin</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;SAVE FORMSET </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">change</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">LoadAdmin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save_formset</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">formset</span><span class="p">,</span> <span class="n">change</span><span class="p">)</span></div></div>
+
+<span class="c1">#     def save_model(self, request, obj, form, change):</span>
+<span class="c1">#         LoadAdmin._log.info(&#39;SAVE MODEL&#39;)</span>
+<span class="c1">#         raise Exception(&quot;I am sad&quot;)</span>
+<span class="c1">#         return super(LoadAdmin, self).save_model(request, obj, form, change)</span>
+<span class="c1"># </span>
+<span class="c1">#     def save_related(self, request, obj, form, formsets, change):</span>
+<span class="c1">#         raise Exception(&quot;I am sad 2&quot;)</span>
+<span class="c1">#         LoadAdmin._log.info(&#39;SAVE RELATED&#39;)</span>
+<span class="c1">#         return super(LoadAdmin, self).save_related(request, form, formsets, change)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../index.html">Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../at_em_imaging_workflow.html">Source Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../at_em_imaging_workflow.admin.html">at_em_imaging_workflow.admin package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../at_em_imaging_workflow.celery.html">at_em_imaging_workflow.celery package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../at_em_imaging_workflow.migrations.html">at_em_imaging_workflow.migrations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../at_em_imaging_workflow.models.html">at_em_imaging_workflow.models package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../at_em_imaging_workflow.models.states.html">at_em_imaging_workflow.models.states package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../at_em_imaging_workflow.serializers.html">at_em_imaging_workflow.serializers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.html">at_em_imaging_workflow.strategies package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.fine.html">at_em_imaging_workflow.strategies.fine package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.fusion.html">at_em_imaging_workflow.strategies.fusion package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.montage.html">at_em_imaging_workflow.strategies.montage package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.registration.html">at_em_imaging_workflow.strategies.registration package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.rough.html">at_em_imaging_workflow.strategies.rough package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.schemas.html">at_em_imaging_workflow.strategies.schemas package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.schemas.fine.html">at_em_imaging_workflow.strategies.schemas.fine package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../at_em_imaging_workflow.views.html">at_em_imaging_workflow.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="http://stash.corp.alleninstitute.org/projects/TECH/repos/at_em_imaging_workflow/browse">Stash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+
+<h3> Questions </h3>
+<p class="questions">
+  Send any questions using the <a href="http://alleninstitute.org/contact_us/index.html">Send Us a Message</a> link below, 
+  or submit your question to <a href="http://stackoverflow.com/">StackOverflow</a> using with the 'allen-sdk' tag.
+</p>
+
+<p class="questions">
+  If you encounter any problems using the AllenSDK, please create an issue on <a href="http://github.com/alleninstitute/allensdk/issues/">Github's issue tracker</a>.
+</p>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+
+    <div class="footer" role="contentinfo">
+    </div>
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalFooter.js"></script>
+
+
+  </body>
+</html>

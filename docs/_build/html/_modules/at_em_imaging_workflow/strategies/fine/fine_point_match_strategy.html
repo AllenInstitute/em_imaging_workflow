@@ -1,0 +1,232 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>at_em_imaging_workflow.strategies.fine.fine_point_match_strategy &#8212; Blue Sky Workflow Engine  documentation</title>
+    <link rel="stylesheet" href="../../../../_static/aibs_sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+  <body>
+<link href="http://www.brain-map.org/assets/stylesheets/portal.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="http://www.brain-map.org/assets/javascripts/portal.js" type="text/javascript"></script>
+<script src="http://www.brain-map.org/assets/javascripts/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var _pSupressBrowserFlashWarning = true;
+    var _pTabId = "pHome";
+    var _pMoreProjectsId = "pMoreProjects";
+    var _pImagePath = "http://www.brain-map.org/assets/images/";
+    var _pSiteWarnings = function() {
+        this.show_warning() = {};
+    }
+</script>
+<script type="text/javascript">
+    function initialize() {
+        /*** do your stuff, then initialize the portal plugin ***/
+        _pPortalOnLoad();
+    }
+</script>
+<style>
+  #header_content > a {
+  display: inline-block;
+  width: 250px;
+  height: 75px;
+  background-image:url("/_static/external_assets/images/Brain_Atlas_Logotype_SDK.png") !important;
+  background-size: 235px 37px;
+  background-position: 0px 20px;
+  background-repeat: no-repeat;
+  }
+</style>
+
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalHeader.js"></script>
+<link rel="stylesheet" type="text/css" href="/_static/external_assets/stylesheets/common_layout.css" />
+
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for at_em_imaging_workflow.strategies.fine.fine_point_match_strategy</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">workflow_engine.strategies</span> <span class="k">import</span>  <span class="n">ExecutionStrategy</span>
+<span class="kn">from</span> <span class="nn">at_em_imaging_workflow.render_strategy_utils</span> <span class="k">import</span> <span class="n">RenderStrategyUtils</span>
+<span class="kn">from</span> <span class="nn">rendermodules.pointmatch.schemas</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">PointMatchClientParametersSpark</span>
+<span class="p">)</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">workflow_engine.models.well_known_file</span> <span class="k">import</span> <span class="n">WellKnownFile</span>
+<span class="kn">import</span> <span class="nn">jinja2</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">at_em_imaging_workflow.strategies.schemas.fine</span> <span class="k">import</span> <span class="n">fine_point_match</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="k">import</span> <span class="n">settings</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<div class="viewcode-block" id="FinePointMatchStrategy"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.fine.html#at_em_imaging_workflow.strategies.fine.fine_point_match_strategy.FinePointMatchStrategy">[docs]</a><span class="k">class</span> <span class="nc">FinePointMatchStrategy</span><span class="p">(</span><span class="n">ExecutionStrategy</span><span class="p">):</span>
+    <span class="n">_package</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;at_em_imaging_workflow.strategies.fine.&#39;</span>
+               <span class="s1">&#39;two_d_montage_point_match_strategy&#39;</span><span class="p">)</span>
+    <span class="n">_templates</span> <span class="o">=</span> <span class="s1">&#39;templates&#39;</span>
+    <span class="n">_log_configuration_template</span> <span class="o">=</span> <span class="s1">&#39;spark_log4j_template.properties&#39;</span>
+    <span class="n">_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">_package</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FinePointMatchStrategy.get_input"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.fine.html#at_em_imaging_workflow.strategies.fine.fine_point_match_strategy.FinePointMatchStrategy.get_input">[docs]</a>    <span class="k">def</span> <span class="nf">get_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">em_mset</span><span class="p">,</span> <span class="n">storage_directory</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
+        <span class="n">FinePointMatchStrategy</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;get input&quot;</span><span class="p">)</span>
+
+        <span class="n">inp</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">fine_point_match</span><span class="o">.</span><span class="n">input_dict</span><span class="p">)</span>
+
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;sparkhome&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">SPARK_HOME</span>
+        <span class="n">log_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_or_create_task_storage_directory</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;logdir&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">log_dir</span>
+
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;render&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RenderStrategyUtils</span><span class="o">.</span><span class="n">render_input_dict</span><span class="p">(</span><span class="n">em_mset</span><span class="p">)</span>
+
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;owner&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">RENDER_SERVICE_USER</span>
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;jarfile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">RENDER_SPARK_JARFILE</span>
+
+        <span class="n">log4j_properties_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_dir</span><span class="p">,</span> <span class="s1">&#39;log4j.properties&#39;</span><span class="p">)</span>
+        <span class="n">log4j_log_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_dir</span><span class="p">,</span> <span class="s1">&#39;spark.log&#39;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">log4j_properties_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_handle</span><span class="p">:</span>
+            <span class="n">file_handle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">create_log_configuration</span><span class="p">(</span><span class="n">log4j_log_path</span><span class="p">))</span>
+
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;spark_files&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span> <span class="n">log4j_properties_path</span> <span class="p">]</span>
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;spark_conf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;spark.driver.extraJavaOptions&#39;</span><span class="p">:</span>
+                <span class="s1">&#39;-Dlog4j.configuration=file:</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">log4j_properties_path</span><span class="p">)</span> <span class="p">}</span>
+
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;collection&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">em_mset</span><span class="o">.</span><span class="n">get_point_collection_name</span><span class="p">()</span>
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;pairJson&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tile_pairs_file_name</span><span class="p">(</span><span class="n">em_mset</span><span class="p">)</span>
+
+        <span class="n">mem</span> <span class="o">=</span> <span class="mi">128</span>
+        <span class="n">ppn</span> <span class="o">=</span> <span class="mi">24</span>
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;memory&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">mem</span> <span class="o">-</span> <span class="n">ppn</span><span class="p">)</span> <span class="o">/</span> <span class="n">ppn</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;g&#39;</span>
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;driverMemory&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">mem</span><span class="p">))</span> <span class="o">+</span>  <span class="s1">&#39;g&#39;</span>  <span class="c1"># TODO Finely memory * ppn</span>
+
+        <span class="n">clipWidth</span> <span class="o">=</span> <span class="mi">800</span>
+        <span class="n">clipHeight</span> <span class="o">=</span> <span class="mi">800</span>
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;clipWidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">clipWidth</span>
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;clipHeight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">clipHeight</span>
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;maxFeatureCacheGb&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+
+        <span class="n">retries</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;masterUrl&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;local[*,</span><span class="si">%d</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">retries</span><span class="p">)</span>
+        <span class="n">inp</span><span class="p">[</span><span class="s1">&#39;baseDataUrl&#39;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="s1">&#39;http://&#39;</span> <span class="o">+</span> <span class="n">settings</span><span class="o">.</span><span class="n">RENDER_SERVICE_URL</span> <span class="o">+</span> \
+            <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="n">settings</span><span class="o">.</span><span class="n">RENDER_SERVICE_PORT</span> <span class="o">+</span> <span class="s1">&#39;/render-ws/v1&#39;</span>
+
+        <span class="k">return</span> <span class="n">PointMatchClientParametersSpark</span><span class="p">()</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FinePointMatchStrategy.get_tile_pairs_file_name"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.fine.html#at_em_imaging_workflow.strategies.fine.fine_point_match_strategy.FinePointMatchStrategy.get_tile_pairs_file_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_tile_pairs_file_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">em_mset</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">WellKnownFile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">em_mset</span><span class="p">,</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">tile_pairs_file_description</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="FinePointMatchStrategy.on_finishing"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.fine.html#at_em_imaging_workflow.strategies.fine.fine_point_match_strategy.FinePointMatchStrategy.on_finishing">[docs]</a>    <span class="k">def</span> <span class="nf">on_finishing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">em_mset</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_key</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="s1">&#39;pairCount&#39;</span><span class="p">)</span></div>
+<span class="c1">#         self.set_well_known_file(</span>
+<span class="c1">#             self.get_output_file(task),</span>
+<span class="c1">#             em_mset,</span>
+<span class="c1">#             &#39;point_match_output&#39;,</span>
+<span class="c1">#             task)</span>
+
+<div class="viewcode-block" id="FinePointMatchStrategy.create_log_configuration"><a class="viewcode-back" href="../../../../at_em_imaging_workflow.strategies.fine.html#at_em_imaging_workflow.strategies.fine.fine_point_match_strategy.FinePointMatchStrategy.create_log_configuration">[docs]</a>    <span class="k">def</span> <span class="nf">create_log_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_file_path</span><span class="p">):</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span>
+           <span class="n">loader</span><span class="o">=</span><span class="n">jinja2</span><span class="o">.</span><span class="n">PackageLoader</span><span class="p">(</span>
+               <span class="n">FinePointMatchStrategy</span><span class="o">.</span><span class="n">_package</span><span class="p">,</span>
+               <span class="n">FinePointMatchStrategy</span><span class="o">.</span><span class="n">_templates</span><span class="p">))</span>
+        <span class="n">log4j_template</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span>
+            <span class="n">FinePointMatchStrategy</span><span class="o">.</span><span class="n">_log_configuration_template</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">log4j_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">log_file_path</span><span class="o">=</span><span class="n">log_file_path</span><span class="p">)</span></div></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../../index.html">Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../at_em_imaging_workflow.html">Source Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../at_em_imaging_workflow.admin.html">at_em_imaging_workflow.admin package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../at_em_imaging_workflow.celery.html">at_em_imaging_workflow.celery package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../at_em_imaging_workflow.migrations.html">at_em_imaging_workflow.migrations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../at_em_imaging_workflow.models.html">at_em_imaging_workflow.models package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../at_em_imaging_workflow.models.states.html">at_em_imaging_workflow.models.states package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../at_em_imaging_workflow.serializers.html">at_em_imaging_workflow.serializers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.html">at_em_imaging_workflow.strategies package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.fine.html">at_em_imaging_workflow.strategies.fine package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.fusion.html">at_em_imaging_workflow.strategies.fusion package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.montage.html">at_em_imaging_workflow.strategies.montage package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.registration.html">at_em_imaging_workflow.strategies.registration package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.rough.html">at_em_imaging_workflow.strategies.rough package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.schemas.html">at_em_imaging_workflow.strategies.schemas package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../at_em_imaging_workflow.strategies.schemas.fine.html">at_em_imaging_workflow.strategies.schemas.fine package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../at_em_imaging_workflow.views.html">at_em_imaging_workflow.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="http://stash.corp.alleninstitute.org/projects/TECH/repos/at_em_imaging_workflow/browse">Stash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../glossary.html">Glossary</a></li>
+</ul>
+
+<h3> Questions </h3>
+<p class="questions">
+  Send any questions using the <a href="http://alleninstitute.org/contact_us/index.html">Send Us a Message</a> link below, 
+  or submit your question to <a href="http://stackoverflow.com/">StackOverflow</a> using with the 'allen-sdk' tag.
+</p>
+
+<p class="questions">
+  If you encounter any problems using the AllenSDK, please create an issue on <a href="http://github.com/alleninstitute/allensdk/issues/">Github's issue tracker</a>.
+</p>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+
+    <div class="footer" role="contentinfo">
+    </div>
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalFooter.js"></script>
+
+
+  </body>
+</html>

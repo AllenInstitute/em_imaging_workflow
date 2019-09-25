@@ -1,0 +1,537 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>at_em_imaging_workflow.admin.e_m_montage_set_admin &#8212; Blue Sky Workflow Engine  documentation</title>
+    <link rel="stylesheet" href="../../../_static/aibs_sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body>
+<link href="http://www.brain-map.org/assets/stylesheets/portal.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="http://www.brain-map.org/assets/javascripts/portal.js" type="text/javascript"></script>
+<script src="http://www.brain-map.org/assets/javascripts/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var _pSupressBrowserFlashWarning = true;
+    var _pTabId = "pHome";
+    var _pMoreProjectsId = "pMoreProjects";
+    var _pImagePath = "http://www.brain-map.org/assets/images/";
+    var _pSiteWarnings = function() {
+        this.show_warning() = {};
+    }
+</script>
+<script type="text/javascript">
+    function initialize() {
+        /*** do your stuff, then initialize the portal plugin ***/
+        _pPortalOnLoad();
+    }
+</script>
+<style>
+  #header_content > a {
+  display: inline-block;
+  width: 250px;
+  height: 75px;
+  background-image:url("/_static/external_assets/images/Brain_Atlas_Logotype_SDK.png") !important;
+  background-size: 235px 37px;
+  background-position: 0px 20px;
+  background-repeat: no-repeat;
+  }
+</style>
+
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalHeader.js"></script>
+<link rel="stylesheet" type="text/css" href="/_static/external_assets/stylesheets/common_layout.css" />
+
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for at_em_imaging_workflow.admin.e_m_montage_set_admin</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="k">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.admin</span> <span class="k">import</span> <span class="n">GenericStackedInline</span>
+<span class="kn">from</span> <span class="nn">workflow_engine.models.configuration</span> <span class="k">import</span> <span class="n">Configuration</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="k">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.utils.safestring</span> <span class="k">import</span> <span class="n">mark_safe</span>
+<span class="kn">from</span> <span class="nn">workflow_engine.models.well_known_file</span> <span class="k">import</span> <span class="n">WellKnownFile</span>
+<span class="kn">from</span> <span class="nn">workflow_engine.workflow_controller</span> <span class="k">import</span> <span class="n">WorkflowController</span>
+<span class="kn">from</span> <span class="nn">at_em_imaging_workflow.models</span> <span class="k">import</span> <span class="n">EMMontageSet</span>  <span class="c1"># , Chunk</span>
+<span class="kn">import</span> <span class="nn">simplejson</span> <span class="k">as</span> <span class="nn">json</span>
+
+
+<div class="viewcode-block" id="redo_point_match_0_5"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_point_match_0_5">[docs]</a><span class="k">def</span> <span class="nf">redo_point_match_0_5</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">redo_point_match_0_5</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> \
+        <span class="s2">&quot;Redo point match 0.5&quot;</span>
+
+    <span class="k">if</span> <span class="n">queryset</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">em_mset</span> <span class="ow">in</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">():</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">update_point_match_state</span><span class="p">({</span>
+                <span class="s1">&#39;render_scale&#39;</span><span class="p">:</span> <span class="mf">0.5</span>
+            <span class="p">})</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">object_state</span><span class="o">=</span><span class="s1">&#39;PROCESSING&#39;</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">WorkflowController</span><span class="o">.</span><span class="n">start_workflow</span><span class="p">(</span>
+                <span class="s1">&#39;em_2d_montage&#39;</span><span class="p">,</span>
+                <span class="n">em_mset</span><span class="p">,</span>
+                <span class="n">start_node_name</span><span class="o">=</span><span class="s1">&#39;2D Montage Point Match&#39;</span><span class="p">,</span>
+                <span class="n">reuse_job</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">raise_priority</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="redo_point_match_0_6"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_point_match_0_6">[docs]</a><span class="k">def</span> <span class="nf">redo_point_match_0_6</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">redo_point_match_0_6</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> \
+        <span class="s2">&quot;Redo point match 0.6&quot;</span>
+
+    <span class="k">if</span> <span class="n">queryset</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">em_mset</span> <span class="ow">in</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">():</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">update_point_match_state</span><span class="p">({</span>
+                <span class="s1">&#39;render_scale&#39;</span><span class="p">:</span> <span class="mf">0.6</span>
+            <span class="p">})</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">object_state</span><span class="o">=</span><span class="s1">&#39;PROCESSING&#39;</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">WorkflowController</span><span class="o">.</span><span class="n">start_workflow</span><span class="p">(</span>
+                <span class="s1">&#39;em_2d_montage&#39;</span><span class="p">,</span>
+                <span class="n">em_mset</span><span class="p">,</span>
+                <span class="n">start_node_name</span><span class="o">=</span><span class="s1">&#39;2D Montage Point Match&#39;</span><span class="p">,</span>
+                <span class="n">reuse_job</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">raise_priority</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="redo_point_match_filter"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_point_match_filter">[docs]</a><span class="k">def</span> <span class="nf">redo_point_match_filter</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">redo_point_match_filter</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> \
+        <span class="s2">&quot;Redo point match filter&quot;</span>
+
+    <span class="k">if</span> <span class="n">queryset</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">em_mset</span> <span class="ow">in</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">():</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">update_point_match_state</span><span class="p">({</span>
+                <span class="s1">&#39;default_lambda&#39;</span><span class="p">:</span> <span class="mf">1000.0</span><span class="p">,</span>
+                <span class="s1">&#39;transformation&#39;</span><span class="p">:</span> <span class="s1">&#39;Polynomial2DTransform&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;poly_order&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="s1">&#39;poly_factors&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">redo_processing</span><span class="p">()</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">WorkflowController</span><span class="o">.</span><span class="n">start_workflow</span><span class="p">(</span>
+                <span class="s1">&#39;filter_point_matches&#39;</span><span class="p">,</span>
+                <span class="n">em_mset</span><span class="p">,</span>
+                <span class="n">start_node_name</span><span class="o">=</span><span class="s1">&#39;Filter Point Matches&#39;</span><span class="p">,</span>
+                <span class="n">reuse_job</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">raise_priority</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="redo_solver_5"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_solver_5">[docs]</a><span class="k">def</span> <span class="nf">redo_solver_5</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">redo_solver_5</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> \
+        <span class="s2">&quot;Redo solver (Lambda=5.0)&quot;</span>
+
+    <span class="k">if</span> <span class="n">queryset</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">em_mset</span> <span class="ow">in</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">():</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">get_em_2d_solver_lambda</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">redo_solver</span><span class="p">()</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">WorkflowController</span><span class="o">.</span><span class="n">start_workflow</span><span class="p">(</span>
+                <span class="s1">&#39;em_2d_montage&#39;</span><span class="p">,</span>
+                <span class="n">em_mset</span><span class="p">,</span>
+                <span class="n">start_node_name</span><span class="o">=</span><span class="s1">&#39;2D Montage Python Solver&#39;</span><span class="p">,</span>
+                <span class="n">reuse_job</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">raise_priority</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="redo_solver_100"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_solver_100">[docs]</a><span class="k">def</span> <span class="nf">redo_solver_100</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">redo_solver_100</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> \
+        <span class="s2">&quot;Redo solver (Lambda=100.0)&quot;</span>
+
+    <span class="k">if</span> <span class="n">queryset</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">em_mset</span> <span class="ow">in</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">():</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">get_em_2d_solver_lambda</span><span class="p">(</span><span class="mf">100.0</span><span class="p">)</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">redo_solver</span><span class="p">()</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">WorkflowController</span><span class="o">.</span><span class="n">start_workflow</span><span class="p">(</span>
+                <span class="s1">&#39;em_2d_montage&#39;</span><span class="p">,</span>
+                <span class="n">em_mset</span><span class="p">,</span>
+                <span class="n">start_node_name</span><span class="o">=</span><span class="s1">&#39;2D Montage Python Solver&#39;</span><span class="p">,</span>
+                <span class="n">reuse_job</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">raise_priority</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="redo_solver_1000"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_solver_1000">[docs]</a><span class="k">def</span> <span class="nf">redo_solver_1000</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">redo_solver_1000</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> \
+        <span class="s2">&quot;Redo solver (Lambda=1000.0)&quot;</span>
+
+    <span class="k">if</span> <span class="n">queryset</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">em_mset</span> <span class="ow">in</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">():</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">object_state</span> <span class="o">=</span> <span class="s1">&#39;PROCESSING&#39;</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">update_point_match_state</span><span class="p">({</span>
+                <span class="s1">&#39;default_lambda&#39;</span><span class="p">:</span> <span class="mf">1000.0</span><span class="p">,</span>
+                <span class="s1">&#39;transformation&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s1">&#39;poly_order&#39;</span><span class="p">:</span> <span class="kc">None</span>
+            <span class="p">})</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">WorkflowController</span><span class="o">.</span><span class="n">start_workflow</span><span class="p">(</span>
+                <span class="s1">&#39;em_2d_montage&#39;</span><span class="p">,</span>
+                <span class="n">em_mset</span><span class="p">,</span>
+                <span class="n">start_node_name</span><span class="o">=</span><span class="s1">&#39;2D Montage Python Solver&#39;</span><span class="p">,</span>
+                <span class="n">reuse_job</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">raise_priority</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="swap_stacks"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.swap_stacks">[docs]</a><span class="k">def</span> <span class="nf">swap_stacks</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">swap_stacks</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s2">&quot;Swap Stacks&quot;</span>
+
+    <span class="k">for</span> <span class="n">em_mset</span> <span class="ow">in</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">():</span>
+        <span class="n">WorkflowController</span><span class="o">.</span><span class="n">start_workflow</span><span class="p">(</span>
+            <span class="s1">&#39;registration&#39;</span><span class="p">,</span>
+            <span class="n">em_mset</span><span class="p">,</span>
+            <span class="n">start_node_name</span><span class="o">=</span><span class="s1">&#39;Swap Zs&#39;</span><span class="p">,</span>
+            <span class="n">reuse_job</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="reimage"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.reimage">[docs]</a><span class="k">def</span> <span class="nf">reimage</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">reimage</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> \
+        <span class="s2">&quot;Request Reimage&quot;</span>
+
+    <span class="k">if</span> <span class="n">queryset</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">em_mset</span> <span class="ow">in</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">():</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">reimage</span><span class="p">()</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="n">WorkflowController</span><span class="o">.</span><span class="n">enqueue_next_queue_by_workflow_node</span><span class="p">(</span>
+            <span class="s1">&#39;em_2d_montage&#39;</span><span class="p">,</span>
+            <span class="n">em_mset</span><span class="p">,</span>
+            <span class="n">start_node_name</span><span class="o">=</span><span class="s1">&#39;Manual QC / High Degree Polynomial or Point Match Regeneration&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="gap"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.gap">[docs]</a><span class="k">def</span> <span class="nf">gap</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">gap</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> \
+        <span class="s2">&quot;Gap&quot;</span>
+
+    <span class="k">if</span> <span class="n">queryset</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">em_mset</span> <span class="ow">in</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">():</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">gap</span><span class="p">()</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="qc_pass_em_montage_set"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.qc_pass_em_montage_set">[docs]</a><span class="k">def</span> <span class="nf">qc_pass_em_montage_set</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">qc_pass_em_montage_set</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> \
+        <span class="s2">&quot;QC Pass selected montage sets&quot;</span>
+
+    <span class="k">if</span> <span class="n">queryset</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">em_mset</span> <span class="ow">in</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">():</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">pass_qc</span><span class="p">()</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="n">WorkflowController</span><span class="o">.</span><span class="n">enqueue_from_admin_form</span><span class="p">(</span>
+            <span class="s1">&#39;em_2d_montage&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Manual QC / High Degree Polynomial or Point Match Regeneration&#39;</span><span class="p">,</span>
+            <span class="n">em_mset</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="qc_fail_em_montage_set"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.qc_fail_em_montage_set">[docs]</a><span class="k">def</span> <span class="nf">qc_fail_em_montage_set</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">qc_fail_em_montage_set</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> \
+        <span class="s2">&quot;QC FAIL selected montage sets&quot;</span>
+
+    <span class="k">if</span> <span class="n">queryset</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">em_mset</span> <span class="ow">in</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">():</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">fail_qc</span><span class="p">()</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="fail_em_montage_set"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.fail_em_montage_set">[docs]</a><span class="k">def</span> <span class="nf">fail_em_montage_set</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">fail_em_montage_set</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> \
+        <span class="s2">&quot;FAIL selected montage sets&quot;</span>
+
+    <span class="k">if</span> <span class="n">queryset</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">em_mset</span> <span class="ow">in</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">():</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">fail</span><span class="p">()</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+            <span class="c1"># TODO: Fail or kill job in QC job queue</span>
+
+<div class="viewcode-block" id="reimage_not_select"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.reimage_not_select">[docs]</a><span class="k">def</span> <span class="nf">reimage_not_select</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">reimage_not_select</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> \
+        <span class="s2">&quot;Set state to REIMAGE_NOT_SELECTED&quot;</span>
+
+    <span class="k">if</span> <span class="n">queryset</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">em_mset</span> <span class="ow">in</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">():</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">reimage_not_select</span><span class="p">()</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="reset_pending_em_montage_set"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.reset_pending_em_montage_set">[docs]</a><span class="k">def</span> <span class="nf">reset_pending_em_montage_set</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="n">reset_pending_em_montage_set</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> \
+        <span class="s2">&quot;reset selected montage sets to pending&quot;</span>
+
+    <span class="k">if</span> <span class="n">queryset</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">em_mset</span> <span class="ow">in</span> <span class="n">queryset</span><span class="o">.</span><span class="n">iterator</span><span class="p">():</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">object_state</span> <span class="o">=</span> <span class="s1">&#39;PENDING&#39;</span>
+            <span class="n">em_mset</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+<span class="c1"># TODO:  Get the load from the montage set, then get candidate chunks from that.</span>
+<div class="viewcode-block" id="assign_chunk"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.assign_chunk">[docs]</a><span class="k">def</span> <span class="nf">assign_chunk</span><span class="p">(</span><span class="n">modeladmin</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;unimplemented&#39;</span><span class="p">)</span></div>
+<span class="c1">#     for em_mset in queryset:</span>
+<span class="c1">#         Chunk.assign_montage_set_to_chunks(em_mset)</span>
+
+
+<div class="viewcode-block" id="ConfigurationInline"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.ConfigurationInline">[docs]</a><span class="k">class</span> <span class="nc">ConfigurationInline</span><span class="p">(</span><span class="n">GenericStackedInline</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">Configuration</span>
+    <span class="n">fields</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;configuration_type&#39;</span><span class="p">,</span> <span class="s1">&#39;json_object&#39;</span><span class="p">)</span>
+    <span class="n">extra</span><span class="o">=</span><span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="WellKnownFileInline"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline">[docs]</a><span class="k">class</span> <span class="nc">WellKnownFileInline</span><span class="p">(</span><span class="n">GenericStackedInline</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">WellKnownFile</span>
+    <span class="n">fields</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;well_known_file_type&#39;</span><span class="p">,)</span>
+    <span class="n">ct_field</span><span class="o">=</span><span class="s1">&#39;attachable_type&#39;</span>
+    <span class="n">ct_fk_field</span><span class="o">=</span><span class="s1">&#39;attachable_id&#39;</span>
+    <span class="n">extra</span><span class="o">=</span><span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="EMMontageSetAdmin"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin">[docs]</a><span class="k">class</span> <span class="nc">EMMontageSetAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">change_list_template</span> <span class="o">=</span> <span class="s1">&#39;admin/em_montage_set_change_list.html&#39;</span>
+    <span class="n">search_fields</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s1">&#39;id&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;section__z_index&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;id&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;z_index&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;qc_link&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;reimage_index&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;reimage_count&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;specimen_link&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;microscope_link&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;reference_set_link&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;acquisition_date&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;object_state&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;load_uid&#39;</span>
+    <span class="p">]</span>
+    <span class="n">list_select_related</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;microscope&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;reference_set&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;section&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;section__specimen&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;sample_holder&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;sample_holder__load&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">list_filter</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;section__specimen__uid&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;microscope__uid&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;object_state&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;sample_holder__load&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">assign_chunk</span><span class="p">,</span>
+        <span class="n">redo_point_match_0_5</span><span class="p">,</span>
+        <span class="n">redo_point_match_0_6</span><span class="p">,</span>
+        <span class="n">redo_point_match_filter</span><span class="p">,</span>
+        <span class="n">redo_solver_5</span><span class="p">,</span>
+        <span class="n">redo_solver_100</span><span class="p">,</span>
+        <span class="n">redo_solver_1000</span><span class="p">,</span>
+        <span class="n">qc_pass_em_montage_set</span><span class="p">,</span>
+        <span class="n">qc_fail_em_montage_set</span><span class="p">,</span>
+        <span class="n">fail_em_montage_set</span><span class="p">,</span>
+        <span class="n">reimage</span><span class="p">,</span>
+        <span class="n">gap</span><span class="p">,</span>
+        <span class="n">swap_stacks</span><span class="p">,</span>
+        <span class="n">reset_pending_em_montage_set</span><span class="p">,</span>
+        <span class="n">reimage_not_select</span>
+    <span class="p">]</span>
+    <span class="n">inlines</span> <span class="o">=</span> <span class="p">(</span><span class="n">ConfigurationInline</span><span class="p">,</span><span class="n">WellKnownFileInline</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EMMontageSetAdmin.load_uid"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.load_uid">[docs]</a>    <span class="k">def</span> <span class="nf">load_uid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">em_montage_set_object</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">em_montage_set_object</span><span class="o">.</span><span class="n">get_load</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="n">l</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mark_safe</span><span class="p">(</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{}</span><span class="s1">&quot;&gt;</span><span class="si">{}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;admin:at_em_imaging_workflow_load_change&quot;</span><span class="p">,</span>
+                        <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">pk</span><span class="p">,)),</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">uid</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="EMMontageSetAdmin.microscope_link"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.microscope_link">[docs]</a>    <span class="k">def</span> <span class="nf">microscope_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">em_montage_set_object</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">mark_safe</span><span class="p">(</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{}</span><span class="s1">&quot;&gt;</span><span class="si">{}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;admin:at_em_imaging_workflow_microscope_change&quot;</span><span class="p">,</span>
+                    <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">em_montage_set_object</span><span class="o">.</span><span class="n">microscope</span><span class="o">.</span><span class="n">pk</span><span class="p">,)),</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">em_montage_set_object</span><span class="o">.</span><span class="n">microscope</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="EMMontageSetAdmin.specimen_link"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.specimen_link">[docs]</a>    <span class="k">def</span> <span class="nf">specimen_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">em_montage_set_object</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">mark_safe</span><span class="p">(</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{}</span><span class="s1">&quot;&gt;</span><span class="si">{}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;admin:at_em_imaging_workflow_specimen_change&quot;</span><span class="p">,</span>
+                    <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">em_montage_set_object</span><span class="o">.</span><span class="n">section</span><span class="o">.</span><span class="n">specimen</span><span class="o">.</span><span class="n">pk</span><span class="p">,)),</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">em_montage_set_object</span><span class="o">.</span><span class="n">section</span><span class="o">.</span><span class="n">specimen</span><span class="p">)))</span></div>
+
+    <span class="n">specimen_link</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s2">&quot;Specimen&quot;</span>
+
+
+<div class="viewcode-block" id="EMMontageSetAdmin.qc_link_from_well_known_file"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.qc_link_from_well_known_file">[docs]</a>    <span class="k">def</span> <span class="nf">qc_link_from_well_known_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">em_montage_set_object</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">em_montage_set_object</span><span class="o">.</span><span class="n">object_state</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">EMMontageSet</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">EM_MONTAGE_SET_QC_PASSED</span><span class="p">,</span>
+            <span class="n">EMMontageSet</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">EM_MONTAGE_SET_QC_FAILED</span><span class="p">]:</span>
+            <span class="n">urls</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">wkf</span> <span class="o">=</span> <span class="n">em_montage_set_object</span><span class="o">.</span><span class="n">well_known_files</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                    <span class="n">well_known_file_type</span><span class="o">=</span><span class="s1">&#39;defect_detection&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">wkf</span><span class="p">)</span>
+
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="n">json_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+                    <span class="n">urls</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="s1">&#39;&lt;a target=&quot;qc&quot; href=&quot;file:////</span><span class="si">{}</span><span class="s1">&quot;&gt;Plot&lt;/a&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">json_data</span><span class="p">[</span><span class="s1">&#39;output_html&#39;</span><span class="p">]</span>
+                    <span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">urls</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span>
+
+        <span class="k">return</span> <span class="n">mark_safe</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EMMontageSetAdmin.qc_link"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.qc_link">[docs]</a>    <span class="k">def</span> <span class="nf">qc_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">em_montage_set_object</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">em_montage_set_object</span><span class="o">.</span><span class="n">object_state</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">EMMontageSet</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">EM_MONTAGE_SET_QC_PASSED</span><span class="p">,</span>
+            <span class="n">EMMontageSet</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">EM_MONTAGE_SET_QC_FAILED</span><span class="p">,</span>
+            <span class="n">EMMontageSet</span><span class="o">.</span><span class="n">STATE</span><span class="o">.</span><span class="n">EM_MONTAGE_SET_NOT_SELECTED</span><span class="p">]:</span>
+            <span class="n">urls</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">qc_task</span> <span class="o">=</span> <span class="n">em_montage_set_object</span><span class="o">.</span><span class="n">jobs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="n">workflow_node__job_queue__name</span><span class="o">=</span><span class="s1">&#39;Detect Defects&#39;</span><span class="p">,</span>
+                    <span class="n">archived</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">task_set</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">qc_task</span><span class="o">.</span><span class="n">output_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="n">json_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+                    <span class="n">urls</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="s1">&#39;&lt;a target=&quot;qc&quot; href=&quot;file:////</span><span class="si">{}</span><span class="s1">&quot;&gt;Plot&lt;/a&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">json_data</span><span class="p">[</span><span class="s1">&#39;output_html&#39;</span><span class="p">]</span>
+                    <span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">urls</span> <span class="o">=</span> <span class="s1">&#39;error&#39;</span>
+
+        <span class="k">return</span> <span class="n">mark_safe</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EMMontageSetAdmin.reimage_index"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.reimage_index">[docs]</a>    <span class="k">def</span> <span class="nf">reimage_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">em_montage_set_object</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">em_montage_set_object</span><span class="o">.</span><span class="n">reimage_index</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="EMMontageSetAdmin.reimage_count"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.reimage_count">[docs]</a>    <span class="k">def</span> <span class="nf">reimage_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">em_montage_set_object</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">em_montage_set_object</span><span class="o">.</span><span class="n">section</span><span class="o">.</span><span class="n">montageset_set</span><span class="o">.</span><span class="n">count</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="EMMontageSetAdmin.reference_set_link"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.reference_set_link">[docs]</a>    <span class="k">def</span> <span class="nf">reference_set_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">em_montage_set_object</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">pk</span> <span class="o">=</span> <span class="n">em_montage_set_object</span><span class="o">.</span><span class="n">reference_set</span><span class="o">.</span><span class="n">pk</span>
+            <span class="k">return</span> <span class="n">mark_safe</span><span class="p">(</span><span class="s1">&#39;&lt;a href=&quot;</span><span class="si">{}</span><span class="s1">&quot;&gt;</span><span class="si">{}</span><span class="s1">&lt;/a&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;admin:at_em_imaging_workflow_referenceset_change&quot;</span><span class="p">,</span>
+                        <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">pk</span><span class="p">,)),</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">em_montage_set_object</span><span class="o">.</span><span class="n">reference_set</span><span class="p">)))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span></div>
+
+
+<div class="viewcode-block" id="EMMontageSetAdmin.changelist_view"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.changelist_view">[docs]</a>    <span class="k">def</span> <span class="nf">changelist_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">extra_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">changelist_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">extra_context</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span></div>
+
+<div class="viewcode-block" id="EMMontageSetAdmin.lookup_allowed"><a class="viewcode-back" href="../../../at_em_imaging_workflow.admin.html#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.lookup_allowed">[docs]</a>    <span class="k">def</span> <span class="nf">lookup_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="s1">&#39;id__in&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;reference_set__id__in&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;section__z_index&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;section__z_index__in&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;section__z_index__gt&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;section__z_index__gte&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;section__z_index__lt&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;section__z_index__lte&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">EMMontageSetAdmin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">lookup_allowed</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../../index.html">Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../at_em_imaging_workflow.html">Source Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../at_em_imaging_workflow.admin.html">at_em_imaging_workflow.admin package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../at_em_imaging_workflow.celery.html">at_em_imaging_workflow.celery package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../at_em_imaging_workflow.migrations.html">at_em_imaging_workflow.migrations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../at_em_imaging_workflow.models.html">at_em_imaging_workflow.models package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../at_em_imaging_workflow.models.states.html">at_em_imaging_workflow.models.states package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../at_em_imaging_workflow.serializers.html">at_em_imaging_workflow.serializers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.html">at_em_imaging_workflow.strategies package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.fine.html">at_em_imaging_workflow.strategies.fine package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.fusion.html">at_em_imaging_workflow.strategies.fusion package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.montage.html">at_em_imaging_workflow.strategies.montage package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.registration.html">at_em_imaging_workflow.strategies.registration package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.rough.html">at_em_imaging_workflow.strategies.rough package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.schemas.html">at_em_imaging_workflow.strategies.schemas package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../at_em_imaging_workflow.strategies.schemas.fine.html">at_em_imaging_workflow.strategies.schemas.fine package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../at_em_imaging_workflow.views.html">at_em_imaging_workflow.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="http://stash.corp.alleninstitute.org/projects/TECH/repos/at_em_imaging_workflow/browse">Stash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../glossary.html">Glossary</a></li>
+</ul>
+
+<h3> Questions </h3>
+<p class="questions">
+  Send any questions using the <a href="http://alleninstitute.org/contact_us/index.html">Send Us a Message</a> link below, 
+  or submit your question to <a href="http://stackoverflow.com/">StackOverflow</a> using with the 'allen-sdk' tag.
+</p>
+
+<p class="questions">
+  If you encounter any problems using the AllenSDK, please create an issue on <a href="http://github.com/alleninstitute/allensdk/issues/">Github's issue tracker</a>.
+</p>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+
+    <div class="footer" role="contentinfo">
+    </div>
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalFooter.js"></script>
+
+
+  </body>
+</html>

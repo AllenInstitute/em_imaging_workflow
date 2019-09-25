@@ -1,0 +1,311 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>at_em_imaging_workflow.views package &#8212; Blue Sky Workflow Engine  documentation</title>
+    <link rel="stylesheet" href="_static/aibs_sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Glossary" href="glossary.html" />
+    <link rel="prev" title="at_em_imaging_workflow.strategies.schemas.fine package" href="at_em_imaging_workflow.strategies.schemas.fine.html" /> 
+  </head>
+  <body>
+<link href="http://www.brain-map.org/assets/stylesheets/portal.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="http://www.brain-map.org/assets/javascripts/portal.js" type="text/javascript"></script>
+<script src="http://www.brain-map.org/assets/javascripts/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var _pSupressBrowserFlashWarning = true;
+    var _pTabId = "pHome";
+    var _pMoreProjectsId = "pMoreProjects";
+    var _pImagePath = "http://www.brain-map.org/assets/images/";
+    var _pSiteWarnings = function() {
+        this.show_warning() = {};
+    }
+</script>
+<script type="text/javascript">
+    function initialize() {
+        /*** do your stuff, then initialize the portal plugin ***/
+        _pPortalOnLoad();
+    }
+</script>
+<style>
+  #header_content > a {
+  display: inline-block;
+  width: 250px;
+  height: 75px;
+  background-image:url("/_static/external_assets/images/Brain_Atlas_Logotype_SDK.png") !important;
+  background-size: 235px 37px;
+  background-position: 0px 20px;
+  background-repeat: no-repeat;
+  }
+</style>
+
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalHeader.js"></script>
+<link rel="stylesheet" type="text/css" href="/_static/external_assets/stylesheets/common_layout.css" />
+
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-at_em_imaging_workflow.views">
+<span id="at-em-imaging-workflow-views-package"></span><h1>at_em_imaging_workflow.views package<a class="headerlink" href="#module-at_em_imaging_workflow.views" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-at_em_imaging_workflow.views.create_chunk_view">
+<span id="at-em-imaging-workflow-views-create-chunk-view-module"></span><h2>at_em_imaging_workflow.views.create_chunk_view module<a class="headerlink" href="#module-at_em_imaging_workflow.views.create_chunk_view" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.views.create_chunk_view.CreateChunkForm">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.views.create_chunk_view.</code><code class="descname">CreateChunkForm</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>field_order=None</em>, <em>use_required_attribute=None</em>, <em>renderer=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/views/create_chunk_view.html#CreateChunkForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.views.create_chunk_view.CreateChunkForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.forms.Form</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.views.create_chunk_view.CreateChunkForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = {'computed_index': &lt;django.forms.fields.IntegerField object at 0x7f6fa102b610&gt;, 'load_name': &lt;django.forms.fields.CharField object at 0x7f6fa0db4210&gt;, 'volume_name': &lt;django.forms.fields.CharField object at 0x7f6fa1701f50&gt;, 'z_max': &lt;django.forms.fields.IntegerField object at 0x7f6fa17efb90&gt;, 'z_min': &lt;django.forms.fields.IntegerField object at 0x7f6fa102ba10&gt;}</em><a class="headerlink" href="#at_em_imaging_workflow.views.create_chunk_view.CreateChunkForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.views.create_chunk_view.CreateChunkForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = {'computed_index': &lt;django.forms.fields.IntegerField object at 0x7f6fa102b610&gt;, 'load_name': &lt;django.forms.fields.CharField object at 0x7f6fa0db4210&gt;, 'volume_name': &lt;django.forms.fields.CharField object at 0x7f6fa1701f50&gt;, 'z_max': &lt;django.forms.fields.IntegerField object at 0x7f6fa17efb90&gt;, 'z_min': &lt;django.forms.fields.IntegerField object at 0x7f6fa102ba10&gt;}</em><a class="headerlink" href="#at_em_imaging_workflow.views.create_chunk_view.CreateChunkForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.views.create_chunk_view.CreateChunkForm.do_create">
+<code class="descname">do_create</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/views/create_chunk_view.html#CreateChunkForm.do_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.views.create_chunk_view.CreateChunkForm.do_create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.views.create_chunk_view.CreateChunkForm.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.views.create_chunk_view.CreateChunkForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.views.create_chunk_view.CreateChunkView">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.views.create_chunk_view.</code><code class="descname">CreateChunkView</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/views/create_chunk_view.html#CreateChunkView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.views.create_chunk_view.CreateChunkView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.FormView</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.views.create_chunk_view.CreateChunkView.form_class">
+<code class="descname">form_class</code><a class="headerlink" href="#at_em_imaging_workflow.views.create_chunk_view.CreateChunkView.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#at_em_imaging_workflow.views.create_chunk_view.CreateChunkForm" title="at_em_imaging_workflow.views.create_chunk_view.CreateChunkForm"><code class="xref py py-class docutils literal"><span class="pre">CreateChunkForm</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.views.create_chunk_view.CreateChunkView.form_valid">
+<code class="descname">form_valid</code><span class="sig-paren">(</span><em>self</em>, <em>form</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/views/create_chunk_view.html#CreateChunkView.form_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.views.create_chunk_view.CreateChunkView.form_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.views.create_chunk_view.CreateChunkView.success_url">
+<code class="descname">success_url</code><em class="property"> = '/workflow_engine/admin/at_em_imaging_workflow/chunk/'</em><a class="headerlink" href="#at_em_imaging_workflow.views.create_chunk_view.CreateChunkView.success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.views.create_chunk_view.CreateChunkView.template_name">
+<code class="descname">template_name</code><em class="property"> = 'create_chunk.html'</em><a class="headerlink" href="#at_em_imaging_workflow.views.create_chunk_view.CreateChunkView.template_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.views.create_chunk_view.create_chunk_handler">
+<code class="descclassname">at_em_imaging_workflow.views.create_chunk_view.</code><code class="descname">create_chunk_handler</code><span class="sig-paren">(</span><em>load_object</em>, <em>computed_index</em>, <em>z_min</em>, <em>z_max</em>, <em>volume=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/views/create_chunk_view.html#create_chunk_handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.views.create_chunk_view.create_chunk_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.views.create_gap_section_view">
+<span id="at-em-imaging-workflow-views-create-gap-section-view-module"></span><h2>at_em_imaging_workflow.views.create_gap_section_view module<a class="headerlink" href="#module-at_em_imaging_workflow.views.create_gap_section_view" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionForm">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.views.create_gap_section_view.</code><code class="descname">CreateGapSectionForm</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>field_order=None</em>, <em>use_required_attribute=None</em>, <em>renderer=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/views/create_gap_section_view.html#CreateGapSectionForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.forms.Form</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = {'gap_z_index': &lt;django.forms.fields.IntegerField object at 0x7f6fa0317110&gt;, 'reimage_index': &lt;django.forms.fields.IntegerField object at 0x7f6f9fab72d0&gt;, 'z_index': &lt;django.forms.fields.IntegerField object at 0x7f6f9fab7cd0&gt;}</em><a class="headerlink" href="#at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = {'gap_z_index': &lt;django.forms.fields.IntegerField object at 0x7f6fa0317110&gt;, 'reimage_index': &lt;django.forms.fields.IntegerField object at 0x7f6f9fab72d0&gt;, 'z_index': &lt;django.forms.fields.IntegerField object at 0x7f6f9fab7cd0&gt;}</em><a class="headerlink" href="#at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionForm.do_create">
+<code class="descname">do_create</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/views/create_gap_section_view.html#CreateGapSectionForm.do_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionForm.do_create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionForm.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionView">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.views.create_gap_section_view.</code><code class="descname">CreateGapSectionView</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/views/create_gap_section_view.html#CreateGapSectionView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.FormView</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionView.form_class">
+<code class="descname">form_class</code><a class="headerlink" href="#at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionView.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionForm" title="at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionForm"><code class="xref py py-class docutils literal"><span class="pre">CreateGapSectionForm</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionView.form_valid">
+<code class="descname">form_valid</code><span class="sig-paren">(</span><em>self</em>, <em>form</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/views/create_gap_section_view.html#CreateGapSectionView.form_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionView.form_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionView.success_url">
+<code class="descname">success_url</code><em class="property"> = '/workflow_engine/admin/at_em_imaging_workflow/emmontageset/'</em><a class="headerlink" href="#at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionView.success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionView.template_name">
+<code class="descname">template_name</code><em class="property"> = 'create_gap_section.html'</em><a class="headerlink" href="#at_em_imaging_workflow.views.create_gap_section_view.CreateGapSectionView.template_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.views.create_gap_section_view.create_gap_section_handler">
+<code class="descclassname">at_em_imaging_workflow.views.create_gap_section_view.</code><code class="descname">create_gap_section_handler</code><span class="sig-paren">(</span><em>z_index</em>, <em>reimage_index</em>, <em>gap_z_index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/views/create_gap_section_view.html#create_gap_section_handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.views.create_gap_section_view.create_gap_section_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="at-em-imaging-workflow-views-e-m-montage-set-job-grid-module">
+<h2>at_em_imaging_workflow.views.e_m_montage_set_job_grid module<a class="headerlink" href="#at-em-imaging-workflow-views-e-m-montage-set-job-grid-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-at_em_imaging_workflow.views.faster_job_grid_view">
+<span id="at-em-imaging-workflow-views-faster-job-grid-view-module"></span><h2>at_em_imaging_workflow.views.faster_job_grid_view module<a class="headerlink" href="#module-at_em_imaging_workflow.views.faster_job_grid_view" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="at_em_imaging_workflow.views.faster_job_grid_view.faster_job_grid">
+<code class="descclassname">at_em_imaging_workflow.views.faster_job_grid_view.</code><code class="descname">faster_job_grid</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/views/faster_job_grid_view.html#faster_job_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.views.faster_job_grid_view.faster_job_grid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.views.imaging_q_c_view">
+<span id="at-em-imaging-workflow-views-imaging-q-c-view-module"></span><h2>at_em_imaging_workflow.views.imaging_q_c_view module<a class="headerlink" href="#module-at_em_imaging_workflow.views.imaging_q_c_view" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.views.imaging_q_c_view.ImagingQCView">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.views.imaging_q_c_view.</code><code class="descname">ImagingQCView</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/views/imaging_q_c_view.html#ImagingQCView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.views.imaging_q_c_view.ImagingQCView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">rest_pandas.views.PandasView</span></code></p>
+<dl class="method">
+<dt id="at_em_imaging_workflow.views.imaging_q_c_view.ImagingQCView.filter_queryset">
+<code class="descname">filter_queryset</code><span class="sig-paren">(</span><em>self</em>, <em>qs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/views/imaging_q_c_view.html#ImagingQCView.filter_queryset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.views.imaging_q_c_view.ImagingQCView.filter_queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.views.imaging_q_c_view.ImagingQCView.queryset">
+<code class="descname">queryset</code><a class="headerlink" href="#at_em_imaging_workflow.views.imaging_q_c_view.ImagingQCView.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.views.imaging_q_c_view.ImagingQCView.serializer_class">
+<code class="descname">serializer_class</code><a class="headerlink" href="#at_em_imaging_workflow.views.imaging_q_c_view.ImagingQCView.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="at_em_imaging_workflow.serializers.html#at_em_imaging_workflow.serializers.imaging_q_c_serializer.ImagingQCSerializer" title="at_em_imaging_workflow.serializers.imaging_q_c_serializer.ImagingQCSerializer"><code class="xref py py-class docutils literal"><span class="pre">at_em_imaging_workflow.serializers.imaging_q_c_serializer.ImagingQCSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.views.imaging_q_c_view.ImagingQCView.transform_dataframe">
+<code class="descname">transform_dataframe</code><span class="sig-paren">(</span><em>self</em>, <em>df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/views/imaging_q_c_view.html#ImagingQCView.transform_dataframe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.views.imaging_q_c_view.ImagingQCView.transform_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="at_em_imaging_workflow.html">Source Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.admin.html">at_em_imaging_workflow.admin package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.celery.html">at_em_imaging_workflow.celery package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.migrations.html">at_em_imaging_workflow.migrations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.models.html">at_em_imaging_workflow.models package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.models.states.html">at_em_imaging_workflow.models.states package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.serializers.html">at_em_imaging_workflow.serializers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.strategies.html">at_em_imaging_workflow.strategies package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.fine.html">at_em_imaging_workflow.strategies.fine package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.fusion.html">at_em_imaging_workflow.strategies.fusion package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.montage.html">at_em_imaging_workflow.strategies.montage package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.registration.html">at_em_imaging_workflow.strategies.registration package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.rough.html">at_em_imaging_workflow.strategies.rough package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.schemas.html">at_em_imaging_workflow.strategies.schemas package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="at_em_imaging_workflow.strategies.schemas.fine.html">at_em_imaging_workflow.strategies.schemas.fine package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">at_em_imaging_workflow.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="http://stash.corp.alleninstitute.org/projects/TECH/repos/at_em_imaging_workflow/browse">Stash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+<h3> Questions </h3>
+<p class="questions">
+  Send any questions using the <a href="http://alleninstitute.org/contact_us/index.html">Send Us a Message</a> link below, 
+  or submit your question to <a href="http://stackoverflow.com/">StackOverflow</a> using with the 'allen-sdk' tag.
+</p>
+
+<p class="questions">
+  If you encounter any problems using the AllenSDK, please create an issue on <a href="http://github.com/alleninstitute/allensdk/issues/">Github's issue tracker</a>.
+</p>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+
+    <div class="footer" role="contentinfo">
+    </div>
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalFooter.js"></script>
+
+
+  </body>
+</html>

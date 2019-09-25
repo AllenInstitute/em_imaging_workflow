@@ -1,0 +1,1366 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>at_em_imaging_workflow.admin package &#8212; Blue Sky Workflow Engine  documentation</title>
+    <link rel="stylesheet" href="_static/aibs_sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="at_em_imaging_workflow.celery package" href="at_em_imaging_workflow.celery.html" />
+    <link rel="prev" title="at_em_imaging_workflow package" href="at_em_imaging_workflow.html" /> 
+  </head>
+  <body>
+<link href="http://www.brain-map.org/assets/stylesheets/portal.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="http://www.brain-map.org/assets/javascripts/portal.js" type="text/javascript"></script>
+<script src="http://www.brain-map.org/assets/javascripts/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var _pSupressBrowserFlashWarning = true;
+    var _pTabId = "pHome";
+    var _pMoreProjectsId = "pMoreProjects";
+    var _pImagePath = "http://www.brain-map.org/assets/images/";
+    var _pSiteWarnings = function() {
+        this.show_warning() = {};
+    }
+</script>
+<script type="text/javascript">
+    function initialize() {
+        /*** do your stuff, then initialize the portal plugin ***/
+        _pPortalOnLoad();
+    }
+</script>
+<style>
+  #header_content > a {
+  display: inline-block;
+  width: 250px;
+  height: 75px;
+  background-image:url("/_static/external_assets/images/Brain_Atlas_Logotype_SDK.png") !important;
+  background-size: 235px 37px;
+  background-position: 0px 20px;
+  background-repeat: no-repeat;
+  }
+</style>
+
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalHeader.js"></script>
+<link rel="stylesheet" type="text/css" href="/_static/external_assets/stylesheets/common_layout.css" />
+
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-at_em_imaging_workflow.admin">
+<span id="at-em-imaging-workflow-admin-package"></span><h1>at_em_imaging_workflow.admin package<a class="headerlink" href="#module-at_em_imaging_workflow.admin" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-at_em_imaging_workflow.admin.at_em_site_admin">
+<span id="at-em-imaging-workflow-admin-at-em-site-admin-module"></span><h2>at_em_imaging_workflow.admin.at_em_site_admin module<a class="headerlink" href="#module-at_em_imaging_workflow.admin.at_em_site_admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.at_em_site_admin.MyAdminSite">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.at_em_site_admin.</code><code class="descname">MyAdminSite</code><span class="sig-paren">(</span><em>name='admin'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/at_em_site_admin.html#MyAdminSite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.at_em_site_admin.MyAdminSite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.sites.AdminSite</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.at_em_site_admin.MyAdminSite.index_title">
+<code class="descname">index_title</code><em class="property"> = 'Site administration'</em><a class="headerlink" href="#at_em_imaging_workflow.admin.at_em_site_admin.MyAdminSite.index_title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.at_em_site_admin.MyAdminSite.site_header">
+<code class="descname">site_header</code><em class="property"> = 'My administration'</em><a class="headerlink" href="#at_em_imaging_workflow.admin.at_em_site_admin.MyAdminSite.site_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.at_em_site_admin.MyAdminSite.site_title">
+<code class="descname">site_title</code><em class="property"> = 'My site admin'</em><a class="headerlink" href="#at_em_imaging_workflow.admin.at_em_site_admin.MyAdminSite.site_title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.admin.chunk_admin">
+<span id="at-em-imaging-workflow-admin-chunk-admin-module"></span><h2>at_em_imaging_workflow.admin.chunk_admin module<a class="headerlink" href="#module-at_em_imaging_workflow.admin.chunk_admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.chunk_admin.</code><code class="descname">ChunkAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/chunk_admin.html#ChunkAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.actions">
+<code class="descname">actions</code><em class="property"> = [&lt;function initialize_z_mapping&gt;, &lt;function update_chunk_assignments&gt;, &lt;function qc_pass_chunk&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.change_list_template">
+<code class="descname">change_list_template</code><em class="property"> = 'admin/chunk_change_list.html'</em><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.change_list_template" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.following_link">
+<code class="descname">following_link</code><span class="sig-paren">(</span><em>self</em>, <em>chunk_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/chunk_admin.html#ChunkAdmin.following_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.following_link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.inlines">
+<code class="descname">inlines</code><em class="property"> = [&lt;class 'at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationInline'&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.inlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ['id', 'computed_index', 'object_state', 'rendered_volume', 'preceding_link', 'following_link', 'zs']</em><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.list_filter">
+<code class="descname">list_filter</code><em class="property"> = []</em><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.list_select_related">
+<code class="descname">list_select_related</code><em class="property"> = []</em><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.list_select_related" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.preceding_link">
+<code class="descname">preceding_link</code><span class="sig-paren">(</span><em>self</em>, <em>chunk_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/chunk_admin.html#ChunkAdmin.preceding_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.preceding_link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.zs">
+<code class="descname">zs</code><span class="sig-paren">(</span><em>self</em>, <em>chunk_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/chunk_admin.html#ChunkAdmin.zs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkAdmin.zs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.chunk_admin.</code><code class="descname">ChunkConfigurationForm</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>instance=None</em>, <em>use_required_attribute=None</em>, <em>renderer=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/chunk_admin.html#ChunkConfigurationForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/chunk_admin.html#ChunkConfigurationForm.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.Meta.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.Meta.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('name', 'content_type', 'configuration_type', 'json_object')</em><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.models.configuration.Configuration</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = {'configuration_type': &lt;django.forms.fields.CharField object at 0x7f6fa2507cd0&gt;, 'content_type': &lt;django.forms.models.ModelChoiceField object at 0x7f6fa24c7e50&gt;, 'json_object': &lt;jsonfield.forms.JSONFormField object at 0x7f6fa2507dd0&gt;, 'name': &lt;django.forms.fields.CharField object at 0x7f6fa24c7f50&gt;}</em><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.clean_json_object">
+<code class="descname">clean_json_object</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/chunk_admin.html#ChunkConfigurationForm.clean_json_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.clean_json_object" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = {}</em><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationInline">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.chunk_admin.</code><code class="descname">ChunkConfigurationInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/chunk_admin.html#ChunkConfigurationInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.contenttypes.admin.GenericStackedInline</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationInline.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationInline.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationInline.form">
+<code class="descname">form</code><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationInline.form" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm" title="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationForm"><code class="xref py py-class docutils literal"><span class="pre">ChunkConfigurationForm</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationInline.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationInline.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.ChunkConfigurationInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.models.configuration.Configuration</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.initialize_z_mapping">
+<code class="descclassname">at_em_imaging_workflow.admin.chunk_admin.</code><code class="descname">initialize_z_mapping</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/chunk_admin.html#initialize_z_mapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.initialize_z_mapping" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.qc_pass_chunk">
+<code class="descclassname">at_em_imaging_workflow.admin.chunk_admin.</code><code class="descname">qc_pass_chunk</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/chunk_admin.html#qc_pass_chunk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.qc_pass_chunk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.remap_chunk">
+<code class="descclassname">at_em_imaging_workflow.admin.chunk_admin.</code><code class="descname">remap_chunk</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/chunk_admin.html#remap_chunk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.remap_chunk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.update_chunk_assignment">
+<code class="descclassname">at_em_imaging_workflow.admin.chunk_admin.</code><code class="descname">update_chunk_assignment</code><span class="sig-paren">(</span><em>c</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/chunk_admin.html#update_chunk_assignment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.update_chunk_assignment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.chunk_admin.update_chunk_assignments">
+<code class="descclassname">at_em_imaging_workflow.admin.chunk_admin.</code><code class="descname">update_chunk_assignments</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/chunk_admin.html#update_chunk_assignments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.chunk_admin.update_chunk_assignments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.admin.create_chunk_form">
+<span id="at-em-imaging-workflow-admin-create-chunk-form-module"></span><h2>at_em_imaging_workflow.admin.create_chunk_form module<a class="headerlink" href="#module-at_em_imaging_workflow.admin.create_chunk_form" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.create_chunk_form.</code><code class="descname">CreateChunkForm</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/create_chunk_form.html#CreateChunkForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/create_chunk_form.html#CreateChunkForm.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.Meta.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.Meta.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('computed_index', 'object_state', 'z_min', 'z_max', 'rendered_volume')</em><a class="headerlink" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="at_em_imaging_workflow.models.html#at_em_imaging_workflow.models.chunk.Chunk" title="at_em_imaging_workflow.models.chunk.Chunk"><code class="xref py py-class docutils literal"><span class="pre">at_em_imaging_workflow.models.chunk.Chunk</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = {'computed_index': &lt;django.forms.fields.IntegerField object at 0x7f6fa24dbf90&gt;, 'object_state': &lt;django.forms.fields.CharField object at 0x7f6fa24dba10&gt;, 'rendered_volume': &lt;django.forms.models.ModelChoiceField object at 0x7f6fa24df150&gt;, 'z_max': &lt;django.forms.fields.IntegerField object at 0x7f6fa24d5d50&gt;, 'z_min': &lt;django.forms.fields.IntegerField object at 0x7f6fa24d5bd0&gt;}</em><a class="headerlink" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.clean_computed_index">
+<code class="descname">clean_computed_index</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/create_chunk_form.html#CreateChunkForm.clean_computed_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.clean_computed_index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.clean_rendered_volumme">
+<code class="descname">clean_rendered_volumme</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/create_chunk_form.html#CreateChunkForm.clean_rendered_volumme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.clean_rendered_volumme" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.clean_z_max">
+<code class="descname">clean_z_max</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/create_chunk_form.html#CreateChunkForm.clean_z_max"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.clean_z_max" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.clean_z_min">
+<code class="descname">clean_z_min</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/create_chunk_form.html#CreateChunkForm.clean_z_min"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.clean_z_min" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.create_chunk_handler">
+<code class="descname">create_chunk_handler</code><span class="sig-paren">(</span><em>self</em>, <em>chnk</em>, <em>z_min</em>, <em>z_max</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/create_chunk_form.html#CreateChunkForm.create_chunk_handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.create_chunk_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = {'z_max': &lt;django.forms.fields.IntegerField object at 0x7f6fa24d5d50&gt;, 'z_min': &lt;django.forms.fields.IntegerField object at 0x7f6fa24d5bd0&gt;}</em><a class="headerlink" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>self</em>, <em>commit=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/create_chunk_form.html#CreateChunkForm.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.admin.e_m_montage_set_admin">
+<span id="at-em-imaging-workflow-admin-e-m-montage-set-admin-module"></span><h2>at_em_imaging_workflow.admin.e_m_montage_set_admin module<a class="headerlink" href="#module-at_em_imaging_workflow.admin.e_m_montage_set_admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.ConfigurationInline">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">ConfigurationInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#ConfigurationInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.ConfigurationInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.contenttypes.admin.GenericStackedInline</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.ConfigurationInline.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.ConfigurationInline.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.ConfigurationInline.fields">
+<code class="descname">fields</code><em class="property"> = ('name', 'configuration_type', 'json_object')</em><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.ConfigurationInline.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.ConfigurationInline.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.ConfigurationInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.ConfigurationInline.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.ConfigurationInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.models.configuration.Configuration</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">EMMontageSetAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#EMMontageSetAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.actions">
+<code class="descname">actions</code><em class="property"> = [&lt;function assign_chunk&gt;, &lt;function redo_point_match_0_5&gt;, &lt;function redo_point_match_0_6&gt;, &lt;function redo_point_match_filter&gt;, &lt;function redo_solver_5&gt;, &lt;function redo_solver_100&gt;, &lt;function redo_solver_1000&gt;, &lt;function qc_pass_em_montage_set&gt;, &lt;function qc_fail_em_montage_set&gt;, &lt;function fail_em_montage_set&gt;, &lt;function reimage&gt;, &lt;function gap&gt;, &lt;function swap_stacks&gt;, &lt;function reset_pending_em_montage_set&gt;, &lt;function reimage_not_select&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.change_list_template">
+<code class="descname">change_list_template</code><em class="property"> = 'admin/em_montage_set_change_list.html'</em><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.change_list_template" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.changelist_view">
+<code class="descname">changelist_view</code><span class="sig-paren">(</span><em>self</em>, <em>request</em>, <em>extra_context=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#EMMontageSetAdmin.changelist_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.changelist_view" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.inlines">
+<code class="descname">inlines</code><em class="property"> = (&lt;class 'at_em_imaging_workflow.admin.e_m_montage_set_admin.ConfigurationInline'&gt;, &lt;class 'at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline'&gt;)</em><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.inlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ['id', 'z_index', 'qc_link', 'reimage_index', 'reimage_count', 'specimen_link', 'microscope_link', 'reference_set_link', 'acquisition_date', 'object_state', 'load_uid']</em><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.list_filter">
+<code class="descname">list_filter</code><em class="property"> = ['section__specimen__uid', 'microscope__uid', 'object_state', 'sample_holder__load']</em><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.list_select_related">
+<code class="descname">list_select_related</code><em class="property"> = ['microscope', 'reference_set', 'section', 'section__specimen', 'sample_holder', 'sample_holder__load']</em><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.list_select_related" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.load_uid">
+<code class="descname">load_uid</code><span class="sig-paren">(</span><em>self</em>, <em>em_montage_set_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#EMMontageSetAdmin.load_uid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.load_uid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.lookup_allowed">
+<code class="descname">lookup_allowed</code><span class="sig-paren">(</span><em>self</em>, <em>key</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#EMMontageSetAdmin.lookup_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.lookup_allowed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.microscope_link">
+<code class="descname">microscope_link</code><span class="sig-paren">(</span><em>self</em>, <em>em_montage_set_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#EMMontageSetAdmin.microscope_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.microscope_link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.qc_link">
+<code class="descname">qc_link</code><span class="sig-paren">(</span><em>self</em>, <em>em_montage_set_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#EMMontageSetAdmin.qc_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.qc_link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.qc_link_from_well_known_file">
+<code class="descname">qc_link_from_well_known_file</code><span class="sig-paren">(</span><em>self</em>, <em>em_montage_set_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#EMMontageSetAdmin.qc_link_from_well_known_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.qc_link_from_well_known_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.reference_set_link">
+<code class="descname">reference_set_link</code><span class="sig-paren">(</span><em>self</em>, <em>em_montage_set_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#EMMontageSetAdmin.reference_set_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.reference_set_link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.reimage_count">
+<code class="descname">reimage_count</code><span class="sig-paren">(</span><em>self</em>, <em>em_montage_set_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#EMMontageSetAdmin.reimage_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.reimage_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.reimage_index">
+<code class="descname">reimage_index</code><span class="sig-paren">(</span><em>self</em>, <em>em_montage_set_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#EMMontageSetAdmin.reimage_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.reimage_index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.search_fields">
+<code class="descname">search_fields</code><em class="property"> = ('id', 'section__z_index')</em><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.search_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.specimen_link">
+<code class="descname">specimen_link</code><span class="sig-paren">(</span><em>self</em>, <em>em_montage_set_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#EMMontageSetAdmin.specimen_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.EMMontageSetAdmin.specimen_link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">WellKnownFileInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#WellKnownFileInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.contenttypes.admin.GenericStackedInline</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline.ct_field">
+<code class="descname">ct_field</code><em class="property"> = 'attachable_type'</em><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline.ct_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline.ct_fk_field">
+<code class="descname">ct_fk_field</code><em class="property"> = 'attachable_id'</em><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline.ct_fk_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline.fields">
+<code class="descname">fields</code><em class="property"> = ('well_known_file_type',)</em><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.WellKnownFileInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.models.well_known_file.WellKnownFile</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.assign_chunk">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">assign_chunk</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#assign_chunk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.assign_chunk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.fail_em_montage_set">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">fail_em_montage_set</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#fail_em_montage_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.fail_em_montage_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.gap">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">gap</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#gap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.gap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.qc_fail_em_montage_set">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">qc_fail_em_montage_set</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#qc_fail_em_montage_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.qc_fail_em_montage_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.qc_pass_em_montage_set">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">qc_pass_em_montage_set</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#qc_pass_em_montage_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.qc_pass_em_montage_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_point_match_0_5">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">redo_point_match_0_5</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#redo_point_match_0_5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_point_match_0_5" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_point_match_0_6">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">redo_point_match_0_6</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#redo_point_match_0_6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_point_match_0_6" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_point_match_filter">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">redo_point_match_filter</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#redo_point_match_filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_point_match_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_solver_100">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">redo_solver_100</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#redo_solver_100"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_solver_100" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_solver_1000">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">redo_solver_1000</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#redo_solver_1000"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_solver_1000" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_solver_5">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">redo_solver_5</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#redo_solver_5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.redo_solver_5" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.reimage">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">reimage</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#reimage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.reimage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.reimage_not_select">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">reimage_not_select</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#reimage_not_select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.reimage_not_select" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.reset_pending_em_montage_set">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">reset_pending_em_montage_set</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#reset_pending_em_montage_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.reset_pending_em_montage_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.e_m_montage_set_admin.swap_stacks">
+<code class="descclassname">at_em_imaging_workflow.admin.e_m_montage_set_admin.</code><code class="descname">swap_stacks</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/e_m_montage_set_admin.html#swap_stacks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.e_m_montage_set_admin.swap_stacks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.admin.load_admin">
+<span id="at-em-imaging-workflow-admin-load-admin-module"></span><h2>at_em_imaging_workflow.admin.load_admin module<a class="headerlink" href="#module-at_em_imaging_workflow.admin.load_admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.load_admin.ChunkInline">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.load_admin.</code><code class="descname">ChunkInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#ChunkInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.ChunkInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.StackedInline</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.ChunkInline.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.ChunkInline.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.ChunkInline.form">
+<code class="descname">form</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.ChunkInline.form" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm" title="at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm"><code class="xref py py-class docutils literal"><span class="pre">at_em_imaging_workflow.admin.create_chunk_form.CreateChunkForm</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.ChunkInline.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.ChunkInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.ChunkInline.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.ChunkInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="at_em_imaging_workflow.models.html#at_em_imaging_workflow.models.chunk.Chunk" title="at_em_imaging_workflow.models.chunk.Chunk"><code class="xref py py-class docutils literal"><span class="pre">at_em_imaging_workflow.models.chunk.Chunk</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadAdmin">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.load_admin.</code><code class="descname">LoadAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#LoadAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadAdmin.actions">
+<code class="descname">actions</code><em class="property"> = []</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadAdmin.actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadAdmin.form">
+<code class="descname">form</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadAdmin.form" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#at_em_imaging_workflow.admin.load_admin.LoadForm" title="at_em_imaging_workflow.admin.load_admin.LoadForm"><code class="xref py py-class docutils literal"><span class="pre">LoadForm</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadAdmin.inlines">
+<code class="descname">inlines</code><em class="property"> = (&lt;class 'at_em_imaging_workflow.admin.load_admin.ZMappingInline'&gt;, &lt;class 'at_em_imaging_workflow.admin.load_admin.ChunkInline'&gt;)</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadAdmin.inlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ['uid', 'offset', 'rendered_volume']</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadAdmin.list_filter">
+<code class="descname">list_filter</code><em class="property"> = []</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadAdmin.list_select_related">
+<code class="descname">list_select_related</code><em class="property"> = []</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadAdmin.list_select_related" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadAdmin.save_form">
+<code class="descname">save_form</code><span class="sig-paren">(</span><em>self</em>, <em>request</em>, <em>form</em>, <em>change</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#LoadAdmin.save_form"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadAdmin.save_form" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadAdmin.save_formset">
+<code class="descname">save_formset</code><span class="sig-paren">(</span><em>self</em>, <em>request</em>, <em>form</em>, <em>formset</em>, <em>change</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#LoadAdmin.save_formset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadAdmin.save_formset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.load_admin.</code><code class="descname">LoadConfigurationForm</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#LoadConfigurationForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#LoadConfigurationForm.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.Meta.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.Meta.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('name', 'configuration_type', 'json_object')</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.models.configuration.Configuration</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = {'configuration_type': &lt;django.forms.fields.CharField object at 0x7f6fa24dff90&gt;, 'json_object': &lt;jsonfield.forms.JSONFormField object at 0x7f6fa24e90d0&gt;, 'name': &lt;django.forms.fields.CharField object at 0x7f6fa24dfa90&gt;}</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.clean_configuration_type">
+<code class="descname">clean_configuration_type</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#LoadConfigurationForm.clean_configuration_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.clean_configuration_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.clean_json_object">
+<code class="descname">clean_json_object</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#LoadConfigurationForm.clean_json_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.clean_json_object" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.clean_name">
+<code class="descname">clean_name</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#LoadConfigurationForm.clean_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.clean_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = {}</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationInline">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.load_admin.</code><code class="descname">LoadConfigurationInline</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#LoadConfigurationInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.contenttypes.admin.GenericStackedInline</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationInline.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationInline.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationInline.form">
+<code class="descname">form</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationInline.form" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm" title="at_em_imaging_workflow.admin.load_admin.LoadConfigurationForm"><code class="xref py py-class docutils literal"><span class="pre">LoadConfigurationForm</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationInline.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadConfigurationInline.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadConfigurationInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.models.configuration.Configuration</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadForm">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.load_admin.</code><code class="descname">LoadForm</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>instance=None</em>, <em>use_required_attribute=None</em>, <em>renderer=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#LoadForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadForm.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#LoadForm.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadForm.Meta.fields">
+<code class="descname">fields</code><em class="property"> = '__all__'</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadForm.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadForm.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="at_em_imaging_workflow.models.html#at_em_imaging_workflow.models.load.Load" title="at_em_imaging_workflow.models.load.Load"><code class="xref py py-class docutils literal"><span class="pre">at_em_imaging_workflow.models.load.Load</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = {'object_state': &lt;django.forms.fields.CharField object at 0x7f6fa24e9610&gt;, 'offset': &lt;django.forms.fields.IntegerField object at 0x7f6fa24e9a50&gt;, 'uid': &lt;django.forms.fields.CharField object at 0x7f6fa24e9890&gt;}</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = {}</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadForm.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.load_admin.LoadForm.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>self</em>, <em>commit=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#LoadForm.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.LoadForm.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.load_admin.ZMappingInline">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.load_admin.</code><code class="descname">ZMappingInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#ZMappingInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.ZMappingInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.contenttypes.admin.GenericStackedInline</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.ZMappingInline.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.ZMappingInline.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.ZMappingInline.form">
+<code class="descname">form</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.ZMappingInline.form" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm" title="at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm"><code class="xref py py-class docutils literal"><span class="pre">at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.load_admin.ZMappingInline.get_fields">
+<code class="descname">get_fields</code><span class="sig-paren">(</span><em>self</em>, <em>request</em>, <em>load_obj=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/load_admin.html#ZMappingInline.get_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.ZMappingInline.get_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.ZMappingInline.max_num">
+<code class="descname">max_num</code><em class="property"> = 1</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.ZMappingInline.max_num" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.ZMappingInline.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.ZMappingInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.ZMappingInline.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.ZMappingInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.models.configuration.Configuration</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.ZMappingInline.verbose_name">
+<code class="descname">verbose_name</code><em class="property"> = 'Z Mapping'</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.ZMappingInline.verbose_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.load_admin.ZMappingInline.verbose_name_plural">
+<code class="descname">verbose_name_plural</code><em class="property"> = 'Z Mappings'</em><a class="headerlink" href="#at_em_imaging_workflow.admin.load_admin.ZMappingInline.verbose_name_plural" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.admin.reference_set_admin">
+<span id="at-em-imaging-workflow-admin-reference-set-admin-module"></span><h2>at_em_imaging_workflow.admin.reference_set_admin module<a class="headerlink" href="#module-at_em_imaging_workflow.admin.reference_set_admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ConfigurationInline">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.reference_set_admin.</code><code class="descname">ConfigurationInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/reference_set_admin.html#ConfigurationInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ConfigurationInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.contenttypes.admin.GenericStackedInline</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ConfigurationInline.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ConfigurationInline.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ConfigurationInline.form">
+<code class="descname">form</code><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ConfigurationInline.form" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm" title="at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm"><code class="xref py py-class docutils literal"><span class="pre">LensCorrectionConfigurationForm</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ConfigurationInline.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ConfigurationInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ConfigurationInline.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ConfigurationInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.models.configuration.Configuration</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.EMMontageInline">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.reference_set_admin.</code><code class="descname">EMMontageInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/reference_set_admin.html#EMMontageInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.EMMontageInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.StackedInline</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.EMMontageInline.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.EMMontageInline.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.EMMontageInline.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.EMMontageInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.EMMontageInline.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.EMMontageInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="at_em_imaging_workflow.models.html#at_em_imaging_workflow.models.e_m_montage_set.EMMontageSet" title="at_em_imaging_workflow.models.e_m_montage_set.EMMontageSet"><code class="xref py py-class docutils literal"><span class="pre">at_em_imaging_workflow.models.e_m_montage_set.EMMontageSet</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.reference_set_admin.</code><code class="descname">LensCorrectionConfigurationForm</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>instance=None</em>, <em>use_required_attribute=None</em>, <em>renderer=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/reference_set_admin.html#LensCorrectionConfigurationForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/reference_set_admin.html#LensCorrectionConfigurationForm.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('name', 'configuration_type', 'json_object')</em><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.models.configuration.Configuration</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = {'configuration_type': &lt;django.forms.fields.CharField object at 0x7f6fa24c7710&gt;, 'json_object': &lt;jsonfield.forms.JSONFormField object at 0x7f6fa24c7850&gt;, 'name': &lt;django.forms.fields.CharField object at 0x7f6fa24fb7d0&gt;}</em><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.clean_configuration_type">
+<code class="descname">clean_configuration_type</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/reference_set_admin.html#LensCorrectionConfigurationForm.clean_configuration_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.clean_configuration_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.clean_json_object">
+<code class="descname">clean_json_object</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/reference_set_admin.html#LensCorrectionConfigurationForm.clean_json_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.clean_json_object" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = {}</em><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.LensCorrectionConfigurationForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.reference_set_admin.</code><code class="descname">ReferenceSetAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/reference_set_admin.html#ReferenceSetAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.actions">
+<code class="descname">actions</code><em class="property"> = [&lt;function set_refset_to_pending&gt;, &lt;function set_refset_to_done&gt;, &lt;function redo_lens_correction&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.changelist_view">
+<code class="descname">changelist_view</code><span class="sig-paren">(</span><em>self</em>, <em>request</em>, <em>extra_context=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/reference_set_admin.html#ReferenceSetAdmin.changelist_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.changelist_view" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.inlines">
+<code class="descname">inlines</code><em class="property"> = (&lt;class 'at_em_imaging_workflow.admin.reference_set_admin.ConfigurationInline'&gt;,)</em><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.inlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ['id', 'object_state', 'microscope_link', 'manifest_path', 'acquisition_date']</em><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.list_filter">
+<code class="descname">list_filter</code><em class="property"> = ['microscope__uid', 'object_state']</em><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.list_select_related">
+<code class="descname">list_select_related</code><em class="property"> = ['microscope']</em><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.list_select_related" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.microscope_link">
+<code class="descname">microscope_link</code><span class="sig-paren">(</span><em>self</em>, <em>em_montage_set_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/reference_set_admin.html#ReferenceSetAdmin.microscope_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.microscope_link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.search_fields">
+<code class="descname">search_fields</code><em class="property"> = ('id',)</em><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.ReferenceSetAdmin.search_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.redo_lens_correction">
+<code class="descclassname">at_em_imaging_workflow.admin.reference_set_admin.</code><code class="descname">redo_lens_correction</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/reference_set_admin.html#redo_lens_correction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.redo_lens_correction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.set_refset_to_done">
+<code class="descclassname">at_em_imaging_workflow.admin.reference_set_admin.</code><code class="descname">set_refset_to_done</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/reference_set_admin.html#set_refset_to_done"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.set_refset_to_done" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.admin.reference_set_admin.set_refset_to_pending">
+<code class="descclassname">at_em_imaging_workflow.admin.reference_set_admin.</code><code class="descname">set_refset_to_pending</code><span class="sig-paren">(</span><em>modeladmin</em>, <em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/reference_set_admin.html#set_refset_to_pending"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.reference_set_admin.set_refset_to_pending" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.admin.rendered_volume_admin">
+<span id="at-em-imaging-workflow-admin-rendered-volume-admin-module"></span><h2>at_em_imaging_workflow.admin.rendered_volume_admin module<a class="headerlink" href="#module-at_em_imaging_workflow.admin.rendered_volume_admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeAdmin">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.rendered_volume_admin.</code><code class="descname">RenderedVolumeAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/rendered_volume_admin.html#RenderedVolumeAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeAdmin.actions">
+<code class="descname">actions</code><em class="property"> = ()</em><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeAdmin.actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeAdmin.inlines">
+<code class="descname">inlines</code><em class="property"> = [&lt;class 'at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationInline'&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeAdmin.inlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ('id', 'mipmap_directory', 'specimen')</em><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeAdmin.list_filter">
+<code class="descname">list_filter</code><em class="property"> = ()</em><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeAdmin.list_select_related">
+<code class="descname">list_select_related</code><em class="property"> = ()</em><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeAdmin.list_select_related" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.rendered_volume_admin.</code><code class="descname">RenderedVolumeConfigurationForm</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>instance=None</em>, <em>use_required_attribute=None</em>, <em>renderer=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/rendered_volume_admin.html#RenderedVolumeConfigurationForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/rendered_volume_admin.html#RenderedVolumeConfigurationForm.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.Meta.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.Meta.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('name', 'configuration_type', 'json_object')</em><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.models.configuration.Configuration</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = {'configuration_type': &lt;django.forms.fields.CharField object at 0x7f6fa24d52d0&gt;, 'json_object': &lt;jsonfield.forms.JSONFormField object at 0x7f6fa24d53d0&gt;, 'name': &lt;django.forms.fields.CharField object at 0x7f6fa24d5110&gt;}</em><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.clean_json_object">
+<code class="descname">clean_json_object</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/rendered_volume_admin.html#RenderedVolumeConfigurationForm.clean_json_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.clean_json_object" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = {}</em><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationInline">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.rendered_volume_admin.</code><code class="descname">RenderedVolumeConfigurationInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/rendered_volume_admin.html#RenderedVolumeConfigurationInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.contenttypes.admin.GenericStackedInline</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationInline.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationInline.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationInline.form">
+<code class="descname">form</code><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationInline.form" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm" title="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationForm"><code class="xref py py-class docutils literal"><span class="pre">RenderedVolumeConfigurationForm</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationInline.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationInline.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.rendered_volume_admin.RenderedVolumeConfigurationInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.models.configuration.Configuration</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.admin.sample_holder_admin">
+<span id="at-em-imaging-workflow-admin-sample-holder-admin-module"></span><h2>at_em_imaging_workflow.admin.sample_holder_admin module<a class="headerlink" href="#module-at_em_imaging_workflow.admin.sample_holder_admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.sample_holder_admin.LoadInline">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.sample_holder_admin.</code><code class="descname">LoadInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/sample_holder_admin.html#LoadInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.sample_holder_admin.LoadInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.StackedInline</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.sample_holder_admin.LoadInline.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.sample_holder_admin.LoadInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.sample_holder_admin.LoadInline.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.sample_holder_admin.LoadInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="at_em_imaging_workflow.models.html#at_em_imaging_workflow.models.load.Load" title="at_em_imaging_workflow.models.load.Load"><code class="xref py py-class docutils literal"><span class="pre">at_em_imaging_workflow.models.load.Load</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.sample_holder_admin.SampleHolderAdmin">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.sample_holder_admin.</code><code class="descname">SampleHolderAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/sample_holder_admin.html#SampleHolderAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.sample_holder_admin.SampleHolderAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.sample_holder_admin.SampleHolderAdmin.actions">
+<code class="descname">actions</code><em class="property"> = []</em><a class="headerlink" href="#at_em_imaging_workflow.admin.sample_holder_admin.SampleHolderAdmin.actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.sample_holder_admin.SampleHolderAdmin.inlines">
+<code class="descname">inlines</code><em class="property"> = []</em><a class="headerlink" href="#at_em_imaging_workflow.admin.sample_holder_admin.SampleHolderAdmin.inlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.sample_holder_admin.SampleHolderAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ['uid', 'imaged_sections_count', 'load']</em><a class="headerlink" href="#at_em_imaging_workflow.admin.sample_holder_admin.SampleHolderAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.sample_holder_admin.SampleHolderAdmin.list_filter">
+<code class="descname">list_filter</code><em class="property"> = ['load']</em><a class="headerlink" href="#at_em_imaging_workflow.admin.sample_holder_admin.SampleHolderAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.sample_holder_admin.SampleHolderAdmin.list_select_related">
+<code class="descname">list_select_related</code><em class="property"> = ['load']</em><a class="headerlink" href="#at_em_imaging_workflow.admin.sample_holder_admin.SampleHolderAdmin.list_select_related" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.sample_holder_admin.SampleHolderAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.sample_holder_admin.SampleHolderAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.admin.section_admin">
+<span id="at-em-imaging-workflow-admin-section-admin-module"></span><h2>at_em_imaging_workflow.admin.section_admin module<a class="headerlink" href="#module-at_em_imaging_workflow.admin.section_admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.section_admin.ChunkInline">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.section_admin.</code><code class="descname">ChunkInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/section_admin.html#ChunkInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.section_admin.ChunkInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.StackedInline</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.section_admin.ChunkInline.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.section_admin.ChunkInline.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.section_admin.ChunkInline.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.section_admin.ChunkInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.section_admin.ChunkInline.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.section_admin.ChunkInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="at_em_imaging_workflow.models.html#at_em_imaging_workflow.models.chunk_assignment.ChunkAssignment" title="at_em_imaging_workflow.models.chunk_assignment.ChunkAssignment"><code class="xref py py-class docutils literal"><span class="pre">at_em_imaging_workflow.models.chunk_assignment.ChunkAssignment</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.section_admin.SectionAdmin">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.section_admin.</code><code class="descname">SectionAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/section_admin.html#SectionAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.section_admin.SectionAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.section_admin.SectionAdmin.actions">
+<code class="descname">actions</code><em class="property"> = []</em><a class="headerlink" href="#at_em_imaging_workflow.admin.section_admin.SectionAdmin.actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.section_admin.SectionAdmin.inlines">
+<code class="descname">inlines</code><em class="property"> = [&lt;class 'at_em_imaging_workflow.admin.section_admin.ChunkInline'&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.admin.section_admin.SectionAdmin.inlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.section_admin.SectionAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ['section_id', 'z_index', 'metadata', 'specimen']</em><a class="headerlink" href="#at_em_imaging_workflow.admin.section_admin.SectionAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.section_admin.SectionAdmin.list_filter">
+<code class="descname">list_filter</code><em class="property"> = []</em><a class="headerlink" href="#at_em_imaging_workflow.admin.section_admin.SectionAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.section_admin.SectionAdmin.list_select_related">
+<code class="descname">list_select_related</code><em class="property"> = []</em><a class="headerlink" href="#at_em_imaging_workflow.admin.section_admin.SectionAdmin.list_select_related" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.section_admin.SectionAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.section_admin.SectionAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.admin.z_mapping_form">
+<span id="at-em-imaging-workflow-admin-z-mapping-form-module"></span><h2>at_em_imaging_workflow.admin.z_mapping_form module<a class="headerlink" href="#module-at_em_imaging_workflow.admin.z_mapping_form" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.admin.z_mapping_form.</code><code class="descname">ZMappingForm</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/z_mapping_form.html#ZMappingForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<dl class="class">
+<dt id="at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/z_mapping_form.html#ZMappingForm.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.Meta.extra">
+<code class="descname">extra</code><em class="property"> = 0</em><a class="headerlink" href="#at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.Meta.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('name', 'xls_path', 'json_object')</em><a class="headerlink" href="#at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.models.configuration.Configuration</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = {'json_object': &lt;jsonfield.forms.JSONFormField object at 0x7f6fa24dfcd0&gt;, 'name': &lt;django.forms.fields.CharField object at 0x7f6fa24dfa50&gt;, 'xls_path': &lt;django.forms.fields.CharField object at 0x7f6fa24db9d0&gt;}</em><a class="headerlink" href="#at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.clean_configuration_type">
+<code class="descname">clean_configuration_type</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/z_mapping_form.html#ZMappingForm.clean_configuration_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.clean_configuration_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.clean_xls_path">
+<code class="descname">clean_xls_path</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/z_mapping_form.html#ZMappingForm.clean_xls_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.clean_xls_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = {'xls_path': &lt;django.forms.fields.CharField object at 0x7f6fa24db9d0&gt;}</em><a class="headerlink" href="#at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.media">
+<code class="descname">media</code><a class="headerlink" href="#at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>self</em>, <em>commit=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/admin/z_mapping_form.html#ZMappingForm.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.admin.z_mapping_form.ZMappingForm.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="at_em_imaging_workflow.html">Source Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">at_em_imaging_workflow.admin package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.celery.html">at_em_imaging_workflow.celery package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.migrations.html">at_em_imaging_workflow.migrations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.models.html">at_em_imaging_workflow.models package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.models.states.html">at_em_imaging_workflow.models.states package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.serializers.html">at_em_imaging_workflow.serializers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.strategies.html">at_em_imaging_workflow.strategies package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.fine.html">at_em_imaging_workflow.strategies.fine package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.fusion.html">at_em_imaging_workflow.strategies.fusion package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.montage.html">at_em_imaging_workflow.strategies.montage package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.registration.html">at_em_imaging_workflow.strategies.registration package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.rough.html">at_em_imaging_workflow.strategies.rough package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.schemas.html">at_em_imaging_workflow.strategies.schemas package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="at_em_imaging_workflow.strategies.schemas.fine.html">at_em_imaging_workflow.strategies.schemas.fine package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.views.html">at_em_imaging_workflow.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="http://stash.corp.alleninstitute.org/projects/TECH/repos/at_em_imaging_workflow/browse">Stash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+<h3> Questions </h3>
+<p class="questions">
+  Send any questions using the <a href="http://alleninstitute.org/contact_us/index.html">Send Us a Message</a> link below, 
+  or submit your question to <a href="http://stackoverflow.com/">StackOverflow</a> using with the 'allen-sdk' tag.
+</p>
+
+<p class="questions">
+  If you encounter any problems using the AllenSDK, please create an issue on <a href="http://github.com/alleninstitute/allensdk/issues/">Github's issue tracker</a>.
+</p>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+
+    <div class="footer" role="contentinfo">
+    </div>
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalFooter.js"></script>
+
+
+  </body>
+</html>

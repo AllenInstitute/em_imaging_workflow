@@ -1,0 +1,670 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>at_em_imaging_workflow.strategies.montage package &#8212; Blue Sky Workflow Engine  documentation</title>
+    <link rel="stylesheet" href="_static/aibs_sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="at_em_imaging_workflow.strategies.registration package" href="at_em_imaging_workflow.strategies.registration.html" />
+    <link rel="prev" title="at_em_imaging_workflow.strategies.fusion package" href="at_em_imaging_workflow.strategies.fusion.html" /> 
+  </head>
+  <body>
+<link href="http://www.brain-map.org/assets/stylesheets/portal.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="http://www.brain-map.org/assets/javascripts/portal.js" type="text/javascript"></script>
+<script src="http://www.brain-map.org/assets/javascripts/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var _pSupressBrowserFlashWarning = true;
+    var _pTabId = "pHome";
+    var _pMoreProjectsId = "pMoreProjects";
+    var _pImagePath = "http://www.brain-map.org/assets/images/";
+    var _pSiteWarnings = function() {
+        this.show_warning() = {};
+    }
+</script>
+<script type="text/javascript">
+    function initialize() {
+        /*** do your stuff, then initialize the portal plugin ***/
+        _pPortalOnLoad();
+    }
+</script>
+<style>
+  #header_content > a {
+  display: inline-block;
+  width: 250px;
+  height: 75px;
+  background-image:url("/_static/external_assets/images/Brain_Atlas_Logotype_SDK.png") !important;
+  background-size: 235px 37px;
+  background-position: 0px 20px;
+  background-repeat: no-repeat;
+  }
+</style>
+
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalHeader.js"></script>
+<link rel="stylesheet" type="text/css" href="/_static/external_assets/stylesheets/common_layout.css" />
+
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-at_em_imaging_workflow.strategies.montage">
+<span id="at-em-imaging-workflow-strategies-montage-package"></span><h1>at_em_imaging_workflow.strategies.montage package<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage" title="Permalink to this headline">¶</a></h1>
+<p>The montage workflow (also called <a class="reference internal" href="glossary.html#term-stitching"><span class="xref std std-term">stitching</span></a>) operates on
+<code class="xref py py-class docutils literal"><span class="pre">EMMontageSet</span></code>
+objects and associated
+<code class="xref py py-class docutils literal"><span class="pre">ReferenceSet</span></code>
+objects.</p>
+<div class="section" id="ingest">
+<h2>Ingest<a class="headerlink" href="#ingest" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest" title="at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest"><code class="xref py py-class docutils literal"><span class="pre">LensCorrectionIngest</span></code></a></li>
+</ul>
+<p>parses ingest messages to create both EMMontageSet and ReferenceSet objects.</p>
+</div>
+<div class="section" id="lens-correction">
+<h2>Lens Correction<a class="headerlink" href="#lens-correction" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>One</li>
+<li>Two</li>
+<li>Three</li>
+</ul>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy">
+<span id="at-em-imaging-workflow-strategies-montage-apply-lens-correction-strategy-module"></span><h2>at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy.ApplyLensCorrectionStrategy">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy.</code><code class="descname">ApplyLensCorrectionStrategy</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/apply_lens_correction_strategy.html#ApplyLensCorrectionStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy.ApplyLensCorrectionStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.input_config_mixin.InputConfigMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.execution_strategy.ExecutionStrategy</span></code></p>
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy.ApplyLensCorrectionStrategy.can_transition">
+<code class="descname">can_transition</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>wn=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/apply_lens_correction_strategy.html#ApplyLensCorrectionStrategy.can_transition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy.ApplyLensCorrectionStrategy.can_transition" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy.ApplyLensCorrectionStrategy.get_input">
+<code class="descname">get_input</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>storage_directory</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/apply_lens_correction_strategy.html#ApplyLensCorrectionStrategy.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy.ApplyLensCorrectionStrategy.get_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy.ApplyLensCorrectionStrategy.read_transform_from_configuration">
+<code class="descname">read_transform_from_configuration</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>inp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/apply_lens_correction_strategy.html#ApplyLensCorrectionStrategy.read_transform_from_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy.ApplyLensCorrectionStrategy.read_transform_from_configuration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy.ApplyLensCorrectionStrategy.read_transform_from_well_known_file">
+<code class="descname">read_transform_from_well_known_file</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/apply_lens_correction_strategy.html#ApplyLensCorrectionStrategy.read_transform_from_well_known_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.apply_lens_correction_strategy.ApplyLensCorrectionStrategy.read_transform_from_well_known_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.apply_mip_maps_strategy">
+<span id="at-em-imaging-workflow-strategies-montage-apply-mip-maps-strategy-module"></span><h2>at_em_imaging_workflow.strategies.montage.apply_mip_maps_strategy module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.apply_mip_maps_strategy" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.apply_mip_maps_strategy.ApplyMipMapsStrategy">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.apply_mip_maps_strategy.</code><code class="descname">ApplyMipMapsStrategy</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/apply_mip_maps_strategy.html#ApplyMipMapsStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.apply_mip_maps_strategy.ApplyMipMapsStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.execution_strategy.ExecutionStrategy</span></code></p>
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.apply_mip_maps_strategy.ApplyMipMapsStrategy.get_input">
+<code class="descname">get_input</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>storage_directory</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/apply_mip_maps_strategy.html#ApplyMipMapsStrategy.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.apply_mip_maps_strategy.ApplyMipMapsStrategy.get_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.create_tile_pairs_strategy">
+<span id="at-em-imaging-workflow-strategies-montage-create-tile-pairs-strategy-module"></span><h2>at_em_imaging_workflow.strategies.montage.create_tile_pairs_strategy module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.create_tile_pairs_strategy" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.create_tile_pairs_strategy.CreateTilePairsStrategy">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.create_tile_pairs_strategy.</code><code class="descname">CreateTilePairsStrategy</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/create_tile_pairs_strategy.html#CreateTilePairsStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.create_tile_pairs_strategy.CreateTilePairsStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.execution_strategy.ExecutionStrategy</span></code></p>
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.create_tile_pairs_strategy.CreateTilePairsStrategy.get_input">
+<code class="descname">get_input</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>storage_directory</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/create_tile_pairs_strategy.html#CreateTilePairsStrategy.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.create_tile_pairs_strategy.CreateTilePairsStrategy.get_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.create_tile_pairs_strategy.CreateTilePairsStrategy.on_finishing">
+<code class="descname">on_finishing</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>results</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/create_tile_pairs_strategy.html#CreateTilePairsStrategy.on_finishing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.create_tile_pairs_strategy.CreateTilePairsStrategy.on_finishing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="at-em-imaging-workflow-strategies-montage-filter-point-match-strategy-module">
+<h2>at_em_imaging_workflow.strategies.montage.filter_point_match_strategy module<a class="headerlink" href="#at-em-imaging-workflow-strategies-montage-filter-point-match-strategy-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction">
+<span id="at-em-imaging-workflow-strategies-montage-generate-mesh-lens-correction-module"></span><h2>at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.</code><code class="descname">GenerateMeshLensCorrection</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_mesh_lens_correction.html#GenerateMeshLensCorrection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.input_config_mixin.InputConfigMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.execution_strategy.ExecutionStrategy</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.BAD_CORNER_50MP_CONFIGURATION">
+<code class="descname">BAD_CORNER_50MP_CONFIGURATION</code><em class="property"> = 'Generate Mesh Lens Correction TEMCA3 Input'</em><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.BAD_CORNER_50MP_CONFIGURATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.CONFIGURATION_NAME">
+<code class="descname">CONFIGURATION_NAME</code><em class="property"> = 'Generate Mesh Lens Correction Input'</em><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.CONFIGURATION_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.CONFIGURATION_TYPE">
+<code class="descname">CONFIGURATION_TYPE</code><em class="property"> = 'lens correction transform'</em><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.CONFIGURATION_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.TEMCA2_50MP_CAMERA_ID">
+<code class="descname">TEMCA2_50MP_CAMERA_ID</code><em class="property"> = 'BJMAB1820029'</em><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.TEMCA2_50MP_CAMERA_ID" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.TEMCA3_CONFIGURATION">
+<code class="descname">TEMCA3_CONFIGURATION</code><em class="property"> = 'Generate Mesh Lens Correction TEMCA3 Input'</em><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.TEMCA3_CONFIGURATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.TRANSFORM">
+<code class="descname">TRANSFORM</code><em class="property"> = 'transform'</em><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.TRANSFORM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.can_transition">
+<code class="descname">can_transition</code><span class="sig-paren">(</span><em>self</em>, <em>ref_set</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_mesh_lens_correction.html#GenerateMeshLensCorrection.can_transition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.can_transition" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.get_do_montage_qc">
+<code class="descname">get_do_montage_qc</code><span class="sig-paren">(</span><em>self</em>, <em>ref_set</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_mesh_lens_correction.html#GenerateMeshLensCorrection.get_do_montage_qc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.get_do_montage_qc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.get_good_solve_from_configuration">
+<code class="descname">get_good_solve_from_configuration</code><span class="sig-paren">(</span><em>self</em>, <em>ref_set</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_mesh_lens_correction.html#GenerateMeshLensCorrection.get_good_solve_from_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.get_good_solve_from_configuration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.get_input">
+<code class="descname">get_input</code><span class="sig-paren">(</span><em>self</em>, <em>ref_set</em>, <em>task_storage_directory</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_mesh_lens_correction.html#GenerateMeshLensCorrection.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.get_input" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Args:</dt>
+<dd>ref_set : ReferenceSet</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.get_storage_directory">
+<code class="descname">get_storage_directory</code><span class="sig-paren">(</span><em>self</em>, <em>base_storage_directory</em>, <em>job</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_mesh_lens_correction.html#GenerateMeshLensCorrection.get_storage_directory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.get_storage_directory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.on_failure">
+<code class="descname">on_failure</code><span class="sig-paren">(</span><em>self</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_mesh_lens_correction.html#GenerateMeshLensCorrection.on_failure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.on_failure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.on_finishing">
+<code class="descname">on_finishing</code><span class="sig-paren">(</span><em>self</em>, <em>ref_set</em>, <em>results</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_mesh_lens_correction.html#GenerateMeshLensCorrection.on_finishing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.on_finishing" title="Permalink to this definition">¶</a></dt>
+<dd><p>called after the execution finishes
+process and save results to the database</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.on_running">
+<code class="descname">on_running</code><span class="sig-paren">(</span><em>self</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_mesh_lens_correction.html#GenerateMeshLensCorrection.on_running"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mesh_lens_correction.GenerateMeshLensCorrection.on_running" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.generate_mip_maps_strategy">
+<span id="at-em-imaging-workflow-strategies-montage-generate-mip-maps-strategy-module"></span><h2>at_em_imaging_workflow.strategies.montage.generate_mip_maps_strategy module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.generate_mip_maps_strategy" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mip_maps_strategy.GenerateMipMapsStrategy">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.generate_mip_maps_strategy.</code><code class="descname">GenerateMipMapsStrategy</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_mip_maps_strategy.html#GenerateMipMapsStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mip_maps_strategy.GenerateMipMapsStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.input_config_mixin.InputConfigMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.execution_strategy.ExecutionStrategy</span></code></p>
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mip_maps_strategy.GenerateMipMapsStrategy.get_input">
+<code class="descname">get_input</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>storage_directory</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_mip_maps_strategy.html#GenerateMipMapsStrategy.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mip_maps_strategy.GenerateMipMapsStrategy.get_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mip_maps_strategy.GenerateMipMapsStrategy.on_finishing">
+<code class="descname">on_finishing</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>results</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_mip_maps_strategy.html#GenerateMipMapsStrategy.on_finishing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mip_maps_strategy.GenerateMipMapsStrategy.on_finishing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_mip_maps_strategy.GenerateMipMapsStrategy.on_running">
+<code class="descname">on_running</code><span class="sig-paren">(</span><em>self</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_mip_maps_strategy.html#GenerateMipMapsStrategy.on_running"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_mip_maps_strategy.GenerateMipMapsStrategy.on_running" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.generate_render_stack_strategy">
+<span id="at-em-imaging-workflow-strategies-montage-generate-render-stack-strategy-module"></span><h2>at_em_imaging_workflow.strategies.montage.generate_render_stack_strategy module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.generate_render_stack_strategy" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_render_stack_strategy.GenerateRenderStackStrategy">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.generate_render_stack_strategy.</code><code class="descname">GenerateRenderStackStrategy</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_render_stack_strategy.html#GenerateRenderStackStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_render_stack_strategy.GenerateRenderStackStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.input_config_mixin.InputConfigMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.execution_strategy.ExecutionStrategy</span></code></p>
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_render_stack_strategy.GenerateRenderStackStrategy.can_transition">
+<code class="descname">can_transition</code><span class="sig-paren">(</span><em>self</em>, <em>enqueued_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_render_stack_strategy.html#GenerateRenderStackStrategy.can_transition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_render_stack_strategy.GenerateRenderStackStrategy.can_transition" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_render_stack_strategy.GenerateRenderStackStrategy.get_input">
+<code class="descname">get_input</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>storage_directory</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_render_stack_strategy.html#GenerateRenderStackStrategy.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_render_stack_strategy.GenerateRenderStackStrategy.get_input" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Args:</dt>
+<dd>em_set (EMMontageSet) the enqueued object</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.generate_render_stack_strategy.GenerateRenderStackStrategy.get_z_index">
+<code class="descname">get_z_index</code><span class="sig-paren">(</span><em>self</em>, <em>em_set</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/generate_render_stack_strategy.html#GenerateRenderStackStrategy.get_z_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.generate_render_stack_strategy.GenerateRenderStackStrategy.get_z_index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.lens_correction_ingest">
+<span id="at-em-imaging-workflow-strategies-montage-lens-correction-ingest-module"></span><h2>at_em_imaging_workflow.strategies.montage.lens_correction_ingest module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.lens_correction_ingest" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.lens_correction_ingest.</code><code class="descname">LensCorrectionIngest</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/lens_correction_ingest.html#LensCorrectionIngest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.ingest_strategy.IngestStrategy</span></code></p>
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_camera">
+<code class="descname">create_camera</code><span class="sig-paren">(</span><em>self</em>, <em>message_camera</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/lens_correction_ingest.html#LensCorrectionIngest.create_camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add or retrieve and optionally modify a Camera in the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>message_camera</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">height, width, model keys</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt>Camera</dt>
+<dd><p class="first last">the database object</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_em_montage_set">
+<code class="descname">create_em_montage_set</code><span class="sig-paren">(</span><em>self</em>, <em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/lens_correction_ingest.html#LensCorrectionIngest.create_em_montage_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_em_montage_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_enqueued_object">
+<code class="descname">create_enqueued_object</code><span class="sig-paren">(</span><em>self</em>, <em>message</em>, <em>tags=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/lens_correction_ingest.html#LensCorrectionIngest.create_enqueued_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_enqueued_object" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_load">
+<code class="descname">create_load</code><span class="sig-paren">(</span><em>self</em>, <em>load_message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/lens_correction_ingest.html#LensCorrectionIngest.create_load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_microscope">
+<code class="descname">create_microscope</code><span class="sig-paren">(</span><em>self</em>, <em>message_microscope</em>, <em>message_microscope_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/lens_correction_ingest.html#LensCorrectionIngest.create_microscope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_microscope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add or retrieve and optionally modify a Microscope
+in the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>message_microscope</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">the sub-message to be unpacked</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt>Microscope</dt>
+<dd><p class="first last">the database object</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_reference_set">
+<code class="descname">create_reference_set</code><span class="sig-paren">(</span><em>self</em>, <em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/lens_correction_ingest.html#LensCorrectionIngest.create_reference_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_reference_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add or retrieve and optionally modify a Microscope
+in the database. Camera and Microscope are created if needed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>message_microscope</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd><p class="first last">the sub-message to be unpacked</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt>ReferenceSet</dt>
+<dd><p class="first last">the database object</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_sample_holder">
+<code class="descname">create_sample_holder</code><span class="sig-paren">(</span><em>self</em>, <em>sample_holder_message</em>, <em>load</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/lens_correction_ingest.html#LensCorrectionIngest.create_sample_holder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_sample_holder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_section">
+<code class="descname">create_section</code><span class="sig-paren">(</span><em>self</em>, <em>section_message</em>, <em>metafile</em>, <em>specimen</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/lens_correction_ingest.html#LensCorrectionIngest.create_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_section" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_specimen">
+<code class="descname">create_specimen</code><span class="sig-paren">(</span><em>self</em>, <em>specimen_message</em>, <em>study</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/lens_correction_ingest.html#LensCorrectionIngest.create_specimen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_specimen" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_study">
+<code class="descname">create_study</code><span class="sig-paren">(</span><em>self</em>, <em>study_message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/lens_correction_ingest.html#LensCorrectionIngest.create_study"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.create_study" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.generate_response">
+<code class="descname">generate_response</code><span class="sig-paren">(</span><em>self</em>, <em>enqueued_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/lens_correction_ingest.html#LensCorrectionIngest.generate_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.generate_response" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.get_workflow_name">
+<code class="descname">get_workflow_name</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/lens_correction_ingest.html#LensCorrectionIngest.get_workflow_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.lens_correction_ingest.LensCorrectionIngest.get_workflow_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.make_montage_scapes_stack_strategy">
+<span id="at-em-imaging-workflow-strategies-montage-make-montage-scapes-stack-strategy-module"></span><h2>at_em_imaging_workflow.strategies.montage.make_montage_scapes_stack_strategy module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.make_montage_scapes_stack_strategy" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.make_montage_scapes_stack_strategy.MakeMontageScapesStackStrategy">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.make_montage_scapes_stack_strategy.</code><code class="descname">MakeMontageScapesStackStrategy</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/make_montage_scapes_stack_strategy.html#MakeMontageScapesStackStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.make_montage_scapes_stack_strategy.MakeMontageScapesStackStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.input_config_mixin.InputConfigMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.execution_strategy.ExecutionStrategy</span></code></p>
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.make_montage_scapes_stack_strategy.MakeMontageScapesStackStrategy.get_input">
+<code class="descname">get_input</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>storage_directory</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/make_montage_scapes_stack_strategy.html#MakeMontageScapesStackStrategy.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.make_montage_scapes_stack_strategy.MakeMontageScapesStackStrategy.get_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.manual_q_c_strategy">
+<span id="at-em-imaging-workflow-strategies-montage-manual-q-c-strategy-module"></span><h2>at_em_imaging_workflow.strategies.montage.manual_q_c_strategy module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.manual_q_c_strategy" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.manual_q_c_strategy.ManualQCStrategy">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.manual_q_c_strategy.</code><code class="descname">ManualQCStrategy</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/manual_q_c_strategy.html#ManualQCStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.manual_q_c_strategy.ManualQCStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.input_config_mixin.InputConfigMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.execution_strategy.ExecutionStrategy</span></code></p>
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.manual_q_c_strategy.ManualQCStrategy.get_input">
+<code class="descname">get_input</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>storage_directory</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/manual_q_c_strategy.html#ManualQCStrategy.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.manual_q_c_strategy.ManualQCStrategy.get_input" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Args:</dt>
+<dd>em_mset : EMMontageSet</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.manual_q_c_strategy.ManualQCStrategy.on_finishing">
+<code class="descname">on_finishing</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>results</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/manual_q_c_strategy.html#ManualQCStrategy.on_finishing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.manual_q_c_strategy.ManualQCStrategy.on_finishing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.remap_z_strategy">
+<span id="at-em-imaging-workflow-strategies-montage-remap-z-strategy-module"></span><h2>at_em_imaging_workflow.strategies.montage.remap_z_strategy module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.remap_z_strategy" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.remap_z_strategy.RemapZStrategy">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.remap_z_strategy.</code><code class="descname">RemapZStrategy</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/remap_z_strategy.html#RemapZStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.remap_z_strategy.RemapZStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.input_config_mixin.InputConfigMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.execution_strategy.ExecutionStrategy</span></code></p>
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.remap_z_strategy.RemapZStrategy.get_input">
+<code class="descname">get_input</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>storage_directory</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/remap_z_strategy.html#RemapZStrategy.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.remap_z_strategy.RemapZStrategy.get_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy">
+<span id="at-em-imaging-workflow-strategies-montage-two-d-montage-point-match-strategy-module"></span><h2>at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy.</code><code class="descname">TwoDMontagePointMatchStrategy</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/two_d_montage_point_match_strategy.html#TwoDMontagePointMatchStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.input_config_mixin.InputConfigMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.execution_strategy.ExecutionStrategy</span></code></p>
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy.create_log_configuration">
+<code class="descname">create_log_configuration</code><span class="sig-paren">(</span><em>self</em>, <em>log_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/two_d_montage_point_match_strategy.html#TwoDMontagePointMatchStrategy.create_log_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy.create_log_configuration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy.get_input">
+<code class="descname">get_input</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>storage_directory</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/two_d_montage_point_match_strategy.html#TwoDMontagePointMatchStrategy.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy.get_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy.get_tile_pairs_file_name">
+<code class="descname">get_tile_pairs_file_name</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/two_d_montage_point_match_strategy.html#TwoDMontagePointMatchStrategy.get_tile_pairs_file_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy.get_tile_pairs_file_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy.on_finishing">
+<code class="descname">on_finishing</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>results</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/two_d_montage_point_match_strategy.html#TwoDMontagePointMatchStrategy.on_finishing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.two_d_montage_point_match_strategy.TwoDMontagePointMatchStrategy.on_finishing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy">
+<span id="at-em-imaging-workflow-strategies-montage-two-d-python-solver-strategy-module"></span><h2>at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy.TwoDPythonSolverStrategy">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy.</code><code class="descname">TwoDPythonSolverStrategy</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/two_d_python_solver_strategy.html#TwoDPythonSolverStrategy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy.TwoDPythonSolverStrategy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.execution_strategy.ExecutionStrategy</span></code></p>
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy.TwoDPythonSolverStrategy.can_transition">
+<code class="descname">can_transition</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/two_d_python_solver_strategy.html#TwoDPythonSolverStrategy.can_transition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy.TwoDPythonSolverStrategy.can_transition" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy.TwoDPythonSolverStrategy.get_input">
+<code class="descname">get_input</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>storage_directory</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/two_d_python_solver_strategy.html#TwoDPythonSolverStrategy.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy.TwoDPythonSolverStrategy.get_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy.TwoDPythonSolverStrategy.on_finishing">
+<code class="descname">on_finishing</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em>, <em>results</em>, <em>task</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/two_d_python_solver_strategy.html#TwoDPythonSolverStrategy.on_finishing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.two_d_python_solver_strategy.TwoDPythonSolverStrategy.on_finishing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.wait_for_lens_correction">
+<span id="at-em-imaging-workflow-strategies-montage-wait-for-lens-correction-module"></span><h2>at_em_imaging_workflow.strategies.montage.wait_for_lens_correction module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.wait_for_lens_correction" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.wait_for_lens_correction.WaitForLensCorrection">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.wait_for_lens_correction.</code><code class="descname">WaitForLensCorrection</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/wait_for_lens_correction.html#WaitForLensCorrection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.wait_for_lens_correction.WaitForLensCorrection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.wait_strategy.WaitStrategy</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.strategies.montage.wait_for_lens_correction.WaitForLensCorrection.QUEUE_NAME">
+<code class="descname">QUEUE_NAME</code><em class="property"> = 'Wait for Lens Correction'</em><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.wait_for_lens_correction.WaitForLensCorrection.QUEUE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.wait_for_lens_correction.WaitForLensCorrection.must_wait">
+<code class="descname">must_wait</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/wait_for_lens_correction.html#WaitForLensCorrection.must_wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.wait_for_lens_correction.WaitForLensCorrection.must_wait" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.wait_for_lens_correction.WaitForLensCorrection.transform_objects_for_queue">
+<code class="descname">transform_objects_for_queue</code><span class="sig-paren">(</span><em>self</em>, <em>source_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/wait_for_lens_correction.html#WaitForLensCorrection.transform_objects_for_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.wait_for_lens_correction.WaitForLensCorrection.transform_objects_for_queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.wait_for_manual_qc">
+<span id="at-em-imaging-workflow-strategies-montage-wait-for-manual-qc-module"></span><h2>at_em_imaging_workflow.strategies.montage.wait_for_manual_qc module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.wait_for_manual_qc" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.wait_for_manual_qc.WaitForManualQc">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.wait_for_manual_qc.</code><code class="descname">WaitForManualQc</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/wait_for_manual_qc.html#WaitForManualQc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.wait_for_manual_qc.WaitForManualQc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.wait_strategy.WaitStrategy</span></code></p>
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.wait_for_manual_qc.WaitForManualQc.must_wait">
+<code class="descname">must_wait</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/wait_for_manual_qc.html#WaitForManualQc.must_wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.wait_for_manual_qc.WaitForManualQc.must_wait" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.strategies.montage.wait_for_z_mapping">
+<span id="at-em-imaging-workflow-strategies-montage-wait-for-z-mapping-module"></span><h2>at_em_imaging_workflow.strategies.montage.wait_for_z_mapping module<a class="headerlink" href="#module-at_em_imaging_workflow.strategies.montage.wait_for_z_mapping" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.strategies.montage.wait_for_z_mapping.WaitForZMapping">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.strategies.montage.wait_for_z_mapping.</code><code class="descname">WaitForZMapping</code><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/wait_for_z_mapping.html#WaitForZMapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.wait_for_z_mapping.WaitForZMapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">workflow_engine.strategies.wait_strategy.WaitStrategy</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.strategies.montage.wait_for_z_mapping.WaitForZMapping.QUEUE_NAME">
+<code class="descname">QUEUE_NAME</code><em class="property"> = 'Wait for Z Mapping'</em><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.wait_for_z_mapping.WaitForZMapping.QUEUE_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.wait_for_z_mapping.WaitForZMapping.must_wait">
+<code class="descname">must_wait</code><span class="sig-paren">(</span><em>self</em>, <em>em_mset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/wait_for_z_mapping.html#WaitForZMapping.must_wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.wait_for_z_mapping.WaitForZMapping.must_wait" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="at_em_imaging_workflow.strategies.montage.wait_for_z_mapping.WaitForZMapping.transform_objects_for_queue">
+<code class="descname">transform_objects_for_queue</code><span class="sig-paren">(</span><em>self</em>, <em>source_object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/strategies/montage/wait_for_z_mapping.html#WaitForZMapping.transform_objects_for_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.strategies.montage.wait_for_z_mapping.WaitForZMapping.transform_objects_for_queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="at_em_imaging_workflow.html">Source Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.admin.html">at_em_imaging_workflow.admin package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.celery.html">at_em_imaging_workflow.celery package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.migrations.html">at_em_imaging_workflow.migrations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.models.html">at_em_imaging_workflow.models package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.models.states.html">at_em_imaging_workflow.models.states package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.serializers.html">at_em_imaging_workflow.serializers package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="at_em_imaging_workflow.strategies.html">at_em_imaging_workflow.strategies package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.fine.html">at_em_imaging_workflow.strategies.fine package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.fusion.html">at_em_imaging_workflow.strategies.fusion package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">at_em_imaging_workflow.strategies.montage package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.registration.html">at_em_imaging_workflow.strategies.registration package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.rough.html">at_em_imaging_workflow.strategies.rough package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.schemas.html">at_em_imaging_workflow.strategies.schemas package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="at_em_imaging_workflow.strategies.schemas.fine.html">at_em_imaging_workflow.strategies.schemas.fine package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.views.html">at_em_imaging_workflow.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="http://stash.corp.alleninstitute.org/projects/TECH/repos/at_em_imaging_workflow/browse">Stash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+<h3> Questions </h3>
+<p class="questions">
+  Send any questions using the <a href="http://alleninstitute.org/contact_us/index.html">Send Us a Message</a> link below, 
+  or submit your question to <a href="http://stackoverflow.com/">StackOverflow</a> using with the 'allen-sdk' tag.
+</p>
+
+<p class="questions">
+  If you encounter any problems using the AllenSDK, please create an issue on <a href="http://github.com/alleninstitute/allensdk/issues/">Github's issue tracker</a>.
+</p>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+
+    <div class="footer" role="contentinfo">
+    </div>
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalFooter.js"></script>
+
+
+  </body>
+</html>

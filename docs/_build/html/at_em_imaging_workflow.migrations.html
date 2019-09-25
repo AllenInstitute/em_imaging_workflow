@@ -1,0 +1,596 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>at_em_imaging_workflow.migrations package &#8212; Blue Sky Workflow Engine  documentation</title>
+    <link rel="stylesheet" href="_static/aibs_sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="at_em_imaging_workflow.models package" href="at_em_imaging_workflow.models.html" />
+    <link rel="prev" title="at_em_imaging_workflow.celery package" href="at_em_imaging_workflow.celery.html" /> 
+  </head>
+  <body>
+<link href="http://www.brain-map.org/assets/stylesheets/portal.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="http://www.brain-map.org/assets/javascripts/portal.js" type="text/javascript"></script>
+<script src="http://www.brain-map.org/assets/javascripts/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var _pSupressBrowserFlashWarning = true;
+    var _pTabId = "pHome";
+    var _pMoreProjectsId = "pMoreProjects";
+    var _pImagePath = "http://www.brain-map.org/assets/images/";
+    var _pSiteWarnings = function() {
+        this.show_warning() = {};
+    }
+</script>
+<script type="text/javascript">
+    function initialize() {
+        /*** do your stuff, then initialize the portal plugin ***/
+        _pPortalOnLoad();
+    }
+</script>
+<style>
+  #header_content > a {
+  display: inline-block;
+  width: 250px;
+  height: 75px;
+  background-image:url("/_static/external_assets/images/Brain_Atlas_Logotype_SDK.png") !important;
+  background-size: 235px 37px;
+  background-position: 0px 20px;
+  background-repeat: no-repeat;
+  }
+</style>
+
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalHeader.js"></script>
+<link rel="stylesheet" type="text/css" href="/_static/external_assets/stylesheets/common_layout.css" />
+
+
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-at_em_imaging_workflow.migrations">
+<span id="at-em-imaging-workflow-migrations-package"></span><h1>at_em_imaging_workflow.migrations package<a class="headerlink" href="#module-at_em_imaging_workflow.migrations" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0001_initial">
+<span id="at-em-imaging-workflow-migrations-0001-initial-module"></span><h2>at_em_imaging_workflow.migrations.0001_initial module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0001_initial" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0001_initial.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0001_initial.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0001_initial.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0001_initial.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0001_initial.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0001_initial.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0001_initial.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = []</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0001_initial.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0001_initial.Migration.initial">
+<code class="descname">initial</code><em class="property"> = True</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0001_initial.Migration.initial" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0001_initial.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;CreateModel  name='Camera', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('uid', &lt;django.db.models.fields.CharField&gt;)], options={'db_table': 'development_camera'}&gt;, &lt;CreateModel  name='Chuck', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('size', &lt;django.db.models.fields.IntegerField&gt;), ('chunk_state', &lt;django.db.models.fields.CharField&gt;), ('following_chunk', &lt;django.db.models.fields.related.ForeignKey&gt;), ('preceding_chunk', &lt;django.db.models.fields.related.ForeignKey&gt;)], options={'db_table': 'development_chuck'}&gt;, &lt;CreateModel  name='Load', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('uid', &lt;django.db.models.fields.CharField&gt;)], options={'db_table': 'development_load'}&gt;, &lt;CreateModel  name='Microscope', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('uid', &lt;django.db.models.fields.CharField&gt;)], options={'db_table': 'development_microscope'}&gt;, &lt;CreateModel  name='MicroscopeType', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('name', &lt;django.db.models.fields.CharField&gt;)], options={'db_table': 'development_microscopetype'}&gt;, &lt;CreateModel  name='RegistrationSeries', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('size', &lt;django.db.models.fields.IntegerField&gt;), ('workflow_state', &lt;django.db.models.fields.CharField&gt;)], options={'db_table': 'development_registrationseries'}&gt;, &lt;CreateModel  name='RenderedVolumn', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('mipmap_directory', &lt;django.db.models.fields.CharField&gt;)], options={'db_table': 'development_renderedvolumn'}&gt;, &lt;CreateModel  name='SampleHolder', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('uid', &lt;django.db.models.fields.CharField&gt;), ('imaged_sections_count', &lt;django.db.models.fields.IntegerField&gt;), ('load', &lt;django.db.models.fields.related.ForeignKey&gt;)], options={'db_table': 'development_sampleholder'}&gt;, &lt;CreateModel  name='Section', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('section_id', &lt;django.db.models.fields.CharField&gt;), ('z_index', &lt;django.db.models.fields.IntegerField&gt;), ('metadata', &lt;django.contrib.postgres.fields.jsonb.JSONField&gt;), ('chucks', &lt;django.db.models.fields.related.ManyToManyField&gt;), ('sample_holders', &lt;django.db.models.fields.related.ManyToManyField&gt;)], options={'db_table': 'development_section'}&gt;, &lt;CreateModel  name='Specimen', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('uid', &lt;django.db.models.fields.CharField&gt;), ('render_project', &lt;django.db.models.fields.CharField&gt;), ('render_owner', &lt;django.db.models.fields.CharField&gt;)], options={'db_table': 'development_specimen'}&gt;, &lt;CreateModel  name='Stain', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('name', &lt;django.db.models.fields.CharField&gt;)], options={'db_table': 'development_stain'}&gt;, &lt;CreateModel  name='Study', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('name', &lt;django.db.models.fields.CharField&gt;), ('storage_directory', &lt;django.db.models.fields.CharField&gt;)], options={'db_table': 'development_study'}&gt;, &lt;CreateModel  name='TileImageSet', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('storage_directory', &lt;django.db.models.fields.CharField&gt;), ('workflow_state', &lt;django.db.models.fields.CharField&gt;)], options={'db_table': 'development_tileimageset'}&gt;, &lt;CreateModel  name='MontageSet', fields=[('tileimageset_ptr', &lt;django.db.models.fields.related.OneToOneField&gt;), ('uid', &lt;django.db.models.fields.CharField&gt;), ('acquisition_date', &lt;django.db.models.fields.DateTimeField&gt;), ('mipmap_directory', &lt;django.db.models.fields.CharField&gt;)], options={'db_table': 'development_montageset'}, bases=('at_em_imaging_workflow.tileimageset',)&gt;, &lt;CreateModel  name='ReferenceSet', fields=[('tileimageset_ptr', &lt;django.db.models.fields.related.OneToOneField&gt;), ('uid', &lt;django.db.models.fields.CharField&gt;)], options={'db_table': 'development_referenceset'}, bases=('at_em_imaging_workflow.tileimageset',)&gt;, &lt;AddField  model_name='tileimageset', name='camera', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;, &lt;AddField  model_name='tileimageset', name='microscope', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;, &lt;AddField  model_name='specimen', name='study', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;, &lt;AddField  model_name='section', name='specimen', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;, &lt;AddField  model_name='renderedvolumn', name='specimen', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;, &lt;AddField  model_name='microscope', name='microscope_type', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;, &lt;AddField  model_name='chuck', name='rendered_volumn', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;, &lt;CreateModel  name='ATMontageSet', fields=[('montageset_ptr', &lt;django.db.models.fields.related.OneToOneField&gt;), ('image_session_number', &lt;django.db.models.fields.CharField&gt;), ('registration_series', &lt;django.db.models.fields.related.ForeignKey&gt;)], options={'db_table': 'development_atmontageset'}, bases=('at_em_imaging_workflow.montageset',)&gt;, &lt;CreateModel  name='EMMontageSet', fields=[('montageset_ptr', &lt;django.db.models.fields.related.OneToOneField&gt;), ('reference_set_uid', &lt;django.db.models.fields.CharField&gt;), ('reference_set', &lt;django.db.models.fields.related.ForeignKey&gt;)], options={'db_table': 'development_emmontageset'}, bases=('at_em_imaging_workflow.montageset',)&gt;, &lt;AddField  model_name='montageset', name='sample_holder', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;, &lt;AddField  model_name='montageset', name='section', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0001_initial.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0002_auto_20170831_1536">
+<span id="at-em-imaging-workflow-migrations-0002-auto-20170831-1536-module"></span><h2>at_em_imaging_workflow.migrations.0002_auto_20170831_1536 module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0002_auto_20170831_1536" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0002_auto_20170831_1536.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0002_auto_20170831_1536.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0002_auto_20170831_1536.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0002_auto_20170831_1536.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0002_auto_20170831_1536.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0002_auto_20170831_1536.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0002_auto_20170831_1536.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0001_initial')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0002_auto_20170831_1536.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0002_auto_20170831_1536.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;AddField  model_name='referenceset', name='project_path', field=&lt;django.db.models.fields.CharField&gt;, preserve_default=False&gt;, &lt;AlterField  model_name='tileimageset', name='camera', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;, &lt;AlterField  model_name='tileimageset', name='microscope', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0002_auto_20170831_1536.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0003_auto_20171107_1027">
+<span id="at-em-imaging-workflow-migrations-0003-auto-20171107-1027-module"></span><h2>at_em_imaging_workflow.migrations.0003_auto_20171107_1027 module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0003_auto_20171107_1027" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0003_auto_20171107_1027.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0003_auto_20171107_1027.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0003_auto_20171107_1027.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0003_auto_20171107_1027.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0003_auto_20171107_1027.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0003_auto_20171107_1027.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0003_auto_20171107_1027.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0002_auto_20170831_1536')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0003_auto_20171107_1027.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0003_auto_20171107_1027.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;AddField  model_name='camera', name='height', field=&lt;django.db.models.fields.IntegerField&gt;&gt;, &lt;AddField  model_name='camera', name='model', field=&lt;django.db.models.fields.CharField&gt;&gt;, &lt;AddField  model_name='camera', name='width', field=&lt;django.db.models.fields.IntegerField&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0003_auto_20171107_1027.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0004_montageset_overlap">
+<span id="at-em-imaging-workflow-migrations-0004-montageset-overlap-module"></span><h2>at_em_imaging_workflow.migrations.0004_montageset_overlap module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0004_montageset_overlap" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0004_montageset_overlap.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0004_montageset_overlap.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0004_montageset_overlap.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0004_montageset_overlap.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0004_montageset_overlap.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0004_montageset_overlap.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0004_montageset_overlap.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0003_auto_20171107_1027')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0004_montageset_overlap.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0004_montageset_overlap.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;AddField  model_name='montageset', name='overlap', field=&lt;django.db.models.fields.FloatField&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0004_montageset_overlap.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0005_auto_20171111_1447">
+<span id="at-em-imaging-workflow-migrations-0005-auto-20171111-1447-module"></span><h2>at_em_imaging_workflow.migrations.0005_auto_20171111_1447 module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0005_auto_20171111_1447" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0005_auto_20171111_1447.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0005_auto_20171111_1447.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0005_auto_20171111_1447.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0005_auto_20171111_1447.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0005_auto_20171111_1447.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0005_auto_20171111_1447.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0005_auto_20171111_1447.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0004_montageset_overlap')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0005_auto_20171111_1447.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0005_auto_20171111_1447.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;CreateModel  name='Chunk', fields=[('id', &lt;django.db.models.fields.AutoField&gt;), ('size', &lt;django.db.models.fields.IntegerField&gt;), ('chunk_state', &lt;django.db.models.fields.CharField&gt;), ('following_chunk', &lt;django.db.models.fields.related.ForeignKey&gt;), ('preceding_chunk', &lt;django.db.models.fields.related.ForeignKey&gt;)], options={'db_table': 'development_chunk'}&gt;, &lt;RenameModel  old_name='RenderedVolumn', new_name='RenderedVolume'&gt;, &lt;RemoveField  model_name='chuck', name='following_chunk'&gt;, &lt;RemoveField  model_name='chuck', name='preceding_chunk'&gt;, &lt;RemoveField  model_name='chuck', name='rendered_volumn'&gt;, &lt;RemoveField  model_name='section', name='chucks'&gt;, &lt;DeleteModel  name='Chuck'&gt;, &lt;AddField  model_name='chunk', name='rendered_volumn', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;, &lt;AddField  model_name='section', name='chunks', field=&lt;django.db.models.fields.related.ManyToManyField&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0005_auto_20171111_1447.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0006_auto_20171111_1513">
+<span id="at-em-imaging-workflow-migrations-0006-auto-20171111-1513-module"></span><h2>at_em_imaging_workflow.migrations.0006_auto_20171111_1513 module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0006_auto_20171111_1513" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0006_auto_20171111_1513.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0006_auto_20171111_1513.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0006_auto_20171111_1513.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0006_auto_20171111_1513.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0006_auto_20171111_1513.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0006_auto_20171111_1513.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0006_auto_20171111_1513.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0005_auto_20171111_1447')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0006_auto_20171111_1513.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0006_auto_20171111_1513.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;RenameField  model_name='chunk', old_name='rendered_volumn', new_name='rendered_volume'&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0006_auto_20171111_1513.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0007_auto_20171117_1522">
+<span id="at-em-imaging-workflow-migrations-0007-auto-20171117-1522-module"></span><h2>at_em_imaging_workflow.migrations.0007_auto_20171117_1522 module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0007_auto_20171117_1522" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0007_auto_20171117_1522.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0007_auto_20171117_1522.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0007_auto_20171117_1522.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0007_auto_20171117_1522.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0007_auto_20171117_1522.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0007_auto_20171117_1522.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0007_auto_20171117_1522.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0006_auto_20171111_1513')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0007_auto_20171117_1522.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0007_auto_20171117_1522.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;AlterField  model_name='emmontageset', name='reference_set', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0007_auto_20171117_1522.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0008_tileimageset_metafile">
+<span id="at-em-imaging-workflow-migrations-0008-tileimageset-metafile-module"></span><h2>at_em_imaging_workflow.migrations.0008_tileimageset_metafile module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0008_tileimageset_metafile" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0008_tileimageset_metafile.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0008_tileimageset_metafile.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0008_tileimageset_metafile.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0008_tileimageset_metafile.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0008_tileimageset_metafile.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0008_tileimageset_metafile.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0008_tileimageset_metafile.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0007_auto_20171117_1522')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0008_tileimageset_metafile.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0008_tileimageset_metafile.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;AddField  model_name='tileimageset', name='metafile', field=&lt;django.db.models.fields.CharField&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0008_tileimageset_metafile.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0009_referenceset_manifest_path">
+<span id="at-em-imaging-workflow-migrations-0009-referenceset-manifest-path-module"></span><h2>at_em_imaging_workflow.migrations.0009_referenceset_manifest_path module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0009_referenceset_manifest_path" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0009_referenceset_manifest_path.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0009_referenceset_manifest_path.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0009_referenceset_manifest_path.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0009_referenceset_manifest_path.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0009_referenceset_manifest_path.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0009_referenceset_manifest_path.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0009_referenceset_manifest_path.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0008_tileimageset_metafile')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0009_referenceset_manifest_path.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0009_referenceset_manifest_path.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;AddField  model_name='referenceset', name='manifest_path', field=&lt;django.db.models.fields.CharField&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0009_referenceset_manifest_path.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0010_auto_20180115_1213">
+<span id="at-em-imaging-workflow-migrations-0010-auto-20180115-1213-module"></span><h2>at_em_imaging_workflow.migrations.0010_auto_20180115_1213 module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0010_auto_20180115_1213" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0010_auto_20180115_1213.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0010_auto_20180115_1213.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0010_auto_20180115_1213.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0010_auto_20180115_1213.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0010_auto_20180115_1213.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0010_auto_20180115_1213.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0010_auto_20180115_1213.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0009_referenceset_manifest_path')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0010_auto_20180115_1213.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0010_auto_20180115_1213.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;RemoveField  model_name='montageset', name='acquisition_date'&gt;, &lt;AddField  model_name='tileimageset', name='acquisition_date', field=&lt;django.db.models.fields.DateTimeField&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0010_auto_20180115_1213.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0011_chunk_computed_index">
+<span id="at-em-imaging-workflow-migrations-0011-chunk-computed-index-module"></span><h2>at_em_imaging_workflow.migrations.0011_chunk_computed_index module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0011_chunk_computed_index" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0011_chunk_computed_index.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0011_chunk_computed_index.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0011_chunk_computed_index.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0011_chunk_computed_index.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0011_chunk_computed_index.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0011_chunk_computed_index.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0011_chunk_computed_index.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0010_auto_20180115_1213')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0011_chunk_computed_index.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0011_chunk_computed_index.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;AddField  model_name='chunk', name='computed_index', field=&lt;django.db.models.fields.IntegerField&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0011_chunk_computed_index.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="at-em-imaging-workflow-migrations-0012-remove-chunk-assignment-module">
+<h2>at_em_imaging_workflow.migrations.0012_remove chunk assignment module<a class="headerlink" href="#at-em-imaging-workflow-migrations-0012-remove-chunk-assignment-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="at-em-imaging-workflow-migrations-0013-chunk-assignment-join-through-table-module">
+<h2>at_em_imaging_workflow.migrations.0013_chunk assignment join through table module<a class="headerlink" href="#at-em-imaging-workflow-migrations-0013-chunk-assignment-join-through-table-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0014_montage_set_blank_fields">
+<span id="at-em-imaging-workflow-migrations-0014-montage-set-blank-fields-module"></span><h2>at_em_imaging_workflow.migrations.0014_montage_set_blank_fields module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0014_montage_set_blank_fields" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0014_montage_set_blank_fields.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0014_montage_set_blank_fields.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0014_montage_set_blank_fields.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0014_montage_set_blank_fields.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0014_montage_set_blank_fields.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0014_montage_set_blank_fields.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0014_montage_set_blank_fields.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0013_chunk assignment join through table')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0014_montage_set_blank_fields.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0014_montage_set_blank_fields.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;AlterField  model_name='emmontageset', name='reference_set', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;, &lt;AlterField  model_name='emmontageset', name='reference_set_uid', field=&lt;django.db.models.fields.CharField&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0014_montage_set_blank_fields.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0015_load_offset">
+<span id="at-em-imaging-workflow-migrations-0015-load-offset-module"></span><h2>at_em_imaging_workflow.migrations.0015_load_offset module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0015_load_offset" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0015_load_offset.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0015_load_offset.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0015_load_offset.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0015_load_offset.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0015_load_offset.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0015_load_offset.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0015_load_offset.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0014_montage_set_blank_fields')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0015_load_offset.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0015_load_offset.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;AddField  model_name='load', name='offset', field=&lt;django.db.models.fields.IntegerField&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0015_load_offset.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0016_finite_state_machine">
+<span id="at-em-imaging-workflow-migrations-0016-finite-state-machine-module"></span><h2>at_em_imaging_workflow.migrations.0016_finite_state_machine module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0016_finite_state_machine" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0016_finite_state_machine.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0016_finite_state_machine.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0016_finite_state_machine.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0016_finite_state_machine.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0016_finite_state_machine.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0016_finite_state_machine.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0016_finite_state_machine.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0015_load_offset')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0016_finite_state_machine.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0016_finite_state_machine.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;AddField  model_name='chunk', name='object_state', field=&lt;django_fsm.FSMField&gt;&gt;, &lt;AddField  model_name='tileimageset', name='object_state', field=&lt;django_fsm.FSMField&gt;&gt;, &lt;RunPython &lt;function copy_state&gt; reverse_code=&lt;function RunPython.noop&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0016_finite_state_machine.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="at_em_imaging_workflow.migrations.0016_finite_state_machine.copy_state">
+<code class="descclassname">at_em_imaging_workflow.migrations.0016_finite_state_machine.</code><code class="descname">copy_state</code><span class="sig-paren">(</span><em>apps</em>, <em>schema_editor</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0016_finite_state_machine.html#copy_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0016_finite_state_machine.copy_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0017_remove_workflow_state">
+<span id="at-em-imaging-workflow-migrations-0017-remove-workflow-state-module"></span><h2>at_em_imaging_workflow.migrations.0017_remove_workflow_state module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0017_remove_workflow_state" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0017_remove_workflow_state.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0017_remove_workflow_state.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0017_remove_workflow_state.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0017_remove_workflow_state.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0017_remove_workflow_state.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0017_remove_workflow_state.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0017_remove_workflow_state.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0016_finite_state_machine')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0017_remove_workflow_state.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0017_remove_workflow_state.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;RemoveField  model_name='registrationseries', name='workflow_state'&gt;, &lt;RemoveField  model_name='tileimageset', name='workflow_state'&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0017_remove_workflow_state.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0018_load_chunk">
+<span id="at-em-imaging-workflow-migrations-0018-load-chunk-module"></span><h2>at_em_imaging_workflow.migrations.0018_load_chunk module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0018_load_chunk" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0018_load_chunk.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0018_load_chunk.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0018_load_chunk.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0018_load_chunk.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0018_load_chunk.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0018_load_chunk.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0018_load_chunk.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0017_remove_workflow_state')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0018_load_chunk.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0018_load_chunk.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;AddField  model_name='chunk', name='load', field=&lt;django.db.models.fields.related.ForeignKey&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0018_load_chunk.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0019_load_state">
+<span id="at-em-imaging-workflow-migrations-0019-load-state-module"></span><h2>at_em_imaging_workflow.migrations.0019_load_state module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0019_load_state" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0019_load_state.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0019_load_state.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0019_load_state.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0019_load_state.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0019_load_state.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0019_load_state.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0019_load_state.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0018_load_chunk')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0019_load_state.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0019_load_state.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;RemoveField  model_name='atmontageset', name='montageset_ptr'&gt;, &lt;RemoveField  model_name='atmontageset', name='registration_series'&gt;, &lt;AddField  model_name='load', name='object_state', field=&lt;django_fsm.FSMField&gt;&gt;, &lt;AlterModelTable  name='camera', table='development_camera'&gt;, &lt;AlterModelTable  name='chunk', table='development_chunk'&gt;, &lt;AlterModelTable  name='chunkassignment', table='development_chunkassignment'&gt;, &lt;AlterModelTable  name='emmontageset', table='development_emmontageset'&gt;, &lt;AlterModelTable  name='load', table='development_load'&gt;, &lt;AlterModelTable  name='microscope', table='development_microscope'&gt;, &lt;AlterModelTable  name='microscopetype', table='development_microscopetype'&gt;, &lt;AlterModelTable  name='montageset', table='development_montageset'&gt;, &lt;AlterModelTable  name='referenceset', table='development_referenceset'&gt;, &lt;AlterModelTable  name='registrationseries', table='development_registrationseries'&gt;, &lt;AlterModelTable  name='renderedvolume', table='development_renderedvolume'&gt;, &lt;AlterModelTable  name='sampleholder', table='development_sampleholder'&gt;, &lt;AlterModelTable  name='section', table='development_section'&gt;, &lt;AlterModelTable  name='specimen', table='development_specimen'&gt;, &lt;AlterModelTable  name='stain', table='development_stain'&gt;, &lt;AlterModelTable  name='study', table='development_study'&gt;, &lt;AlterModelTable  name='tileimageset', table='development_tileimageset'&gt;, &lt;DeleteModel  name='ATMontageSet'&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0019_load_state.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-at_em_imaging_workflow.migrations.0020_object_state_update">
+<span id="at-em-imaging-workflow-migrations-0020-object-state-update-module"></span><h2>at_em_imaging_workflow.migrations.0020_object_state_update module<a class="headerlink" href="#module-at_em_imaging_workflow.migrations.0020_object_state_update" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="at_em_imaging_workflow.migrations.0020_object_state_update.Migration">
+<em class="property">class </em><code class="descclassname">at_em_imaging_workflow.migrations.0020_object_state_update.</code><code class="descname">Migration</code><span class="sig-paren">(</span><em>name</em>, <em>app_label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/at_em_imaging_workflow/migrations/0020_object_state_update.html#Migration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#at_em_imaging_workflow.migrations.0020_object_state_update.Migration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.migrations.migration.Migration</span></code></p>
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0020_object_state_update.Migration.atomic">
+<code class="descname">atomic</code><em class="property"> = False</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0020_object_state_update.Migration.atomic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0020_object_state_update.Migration.dependencies">
+<code class="descname">dependencies</code><em class="property"> = [('at_em_imaging_workflow', '0019_load_state')]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0020_object_state_update.Migration.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="at_em_imaging_workflow.migrations.0020_object_state_update.Migration.operations">
+<code class="descname">operations</code><em class="property"> = [&lt;RemoveField  model_name='chunk', name='chunk_state'&gt;, &lt;AddField  model_name='chunkassignment', name='object_state', field=&lt;django_fsm.FSMField&gt;&gt;, &lt;AlterField  model_name='chunk', name='object_state', field=&lt;django_fsm.FSMField&gt;&gt;]</em><a class="headerlink" href="#at_em_imaging_workflow.migrations.0020_object_state_update.Migration.operations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="at_em_imaging_workflow.html">Source Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.admin.html">at_em_imaging_workflow.admin package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.celery.html">at_em_imaging_workflow.celery package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">at_em_imaging_workflow.migrations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.models.html">at_em_imaging_workflow.models package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.models.states.html">at_em_imaging_workflow.models.states package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.serializers.html">at_em_imaging_workflow.serializers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.strategies.html">at_em_imaging_workflow.strategies package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.fine.html">at_em_imaging_workflow.strategies.fine package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.fusion.html">at_em_imaging_workflow.strategies.fusion package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.montage.html">at_em_imaging_workflow.strategies.montage package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.registration.html">at_em_imaging_workflow.strategies.registration package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.rough.html">at_em_imaging_workflow.strategies.rough package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="at_em_imaging_workflow.strategies.schemas.html">at_em_imaging_workflow.strategies.schemas package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="at_em_imaging_workflow.strategies.schemas.fine.html">at_em_imaging_workflow.strategies.schemas.fine package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="at_em_imaging_workflow.views.html">at_em_imaging_workflow.views package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="http://stash.corp.alleninstitute.org/projects/TECH/repos/at_em_imaging_workflow/browse">Stash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+<h3> Questions </h3>
+<p class="questions">
+  Send any questions using the <a href="http://alleninstitute.org/contact_us/index.html">Send Us a Message</a> link below, 
+  or submit your question to <a href="http://stackoverflow.com/">StackOverflow</a> using with the 'allen-sdk' tag.
+</p>
+
+<p class="questions">
+  If you encounter any problems using the AllenSDK, please create an issue on <a href="http://github.com/alleninstitute/allensdk/issues/">Github's issue tracker</a>.
+</p>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+
+    <div class="footer" role="contentinfo">
+    </div>
+<script type="text/javascript" src="http://www.brain-map.org/external_assets/javascripts/portalFooter.js"></script>
+
+
+  </body>
+</html>
