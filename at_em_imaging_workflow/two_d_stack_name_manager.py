@@ -284,7 +284,7 @@ class TwoDStackNameManager(object):
 
     @classmethod
     def solve_rough_align_python_stacks(cls, chnk, transformation):
-        if 'transformation' == TwoDStackNameManager.TRANSFORM.RIGID:
+        if transformation == TwoDStackNameManager.TRANSFORM.RIGID:
             return {
                 'input_stack': cls.downsampled_stack(None),
                 'output_stack': cls.rigid_align_downsample_stack(chnk)

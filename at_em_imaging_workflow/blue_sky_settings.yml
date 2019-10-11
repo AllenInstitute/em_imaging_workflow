@@ -1,7 +1,20 @@
-MESSAGE_QUEUE_HOST: message_queue
-MESSAGE_QUEUE_PORT: 5672
-MESSAGE_QUEUE_USER: blue_sky_user
-MESSAGE_QUEUE_PASSWORD: blue_sky_user
-CELERY_MESSAGE_QUEUE_NAME: celery_at_em_imaging_workflow
-DEFAULT_MESSAGE_QUEUE_NAME: 'null'
-WORKFLOW_CONFIG_YAML: /local1/git/at_em_imaging_workflow/tests/workflows/dev.yml
+broker_url: pyamqp://blue_sky_user:blue_sky_user@message_queue:5672/
+result_backend: rpc://
+result_persistent: false
+task_serializer: json
+result_serializer: json
+result_expires: 3600
+broker_connection_timeout: 10
+broker_connection_retry: false
+soft_time_limit: 600
+time_limit: 2400
+accept_content: ['json']
+worker_prefetch_multiplier: 1
+timezone: US/Pacific
+enable_utc: true
+task_queue_max_priority: 10
+broker_transport_options:
+    max_retries: 3
+    interval_start: 0
+    interval_step: 10
+    interval_max: 30

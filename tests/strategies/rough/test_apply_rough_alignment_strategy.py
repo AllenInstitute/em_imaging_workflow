@@ -49,16 +49,20 @@ def test_get_input_data(lots_of_chunks):
         storage_directory,
         task)
 
-    assert inp['render']['project'] == 'MOCK SPECIMEN'
-    assert inp['render']['owner'] == 'MOCK_USER'
-    assert inp['render']['port'] == 9999
-    assert inp['render']['host'] == 'MOCK_URL'
-    assert inp['render']['client_scripts'] == '/path/to/mock/client/scripts'
+    assert inp['render'] == {
+        "host": "MOCK_URL",
+        "project": "MOCK SPECIMEN",
+        "owner": "MOCK_USER",
+        "port": 9999,
+        "memGB": "5G",
+        "client_scripts": "/path/to/mock/client/scripts"
+    }
 
     assert inp['old_z'] == list(range(10180,10280 + 1))
     assert inp['new_z'] == list(range(180, 280 + 1))
 
     assert inp['montage_stack'] == 'em_2d_montage_solved_py'
     assert inp['prealigned_stack'] == 'em_2d_montage_solved_py'
+
     assert inp['lowres_stack'] == 'em_rough_align_solved_downsample_zs180_ze280'
     assert inp['output_stack'] == 'em_rough_align_zs180_ze280'

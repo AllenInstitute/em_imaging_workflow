@@ -3,6 +3,7 @@ from at_em_imaging_workflow.two_d_stack_name_manager import TwoDStackNameManager
 from at_em_imaging_workflow.render_strategy_utils import (
     RenderStrategyUtils as RSU
 )
+from EMaligner.schemas import EMA_Schema
 import logging
 
 
@@ -12,6 +13,8 @@ class SolveRoughAlignmentPython(InputConfigMixin, ExecutionStrategy):
         'solve_rough_alignment_python')
 
     def get_input(self, chnk, storage_directory, task):
+        del storage_directory  # unused
+
         inp = self.get_workflow_node_input_template(task)
 
         stacks = TwoDStackNameManager.solve_rough_align_python_stacks(
@@ -42,9 +45,4 @@ class SolveRoughAlignmentPython(InputConfigMixin, ExecutionStrategy):
 
         return EMA_Schema().dump(inp).data
 
-
-try:
-    from EMaligner.schemas import EMA_Schema
-except:
-    SolveRoughAlignmentPython._log.warning('Could not import EMA_Schema')
 

@@ -82,7 +82,7 @@ class ApplyLensCorrectionStrategy(InputConfigMixin, ExecutionStrategy):
                 "Too many lens correction transform configurations")
             raise(e)
 
-        return ApplyLensCorrectionParameters().dump(inp)
+        return ApplyLensCorrectionParameters().dump(inp).data
 
     def read_transform_from_configuration(self, em_mset, inp):
         conf = em_mset.reference_set.configurations.get(

@@ -26,10 +26,7 @@ pypi_deploy:
 
 # see pytest.ini for additional configuration
 pytest_lax:
-	#rm database.db || exit 0
-	#python manage.py makemigrations --noinput
-	#python manage.py migrate --noinput
-	pytest -s --cov=workflow_engine,workflow_client --cov-report html --cov-append --junitxml=test-reports/test.xml
+	pytest -s --cov=at_em_imaging_workflow --cov-report html --cov-append --junitxml=test-reports/test.xml
 
 pytest: pytest_lax
 
@@ -53,7 +50,7 @@ flake8:
 	flake8 --ignore=E201,E202,E226 --max-line-length=200 --filename 'at_em_imaging_workflow/**/*.py' at_em_imaging_workflow | grep -v "local variable '_' is assigned to but never used" > htmlcov/flake8.txt
 	grep -i "import" htmlcov/flake8.txt > htmlcov/imports.txt || exit 0
 
-EXAMPLES=doc/_static/examples
+EXAMPLES=$(DOCDIR)/_static/examples
 
 fsm_figures:
 	python -m manage graph_transitions -o doc_template/aibs_sphinx/static/reference_set_states.png at_em_imaging_workflow.ReferenceSet
@@ -63,19 +60,19 @@ fsm_figures:
 
 
 doc: FORCE
-	sphinx-apidoc -d 4 --force -H "AT EM Imaging Workflow" -A "Allen Institute for Brain Science" -V $(VERSION) -R $(VERSION)$(RELEASE) --full -o doc --module-first $(PROJECTNAME)
-	cp doc_template/*.rst doc_template/conf.py doc
+	sphinx-apidoc -d 4 --force -H "AT EM Imaging Workflow" -A "Allen Institute for Brain Science" -V $(VERSION) -R $(VERSION)$(RELEASE) --full -o $(DOCDIR) --module-first $(PROJECTNAME)
+	cp doc_template/*.rst doc_template/conf.py $(DOCDIR)
 	# cp -R doc_template/examples $(EXAMPLES)
-	cp -R htmlcov doc/_static
-	sed -i --expression "s/|version|/${VERSION}/g" doc/conf.py
-	cp -R doc_template/aibs_sphinx/static/* doc/_static
-	cp -R doc_template/aibs_sphinx/templates/* doc/_templates
+	cp -R htmlcov $(DOCDIR)/_static
+	sed -i --expression "s/|version|/${VERSION}/g" $(DOCDIR)/conf.py
+	cp -R doc_template/aibs_sphinx/static/* $(DOCDIR)/_static
+	cp -R doc_template/aibs_sphinx/templates/* $(DOCDIR)/_templates
 ifdef STATIC
-	sed -i --expression "s/\/_static\/external_assets/${STATIC}\/external_assets/g" doc/_templates/layout.html
-	sed -i --expression "s/\/_static\/external_assets/${STATIC}\/external_assets/g" doc/_templates/portalHeader.html
-	sed -i --expression "s/\/_static\/external_assets/${STATIC}\/external_assets/g" doc/_templates/portalFooter.html
+	sed -i --expression "s/\/_static\/external_assets/${STATIC}\/external_assets/g" $(DOCDIR)/_templates/layout.html
+	sed -i --expression "s/\/_static\/external_assets/${STATIC}\/external_assets/g" $(DOCDIR)/_templates/portalHeader.html
+	sed -i --expression "s/\/_static\/external_assets/${STATIC}\/external_assets/g" $(DOCDIR)/_templates/portalFooter.html
 endif
-	cd doc && make html || true
+	cd $(DOCDIR) && make html || true
 
 FORCE:
 

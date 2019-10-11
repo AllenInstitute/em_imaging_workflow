@@ -31,7 +31,7 @@ class CreateTilePairsStrategy(ExecutionStrategy):
         inp["minZ"] = em_mset.section.z_index
         inp["maxZ"] = em_mset.section.z_index
 
-        return TilePairClientParameters().dump(inp)
+        return TilePairClientParameters().dump(inp).data
 
     def on_finishing(self, em_mset, results, task):
         self.check_key(results, 'tile_pair_file')

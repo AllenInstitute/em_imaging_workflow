@@ -77,4 +77,4 @@ class MakeMontageScapesStackStrategy(InputConfigMixin, ExecutionStrategy):
         inp['montage_stack'] = stack_names['montage_stack']
         inp['output_stack'] = stack_names['output_stack']
 
-        return MakeMontageScapeSectionStackParameters().dump(inp)
+        return MakeMontageScapeSectionStackParameters().dump(inp).data

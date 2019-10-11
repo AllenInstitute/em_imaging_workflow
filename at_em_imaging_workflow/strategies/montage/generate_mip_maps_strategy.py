@@ -2,7 +2,7 @@
 # license plus a third clause that prohibits redistribution for commercial
 # purposes without further permission.
 #
-# Copyright 2017-2018. Allen Institute. All rights reserved.
+# Copyright 2017-2019. Allen Institute. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -65,7 +65,7 @@ class GenerateMipMapsStrategy(InputConfigMixin, ExecutionStrategy):
         inp['output_dir'] = em_mset.mipmap_directory
         inp['zValues'] = [ em_mset.section.z_index ]
 
-        return GenerateMipMapsParameters().dump(inp)
+        return GenerateMipMapsParameters().dump(inp).data
 
     def on_running(self, task):
         em_mset = task.enqueued_task_object
@@ -78,6 +78,6 @@ class GenerateMipMapsStrategy(InputConfigMixin, ExecutionStrategy):
             GenerateMipMapsStrategy._log.warning('Bad state transition')
 
     def on_finishing(self, em_mset, results, task):
-        self.check_key(results, 'output_dir')
-        em_mset.mipmap_directory =  results['output_dir']
+        self.check_key(results, 'output_prefix')
+        em_mset.mipmap_directory =  results['output_prefix']
         em_mset.save()

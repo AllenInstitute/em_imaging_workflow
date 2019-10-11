@@ -64,7 +64,7 @@ class FinePointMatchStrategy(ExecutionStrategy):
             'http://' + settings.RENDER_SERVICE_URL + \
             ':' + settings.RENDER_SERVICE_PORT + '/render-ws/v1'
 
-        return PointMatchClientParametersSpark().dump(inp)
+        return PointMatchClientParametersSpark().dump(inp).data
 
     def get_tile_pairs_file_name(self, em_mset):
         return WellKnownFile.get(

@@ -90,8 +90,7 @@ class GenerateMeshLensCorrection(InputConfigMixin, ExecutionStrategy):
             additional_config = self.get_good_solve_from_configuration(ref_set)
             inp.update(additional_config)
 
-        # input_data_json = MeshLensCorrectionSchema().dump(inp).data
-        input_data_json = inp
+        input_data_json = MeshLensCorrectionSchema().dump(inp).data
 
         do_montage_qc = self.get_do_montage_qc(ref_set)
 

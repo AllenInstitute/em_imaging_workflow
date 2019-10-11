@@ -43,6 +43,7 @@ def test_get_input_data(lots_of_chunks,
                     chnk_assign,
                     storage_directory,
                     task)
+
     assert inp['SIFTsteps'] == 5
 
     assert inp['collection'] == 'chunk_rough_align_point_matches'

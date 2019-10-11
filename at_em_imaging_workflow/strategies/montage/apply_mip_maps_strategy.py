@@ -58,9 +58,9 @@ class ApplyMipMapsStrategy(ExecutionStrategy):
 
         inp['input_stack'] = stack_names['input_stack']
         inp['output_stack'] = stack_names['output_stack']
-        inp['mipmap_dir'] = em_mset.mipmap_directory
+        inp['mipmap_prefix'] = em_mset.mipmap_directory
         inp['output_dir'] = em_mset.get_storage_directory()
 
         inp['zValues'] = [ em_mset.section.z_index ]
 
-        return AddMipMapsToStackParameters().dump(inp) #.data
+        return AddMipMapsToStackParameters().dump(inp).data

@@ -49,7 +49,7 @@ DEFAULT_MESSAGE_QUEUE_NAME: null_application_name
     with patch("builtins.open",
                mock_open(read_data=cfg_string)):
         with patch('os.getenv', Mock(return_value='/path/to/settings.yml')):
-            from workflow_client.client_settings import load_settings_yaml
+            from workflow_engine.client_settings import load_settings_yaml
 
             settings = load_settings_yaml()
 

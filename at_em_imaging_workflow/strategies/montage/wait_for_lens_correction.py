@@ -42,7 +42,7 @@ class WaitForLensCorrection(WaitStrategy):
         queued_montage_set_jobs = set(it.chain.from_iterable(
             m.jobs.filter(
                 workflow_node__job_queue__name=WaitForLensCorrection.QUEUE_NAME,
-                run_state__name__in=[
+                running_state__in=[
                     'QUEUED',
                     'FAILED',
                     'FAILED_EXECUTION',

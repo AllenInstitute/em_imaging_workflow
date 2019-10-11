@@ -54,7 +54,7 @@ def test_get_input_data(lots_of_montage_sets):
     )
 def test_on_finishing(lots_of_montage_sets):
     em_mset = lots_of_montage_sets[0]
-    results = { 'output_dir': '/path/to/output/dir' }
+    results = { 'output_prefix': 'file://path/to/output/dir' }
     job = Job(
         id=444,
         enqueued_object_id=em_mset.id)

@@ -62,4 +62,4 @@ class RemapZStrategy(InputConfigMixin, ExecutionStrategy):
         inp['input_stack'] = stack_names['input_stack']
         inp['output_stack'] = stack_names['output_stack']
 
-        return RemapZsParameters().dump(inp)
+        return RemapZsParameters().dump(inp).data
