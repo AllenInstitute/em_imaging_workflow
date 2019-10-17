@@ -44,11 +44,6 @@ RESULT_MESSAGE_QUEUE_NAME = 'result_' + MESSAGE_QUEUE_NAME
 STATE_MACHINE_YAML='/at_em_imaging_workflow/tests/workflows/states.yml'
 WORKFLOW_CONFIG_YAML='/at_em_imaging_workflow/tests/workflows/dev.yml'
 
-MESSAGE_QUEUE_HOST = 'message_queue'
-MESSAGE_QUEUE_USER = 'blue_sky_user'
-MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
-MESSAGE_QUEUE_PORT = 5672
-
 MESSAGE_QUEUE_MONITOR_PORT = 9000
 UI_PORT = 9002
 FLOWER_MONITOR_URL='http://' + UI_HOST + ":" + str(9003)

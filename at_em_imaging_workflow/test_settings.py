@@ -24,21 +24,6 @@ PBS_FINISH_PATH = \
     '/allen/programs/celltypes/workgroups/array_tomography/blue_sky' + \
     '/at_em_imaging_workflow/pbs_execution_finish.py'
 
-MESSAGE_QUEUE_NAME = 'at_em_imaging_workflow'
-INGEST_MESSAGE_QUEUE_NAME = 'ingest_'+ MESSAGE_QUEUE_NAME
-CELERY_MESSAGE_QUEUE_NAME = 'celery_' + MESSAGE_QUEUE_NAME
-WORKFLOW_MESSAGE_QUEUE_NAME = 'workflow_' + MESSAGE_QUEUE_NAME
-# CELERY_DEFAULT_QUEUE = 'celery_' + MESSAGE_QUEUE_NAME
-MOAB_MESSAGE_QUEUE_NAME = 'moab_' + MESSAGE_QUEUE_NAME
-LOCAL_MESSAGE_QUEUE_NAME = 'local_' + MESSAGE_QUEUE_NAME
-BROADCAST_MESSAGE_QUEUE_NAME = 'broadcast_' + MESSAGE_QUEUE_NAME
-WORKFLOW_MESSAGE_QUEUE_NAME = 'workflow_' + MESSAGE_QUEUE_NAME
-RESULT_MESSAGE_QUEUE_NAME = 'result_' + MESSAGE_QUEUE_NAME
-MESSAGE_QUEUE_HOST = 'message_queue'
-MESSAGE_QUEUE_USER = 'blue_sky_user'
-MESSAGE_QUEUE_PASSWORD = 'blue_sky_user'
-MESSAGE_QUEUE_PORT = 5672
-
 MESSAGE_QUEUE_MONITOR_PORT = 9000
 UI_HOST = 'ibs-timf-ux1.corp.alleninstitute.org'
 UI_PORT = 9002
