@@ -95,8 +95,7 @@ class LoadAdmin(admin.ModelAdmin):
     form = LoadForm
     list_display = [
         'uid',
-        'offset',
-        'rendered_volume'
+        'offset'
     ]
     list_select_related = []
     list_filter = []
