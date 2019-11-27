@@ -1,0 +1,21 @@
+FROM alleninstitute/blue_sky:dev
+
+LABEL maintainer="Zach Madigan <zach.madigan@alleninstitute.org>"
+
+
+# COPY ./em_imaging_workflow/at_em_imaging_workflow ./source/at_em_imaging_workflow/
+COPY ./em_imaging_workflow ./source/at_em_imaging_workflow/
+COPY ./render-modules/ ./render_modules/
+COPY ./EM_aligner_python/ ./EM_aligner_python/
+# COPY ./em_imaging_workflow/requirements.txt ./em_imaging_workflow/requirements.txt
+# COPY ./em_imaging_workflow/test_requirements.txt ./em_imaging_workflow/test_requirements.txt
+
+# These are overwritten through Bamboo/Ansible build/deploy to use actual dev/staging/prod at_em_imaging_workflow/settings.py
+# This file location is added to the PYTHONPATH and is mounted to /at_em_imaging_workflow/at_em_imaging_workflow/settings.py
+ENV PYTHONPATH="/source/at_em_imaging_workflow:/source/blue_sky_workflow_engine:/render_modules:/EM_aligner_python"
+ENV DJANGO_SETTINGS_MODULE="at_em_imaging_workflow.test_settings"
+
+RUN /bin/bash -c "source activate /conda_envs/py_37 && pip install -r ./source/at_em_imaging_workflow/requirements.txt"; \
+    pip install -r ./source/at_em_imaging_workflow/test_requirements.txt; \
+    pip install -r ./render_modules/requirements.txt; \
+    pip install -r ./render_modules/test_requirements.txt

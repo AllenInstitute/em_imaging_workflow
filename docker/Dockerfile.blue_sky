@@ -1,0 +1,10 @@
+FROM alleninstitute/blue_sky_base:dev
+
+LABEL maintainer="Zach Madigan <zach.madigan@alleninstitute.org>"
+
+RUN mkdir /source
+COPY ./blue_sky_workflow_engine/ ./source/blue_sky_workflow_engine/
+COPY ./blue_sky/ ./source/blue_sky/
+# COPY ./tests ./source/tests/
+
+RUN /create_conda_envs.sh
