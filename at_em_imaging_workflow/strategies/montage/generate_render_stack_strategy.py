@@ -66,7 +66,8 @@ class GenerateRenderStackStrategy(InputConfigMixin, ExecutionStrategy):
         inp['render'] = RenderStrategyUtils.render_input_dict(em_mset)
 
         inp['output_stack'] = stack_names['output_stack']
-        inp['metafile'] = em_mset.metafile
+        inp['metafile_uri'] = em_mset.metafile
+        inp['metafile'] = '/allen/aibs/pipeline/image_processing/volume_assembly/dummy_json/dummy_metafile.json' # Remove this when this is no longer validated
         inp['close_stack'] = False
         inp['zValues'] = [ self.get_z_index(em_mset) ]
 

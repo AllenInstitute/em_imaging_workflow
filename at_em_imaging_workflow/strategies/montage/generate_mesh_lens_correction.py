@@ -78,7 +78,8 @@ class GenerateMeshLensCorrection(InputConfigMixin, ExecutionStrategy):
         inp['output_stack'] = RENDER_STACK_MESH_LENS_CORRECTED
         inp['match_collection'] = RENDER_LENS_COLLECTION
 
-        inp['metafile'] = ref_set.metafile
+        inp['metafile_uri'] = ref_set.metafile
+        inp['metafile'] = '/allen/aibs/pipeline/image_processing/volume_assembly/dummy_json/dummy_metafile.json' # Remove this when this is no longer validated
         inp['z_index'] = ref_set.id
         inp['outfile'] = os.path.join(task_storage_directory,
                                       'lens_correction_out.json')
