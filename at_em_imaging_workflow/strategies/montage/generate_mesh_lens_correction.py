@@ -167,10 +167,6 @@ class GenerateMeshLensCorrection(InputConfigMixin, ExecutionStrategy):
             ref_set.finish_processing()
             ref_set.save()
 
-            # trigger waiting jobs
-            WorkflowController.set_jobs_for_run(
-                'Wait for Lens Correction'
-            )
 
     # TODO: this isn't used.  Ingest picks it directly
     def can_transition(self, ref_set):
