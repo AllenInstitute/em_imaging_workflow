@@ -90,6 +90,14 @@ class TwoDPythonSolverStrategy(execution_strategy.ExecutionStrategy):
             TwoDPythonSolverStrategy._log.warning(
                 'Unexpected state transition - remaining in QC Passed'
             )
+        elif em_mset.object_state == EMMontageSet.STATE.EM_MONTAGE_SET_QC:
+            TwoDPythonSolverStrategy._log.warning(
+                'Unexpected state transition - remaining in QC'
+            )
+        elif em_mset.object_state == EMMontageSet.STATE.EM_MONTAGE_SET_QC_FAILED:
+            TwoDPythonSolverStrategy._log.warning(
+                'Unexpected state transition - remaining in QC Failed'
+            )
         else:
             em_mset.finish_processing()  # expected to throw an exception
             em_mset.save()
