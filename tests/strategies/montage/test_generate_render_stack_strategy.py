@@ -23,7 +23,7 @@ def test_get_input_data():
     test_z_index = 543
     em_set.section.z_index = test_z_index
     em_set.section.specimen.uid = 'mock_specimen_uid'
-    em_set.metafile = '/path/to/test/meta.file'
+    em_set.metafile_uri = '/path/to/test/meta.file'
     em_set.reimage_index = Mock(return_value=0)
     em_set.render_stack_name = Mock(
         return_value='test_stack')
