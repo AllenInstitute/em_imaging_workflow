@@ -168,7 +168,7 @@ class LensCorrectionIngest(IngestStrategy):
         specimen, _ = Specimen.objects.update_or_create(
             uid=specimen_message,
             defaults={
-                'render_project': settings.RENDER_SERVICE_PROJECT,
+                'render_project': specimen_message, # render_project is the same as the specimens name
                 'render_owner': settings.RENDER_SERVICE_USER,
                 'study': study
             }
