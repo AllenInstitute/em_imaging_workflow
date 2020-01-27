@@ -47,7 +47,7 @@ def test_get_input_data():
         'em_2d_montage_ingest')
     assert (input_json['render']['client_scripts'] ==
         settings.RENDER_CLIENT_SCRIPTS)
-    assert input_json['metafile'] == em_set.metafile
+    assert input_json['metafile_uri'] == em_set.metafile_uri
     assert input_json['close_stack'] == False
     assert set(input_json['zValues']) == set([test_z_index])
 

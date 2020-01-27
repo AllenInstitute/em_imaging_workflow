@@ -12,7 +12,7 @@ from tests.fixtures.model_fixtures import (
 )
 
 
-@pytest.mark.render_schema_failure
+@pytest.mark.unimplemented
 @pytest.mark.django_db
 @override_settings(
     RENDER_SERVICE_URL='MOCK_URL',
