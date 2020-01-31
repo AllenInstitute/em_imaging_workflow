@@ -45,7 +45,7 @@ class RemapZStrategy(InputConfigMixin, ExecutionStrategy):
         'at_em_imaging_workflow.strategies.montage'
         '.remap_z_strategy')
 
-    def get_input(self, em_mset, storage_directory, task):
+    def get_input(self, em_mset, storage_directory, task, from_mapped=False):
         inp = self.get_workflow_node_input_template(task)
 
         inp['render'] = RenderStrategyUtils.render_input_dict(em_mset)
@@ -55,8 +55,13 @@ class RemapZStrategy(InputConfigMixin, ExecutionStrategy):
         z_index = em_mset.section.z_index
         z_mapping = em_mset.sample_holder.load.configurations.get(
             configuration_type='z_mapping').json_object
-        inp['zValues'] = [ z_mapping[str(z_index)] ]
-        inp['new_zValues'] = [ z_index ]
+
+        if from_mapped:
+            inp['zValues'] = [z_mapping[str(z_index)]]
+            inp['new_zValues'] = [z_index]
+        else:
+            inp['zValues'] = [z_index]
+            inp['new_zValues'] = [z_mapping[str(z_index)]]
 
         stack_names = TwoDStackNameManager.remap_z_stacks(em_mset)
         inp['input_stack'] = stack_names['input_stack']

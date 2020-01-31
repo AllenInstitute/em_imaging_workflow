@@ -55,19 +55,20 @@ class MakeMontageScapesStackStrategy(InputConfigMixin, ExecutionStrategy):
         'at_em_imaging_workflow.strategies.montage'
         '.make_montage_scapes_stack_strategy')
 
-    def get_input(self, em_mset, storage_directory, task):
+    def get_input(self, em_mset, storage_directory, task, mapped=False):
         inp = self.get_workflow_node_input_template(task)
 
         inp['render'] = RenderStrategyUtils.render_input_dict(em_mset)
 
-        inp['set_new_z'] = True
         z_index = em_mset.section.z_index
         inp['minZ'] = z_index
         inp['maxZ'] = z_index
 
-        z_mapping = em_mset.sample_holder.load.configurations.get(
-            configuration_type='z_mapping').json_object
-        inp['new_z_start'] = z_mapping[str(z_index)]
+        if mapped:
+            inp['set_new_z'] = True
+            z_mapping = em_mset.sample_holder.load.configurations.get(
+                configuration_type='z_mapping').json_object
+            inp['new_z_start'] = z_mapping[str(z_index)]
 
         inp['image_directory'] = em_mset.get_storage_directory(
             settings.LONG_TERM_BASE_FILE_PATH

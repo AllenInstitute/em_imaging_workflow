@@ -234,14 +234,14 @@ class TwoDStackNameManager(object):
     def make_montage_scapes_stacks(cls, em_mset):
         return {
             'montage_stack': cls.solved_python_stack(em_mset),
-            'output_stack': cls.downsampled_stack(em_mset)
+            'output_stack': cls.downsampled_unmapped_stack(em_mset)
         }
 
     @classmethod
     def remap_z_stacks(cls, em_mset):
         return {
-            'input_stack': cls.downsampled_stack(em_mset),
-            'output_stack': cls.downsampled_unmapped_stack(em_mset)
+            'input_stack': cls.downsampled_unmapped_stack(em_mset),
+            'output_stack': cls.downsampled_stack(em_mset)
         }
 
     @classmethod
