@@ -236,6 +236,9 @@ class LensCorrectionIngest(IngestStrategy):
         elif 'EMMontageSet' in tags:
             enqueued_object = self.create_em_montage_set(message)
             start_node = 'Generate Render Stack'
+        elif 'ZMapping' in tags:
+            enqueued_object = self.create_z_mapping(message)
+            start_node = 'Load Z Mapping'
         else:
             LensCorrectionIngest._log.warning("No enqueued object type tag")
             enqueued_object = None
@@ -301,6 +304,20 @@ class LensCorrectionIngest(IngestStrategy):
         LensCorrectionIngest._log.info(str(em_montage_set))
 
         return em_montage_set
+
+    def create_z_mapping(self, message):
+        LensCorrectionIngest._log.info('create_z_mapping')
+
+        load_uid = message['load_id']
+        z_mapping = message['z_mapping']
+
+        try:
+            load = Load.objects.get(uid=load_uid)
+            load.update_z_mapping(z_mapping)
+        except ObjectDoesNotExist:
+            raise ObjectDoesNotExist('z_mapping update failed: Load ID {} not'.format(load_uid))
+
+        return load
 
     def generate_response(self, enqueued_object):
         LensCorrectionIngest._log.info('generate_response')

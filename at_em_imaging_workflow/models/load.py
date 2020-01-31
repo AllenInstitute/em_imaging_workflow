@@ -85,20 +85,11 @@ class Load(
         '''
         return (z_range[0] + self.offset, z_range[1] + self.offset)
 
-    def update_z_mapping(self, tape_df):
-        tape_df = tape_df[
-            tape_df['Barcode'].notnull() &
-            tape_df['Z'].notnull()
-            (tape_df['Z and TAO agree?'] == True)]
-
+    def update_z_mapping(self, z_mapping):
         self.configurations.update_or_create(
             configuration_type='z_mapping',
             defaults={
                 'name': '{} Z Mapping'.format(self.uid),
-                'json_object': {
-                    str(self.offset + barcode): int(perm_z)
-                    for (_, barcode, perm_z)
-                    in tape_df.loc[:,['Barcode','Z']].itertuples()
-                }
+                'json_object': z_mapping
             }
         )
