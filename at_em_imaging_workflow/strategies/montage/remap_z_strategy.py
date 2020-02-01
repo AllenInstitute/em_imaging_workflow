@@ -40,12 +40,14 @@ from at_em_imaging_workflow.two_d_stack_name_manager import TwoDStackNameManager
 import logging
 
 
-class RemapZStrategy(InputConfigMixin, ExecutionStrategy):
+class RemapZNotMappedStrategy(InputConfigMixin, ExecutionStrategy):
     _log = logging.getLogger(
         'at_em_imaging_workflow.strategies.montage'
-        '.remap_z_strategy')
+        '.remap_z_not_mapped_strategy')
 
-    def get_input(self, em_mset, storage_directory, task, from_mapped=False):
+    from_mapped = False
+
+    def get_input(self, em_mset, storage_directory, task):
         inp = self.get_workflow_node_input_template(task)
 
         inp['render'] = RenderStrategyUtils.render_input_dict(em_mset)
@@ -56,7 +58,7 @@ class RemapZStrategy(InputConfigMixin, ExecutionStrategy):
         z_mapping = em_mset.sample_holder.load.configurations.get(
             configuration_type='z_mapping').json_object
 
-        if from_mapped:
+        if self.from_mapped:
             inp['zValues'] = [z_mapping[str(z_index)]]
             inp['new_zValues'] = [z_index]
         else:
@@ -68,3 +70,14 @@ class RemapZStrategy(InputConfigMixin, ExecutionStrategy):
         inp['output_stack'] = stack_names['output_stack']
 
         return RemapZsParameters().dump(inp).data
+
+
+class RemapZMappedStrategy(RemapZNotMappedStrategy):
+    _log = logging.getLogger(
+        'at_em_imaging_workflow.strategies.montage'
+        '.remap_z_mapped_strategy')
+
+    from_mapped = False
+
+
+RemapZStrategy = RemapZNotMappedStrategy
