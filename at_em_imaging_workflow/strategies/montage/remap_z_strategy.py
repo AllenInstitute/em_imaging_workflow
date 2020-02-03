@@ -40,10 +40,12 @@ from at_em_imaging_workflow.two_d_stack_name_manager import TwoDStackNameManager
 import logging
 
 
-class RemapZStrategy(InputConfigMixin, ExecutionStrategy):
+class RemapZNotMappedStrategy(InputConfigMixin, ExecutionStrategy):
     _log = logging.getLogger(
         'at_em_imaging_workflow.strategies.montage'
-        '.remap_z_strategy')
+        '.remap_z_not_mapped_strategy')
+
+    from_mapped = False
 
     def get_input(self, em_mset, storage_directory, task):
         inp = self.get_workflow_node_input_template(task)
@@ -55,11 +57,27 @@ class RemapZStrategy(InputConfigMixin, ExecutionStrategy):
         z_index = em_mset.section.z_index
         z_mapping = em_mset.sample_holder.load.configurations.get(
             configuration_type='z_mapping').json_object
-        inp['zValues'] = [ z_mapping[str(z_index)] ]
-        inp['new_zValues'] = [ z_index ]
+
+        if self.from_mapped:
+            inp['zValues'] = [z_mapping[str(z_index)]]
+            inp['new_zValues'] = [z_index]
+        else:
+            inp['zValues'] = [z_index]
+            inp['new_zValues'] = [z_mapping[str(z_index)]]
 
         stack_names = TwoDStackNameManager.remap_z_stacks(em_mset)
         inp['input_stack'] = stack_names['input_stack']
         inp['output_stack'] = stack_names['output_stack']
 
         return RemapZsParameters().dump(inp).data
+
+
+class RemapZMappedStrategy(RemapZNotMappedStrategy):
+    _log = logging.getLogger(
+        'at_em_imaging_workflow.strategies.montage'
+        '.remap_z_mapped_strategy')
+
+    from_mapped = True
+
+
+RemapZStrategy = RemapZNotMappedStrategy

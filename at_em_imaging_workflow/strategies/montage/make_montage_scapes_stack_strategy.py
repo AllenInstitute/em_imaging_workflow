@@ -50,24 +50,28 @@ from django.conf import settings
 import logging
 
 
-class MakeMontageScapesStackStrategy(InputConfigMixin, ExecutionStrategy):
+class MakeMontageScapesStackNoMappingStrategy(InputConfigMixin,
+                                              ExecutionStrategy):
     _log = logging.getLogger(
         'at_em_imaging_workflow.strategies.montage'
-        '.make_montage_scapes_stack_strategy')
+        '.make_montage_scapes_stack_no_mapping_strategy')
+
+    map_zvalues = False
 
     def get_input(self, em_mset, storage_directory, task):
         inp = self.get_workflow_node_input_template(task)
 
         inp['render'] = RenderStrategyUtils.render_input_dict(em_mset)
 
-        inp['set_new_z'] = True
         z_index = em_mset.section.z_index
         inp['minZ'] = z_index
         inp['maxZ'] = z_index
 
-        z_mapping = em_mset.sample_holder.load.configurations.get(
-            configuration_type='z_mapping').json_object
-        inp['new_z_start'] = z_mapping[str(z_index)]
+        if self.map_zvalues:
+            inp['set_new_z'] = True
+            z_mapping = em_mset.sample_holder.load.configurations.get(
+                configuration_type='z_mapping').json_object
+            inp['new_z_start'] = z_mapping[str(z_index)]
 
         inp['image_directory'] = em_mset.get_storage_directory(
             settings.LONG_TERM_BASE_FILE_PATH
@@ -78,3 +82,15 @@ class MakeMontageScapesStackStrategy(InputConfigMixin, ExecutionStrategy):
         inp['output_stack'] = stack_names['output_stack']
 
         return MakeMontageScapeSectionStackParameters().dump(inp).data
+
+
+class MakeMontageScapesStackMappingStrategy(
+        MakeMontageScapesStackNoMappingStrategy):
+    _log = logging.getLogger(
+        'at_em_imaging_workflow.strategies.montage'
+        '.make_montage_scapes_stack_mapping_strategy')
+
+    map_zvalues = True
+
+
+MakeMontageScapesStackStrategy = MakeMontageScapesStackNoMappingStrategy
