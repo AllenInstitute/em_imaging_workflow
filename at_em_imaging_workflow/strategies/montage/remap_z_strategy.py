@@ -77,7 +77,7 @@ class RemapZMappedStrategy(RemapZNotMappedStrategy):
         'at_em_imaging_workflow.strategies.montage'
         '.remap_z_mapped_strategy')
 
-    from_mapped = False
+    from_mapped = True
 
 
 RemapZStrategy = RemapZNotMappedStrategy
