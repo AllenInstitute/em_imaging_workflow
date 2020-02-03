@@ -43,8 +43,8 @@ class ReferenceSet(ReferenceSetState, TileImageSet):
         db_table = 'development_referenceset'
 
     uid = models.CharField(max_length=255, null=True)
-    project_path = models.CharField(max_length=255) # deprecate for storage_dir
-    manifest_path = models.CharField(max_length=255, null=True) # well_known_file?
+    project_path = models.CharField(max_length=500) # deprecate for storage_dir
+    manifest_path = models.CharField(max_length=500, null=True) # well_known_file?
 
     def __str__(self):
         return str(self.acquisition_date)

@@ -39,7 +39,7 @@ from at_em_imaging_workflow.models import TileImageSet
 
 class MontageSet(TileImageSet):
     uid = models.CharField(max_length=255, null=True)
-    mipmap_directory = models.CharField(max_length=255, null=True)
+    mipmap_directory = models.CharField(max_length=500, null=True)
     section = models.ForeignKey(
         'Section',
         on_delete=models.CASCADE

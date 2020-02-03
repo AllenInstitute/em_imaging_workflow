@@ -52,7 +52,7 @@ class TileImageSet(
     Stateful,
     models.Model
 ):
-    storage_directory = models.CharField(max_length=255, null=True)
+    storage_directory = models.CharField(max_length=500, null=True)
     camera = models.ForeignKey(
         'Camera',
         null=True,
@@ -63,7 +63,7 @@ class TileImageSet(
         null=True,
         on_delete=models.CASCADE
     )
-    metafile = models.CharField(max_length=255, null=True)
+    metafile = models.CharField(max_length=500, null=True)
     acquisition_date = models.DateTimeField(null=True)
 
     class Meta:

@@ -38,7 +38,7 @@ from django.db import models
 
 class Study(models.Model):
     name = models.CharField(max_length=255, null=True)
-    storage_directory = models.CharField(max_length=255, null=True)
+    storage_directory = models.CharField(max_length=500, null=True)
 
     class Meta:
         db_table = 'development_study'
