@@ -56,7 +56,7 @@ def test_get_input_data(
         storage_directory,
         task)
 
-    assert inp['set_new_z'] == True
+    assert inp['set_new_z'] == False
     assert inp['minZ'] == 10000
     assert inp['maxZ'] == 10000
     assert inp['new_z_start'] == 0
@@ -65,7 +65,7 @@ def test_get_input_data(
         '/long/term/em_montage_set/MOCK SPECIMEN_z10000_2345_06_07_16_09_09_00_00'
 
     assert inp['montage_stack'] == 'em_2d_montage_solved_py'
-    assert inp['output_stack'] == 'em_2d_montage_solved_py_0_01_mapped'
+    assert inp['output_stack'] == 'em_2d_montage_downsampled_no_mapping'
 
     assert inp['render']['host'] == 'renderservice'
     assert inp['render']['port'] == 8080

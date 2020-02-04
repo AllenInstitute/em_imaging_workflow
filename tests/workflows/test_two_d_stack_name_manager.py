@@ -171,7 +171,7 @@ def test_make_montage_scapes_stacks(em_mset):
     stacks = TwoDStackNameManager.make_montage_scapes_stacks(em_mset)
 
     assert stacks['montage_stack'] == 'em_2d_montage_solved_py'
-    assert stacks['output_stack'] == 'em_2d_montage_solved_py_0_01_mapped'
+    assert stacks['output_stack'] == 'em_2d_montage_downsampled_no_mapping'
 
 
 def test_make_montage_scapes_stacks_reimage(em_mset_reimage_one):
@@ -180,14 +180,14 @@ def test_make_montage_scapes_stacks_reimage(em_mset_reimage_one):
 
     assert stacks['montage_stack'] == 'em_2d_montage_solved_py_reimage_1'
     assert stacks['output_stack'] == \
-        'em_2d_montage_solved_py_0_01_mapped_reimage_1'
+        'em_2d_montage_downsampled_no_mapping_reimage_1'
 
 
 def test_remap_z_stacks(em_mset):
     stacks = TwoDStackNameManager.remap_z_stacks(em_mset)
 
-    assert stacks['input_stack'] == 'em_2d_montage_solved_py_0_01_mapped'
-    assert stacks['output_stack'] == 'em_2d_montage_downsampled_no_mapping'
+    assert stacks['input_stack'] == 'em_2d_montage_downsampled_no_mapping'
+    assert stacks['output_stack'] == 'em_2d_montage_solved_py_0_01_mapped'
 
 
 def test_remap_z_stacks_reimage(em_mset_reimage_one):
@@ -195,7 +195,7 @@ def test_remap_z_stacks_reimage(em_mset_reimage_one):
         em_mset_reimage_one)
 
     assert stacks['input_stack'] == \
-        'em_2d_montage_solved_py_0_01_mapped_reimage_1'
-    assert stacks['output_stack'] == \
         'em_2d_montage_downsampled_no_mapping_reimage_1'
+    assert stacks['output_stack'] == \
+        'em_2d_montage_solved_py_0_01_mapped_reimage_1'
 
