@@ -49,11 +49,11 @@ def test_get_input_data(lots_of_chunks):
             storage_directory,
             task)
 
-    assert inp['zValues'] == [0]
-    assert inp['new_zValues'] == [10000]
+    assert inp['zValues'] == [10000]
+    assert inp['new_zValues'] == [0]
 
-    assert inp['input_stack'] == 'em_2d_montage_solved_py_0_01_mapped'
-    assert inp['output_stack'] == 'em_2d_montage_downsampled_no_mapping'
+    assert inp['input_stack'] == 'em_2d_montage_downsampled_no_mapping'
+    assert inp['output_stack'] == 'em_2d_montage_solved_py_0_01_mapped'
 
     assert inp['render']['host'] == 'renderservice'
     assert inp['render']['port'] == 8080
